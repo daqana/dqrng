@@ -1,0 +1,6 @@
+[submodule "external/xoroshiro128plus-cpp"]
+	path = external/xoroshiro128plus-cpp
+	url = git@github.com:alexcoplan/xoroshiro128plus-cpp.git
+[submodule "external/pcg-cpp"]
+	path = external/pcg-cpp
+	url = git@github.com:imneme/pcg-cpp.git
