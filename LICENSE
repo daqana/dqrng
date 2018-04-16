@@ -1,0 +1,17 @@
+Files: inst/include/pcg_*
+Copyright: 2014-2017 Melissa O'Neill and the PCG Project contributors.
+License: Apache-2.0 OR MIT
+
+File: inst/include/xoroshiro.hpp
+Copyright: 2016 Alex Coplan, 2018 Ralf Stubner (daqana GmbH)
+License: MIT
+
+File: inst/include/xorshift.hpp
+Copyright: 2014 Ivo Doko
+License: CC0
+
+Both inst/include/xoroshiro.hpp and inst/include/xorshift.hpp are based on code
+written by David Blackman and Sebastiano Vigna and distributed under CC0 license,
+c.f. http://xoroshiro.di.unimi.it/.
+
+All other files as well dqrng as a a whole are licensed under GPL-2 or later.

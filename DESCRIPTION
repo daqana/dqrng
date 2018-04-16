@@ -1,0 +1,26 @@
+Package: dqrng
+Type: Package
+Title: Fast Pseudo Random Number Generators
+Version: 0.0.1
+Authors@R: as.person(c(
+    "Ralf Stubner <ralf.stubner@daqana.com> [aut, cre]",
+    "daqana GmbH [cph]",
+    "Alex Coplan [ctb]",
+    "David Blackman [ctb]",
+    "Ivo Doko <ivo.doko@gmail.com> [ctb]",
+    "Melissa O'Neill <oneill@pcg-random.org> [ctb]",
+    "Sebastiano Vigna <vigna@acm.org> [ctb]"
+  ))
+Description: This package provides several fast random number generators as C++
+  header only libraries. In addition functions for generating random numbers 
+  generated according to a uniform, normal and exponential distribution are
+  provided.
+License: GPL (>= 2) | file LICENSE
+Depends: R (>= 3.1.0)
+Imports: Rcpp (>= 0.12.16)
+LinkingTo: Rcpp, BH (>= 1.64.0-1)
+RoxygenNote: 6.0.1
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
