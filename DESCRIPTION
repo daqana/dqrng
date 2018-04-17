@@ -1,6 +1,6 @@
 Package: dqrng
 Type: Package
-Title: Fast Pseudo Random Number Generators
+Title: Fast Pseudo Random Number Generators for R
 Version: 0.0.1
 Authors@R: as.person(c(
     "Ralf Stubner <ralf.stubner@daqana.com> [aut, cre]",
@@ -12,9 +12,9 @@ Authors@R: as.person(c(
     "Sebastiano Vigna <vigna@acm.org> [ctb]"
   ))
 Description: This package provides several fast random number generators as C++
-  header only libraries. In addition functions for generating random numbers 
-  generated according to a uniform, normal and exponential distribution are
-  provided.
+  header only libraries. In addition fast functions for generating random 
+  numbers according to a uniform, normal and exponential distribution are
+  provided. These functions are exported to R and as a C++ interface.
 License: GPL (>= 2) | file LICENSE
 Depends: R (>= 3.1.0)
 Imports: Rcpp (>= 0.12.16)
