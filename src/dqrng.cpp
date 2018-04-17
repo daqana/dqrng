@@ -18,9 +18,7 @@ void dqset_seed(const uint32_t seed) {
 
 //' @rdname dqrng-functions
 // [[Rcpp::export(rng = false)]]
-void dqRNGkind(std::string kind, std::string normal_kind = "ignored") {
-  for (auto & c: kind)
-    c = std::toupper(c);
+void dqRNGkind(const std::string kind, std::string normal_kind = "ignored") {
   rng = dqrng::generator(kind, rng->operator()());
 }
 

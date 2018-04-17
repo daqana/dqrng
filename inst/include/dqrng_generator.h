@@ -37,7 +37,9 @@ struct random_64bit_wrapper : random_64bit_generator {
   virtual void seed(result_type seed) {gen.seed(seed);}
 };
 
-inline std::shared_ptr<random_64bit_generator> generator(const std::string kind, uint64_t seed) {
+inline std::shared_ptr<random_64bit_generator> generator(std::string kind, uint64_t seed) {
+  for (auto & c: kind)
+    c = std::toupper(c);
   std::shared_ptr<random_64bit_generator> rng;
   if (kind == "DEFAULT") {
     rng = std::make_shared<random_64bit_wrapper<default_64bit_generator>>();

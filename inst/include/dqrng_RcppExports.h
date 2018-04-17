@@ -41,11 +41,11 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline void dqRNGkind(std::string kind, std::string normal_kind = "ignored") {
+    inline void dqRNGkind(const std::string kind, std::string normal_kind = "ignored") {
         typedef SEXP(*Ptr_dqRNGkind)(SEXP,SEXP);
         static Ptr_dqRNGkind p_dqRNGkind = NULL;
         if (p_dqRNGkind == NULL) {
-            validateSignature("void(*dqRNGkind)(std::string,std::string)");
+            validateSignature("void(*dqRNGkind)(const std::string,std::string)");
             p_dqRNGkind = (Ptr_dqRNGkind)R_GetCCallable("dqrng", "_dqrng_dqRNGkind");
         }
         RObject rcpp_result_gen;
