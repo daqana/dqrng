@@ -20,7 +20,9 @@ Depends: R (>= 3.1.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1)
 RoxygenNote: 6.0.1
-Suggests: testthat,
+Suggests: 
+    testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr

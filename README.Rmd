@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+[![Travis build status](https://travis-ci.org/RInstitute/dqrng.svg?branch=master)](https://travis-ci.org/RInstitute/dqrng)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RInstitute/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/RInstitute/dqrng)
+  [![Coverage status](https://codecov.io/gh/RInstitute/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/RInstitute/dqrng?branch=master)
+  
 # dqrng
 
 The dqrng package provides fast random number generators (RNG) with good statistical properties for usage with R.

@@ -4,3 +4,6 @@ external
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
+^\.travis\.yml$
+^codecov\.yml$
+^appveyor\.yml$
