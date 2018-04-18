@@ -9,6 +9,7 @@ auto rng = dqrng::generator();
 //' @name dqrng functions
 //'
 //' @rdname dqrng-functions
+//' @export
 // [[Rcpp::export(dqset.seed, rng = false)]]
 void dqset_seed(const uint32_t seed) {
   uint64_t seed2  = 1664525 * seed + 1013904223;
@@ -17,12 +18,14 @@ void dqset_seed(const uint32_t seed) {
 }
 
 //' @rdname dqrng-functions
+//' @export
 // [[Rcpp::export(rng = false)]]
 void dqRNGkind(const std::string kind, std::string normal_kind = "ignored") {
   rng = dqrng::generator(kind, rng->operator()());
 }
 
 //' @rdname dqrng-functions
+//' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
   if(max / 2 - min / 2 > (std::numeric_limits<double>::max)() / 2)
@@ -33,6 +36,7 @@ Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
 }
 
 //' @rdname dqrng-functions
+//' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
   dqrng::normal_distribution dist(mean, sd);
@@ -40,6 +44,7 @@ Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
 }
 
 //' @rdname dqrng-functions
+//' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
   dqrng::exponential_distribution dist(rate);

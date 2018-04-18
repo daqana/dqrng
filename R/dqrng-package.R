@@ -1,7 +1,14 @@
-#' dqrng.
+#' Fast Pseudo Random Number Generators for R
+#'
+#' This package provides several fast random number generators as C++
+#' header only libraries. In addition fast functions for generating random
+#' numbers according to a uniform, normal and exponential distribution are
+#' provided. These functions are exported to R and as a C++ interface.
 #'
 #' @name dqrng
 #' @docType package
+#' @useDynLib dqrng, .registration = TRUE
+#' @importFrom Rcpp evalCpp
 NULL
 
 #' @title dqrng functions
