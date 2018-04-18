@@ -3,9 +3,9 @@
 
 #' @name dqrng functions
 #'
-#' @rdname dqrng-functions
-#' @export
-dqset.seed <- function(seed) {
+NULL
+
+dqset_seed <- function(seed) {
     invisible(.Call(`_dqrng_dqset_seed`, seed))
 }
 

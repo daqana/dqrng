@@ -8,9 +8,8 @@ auto rng = dqrng::generator();
 // [[Rcpp::interfaces(r, cpp)]]
 //' @name dqrng functions
 //'
-//' @rdname dqrng-functions
-//' @export
-// [[Rcpp::export(dqset.seed, rng = false)]]
+
+// [[Rcpp::export(rng = false)]]
 void dqset_seed(const uint32_t seed) {
   uint64_t seed2  = 1664525 * seed + 1013904223;
   uint64_t _seed = seed || (seed2 << 32);
