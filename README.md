@@ -1,5 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis build status](https://travis-ci.org/RInstitute/dqrng.svg?branch=master)](https://travis-ci.org/RInstitute/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RInstitute/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/RInstitute/dqrng) [![Coverage status](https://codecov.io/gh/RInstitute/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/RInstitute/dqrng?branch=master)
+
 dqrng
 =====
 
@@ -37,8 +39,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.658   0.008   0.667
+#>   0.692   0.012   0.705
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.099   0.024   0.124
+#>   0.110   0.009   0.119
 ```
