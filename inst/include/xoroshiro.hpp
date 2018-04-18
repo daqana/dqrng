@@ -63,6 +63,12 @@ public:
   constexpr static result_type min() { return 0; }
   constexpr static result_type max() { return -1; }
 
+  xoroshiro128plus_engine(result_type seed) {
+    splitmix init(seed);
+    state[0] = init.next();
+    state[1] = init.next();
+  }
+
   result_type operator()() {
       const uint64_t s0 = state[0];
       uint64_t s1 = state[1];

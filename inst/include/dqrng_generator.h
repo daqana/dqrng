@@ -31,8 +31,12 @@ struct random_64bit_wrapper : random_64bit_generator {
                 "Provided RNG has wrong result_type");
   static_assert(RNG::max() == UINT64_MAX, "Provided RNG has wrong maximum.");
   static_assert(RNG::min() == 0, "Provided RNG has wrong minimum.");
+private:
   RNG gen;
 
+public:
+  random_64bit_wrapper() : gen() {};
+  random_64bit_wrapper(result_type seed) : gen(seed) {};
   virtual result_type operator() () {return gen();}
   virtual void seed(result_type seed) {gen.seed(seed);}
 };
@@ -40,24 +44,21 @@ struct random_64bit_wrapper : random_64bit_generator {
 inline std::shared_ptr<random_64bit_generator> generator(std::string kind, uint64_t seed) {
   for (auto & c: kind)
     c = std::toupper(c);
-  std::shared_ptr<random_64bit_generator> rng;
   if (kind == "DEFAULT") {
-    rng = std::make_shared<random_64bit_wrapper<default_64bit_generator>>();
+    return std::make_shared<random_64bit_wrapper<default_64bit_generator>>(seed);
   } else if (kind == "MERSENNE-TWISTER") {
-    rng = std::make_shared<random_64bit_wrapper<std::mt19937_64>>();
+    return std::make_shared<random_64bit_wrapper<std::mt19937_64>>(seed);
   } else if (kind == "XORSHIFT128+") {
-    rng = std::make_shared<random_64bit_wrapper<xorshift128plus>>();
+    return std::make_shared<random_64bit_wrapper<xorshift128plus>>(seed);
   } else if (kind == "XORSHIFT1024*") {
-    rng = std::make_shared<random_64bit_wrapper<xorshift1024star>>();
+    return std::make_shared<random_64bit_wrapper<xorshift1024star>>(seed);
   } else if (kind == "XOROSHIRO128+") {
-    rng = std::make_shared<random_64bit_wrapper<xoroshiro128plus_engine>>();
+    return std::make_shared<random_64bit_wrapper<xoroshiro128plus_engine>>(seed);
   } else if (kind == "PCG64") {
-    rng = std::make_shared<random_64bit_wrapper<pcg64>>();
+    return std::make_shared<random_64bit_wrapper<pcg64>>(seed);
   } else {
     Rcpp::stop("Unknown random generator kind.");
   }
-  rng->seed(seed);
-  return rng;
 }
 
 inline std::shared_ptr<random_64bit_generator> generator(const std::string kind = "DEFAULT") {
