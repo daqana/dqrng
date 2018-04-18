@@ -38,3 +38,11 @@ test_that("numbers are generated in the correct range", {
   u <- dqrunif(1e4, min = 10, max = 12)
   expect_true(all(u >= 10) && all(u < 12))
 })
+
+
+test_that("numbers can be generated in maximum range", {
+  dqset.seed(seed)
+  max <- .Machine$double.xmax
+  u <- dqrunif(1e4, min = -max, max = max)
+  expect_true(all(u >= -max) && all(u < max))
+})
