@@ -21,7 +21,7 @@ install.packages("dqrng")
 Example
 -------
 
-Using the provided RNGs from R is delibratly similar to using R's build-in RNGs:
+Using the provided RNGs from R is deliberately similar to using R's build-in RNGs:
 
 ``` r
 library(dqrng)
@@ -39,8 +39,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.692   0.012   0.705
+#>   0.773   0.009   0.781
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.110   0.009   0.119
+#>   0.114   0.036   0.149
 ```

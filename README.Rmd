@@ -37,7 +37,7 @@ install.packages("dqrng")
 
 ## Example
 
-Using the provided RNGs from R is delibratly similar to using R's build-in RNGs:
+Using the provided RNGs from R is deliberately similar to using R's build-in RNGs:
 
 ```{r example}
 library(dqrng)
