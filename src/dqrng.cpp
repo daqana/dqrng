@@ -1,8 +1,12 @@
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
+#include <xorshift.hpp>
+#include <xoroshiro.hpp>
+#include <pcg_random.hpp>
+
 
 namespace {
-auto rng = dqrng::generator();
+dqrng::rng64_t rng = dqrng::generator();
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -19,8 +23,25 @@ void dqset_seed(const uint32_t seed) {
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
-void dqRNGkind(const std::string kind, std::string normal_kind = "ignored") {
-  rng = dqrng::generator(kind, rng->operator()());
+void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
+  for (auto & c: kind)
+    c = std::tolower(c);
+  uint64_t seed = rng->operator()();
+  if (kind == "default") {
+    rng =  dqrng::generator(seed);
+  } else if (kind == "mersenne-twister") {
+    rng =  dqrng::generator<std::mt19937_64>(seed);
+  } else if (kind == "xorshift128+") {
+    rng =  dqrng::generator<xorshift128plus>(seed);
+  } else if (kind == "xorshift1024*") {
+    rng =  dqrng::generator<xorshift1024star>(seed);
+  } else if (kind == "xoroshiro128+") {
+    rng =  dqrng::generator<xoroshiro128plus_engine>(seed);
+  } else if (kind == "pcg64") {
+    rng =  dqrng::generator<pcg64>(seed);
+  } else {
+    Rcpp::stop("Unknown random generator kind: %s", kind);
+  }
 }
 
 //' @rdname dqrng-functions

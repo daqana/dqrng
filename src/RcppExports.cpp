@@ -37,11 +37,11 @@ RcppExport SEXP _dqrng_dqset_seed(SEXP seedSEXP) {
     return rcpp_result_gen;
 }
 // dqRNGkind
-void dqRNGkind(const std::string kind, std::string normal_kind);
+void dqRNGkind(std::string kind, const std::string& normal_kind);
 static SEXP _dqrng_dqRNGkind_try(SEXP kindSEXP, SEXP normal_kindSEXP) {
 BEGIN_RCPP
-    Rcpp::traits::input_parameter< const std::string >::type kind(kindSEXP);
-    Rcpp::traits::input_parameter< std::string >::type normal_kind(normal_kindSEXP);
+    Rcpp::traits::input_parameter< std::string >::type kind(kindSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type normal_kind(normal_kindSEXP);
     dqRNGkind(kind, normal_kind);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
@@ -163,7 +163,7 @@ static int _dqrng_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("void(*dqset_seed)(const uint32_t)");
-        signatures.insert("void(*dqRNGkind)(const std::string,std::string)");
+        signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrnorm)(size_t,double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrexp)(size_t,double)");

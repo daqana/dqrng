@@ -1,15 +1,10 @@
 #ifndef DQRNG_GENERATOR_H
 #define DQRNG_GENERATOR_H 1
 
-#include <Rcpp.h>
 #include <cstdint>
 #include <memory>
 #include <random>
 #include <type_traits>
-#include <xorshift.hpp>
-#include <xoroshiro.hpp>
-#include <pcg_random.hpp>
-
 
 namespace dqrng {
 // conservative default
@@ -24,6 +19,8 @@ struct random_64bit_generator {
   virtual result_type min() {return 0.0;};
   virtual result_type max() {return UINT64_MAX;};
 };
+
+typedef std::shared_ptr<random_64bit_generator> rng64_t;
 
 template<class RNG>
 struct random_64bit_wrapper : random_64bit_generator {
@@ -41,30 +38,9 @@ public:
   virtual void seed(result_type seed) {gen.seed(seed);}
 };
 
-inline std::shared_ptr<random_64bit_generator> generator(std::string kind, uint64_t seed) {
-  for (auto & c: kind)
-    c = std::toupper(c);
-  if (kind == "DEFAULT") {
-    return std::make_shared<random_64bit_wrapper<default_64bit_generator>>(seed);
-  } else if (kind == "MERSENNE-TWISTER") {
-    return std::make_shared<random_64bit_wrapper<std::mt19937_64>>(seed);
-  } else if (kind == "XORSHIFT128+") {
-    return std::make_shared<random_64bit_wrapper<xorshift128plus>>(seed);
-  } else if (kind == "XORSHIFT1024*") {
-    return std::make_shared<random_64bit_wrapper<xorshift1024star>>(seed);
-  } else if (kind == "XOROSHIRO128+") {
-    return std::make_shared<random_64bit_wrapper<xoroshiro128plus_engine>>(seed);
-  } else if (kind == "PCG64") {
-    return std::make_shared<random_64bit_wrapper<pcg64>>(seed);
-  } else {
-    Rcpp::stop("Unknown random generator kind.");
-  }
-}
-
-inline std::shared_ptr<random_64bit_generator> generator(const std::string kind = "DEFAULT") {
-  std::random_device r;
-  uint64_t seed(r());
-  return generator(kind, seed);
+template<class RNG = default_64bit_generator>
+rng64_t generator (uint64_t seed = std::random_device{}()) {
+  return std::make_shared<random_64bit_wrapper<RNG>>(seed);
 }
 } // namespace dqrng
 
