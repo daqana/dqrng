@@ -25,6 +25,7 @@ inline Rcpp::NumericVector generate_from_distribution(size_t n, std::shared_ptr<
 }
 
 inline double uniform01(uint64_t x) {
+  // shift x due to weakness of lowest bits for xorshift/xoroshiro
   return (x >> 11) * (1. / (UINT64_C(1) << 53));
 }
 } // namespace dqrng
@@ -39,7 +40,7 @@ inline std::pair<double, int> generate_int_float_pair<double, 8, dqrng::random_6
   dqrng::random_64bit_generator::result_type x = eng();
   double r = dqrng::uniform01(x);
   // shift x due to weakness of lowest bits for xorshift/xoroshiro
-  int bucket = (x >> 2) & 0xFF;
+  int bucket = (x >> 3) & 0xFF;
   return std::make_pair(r, bucket);
 }
 
