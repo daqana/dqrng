@@ -30,7 +30,7 @@ dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
 #> [1] 4.498747 9.500660 2.457009 5.249195 2.370585
 dqrexp(5, rate = 4)
-#> [1] 0.4611545 0.2660513 0.3635514 0.5990732 0.5629849
+#> [1] 0.1467616 0.4703906 0.1948944 0.8026790 0.2843804
 ```
 
 They are quite a bit faster, though:
@@ -38,9 +38,9 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e7
 system.time(rnorm(N))
-#>    user  system elapsed 
-#>   0.773   0.009   0.781
+#>        User      System verstrichen 
+#>       0.739       0.033       0.771
 system.time(dqrnorm(N))
-#>    user  system elapsed 
-#>   0.114   0.036   0.149
+#>        User      System verstrichen 
+#>       0.123       0.029       0.151
 ```
