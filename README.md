@@ -39,8 +39,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>        User      System verstrichen 
-#>       0.739       0.033       0.771
+#>       0.630       0.008       0.638
 system.time(dqrnorm(N))
 #>        User      System verstrichen 
-#>       0.123       0.029       0.151
+#>       0.101       0.007       0.109
 ```

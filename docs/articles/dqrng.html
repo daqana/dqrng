@@ -44,7 +44,14 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/RInstitute/dqrng">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -59,7 +66,7 @@
       <h1>Fast Pseudo Random Number Generators for R</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2018-04-19</h4>
+            <h4 class="date">2018-04-20</h4>
           </div>
 
     
@@ -105,7 +112,7 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
 <span class="co">#&gt; pi ~=  3.140899</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.809       0.092       0.900</span></code></pre></div>
+<span class="co">#&gt;       0.730       0.013       0.742</span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dqrng)
 <span class="kw"><a href="../reference/dqrng.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)
@@ -113,28 +120,28 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N, <span class="dt">rng =</span> dqrunif), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
 <span class="co">#&gt; pi ~=  3.141416</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.214       0.075       0.290</span></code></pre></div>
+<span class="co">#&gt;       0.196       0.012       0.209</span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">runif</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.267       0.024       0.292</span>
+<span class="co">#&gt;       0.250       0.012       0.262</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrunif</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.041       0.021       0.061</span></code></pre></div>
+<span class="co">#&gt;       0.042       0.000       0.042</span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rexp</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.407       0.024       0.430</span>
+<span class="co">#&gt;       0.419       0.000       0.419</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrexp</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.059       0.024       0.083</span></code></pre></div>
+<span class="co">#&gt;       0.059       0.004       0.063</span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.697       0.020       0.717</span>
+<span class="co">#&gt;       0.600       0.001       0.600</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrnorm</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.078       0.020       0.098</span></code></pre></div>
+<span class="co">#&gt;       0.066       0.007       0.074</span></code></pre></div>
 </div>
 <div id="usage-from-c" class="section level2">
 <h2 class="hasAnchor">
@@ -170,7 +177,10 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
   NumericVector y = dqrunif(n);
   NumericVector d = sqrt(x*x + y*y);
   <span class="cf">return</span> <span class="fl">4.0</span> * sum(d &lt; <span class="fl">1.0</span>) / n;
-}</code></pre></div>
+}
+<span class="co">/*** R</span>
+<span class="co">system.time(cat("pi ~= ", piCpp(1e7), "\n"))</span>
+<span class="co">*/</span></code></pre></div>
 <p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>, whereas the anlogue function in the R interface is called <code><a href="http://www.rdocumentation.org/packages/dqrng/topics/dqrng">dqrng::dqset.seed()</a></code>.</p>
 </div>
 <div id="using-the-header-only-library" class="section level3">
@@ -203,8 +213,12 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 Rcpp::NumericVector splitmix_rnorm(<span class="at">const</span> <span class="dt">int</span> n, <span class="at">const</span> <span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="at">const</span> <span class="dt">double</span> sd = <span class="fl">1.0</span>) {
   <span class="kw">auto</span> rng = dqrng::generator&lt;SplitMix&gt;(<span class="dv">42</span>);
   dqrng::normal_distribution dist(mean, sd);
-  <span class="cf">return</span> dqrng::generate_from_distribution&lt;dqrng::normal_distribution&gt;(n, rng, dist);
-}</code></pre></div>
+  <span class="cf">return</span> dqrng::generate&lt;dqrng::normal_distribution, Rcpp::NumericVector&gt;(n, rng, dist);
+}
+<span class="co">/*** R</span>
+<span class="co">splitmix_rnorm(10)</span>
+<span class="co">system.time(splitmix_rnorm(1e7))</span>
+<span class="co">*/</span></code></pre></div>
 <p>Since SplitMix is a very fast RNG, the speed of this function is comparable to <code>dqrnorm</code>. Alternatively, you could combine the included RNGs together with dqrng’s tooling and some other distribution function. For example, this function generates random numbers according to the normal distribution using the standard library from C++11:</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// [[Rcpp::plugins(cpp11)]]   </span>
 <span class="pp">#include </span><span class="im">&lt;random&gt;</span>
@@ -217,8 +231,12 @@ Rcpp::NumericVector splitmix_rnorm(<span class="at">const</span> <span class="dt
 Rcpp::NumericVector std_rnorm(<span class="at">const</span> <span class="dt">int</span> n, <span class="at">const</span> <span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="at">const</span> <span class="dt">double</span> sd = <span class="fl">1.0</span>) {
   <span class="kw">auto</span> rng = dqrng::generator&lt;xoroshiro128plus_engine&gt;(<span class="dv">42</span>);
   <span class="bu">std::</span>normal_distribution&lt;<span class="dt">double</span>&gt; dist(mean, sd);
-  <span class="cf">return</span> dqrng::generate_from_distribution&lt;<span class="bu">std::</span>normal_distribution&lt;<span class="dt">double</span>&gt;&gt;(n, rng, dist);
-}</code></pre></div>
+  <span class="cf">return</span> dqrng::generate&lt;<span class="bu">std::</span>normal_distribution&lt;<span class="dt">double</span>&gt;, Rcpp::NumericVector&gt;(n, rng, dist);
+}
+<span class="co">/*** R</span>
+<span class="co">std_rnorm(10)</span>
+<span class="co">system.time(std_rnorm(1e7))</span>
+<span class="co">*/</span></code></pre></div>
 <p>Typically this is not as fast as <code>dqrnorm</code>, but the technique is useful to support distributions not (yet) included in dqrng. Finally you could directly use the base generators, which are provided as header-only libraries, without dqrng’s tooling. For example, the following function uses the 32 bit PCG variant together with Boost’s normal distribution function:</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span>
 <span class="co">// [[Rcpp::depends(dqrng, BH)]]</span>
@@ -234,7 +252,11 @@ Rcpp::NumericVector boost_pcg_rnorm(<span class="at">const</span> <span class="d
   <span class="kw">auto</span> gen = <span class="bu">std::</span>bind(dist, rng);
   <span class="bu">std::</span>generate(result.begin(), result.end(), gen);
   <span class="cf">return</span> result;
-}</code></pre></div>
+}
+<span class="co">/*** R</span>
+<span class="co">boost_pcg_rnorm(10)</span>
+<span class="co">system.time(boost_pcg_rnorm(1e7))</span>
+<span class="co">*/</span></code></pre></div>
 <p>This is quite fast since <code>boost::random::normal_distribution</code> uses the fast Ziggurat algorithm.</p>
 <!-- STATIC_ARBITRARY_SEED -->
 </div>
