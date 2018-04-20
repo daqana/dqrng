@@ -1,7 +1,6 @@
 #ifndef DQRNG_DISTRIBUTION_H
 #define DQRNG_DISTRIBUTION_H 1
 
-#include <Rcpp.h>
 #include <cstdint>
 #include <memory>
 #include <boost/random/uniform_real_distribution.hpp>
@@ -16,9 +15,9 @@ typedef boost::random::uniform_real_distribution<double> uniform_distribution;
 typedef boost::random::normal_distribution<double> normal_distribution;
 typedef boost::random::exponential_distribution<double> exponential_distribution;
 
-template<class DIST>
-inline Rcpp::NumericVector generate_from_distribution(size_t n, std::shared_ptr<random_64bit_generator> rng, const DIST& dist) {
-  Rcpp::NumericVector result(n);
+template<class DIST, class RES>
+inline RES generate(size_t n, std::shared_ptr<random_64bit_generator> rng, const DIST& dist) {
+  RES result(n);
   auto gen = std::bind(dist, std::ref(*rng.get()));
   std::generate(result.begin(), result.end(), gen);
   return result;

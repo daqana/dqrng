@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
 #include <xorshift.hpp>
@@ -51,7 +52,7 @@ Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
      return 2 * dqrunif(n, min/2, max/2);
 
   dqrng::uniform_distribution dist(min, max);
-  return dqrng::generate_from_distribution<dqrng::uniform_distribution>(n, rng, dist);
+  return dqrng::generate<dqrng::uniform_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
 
 //' @rdname dqrng
@@ -59,7 +60,7 @@ Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
   dqrng::normal_distribution dist(mean, sd);
-  return dqrng::generate_from_distribution<dqrng::normal_distribution>(n, rng, dist);
+  return dqrng::generate<dqrng::normal_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
 
 //' @rdname dqrng
@@ -67,5 +68,5 @@ Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
   dqrng::exponential_distribution dist(rate);
-  return dqrng::generate_from_distribution<dqrng::exponential_distribution>(n, rng, dist);
+  return dqrng::generate<dqrng::exponential_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
