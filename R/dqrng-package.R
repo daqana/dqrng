@@ -39,6 +39,13 @@
 #' @seealso \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'          \code{\link{rnorm}}, and \code{\link{rexp}}
 #'
+#' @examples
+#' library(dqrng)
+#' dqRNGkind("Xoroshiro128+")
+#' dqset.seed(42)
+#' dqrunif(5, min = 2, max = 10)
+#' dqrexp(5, rate = 4)
+#' dqrnorm(5, mean = 5, sd = 3)
 #' @name dqrng
 #' @docType package
 #' @useDynLib dqrng, .registration = TRUE

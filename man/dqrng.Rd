@@ -71,6 +71,14 @@ Supported RNG kinds:
 The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as
 provided by \code{boost.random}.
 }
+\examples{
+library(dqrng)
+dqRNGkind("Xoroshiro128+")
+dqset.seed(42)
+dqrunif(5, min = 2, max = 10)
+dqrexp(5, rate = 4)
+dqrnorm(5, mean = 5, sd = 3)
+}
 \seealso{
 \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
          \code{\link{rnorm}}, and \code{\link{rexp}}
