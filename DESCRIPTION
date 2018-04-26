@@ -2,19 +2,19 @@ Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators for R
 Version: 0.0.1
-Authors@R: as.person(c(
-    "Ralf Stubner <ralf.stubner@daqana.com> [aut, cre]",
-    "daqana GmbH [cph]",
-    "Alex Coplan [ctb]",
-    "David Blackman [ctb]",
-    "Ivo Doko <ivo.doko@gmail.com> [ctb]",
-    "Melissa O'Neill <oneill@pcg-random.org> [ctb]",
-    "Sebastiano Vigna <vigna@acm.org> [ctb]"
-  ))
-Description: This package provides several fast random number generators as C++
+Authors@R: c(
+    person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
+    person("daqana GmbH", role = "cph"),
+    person("Alex Coplan", role = "ctb"),
+    person("David Blackman", role = "ctb"),
+    person("Ivo Doko", email = "ivo.doko@gmail.com", role = "ctb"),
+    person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "ctb"),
+    person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb")
+    )
+Description: Several fast random number generators are provided as C++
   header only libraries. In addition fast functions for generating random 
   numbers according to a uniform, normal and exponential distribution are
-  provided. These functions are exported to R and as a C++ interface.
+  included. These functions are exported to R and as a C++ interface.
 License: GPL (>= 2) | file LICENSE
 Depends: R (>= 3.1.0)
 Imports: Rcpp (>= 0.12.16)
@@ -26,5 +26,5 @@ Suggests:
     rmarkdown,
     covr
 VignetteBuilder: knitr
-URL: https://github.com/RInstitute/dqrng
+URL: http://www.daqana.org/dqrng
 BugReports: https://github.com/RInstitute/dqrng/issues
