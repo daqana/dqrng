@@ -1,18 +1,21 @@
 Files: inst/include/pcg_*
 Copyright: 2014-2017 Melissa O'Neill and the PCG Project contributors.
 License: Apache-2.0 or MIT
+URL: https://github.com/imneme/pcg-cpp
 
 File: inst/include/xoroshiro.hpp
 Copyright: 2016 Alex Coplan, 2018 Ralf Stubner (daqana GmbH)
            Based on code written by David Blackman and Sebastiano Vigna and
            distributed under CC0 license, c.f. http://xoroshiro.di.unimi.it/.
 License: MIT
+URL: https://github.com/alexcoplan/xoroshiro128plus-cpp
 
 File: inst/include/xorshift.hpp
 Copyright: 2014 Ivo Doko
            Based on code written by Sebastiano Vigna and distributed under
            CC0 license, c.f. http://xoroshiro.di.unimi.it/.
 License: CC0
+URL: https://sourceforge.net/projects/xorshift-cpp/
 
 Files: *
 Copyright: 2018 Ralf Stubner (daqana GmbH)
