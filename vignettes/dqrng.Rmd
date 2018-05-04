@@ -152,7 +152,7 @@ struct SplitMix {
   static constexpr result_type max() {return UINT64_MAX;}
   static constexpr result_type min() {return 0;}
   SplitMix (result_type seed) : state(seed) {};
-  inline result_type operator() () {
+  result_type operator() () {
     result_type z = (state += 0x9e3779b97f4a7c15ULL);
     z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9ULL;
     z = (z ^ (z >> 27)) * 0x94d049bb133111ebULL;
