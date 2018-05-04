@@ -30,7 +30,7 @@ via [drat](https://cran.r-project.org/package=drat):
 
 ```r
 if (!requireNamespace("drat", quietly = TRUE)) install.packages("drat")
-drat::addRepo("RInstitute")
+drat::addRepo("daqana")
 install.packages("dqrng")
 ```
 

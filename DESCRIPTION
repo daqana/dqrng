@@ -27,4 +27,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 URL: http://www.daqana.org/dqrng
-BugReports: https://github.com/RInstitute/dqrng/issues
+BugReports: https://github.com/daqana/dqrng/issues

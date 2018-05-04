@@ -14,7 +14,7 @@ At the moment dqrng is not on CRAN, but you can install the current version via 
 
 ``` r
 if (!requireNamespace("drat", quietly = TRUE)) install.packages("drat")
-drat::addRepo("RInstitute")
+drat::addRepo("daqana")
 install.packages("dqrng")
 ```
 
@@ -38,9 +38,9 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e7
 system.time(rnorm(N))
-#>        User      System verstrichen 
-#>       0.630       0.008       0.638
+#>    user  system elapsed 
+#>   0.755   0.031   0.785
 system.time(dqrnorm(N))
-#>        User      System verstrichen 
-#>       0.101       0.007       0.109
+#>    user  system elapsed 
+#>   0.064   0.024   0.088
 ```
