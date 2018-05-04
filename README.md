@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis build status](https://travis-ci.org/RInstitute/dqrng.svg?branch=master)](https://travis-ci.org/RInstitute/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/RInstitute/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/RInstitute/dqrng) [![Coverage status](https://codecov.io/gh/RInstitute/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/RInstitute/dqrng?branch=master)
+[![Travis build status](https://travis-ci.org/daqana/dqrng.svg?branch=master)](https://travis-ci.org/daqana/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/daqana/dqrng) [![Coverage status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master)
 
 dqrng
 =====
@@ -39,8 +39,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.755   0.031   0.785
+#>   0.676   0.020   0.696
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.064   0.024   0.088
+#>   0.071   0.020   0.091
 ```
