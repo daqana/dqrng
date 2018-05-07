@@ -147,10 +147,8 @@ Here a minimal [SplitMix](http://xoroshiro.di.unimi.it/splitmix64.c) generator i
 // [[Rcpp::depends(dqrng)]]
 #include <dqrng_distribution.h>
 
-struct SplitMix {
-  typedef uint64_t result_type;
-  static constexpr result_type max() {return UINT64_MAX;}
-  static constexpr result_type min() {return 0;}
+class SplitMix : public dqrng::random_64bit_generator {
+public:
   SplitMix (result_type seed) : state(seed) {};
   result_type operator() () {
     result_type z = (state += 0x9e3779b97f4a7c15ULL);
@@ -160,8 +158,8 @@ struct SplitMix {
   }
   void seed(result_type seed) {state = seed;}
 
-  private:
-    result_type state;
+private:
+  result_type state;
 };
 
 // [[Rcpp::export]]
