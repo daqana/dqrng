@@ -63,9 +63,9 @@ Supported RNG kinds:
    while staying close to R's default RNG (32 bit Mersenne-Twister).}
   \item{pcg64}{The default 64 bit variant from the PCG family developed by
    Melissa O'Neill. See \url{http://www.pcg-random.org} for more details.}
-  \item{Xoroshiro128+, Xorshift128+ and Xorshift1024*}{RNGs mainly developed
-   by Sebastiano Vigna. They are used as default RNGs in Erlang and different
-   JavaScript engines. See \url{http://xoroshiro.di.unimi.it/} for more details.}
+  \item{Xoroshiro128+ and Xoshiro256+}{RNGs developed by David Blackman and
+   Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
+    \url{http://xoshiro.di.unimi.it/} for more details.}
 }
 
 The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as

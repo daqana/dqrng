@@ -41,7 +41,7 @@ inline RES generate(size_t n, std::shared_ptr<random_64bit_generator> rng, const
 }
 
 inline double uniform01(uint64_t x) {
-  // prefer high bits due to weakness of lowest bits for xorshift/xoroshiro
+  // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
   return (x >> 11) * (1. / (UINT64_C(1) << 53));
 }
 } // namespace dqrng
@@ -55,7 +55,7 @@ inline std::pair<double, int> generate_int_float_pair<double, 8, dqrng::random_6
 {
   dqrng::random_64bit_generator::result_type x = eng();
   double r = dqrng::uniform01(x);
-  // shift x due to weakness of lowest bits for xorshift/xoroshiro
+  // shift x due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
   int bucket = (x >> 3) & 0xFF;
   return std::make_pair(r, bucket);
 }

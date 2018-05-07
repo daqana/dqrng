@@ -1,6 +1,9 @@
 # dqrng 0.0.1.9000
 
 * `dqrng_distribution.h` can now be used independently of Rcpp
+* Replace `xorshift.hpp` and `xoroshiro.hpp` with `xoshiro.h`. 
+  This implementation is directly derived from the original C implementations.
+  It provides v1.0 of Xoroshiro128+ and Xoshiro256+.
 
 # dqrng 0.0.1
 

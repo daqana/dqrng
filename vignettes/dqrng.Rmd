@@ -30,10 +30,10 @@ This is a conservative default that allows you to take advantage of the fast dis
 * **pcg64**
 The default 64 bit variant from the PCG family developed by Melissa O'Neill.
 See http://www.pcg-random.org for more details.
-* **Xoroshiro128+**, **Xorshift128+**, and **Xorshift1024***  
-RNGs mainly developed by Sebastiano Vigna.
-They are used as default RNGs in Erlang and different JavaScript engines.
-See http://xoroshiro.di.unimi.it/ for more details.
+* **Xoroshiro128+** amd **Xoshiro256+**  
+RNGs developed by David Blackman and Sebastiano Vigna.
+They are used as default RNGs in Erlang and Lua.
+See http://xoshiro.di.unimi.it/ for more details.
 
 Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples. 
 

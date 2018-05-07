@@ -18,8 +18,7 @@
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
-#include <xorshift.hpp>
-#include <xoroshiro.hpp>
+#include <xoshiro.h>
 #include <pcg_random.hpp>
 
 
@@ -48,12 +47,10 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
     rng =  dqrng::generator(seed);
   } else if (kind == "mersenne-twister") {
     rng =  dqrng::generator<std::mt19937_64>(seed);
-  } else if (kind == "xorshift128+") {
-    rng =  dqrng::generator<xorshift128plus>(seed);
-  } else if (kind == "xorshift1024*") {
-    rng =  dqrng::generator<xorshift1024star>(seed);
   } else if (kind == "xoroshiro128+") {
-    rng =  dqrng::generator<xoroshiro128plus_engine>(seed);
+    rng =  dqrng::generator<dqrng::xoroshiro128plus>(seed);
+  } else if (kind == "xoshiro256+") {
+    rng =  dqrng::generator<dqrng::xoshiro256plus>(seed);
   } else if (kind == "pcg64") {
     rng =  dqrng::generator<pcg64>(seed);
   } else {

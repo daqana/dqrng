@@ -5,9 +5,7 @@ Version: 0.0.1.9000
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
-    person("Alex Coplan", role = "ctb"),
     person("David Blackman", role = "ctb"),
-    person("Ivo Doko", email = "ivo.doko@gmail.com", role = "ctb"),
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "ctb"),
     person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb")
     )

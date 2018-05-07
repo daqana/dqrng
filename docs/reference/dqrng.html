@@ -182,9 +182,9 @@
    while staying close to R's default RNG (32 bit Mersenne-Twister).</p></dd>
   <dt>pcg64</dt><dd><p>The default 64 bit variant from the PCG family developed by
    Melissa O'Neill. See <a href='http://www.pcg-random.org'>http://www.pcg-random.org</a> for more details.</p></dd>
-  <dt>Xoroshiro128+, Xorshift128+ and Xorshift1024*</dt><dd><p>RNGs mainly developed
-   by Sebastiano Vigna. They are used as default RNGs in Erlang and different
-   JavaScript engines. See <a href='http://xoroshiro.di.unimi.it/'>http://xoroshiro.di.unimi.it/</a> for more details.</p></dd>
+  <dt>Xoroshiro128+ and Xoshiro256+</dt><dd><p>RNGs developed by David Blackman and
+   Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
+    <a href='http://xoshiro.di.unimi.it/'>http://xoshiro.di.unimi.it/</a> for more details.</p></dd>
 </dl>
     <p>The functions <code>dqrnorm</code> and <code>dqrexp</code> use the Ziggurat algorithm as
 provided by <code>boost.random</code>.</p>
@@ -199,7 +199,7 @@ provided by <code>boost.random</code>.</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dqrng</span>)
 <span class='fu'>dqRNGkind</span>(<span class='st'>"Xoroshiro128+"</span>)
 <span class='fu'>dqset.seed</span>(<span class='fl'>42</span>)
-<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 4.498747 9.500660 2.457009 5.249195 2.370585</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.1467616 0.4703906 0.1948944 0.8026790 0.2843804</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 5.017316 8.266053 6.396694 5.610412 9.508178</div></pre>
+<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 4.498747 9.647875 5.232044 6.176499 8.453008</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.5520084 0.1982174 0.3281557 0.1913137 0.7544450</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1]  5.269292  7.241771 10.643339  8.044403  3.034211</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
