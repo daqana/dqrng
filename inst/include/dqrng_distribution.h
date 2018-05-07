@@ -27,12 +27,12 @@
 
 namespace dqrng {
 // Boost's implementation allow for performance increasing spezializations
-typedef boost::random::uniform_real_distribution<double> uniform_distribution;
+using uniform_distribution = boost::random::uniform_real_distribution<double>;
 // Boost's implementation uses the fast Ziggurat method
-typedef boost::random::normal_distribution<double> normal_distribution;
-typedef boost::random::exponential_distribution<double> exponential_distribution;
+using normal_distribution = boost::random::normal_distribution<double>;
+using exponential_distribution = boost::random::exponential_distribution<double>;
 
-template<class DIST, class RES>
+template<typename DIST, typename RES>
 inline RES generate(size_t n, std::shared_ptr<random_64bit_generator> rng, const DIST& dist) {
   RES result(n);
   auto gen = std::bind(dist, std::ref(*rng.get()));

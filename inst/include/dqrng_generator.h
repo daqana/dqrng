@@ -25,22 +25,23 @@
 
 namespace dqrng {
 // conservative default
-typedef std::mt19937_64 default_64bit_generator;
+using default_64bit_generator = std::mt19937_64;
 
-struct random_64bit_generator {
+class random_64bit_generator {
+public:
   typedef uint64_t result_type;
 
   virtual ~random_64bit_generator() {};
   virtual result_type operator() () = 0;
   virtual void seed(result_type seed) = 0;
-  virtual result_type min() {return 0.0;};
-  virtual result_type max() {return UINT64_MAX;};
+  result_type min() {return 0.0;};
+  result_type max() {return UINT64_MAX;};
 };
 
-typedef std::shared_ptr<random_64bit_generator> rng64_t;
+using rng64_t = std::shared_ptr<random_64bit_generator>;
 
-template<class RNG>
-struct random_64bit_wrapper : random_64bit_generator {
+template<typename RNG>
+class random_64bit_wrapper : public random_64bit_generator {
   static_assert(std::is_same<random_64bit_generator::result_type, typename RNG::result_type>::value,
                 "Provided RNG has wrong result_type");
   static_assert(RNG::max() == UINT64_MAX, "Provided RNG has wrong maximum.");
@@ -55,7 +56,7 @@ public:
   virtual void seed(result_type seed) {gen.seed(seed);}
 };
 
-template<class RNG = default_64bit_generator>
+template<typename RNG = default_64bit_generator>
 rng64_t generator (uint64_t seed = std::random_device{}()) {
   return std::make_shared<random_64bit_wrapper<RNG>>(seed);
 }
