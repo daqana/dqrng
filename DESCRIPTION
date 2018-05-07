@@ -26,5 +26,5 @@ Suggests:
     rmarkdown,
     covr
 VignetteBuilder: knitr
-URL: http://www.daqana.org/dqrng
+URL: https://www.daqana.org/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
