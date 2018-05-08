@@ -1,4 +1,4 @@
-# dqrng 0.0.1.9000
+# dqrng 0.0.2
 
 * `dqrng_distribution.h` can now be used independently of Rcpp
 * Replace `xorshift.hpp` and `xoroshiro.hpp` with `xoshiro.h`. 
