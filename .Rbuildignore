@@ -1,9 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-external
+^external$
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
 ^\.travis\.yml$
 ^codecov\.yml$
 ^appveyor\.yml$
+^include$
+^cran-comments\.md$
