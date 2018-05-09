@@ -1,6 +1,6 @@
 Package: dqrng
 Type: Package
-Title: Fast Pseudo Random Number Generators for R
+Title: Fast Pseudo Random Number Generators
 Version: 0.0.2
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
@@ -10,10 +10,19 @@ Authors@R: c(
     person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb")
     )
 Description: Several fast random number generators are provided as C++
-  header only libraries. In addition fast functions for generating random 
-  numbers according to a uniform, normal and exponential distribution are
-  included. These functions are exported to R and as a C++ interface.
-License: GPL (>= 2) | file LICENSE
+  header only libraries: The PCG family by O'Neill (2014
+  <https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf>) as well as
+  Xoroshiro128+ and Xoshiro256+ by Blackman and Vigna (2018
+  <arXiv:1805.01407>). In addition fast functions for generating random
+  numbers according to a uniform, normal and exponential distribution
+  are included. The latter two use the Ziggurat algorithm originally
+  proposed by Marsaglia and Tsang (2000, <doi:10.18637/jss.v005.i08>).
+  These functions are exported to R and as a C++ interface and are
+  enabled for use with the 64 bit version of the Mersenne-Twister by
+  Matsumoto and Nishimura (1998 <doi:10.1145/272991.272995>), the
+  default 64 bit generator from the PCG family as well as Xoroshiro128+
+  and Xoshiro256+.
+License: AGPL-3 | file LICENSE
 Depends: R (>= 3.1.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1)

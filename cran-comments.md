@@ -1,3 +1,13 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Removed the redundant "for R" from the title.
+
+* Included the actual algorithms including citation information
+  in the 'Description' field of the DESCRIPTION file.
+
+* Changed the license of my contributions from GPL (>=2) to AGPL-3.
+
 ## Test environments
 * local Debian install, R 3.5.0
 * Ubuntu on travis-ci, R 3.5.0, R 3.3.3, R-devel
