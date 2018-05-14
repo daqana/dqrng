@@ -62,8 +62,8 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
-  if(max / 2 - min / 2 > (std::numeric_limits<double>::max)() / 2)
-     return 2 * dqrunif(n, min/2, max/2);
+  if(max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
+     return 2. * dqrunif(n, min/2., max/2.);
 
   dqrng::uniform_distribution dist(min, max);
   return dqrng::generate<dqrng::uniform_distribution, Rcpp::NumericVector>(n, rng, dist);
