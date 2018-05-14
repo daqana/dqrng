@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis build status](https://travis-ci.org/daqana/dqrng.svg?branch=master)](https://travis-ci.org/daqana/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/dqrng) [![CRAN status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng) [![Coverage status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master)
 
 dqrng
 =====
@@ -44,8 +45,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.650   0.005   0.654
+#>   0.647   0.000   0.647
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.059   0.012   0.072
+#>   0.070   0.004   0.073
 ```
