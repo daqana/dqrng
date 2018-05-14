@@ -2,6 +2,15 @@ context("generators")
 
 seed <- 1234567890
 
+test_that("Default generator: setting seed produces identical uniformly distributed numbers", {
+  dqRNGkind("default")
+  dqset.seed(seed)
+  u1 <- dqrunif(10)
+  dqset.seed(seed)
+  u2 <- dqrunif(10)
+  expect_equal(u1, u2)
+})
+
 test_that("Mersenne-Twister: setting seed produces identical uniformly distributed numbers", {
   dqRNGkind("Mersenne-Twister")
   dqset.seed(seed)
