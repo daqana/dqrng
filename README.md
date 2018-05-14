@@ -9,7 +9,13 @@ The dqrng package provides fast random number generators (RNG) with good statist
 Installation
 ------------
 
-At the moment dqrng is not on CRAN, but you can install the current version via [drat](https://cran.r-project.org/package=drat):
+The currently released version is available from CRAN via
+
+``` r
+install.packages("dqrng")
+```
+
+Intermediate releases can also be obtained via [drat](https://cran.r-project.org/package=drat):
 
 ``` r
 if (!requireNamespace("drat", quietly = TRUE)) install.packages("drat")
@@ -27,9 +33,9 @@ library(dqrng)
 dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
-#> [1] 4.498747 9.500660 2.457009 5.249195 2.370585
+#> [1] 4.498747 9.647875 5.232044 6.176499 8.453008
 dqrexp(5, rate = 4)
-#> [1] 0.1467616 0.4703906 0.1948944 0.8026790 0.2843804
+#> [1] 0.5520084 0.1982174 0.3281557 0.1913137 0.7544450
 ```
 
 They are quite a bit faster, though:
@@ -38,8 +44,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.676   0.020   0.696
+#>   0.650   0.005   0.654
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.071   0.020   0.091
+#>   0.059   0.012   0.072
 ```
