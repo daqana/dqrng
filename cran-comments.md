@@ -1,22 +1,25 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Removed the redundant "for R" from the title.
-
-* Included the actual algorithms including citation information
-  in the 'Description' field of the DESCRIPTION file.
-
-* Changed the license of my contributions from GPL (>=2) to AGPL-3.
+* Patched the included PCG RNG to compile on Solaris 
 
 ## Test environments
-* local Debian install, R 3.5.0
-* Ubuntu on travis-ci, R 3.5.0, R 3.3.3, R-devel
-* MacOS on travis-ci, R 3.5.0
-* Windows on AppVeyor, R 3.5.0
-* Windows and Linux with R 3.5.0 and R-devel via rhub::check_for_cran()
+* local:  Debian stable with R 3.5.0
+* Travis-CI:
+    * Ubuntu Trusty, R 3.5.0, R 3.3.3, R-devel
+    * MacOS, R 3.5.0
+* AppVeyor: Windows, R 3.5.0
+* winbuilder: Windows, R-devel
+* r-hub.io:
+    * Windows, R-devel
+    * Ubuntu, gcc, R-release
+    * Fedora, clang, R-devel
+    * Solaris, R-patched
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* Days since last update: 3
+
+=> Submission fixes compilation ERROR on Solaris
