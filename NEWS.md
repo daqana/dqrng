@@ -1,3 +1,5 @@
+* PCG has been patched to compile on Solaris.
+
 # dqrng 0.0.2
 
 * `dqrng_distribution.h` can now be used independently of Rcpp
