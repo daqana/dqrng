@@ -1,3 +1,5 @@
+# dqrng 0.0.3
+
 * PCG has been patched to compile on Solaris.
 
 # dqrng 0.0.2
