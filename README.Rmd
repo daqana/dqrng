@@ -17,7 +17,8 @@ knitr::opts_chunk$set(
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/dqrng)
 [![CRAN status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng)
 [![Coverage status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master)
-  
+[![Downloads](http://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](http://www.r-pkg.org/pkg/dqrng)
+
 # dqrng
 
 The dqrng package provides fast random number generators (RNG) with good statistical properties for usage with R.

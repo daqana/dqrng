@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis build status](https://travis-ci.org/daqana/dqrng.svg?branch=master)](https://travis-ci.org/daqana/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/dqrng) [![CRAN status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng) [![Coverage status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master)
+[![Travis build status](https://travis-ci.org/daqana/dqrng.svg?branch=master)](https://travis-ci.org/daqana/dqrng) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/dqrng) [![CRAN status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng) [![Coverage status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master) [![Downloads](http://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](http://www.r-pkg.org/pkg/dqrng)
 
 dqrng
 =====
@@ -45,8 +45,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.647   0.000   0.647
+#>   0.756   0.000   0.757
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.070   0.004   0.073
+#>   0.068   0.027   0.094
 ```
