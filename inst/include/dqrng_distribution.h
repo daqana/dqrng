@@ -33,9 +33,9 @@ using normal_distribution = boost::random::normal_distribution<double>;
 using exponential_distribution = boost::random::exponential_distribution<double>;
 
 template<typename DIST, typename RES>
-inline RES generate(size_t n, std::shared_ptr<random_64bit_generator> rng, const DIST& dist) {
+inline RES generate(size_t n, rng64_t rng, const DIST& dist) {
   RES result(n);
-  auto gen = std::bind(dist, std::ref(*rng.get()));
+  auto gen = std::bind(dist, std::ref(*rng));
   std::generate(result.begin(), result.end(), gen);
   return result;
 }
