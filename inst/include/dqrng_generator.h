@@ -19,6 +19,7 @@
 #define DQRNG_GENERATOR_H 1
 
 #include <cstdint>
+#include <chrono>
 #include <memory>
 #include <random>
 #include <type_traits>
@@ -71,6 +72,8 @@ generator (uint64_t seed) {
 template<typename RNG = default_64bit_generator>
 rng64_t generator() {
   uint64_t seed = std::random_device{}();
+  uint64_t time = std::chrono::system_clock::now().time_since_epoch().count();
+  seed = seed | time;
   return generator<RNG>(seed);
 }
 } // namespace dqrng
