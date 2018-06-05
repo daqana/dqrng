@@ -31,7 +31,7 @@ dqrng::rng64_t rng = dqrng::generator();
 // [[Rcpp::export(rng = false)]]
 void dqset_seed(const uint32_t seed) {
   uint64_t seed2  = 1664525 * seed + 1013904223;
-  uint64_t _seed = seed || (seed2 << 32);
+  uint64_t _seed = seed | (seed2 << 32);
   rng->seed(_seed);
 }
 

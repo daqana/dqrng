@@ -1,3 +1,7 @@
+# dqrng 0.0.3.9000
+
+* Fix critical bug w.r.t. setting seeds
+
 # dqrng 0.0.3
 
 * PCG has been patched to compile on Solaris.
