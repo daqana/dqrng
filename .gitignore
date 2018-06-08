@@ -7,3 +7,5 @@ src/*.so
 src/*.dll
 inst/doc
 *~
+vignettes/*.R
+vignettes/*.html

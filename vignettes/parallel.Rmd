@@ -84,8 +84,8 @@ Result:
 # PCG: multiple streams with RcppParallel
 
 From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
-It offers the function [`advance(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
-In addition, it offers $2^{127}$ separate streams that can be enabled via the function [set_stream(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
+It offers the function [`advance(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
+In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independet:
 
