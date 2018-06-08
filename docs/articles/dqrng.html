@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.4</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
 <span class="co">#&gt; pi ~=  3.140899</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.946       0.116       1.062</span></code></pre></div>
+<span class="co">#&gt;       0.812       0.068       0.880</span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dqrng)
 <span class="kw"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)
@@ -135,28 +135,28 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N, <span class="dt">rng =</span> dqrunif), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
 <span class="co">#&gt; pi ~=  3.14227</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       1.900       0.104       2.004</span></code></pre></div>
+<span class="co">#&gt;       1.675       0.101       1.776</span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">runif</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.348       0.008       0.356</span>
+<span class="co">#&gt;       0.320       0.016       0.336</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrunif</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.905       0.024       0.929</span></code></pre></div>
+<span class="co">#&gt;       0.805       0.029       0.833</span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rexp</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.484       0.028       0.512</span>
+<span class="co">#&gt;       0.492       0.040       0.533</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrexp</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       1.271       0.020       1.291</span></code></pre></div>
+<span class="co">#&gt;       1.182       0.021       1.203</span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.759       0.016       0.775</span>
+<span class="co">#&gt;       0.743       0.008       0.751</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrnorm</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       1.314       0.016       1.330</span></code></pre></div>
+<span class="co">#&gt;       1.303       0.019       1.323</span></code></pre></div>
 </div>
 <div id="usage-from-c" class="section level2">
 <h2 class="hasAnchor">

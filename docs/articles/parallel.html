@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.4</span>
       </span>
     </div>
 
@@ -141,7 +141,7 @@
 <div id="pcg-multiple-streams-with-rcppparallel" class="section level1">
 <h1 class="hasAnchor">
 <a href="#pcg-multiple-streams-with-rcppparallel" class="anchor"></a>PCG: multiple streams with RcppParallel</h1>
-<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function [<code>advance(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to</code>n<code>random draws but scales as $O(ln(n))$ instead of $O(n)$.  In addition, it offers $2^{127}$ separate streams that can be enabled via the function [set_stream(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with</code>seed<code>and</code>stream`. In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independet:</p>
+<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream"><code>set_stream(int n)</code></a> or the <a href="http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor">two argument constructor</a> with <code>seed</code> and <code>stream</code>. In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independet:</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span>
 <span class="co">// [[Rcpp::depends(dqrng)]]</span>
 <span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span>
