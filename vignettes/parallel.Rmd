@@ -1,0 +1,158 @@
+---
+title: "Parallel RNG usage"
+author: "Ralf Stubner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Parallel RNG usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
+There are two main approaches to this problem:^[See for example http://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
+
+* Partition the the complete sequence of random numbers produced for one seed into sub-sequences and assign each process one sub-sequence.
+* Reparametrize the generator to to produce non-overlapping sequences for the same seed.
+
+The RNGs included in `dqrng` offer at least one of these methods for parallel RNG usage.
+Currently these features can only be used from C++.
+
+# Xo(ro)shiro: jump ahead with OpenMP
+
+The Xoshiro256+ generator has a period of $2^{256} -1$ and offeres $2^{128}$ sub-sequences, which are $2^{128}$ random draws appart.
+The Xoroshiro128+ generator has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences, which are $2^{64}$ random draws appart. 
+You can go from one sub-sequence to the next using the `jump()` method and the convenience wrapper `jump(int n)`, which  advances to the `n`th sub-sequence.
+
+As an example we draw and sum a large number of uniformly distributed numbers.
+This is done several times using OpenMP for parallelisation.
+Care has been taken to keep the global RNG `rng` usable outside of the parallel block.
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng)]]
+#include <xoshiro.h>
+#include <dqrng_distribution.h>
+// [[Rcpp::plugins(openmp)]]
+#include <omp.h>
+
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::export]]
+std::vector<double> parallel_random_sum(int n, int m, int ncores) {
+  dqrng::uniform_distribution dist(0.0, 1.0);
+  dqrng::xoshiro256plus rng(42);
+  std::vector<double> res(m);
+  // ok to use rng here
+  
+  #pragma omp parallel num_threads(ncores)
+  {
+    dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
+    lrng.jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps 
+    auto gen = std::bind(dist, lrng);
+
+    #pragma omp for
+    for (unsigned int i = 0; i < m; ++i) {
+      double lres(0);
+      for (unsigned int j = 0; j < n; ++j) {
+        lres += gen();
+      }
+      res[i] = lres / n;
+    }
+  }
+  // ok to use rng here
+  return res;
+}
+
+/*** R
+parallel_random_sum(1e7, 8, 4)
+*/
+```
+
+
+Result:
+
+    [1] 0.4999572 0.5000629 0.5001152 0.4998430 0.5000855 0.5000065 0.5001489 0.4998603
+
+
+# PCG: multiple streams with RcppParallel
+
+From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
+It offers the function [`advance(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
+In addition, it offers $2^{127}$ separate streams that can be enabled via the function [set_stream(int n)](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
+In the following example a matrix with random numbers is generated in parallel using RcppParallel.
+The resulting correlation matrix should be close to the identity matrix if the different streams are independet:
+
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng)]]
+#include <pcg_random.hpp>
+#include <dqrng_distribution.h>
+// [[Rcpp::depends(RcppParallel)]]
+#include <RcppParallel.h>
+// [[Rcpp::plugins(cpp11)]]
+
+struct RandomFill : public RcppParallel::Worker {
+  RcppParallel::RMatrix<double> output;
+  uint64_t seed;
+  dqrng::normal_distribution dist{0.0, 1.0};
+
+  RandomFill(Rcpp::NumericMatrix output, const uint64_t seed) : output(output), seed(seed) {};
+
+  void operator()(std::size_t begin, std::size_t end) {
+    pcg64 rng(seed, end);
+    auto gen = std::bind(dist, rng);
+    std::generate(output.begin() + begin * output.nrow(),
+                  output.begin() + end * output.nrow(),
+                  std::ref(gen));
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix parallel_random_matrix(const int n, const int m, const int ncores) {
+  Rcpp::NumericMatrix res(n, m);
+  RandomFill randomFill(res, 42);
+  RcppParallel::parallelFor(0, m, randomFill, m/ncores + 1);
+  return res;
+}
+
+/*** R
+res <- parallel_random_matrix(1e6, 8, 4)
+head(res)
+symnum(x = cor(res), cutpoints = c(0.001, 0.002, 0.999),
+       symbols = c(" ", "?", "!", "1"),
+       abbr.colnames = FALSE, corr = TRUE)
+*/
+```
+
+Head of the random matrix:
+
+               [,1]        [,2]        [,3]       [,4]       [,5]       [,6]       [,7]       [,8]
+    [1,]  0.7114429 -0.19759808 -0.47149983  0.6046378 -0.3709571 -0.8089533  0.8185977 0.49010575
+    [2,]  0.8721661 -0.47654248  1.10411136 -1.6290995 -1.3276661 -0.2585322 -1.2437521 0.90325167
+    [3,] -1.4959624  0.61068373 -0.54343828 -0.4623555 -1.1779352 -2.8068283 -0.4341252 1.74490995
+    [4,]  0.5087201 -0.05175746  0.19007581 -0.7869679  0.9672267 -0.5009787 -0.5283977 1.42487290
+    [5,] -0.8191448 -0.77348120 -0.03458304  0.7243224  1.0594094 -0.6951184 -0.5456669 0.00894037
+    [6,]  1.2289518 -2.33539762  0.40222707 -2.3346460 -0.5796549 -0.3092356  2.8961294 0.16773085
+
+Correlation matrix:
+
+    [1,] 1              
+    [2,] ? 1            
+    [3,]     1          
+    [4,] ?   ? 1        
+    [5,]         1      
+    [6,]       ?   1    
+    [7,]             1  
+    [8,]   ?           1
+    attr(,"legend")
+    [1] 0 ‘ ’ 0.001 ‘?’ 0.002 ‘!’ 0.999 ‘1’ 1
+
+So as expected the correalation matrix is almost equal to the identity matrix.
