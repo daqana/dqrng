@@ -21,14 +21,17 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Changelog" />
+
 
 
 <!-- mathjax -->
@@ -73,6 +76,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/parallel.html">Parallel RNG usage</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -96,6 +111,24 @@
       
     </div>
 
+    <div id="dqrng-0-0-3-9000" class="section level1">
+<h1 class="page-header">
+<a href="#dqrng-0-0-3-9000" class="anchor"></a>dqrng 0.0.3.9000<small> Unreleased </small>
+</h1>
+<ul>
+<li>Fix critical bug w.r.t. setting seeds</li>
+<li>Use time in addition to <code>std::random_device</code> as source of the default seed, since <code>std::random_device</code> is deterministic with MinGW (c.f. #2)</li>
+<li>Add jump() method to Xoshiro256+ and Xorohiro128+</li>
+</ul>
+</div>
+    <div id="dqrng-0-0-3" class="section level1">
+<h1 class="page-header">
+<a href="#dqrng-0-0-3" class="anchor"></a>dqrng 0.0.3<small> 2018-05-14 </small>
+</h1>
+<ul>
+<li>PCG has been patched to compile on Solaris.</li>
+</ul>
+</div>
     <div id="dqrng-0-0-2" class="section level1">
 <h1 class="page-header">
 <a href="#dqrng-0-0-2" class="anchor"></a>dqrng 0.0.2<small> 2018-05-11 </small>
@@ -120,6 +153,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#dqrng-0-0-3-9000">0.0.3.9000</a></li>
+        <li><a href="#dqrng-0-0-3">0.0.3</a></li>
         <li><a href="#dqrng-0-0-2">0.0.2</a></li>
         <li><a href="#dqrng-0-0-1">0.0.1</a></li>
       </ul>

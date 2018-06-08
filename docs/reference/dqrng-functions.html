@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Pseudo Random Number Generators for R — dqrng • dqrng</title>
+<title>R interface — dqRNGkind • dqrng</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -21,23 +21,25 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Fast Pseudo Random Number Generators for R — dqrng" />
+<meta property="og:title" content="R interface — dqRNGkind" />
 
 <meta property="og:description" content="The dqrng package provides several fast random number
-  generators as C++ header only libraries. In addition fast functions for
-  generating random numbers according to a uniform, normal and exponential
-  distribution are provided. These functions are exported to R and as a C++
-  interface and are modeled after the base functions
+  generators together with fast functions for generating random numbers
+  according to a uniform, normal and exponential distribution. These
+  functions are modeled after the base functions
   set.seed, RNGkind, runif,
   rnorm, and rexp." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -82,6 +84,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/parallel.html">Parallel RNG usage</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -101,18 +115,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Pseudo Random Number Generators for R</h1>
+    <h1>R interface</h1>
     
-    <div class="hidden name"><code>dqrng.Rd</code></div>
+    <div class="hidden name"><code>dqrng-functions.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>The <code>dqrng</code> package provides several fast random number
-  generators as C++ header only libraries. In addition fast functions for
-  generating random numbers according to a uniform, normal and exponential
-  distribution are provided. These functions are exported to R and as a C++
-  interface and are modeled after the <code>base</code> functions
+  generators together with fast functions for generating random numbers
+  according to a uniform, normal and exponential distribution. These
+  functions are modeled after the <code>base</code> functions
   <code>set.seed</code>, <code>RNGkind</code>, <code>runif</code>,
   <code>rnorm</code>, and <code>rexp</code>.</p>
     
@@ -199,7 +212,7 @@ provided by <code>boost.random</code>.</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dqrng</span>)
 <span class='fu'>dqRNGkind</span>(<span class='st'>"Xoroshiro128+"</span>)
 <span class='fu'>dqset.seed</span>(<span class='fl'>42</span>)
-<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 4.498747 9.647875 5.232044 6.176499 8.453008</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.5520084 0.1982174 0.3281557 0.1913137 0.7544450</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1]  5.269292  7.241771 10.643339  8.044403  3.034211</div></pre>
+<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 8.480202 6.582408 8.869840 5.062206 8.828782</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.39374734 0.09218016 0.15409536 0.60380418 0.06477960</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 1.222748 6.129323 8.102425 1.595626 9.726829</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

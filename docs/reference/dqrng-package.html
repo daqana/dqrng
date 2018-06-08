@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • dqrng</title>
+<title>dqrng: Fast Pseudo Random Number Generators — dqrng-package • dqrng</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,22 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="dqrng: Fast Pseudo Random Number Generators — dqrng-package" />
+
+<meta property="og:description" content="Several fast random number generators are provided as C++
+header only libraries: The PCG family by O'Neill (2014
+&amp;lt;https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf&amp;gt;) as well as
+Xoroshiro128+ and Xoshiro256+ by Blackman and Vigna (2018
+&amp;lt;arXiv:1805.01407&amp;gt;). In addition fast functions for generating random
+numbers according to a uniform, normal and exponential distribution
+are included. The latter two use the Ziggurat algorithm originally
+proposed by Marsaglia and Tsang (2000, &amp;lt;doi:10.18637/jss.v005.i08&amp;gt;).
+These functions are exported to R and as a C++ interface and are
+enabled for use with the 64 bit version of the Mersenne-Twister by
+Matsumoto and Nishimura (1998 &amp;lt;doi:10.1145/272991.272995&amp;gt;), the
+default 64 bit generator from the PCG family as well as Xoroshiro128+
+and Xoshiro256+." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +61,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,48 +120,61 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>dqrng: Fast Pseudo Random Number Generators</h1>
+    
+    <div class="hidden name"><code>dqrng-package.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Several fast random number generators are provided as C++
+header only libraries: The PCG family by O'Neill (2014
+&lt;https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf&gt;) as well as
+Xoroshiro128+ and Xoshiro256+ by Blackman and Vigna (2018
+&lt;arXiv:1805.01407&gt;). In addition fast functions for generating random
+numbers according to a uniform, normal and exponential distribution
+are included. The latter two use the Ziggurat algorithm originally
+proposed by Marsaglia and Tsang (2000, &lt;doi:10.18637/jss.v005.i08&gt;).
+These functions are exported to R and as a C++ interface and are
+enabled for use with the 64 bit version of the Mersenne-Twister by
+Matsumoto and Nishimura (1998 &lt;doi:10.1145/272991.272995&gt;), the
+default 64 bit generator from the PCG family as well as Xoroshiro128+
+and Xoshiro256+.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+        
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="dqrng-functions.html">dqRNGkind()</a></code> <code><a href="dqrng-functions.html">dqrunif()</a></code> <code><a href="dqrng-functions.html">dqrnorm()</a></code> <code><a href="dqrng-functions.html">dqrexp()</a></code> <code><a href="dqrng-functions.html">dqset.seed()</a></code> </p>
-        </td>
-        <td><p>R interface</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dqrng-package.html">dqrng-package</a></code> </p>
-        </td>
-        <td><p>dqrng: Fast Pseudo Random Number Generators</p></td>
-      </tr>
-    </tbody>
-    </table>
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p><a href='https://www.daqana.org/dqrng'>https://www.daqana.org/dqrng</a></p></li>
+<li><p>Report bugs at <a href='https://github.com/daqana/dqrng/issues'>https://github.com/daqana/dqrng/issues</a></p></li>
+</ul></div>
+    
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
+    <h2>Author</h2>
+    
+<strong>Maintainer</strong>: Ralf Stubner <a href='mailto:ralf.stubner@daqana.com'>ralf.stubner@daqana.com</a>
+
+Other contributors:
+<ul>
+<li><p>daqana GmbH [copyright holder]</p></li>
+<li><p>David Blackman [contributor]</p></li>
+<li><p>Melissa O'Neill <a href='mailto:oneill@pcg-random.org'>oneill@pcg-random.org</a> [contributor]</p></li>
+<li><p>Sebastiano Vigna <a href='mailto:vigna@acm.org'>vigna@acm.org</a> [contributor]</p></li>
+</ul>
+
+
   </div>
 </div>
 

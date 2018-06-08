@@ -35,8 +35,7 @@ void dqset_seed(const uint32_t seed) {
   rng->seed(_seed);
 }
 
-//' @name dqrng
-//' @rdname dqrng
+//' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
@@ -58,7 +57,7 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   }
 }
 
-//' @rdname dqrng
+//' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
@@ -69,7 +68,7 @@ Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
   return dqrng::generate<dqrng::uniform_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
 
-//' @rdname dqrng
+//' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
@@ -77,7 +76,7 @@ Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
   return dqrng::generate<dqrng::normal_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
 
-//' @rdname dqrng
+//' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {

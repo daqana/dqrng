@@ -5,26 +5,25 @@ dqset_seed <- function(seed) {
     invisible(.Call(`_dqrng_dqset_seed`, seed))
 }
 
-#' @name dqrng
-#' @rdname dqrng
+#' @rdname dqrng-functions
 #' @export
 dqRNGkind <- function(kind, normal_kind = "ignored") {
     invisible(.Call(`_dqrng_dqRNGkind`, kind, normal_kind))
 }
 
-#' @rdname dqrng
+#' @rdname dqrng-functions
 #' @export
 dqrunif <- function(n, min = 0.0, max = 1.0) {
     .Call(`_dqrng_dqrunif`, n, min, max)
 }
 
-#' @rdname dqrng
+#' @rdname dqrng-functions
 #' @export
 dqrnorm <- function(n, mean = 0.0, sd = 1.0) {
     .Call(`_dqrng_dqrnorm`, n, mean, sd)
 }
 
-#' @rdname dqrng
+#' @rdname dqrng-functions
 #' @export
 dqrexp <- function(n, rate = 1.0) {
     .Call(`_dqrng_dqrexp`, n, rate)

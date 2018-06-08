@@ -8,8 +8,8 @@
 <title>Fast Pseudo Random Number Generators for R • dqrng</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Fast Pseudo Random Number Generators for R">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Fast Pseudo Random Number Generators for R">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -47,6 +47,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/parallel.html">Parallel RNG usage</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -66,7 +78,7 @@
       <h1>Fast Pseudo Random Number Generators for R</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2018-05-14</h4>
+            <h4 class="date">2018-06-08</h4>
       
       
       <div class="hidden name"><code>dqrng.Rmd</code></div>
@@ -98,11 +110,11 @@ RNGs developed by David Blackman and Sebastiano Vigna. They are used as default 
 <p>Using these RNGs from R is delibratly similar to using R’s build-in RNGs:</p>
 <ul>
 <li>
-<code><a href="../reference/dqrng.html">dqRNGkind()</a></code> is analogue to <code>RNGkind()</code> and sets the RNG</li>
+<code><a href="../reference/dqrng-functions.html">dqRNGkind()</a></code> is analogue to <code>RNGkind()</code> and sets the RNG</li>
 <li>
-<code><a href="../reference/dqrng.html">dqset.seed()</a></code> is analogue to <code>set.seed()</code> and sets the seed</li>
+<code><a href="../reference/dqrng-functions.html">dqset.seed()</a></code> is analogue to <code>set.seed()</code> and sets the seed</li>
 <li>
-<code><a href="../reference/dqrng.html">dqrunif()</a></code>, <code><a href="../reference/dqrng.html">dqrnorm()</a></code>, and <code><a href="../reference/dqrng.html">dqrexp()</a></code> are analoge to <code>runif()</code>, <code>rnorm()</code>, and <code>rexp()</code> and sample from uniform, normal or exponenetial distributions</li>
+<code><a href="../reference/dqrng-functions.html">dqrunif()</a></code>, <code><a href="../reference/dqrng-functions.html">dqrnorm()</a></code>, and <code><a href="../reference/dqrng-functions.html">dqrexp()</a></code> are analoge to <code>runif()</code>, <code>rnorm()</code>, and <code>rexp()</code> and sample from uniform, normal or exponenetial distributions</li>
 </ul>
 <p>Let’s look at the classical example of calculating <span class="math inline">\(\pi\)</span> via simulation. The basic idea is to generate a large number of random points within the unit square. An approximation for <span class="math inline">\(\pi\)</span> can then be calculated from the ratio of points within the unit circle to the total number of points. A vectorized implementation in R where we can switch the RNG might look like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N &lt;-<span class="st"> </span><span class="fl">1e7</span>
@@ -115,36 +127,36 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
 <span class="co">#&gt; pi ~=  3.140899</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.785       0.020       0.805</span></code></pre></div>
+<span class="co">#&gt;       0.946       0.116       1.062</span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dqrng)
-<span class="kw"><a href="../reference/dqrng.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)
-<span class="kw"><a href="../reference/dqrng.html">dqset.seed</a></span>(<span class="dv">42</span>)
+<span class="kw"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)
+<span class="kw"><a href="../reference/dqrng-functions.html">dqset.seed</a></span>(<span class="dv">42</span>)
 <span class="kw">system.time</span>(<span class="kw">cat</span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N, <span class="dt">rng =</span> dqrunif), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))
-<span class="co">#&gt; pi ~=  3.140501</span>
+<span class="co">#&gt; pi ~=  3.14227</span>
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.201       0.031       0.233</span></code></pre></div>
+<span class="co">#&gt;       1.900       0.104       2.004</span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">runif</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.262       0.009       0.270</span>
-<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrunif</a></span>(N))
+<span class="co">#&gt;       0.348       0.008       0.356</span>
+<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrunif</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.037       0.003       0.041</span></code></pre></div>
+<span class="co">#&gt;       0.905       0.024       0.929</span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rexp</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.424       0.000       0.424</span>
-<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrexp</a></span>(N))
+<span class="co">#&gt;       0.484       0.028       0.512</span>
+<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrexp</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.054       0.009       0.062</span></code></pre></div>
+<span class="co">#&gt;       1.271       0.020       1.291</span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.601       0.003       0.605</span>
-<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng.html">dqrnorm</a></span>(N))
+<span class="co">#&gt;       0.759       0.016       0.775</span>
+<span class="kw">system.time</span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrnorm</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.072       0.000       0.072</span></code></pre></div>
+<span class="co">#&gt;       1.314       0.016       1.330</span></code></pre></div>
 </div>
 <div id="usage-from-c" class="section level2">
 <h2 class="hasAnchor">
@@ -184,7 +196,7 @@ piR &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span clas
 <span class="co">/*** R</span>
 <span class="co">system.time(cat("pi ~= ", piCpp(1e7), "\n"))</span>
 <span class="co">*/</span></code></pre></div>
-<p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>, whereas the anlogue function in the R interface is called <code><a href="../reference/dqrng.html">dqrng::dqset.seed()</a></code>.</p>
+<p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>, whereas the anlogue function in the R interface is called <code><a href="../reference/dqrng-functions.html">dqrng::dqset.seed()</a></code>.</p>
 </div>
 <div id="using-the-header-only-library" class="section level3">
 <h3 class="hasAnchor">
