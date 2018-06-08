@@ -3,6 +3,7 @@
 * Fix critical bug w.r.t. setting seeds
 * Use time in addition to `std::random_device` as source of the default seed, since
   `std::random_device` is deterministic with MinGW (c.f. #2)
+* Add jump() method to Xoshiro256+ and Xorohiro128+ 
 
 # dqrng 0.0.3
 

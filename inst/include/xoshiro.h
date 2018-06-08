@@ -88,6 +88,11 @@ public:
   virtual result_type operator() () {
     return next<N>();
   }
+
+  void jump();
+  void jump(uint64_t n) {
+    for( ; n > 0; --n) jump();
+  }
 };
 
 /* This is xoroshiro128+ 1.0, our best and fastest small-state generator
@@ -115,6 +120,27 @@ public:
 
 using xoroshiro128plus = xoshiro<2, 24, 16, 37>;
 
+/* This is the jump function for the generator. It is equivalent
+ to 2^64 calls to next(); it can be used to generate 2^64
+ non-overlapping subsequences for parallel computations. */
+template<>
+void xoroshiro128plus::jump() {
+  static const uint64_t JUMP[] = { 0xdf900294d8f554a5, 0x170865df4b3201fc };
+
+  uint64_t s0 = 0;
+  uint64_t s1 = 0;
+  for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+    for(int b = 0; b < 64; b++) {
+      if (JUMP[i] & UINT64_C(1) << b) {
+        s0 ^= state[0];
+        s1 ^= state[1];
+      }
+      operator()();
+    }
+
+  state[0] = s0;
+  state[1] = s1;
+}
 /* This is xoshiro256+ 1.0, our best and fastest generator for floating-point
  numbers. We suggest to use its upper bits for floating-point
  generation, as it is slightly faster than xoshiro256**. It passes all
@@ -131,6 +157,34 @@ using xoroshiro128plus = xoshiro<2, 24, 16, 37>;
  output to fill s. */
 
 using xoshiro256plus   = xoshiro<4, 17, 45, 0>;
+
+/* This is the jump function for the generator. It is equivalent
+ to 2^128 calls to next(); it can be used to generate 2^128
+ non-overlapping subsequences for parallel computations. */
+template<>
+void xoshiro256plus::jump() {
+  static const uint64_t JUMP[] = { 0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c };
+
+  uint64_t s0 = 0;
+  uint64_t s1 = 0;
+  uint64_t s2 = 0;
+  uint64_t s3 = 0;
+  for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+    for(int b = 0; b < 64; b++) {
+      if (JUMP[i] & UINT64_C(1) << b) {
+        s0 ^= state[0];
+        s1 ^= state[1];
+        s2 ^= state[2];
+        s3 ^= state[3];
+      }
+      operator()();
+    }
+
+  state[0] = s0;
+  state[1] = s1;
+  state[2] = s2;
+  state[3] = s3;
+}
 
 }
 #endif // XOSHIRO_H
