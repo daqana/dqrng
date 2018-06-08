@@ -129,8 +129,8 @@ void xoroshiro128plus::jump() {
 
   uint64_t s0 = 0;
   uint64_t s1 = 0;
-  for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-    for(int b = 0; b < 64; b++) {
+  for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+    for(unsigned int b = 0; b < 64; b++) {
       if (JUMP[i] & UINT64_C(1) << b) {
         s0 ^= state[0];
         s1 ^= state[1];
@@ -169,8 +169,8 @@ void xoshiro256plus::jump() {
   uint64_t s1 = 0;
   uint64_t s2 = 0;
   uint64_t s3 = 0;
-  for(int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-    for(int b = 0; b < 64; b++) {
+  for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
+    for(unsigned int b = 0; b < 64; b++) {
       if (JUMP[i] & UINT64_C(1) << b) {
         s0 ^= state[0];
         s1 ^= state[1];
