@@ -34,9 +34,9 @@ library(dqrng)
 dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
-#> [1] 4.498747 9.647875 5.232044 6.176499 8.453008
+#> [1] 8.480202 6.582408 8.869840 5.062206 8.828782
 dqrexp(5, rate = 4)
-#> [1] 0.5520084 0.1982174 0.3281557 0.1913137 0.7544450
+#> [1] 0.39374734 0.09218016 0.15409536 0.60380418 0.06477960
 ```
 
 They are quite a bit faster, though:
@@ -45,8 +45,8 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.756   0.000   0.757
+#>   0.628   0.014   0.642
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.068   0.027   0.094
+#>   0.069   0.004   0.073
 ```
