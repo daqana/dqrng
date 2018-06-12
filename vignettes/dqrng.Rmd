@@ -30,7 +30,7 @@ This is a conservative default that allows you to take advantage of the fast dis
 * **pcg64**
 The default 64 bit variant from the PCG family developed by Melissa O'Neill.
 See http://www.pcg-random.org for more details.
-* **Xoroshiro128+** amd **Xoshiro256+**  
+* **Xoroshiro128+** and **Xoshiro256+**  
 RNGs developed by David Blackman and Sebastiano Vigna.
 They are used as default RNGs in Erlang and Lua.
 See http://xoshiro.di.unimi.it/ for more details.
@@ -39,11 +39,11 @@ Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples.
 
 ## Usage from R
 
-Using these RNGs from R is delibratly similar to using R's build-in RNGs:
+Using these RNGs from R is deliberately similar to using R's build-in RNGs:
 
 * `dqRNGkind()` is analogue to `RNGkind()` and sets the RNG
 * `dqset.seed()` is analogue to `set.seed()` and sets the seed
-* `dqrunif()`, `dqrnorm()`, and `dqrexp()` are analoge to `runif()`, `rnorm()`, and `rexp()` and sample from uniform, normal or exponenetial distributions
+* `dqrunif()`, `dqrnorm()`, and `dqrexp()` are analogue to `runif()`, `rnorm()`, and `rexp()` and sample from uniform, normal or exponential distributions
 
 Let's look at the classical example of calculating $\pi$ via simulation. The 
 basic idea is to generate a large number of random points within the unit 
@@ -99,7 +99,7 @@ Technically there are three ways to make use of dqrng at the C++ level:
 
 * use `// [[Rcpp::depends(dqrng)]]` together with `Rcpp::sourceCpp()`
 * use `Rcpp::cppFunction(depends = "dqrng", ...)`
-* use an R pacakge with `LinkingTo: dqrng`
+* use an R package with `LinkingTo: dqrng`
 
 Here only the first approach is shown.
 
@@ -107,7 +107,7 @@ Here only the first approach is shown.
 
 The functions available in R directly call corresponding C++ functions.
 These functions are also available at the C++ level if you include `dqrng.h`.
-Revisting the example of approximating $\pi$ we can use:
+Revisiting the example of approximating $\pi$ we can use:
 
 ```{r, eval=FALSE, engine='Rcpp'}
 // [[Rcpp::depends(dqrng)]]
@@ -133,7 +133,7 @@ system.time(cat("pi ~= ", piCpp(1e7), "\n"))
 */
 ```
 
-Note that in C++ you have to use `dqrng::dqset_seed()`, whereas the anlogue function in the R interface is called `dqrng::dqset.seed()`.
+Note that in C++ you have to use `dqrng::dqset_seed()`, whereas the analogue function in the R interface is called `dqrng::dqset.seed()`.
 
 ### Using the header only library
 

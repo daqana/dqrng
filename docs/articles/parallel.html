@@ -90,13 +90,13 @@
 <p>When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap. There are two main approaches to this problem:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <ul>
 <li>Partition the the complete sequence of random numbers produced for one seed into sub-sequences and assign each process one sub-sequence.</li>
-<li>Reparametrize the generator to to produce non-overlapping sequences for the same seed.</li>
+<li>Re-parametrize the generator to to produce non-overlapping sequences for the same seed.</li>
 </ul>
 <p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. Currently these features can only be used from C++.</p>
 <div id="xoroshiro-jump-ahead-with-openmp" class="section level1">
 <h1 class="hasAnchor">
 <a href="#xoroshiro-jump-ahead-with-openmp" class="anchor"></a>Xo(ro)shiro: jump ahead with OpenMP</h1>
-<p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offeres <span class="math inline">\(2^{128}\)</span> sub-sequences, which are <span class="math inline">\(2^{128}\)</span> random draws appart. The Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences, which are <span class="math inline">\(2^{64}\)</span> random draws appart. You can go from one sub-sequence to the next using the <code>jump()</code> method and the convenience wrapper <code>jump(int n)</code>, which advances to the <code>n</code>th sub-sequence.</p>
+<p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences, which are <span class="math inline">\(2^{128}\)</span> random draws apart. The Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences, which are <span class="math inline">\(2^{64}\)</span> random draws apart. You can go from one sub-sequence to the next using the <code>jump()</code> method and the convenience wrapper <code>jump(int n)</code>, which advances to the <code>n</code>th sub-sequence.</p>
 <p>As an example we draw and sum a large number of uniformly distributed numbers. This is done several times using OpenMP for parallelisation. Care has been taken to keep the global RNG <code>rng</code> usable outside of the parallel block.</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span>
 <span class="co">// [[Rcpp::depends(dqrng)]]</span>
@@ -141,7 +141,7 @@
 <div id="pcg-multiple-streams-with-rcppparallel" class="section level1">
 <h1 class="hasAnchor">
 <a href="#pcg-multiple-streams-with-rcppparallel" class="anchor"></a>PCG: multiple streams with RcppParallel</h1>
-<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream"><code>set_stream(int n)</code></a> or the <a href="http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor">two argument constructor</a> with <code>seed</code> and <code>stream</code>. In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independet:</p>
+<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream"><code>set_stream(int n)</code></a> or the <a href="http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor">two argument constructor</a> with <code>seed</code> and <code>stream</code>. In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span>
 <span class="co">// [[Rcpp::depends(dqrng)]]</span>
 <span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span>
@@ -200,7 +200,7 @@ Rcpp::NumericMatrix parallel_random_matrix(<span class="at">const</span> <span c
 [8,]   ?           1
 attr(,"legend")
 [1] 0 ‘ ’ 0.001 ‘?’ 0.002 ‘!’ 0.999 ‘1’ 1</code></pre>
-<p>So as expected the correalation matrix is almost equal to the identity matrix.</p>
+<p>So as expected the correlation matrix is almost equal to the identity matrix.</p>
 </div>
 <div class="footnotes">
 <hr>
