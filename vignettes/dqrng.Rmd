@@ -184,11 +184,11 @@ For example, this function generates random numbers according to the normal dist
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng)]]
 #include <dqrng_distribution.h>
-#include <xoroshiro.hpp>
+#include <xoshiro.h>
 
 // [[Rcpp::export]]
 Rcpp::NumericVector std_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
-  auto rng = dqrng::generator<xoroshiro128plus_engine>(42);
+  auto rng = dqrng::generator<dqrng::xoroshiro128plus>(42);
   std::normal_distribution<double> dist(mean, sd);
   return dqrng::generate<std::normal_distribution<double>, Rcpp::NumericVector>(n, rng, dist);
 }
