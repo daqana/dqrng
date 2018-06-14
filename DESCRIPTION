@@ -30,8 +30,7 @@ RoxygenNote: 6.0.1
 Suggests: 
     testthat,
     knitr,
-    rmarkdown,
-    covr
+    rmarkdown
 VignetteBuilder: knitr
 URL: https://www.daqana.org/dqrng
 BugReports: https://github.com/daqana/dqrng/issues

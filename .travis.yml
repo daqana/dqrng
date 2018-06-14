@@ -20,5 +20,7 @@ notifications:
   email:
     on_success: change
     on_failure: change
+r_packages:
+  - covr
 after_success:
   - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()' || true
