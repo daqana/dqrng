@@ -7,12 +7,12 @@ os:
   - linux
   - osx
 r:
-  - oldrel
+  - 3.4
   - release
   - devel
 matrix:
   exclude:
-  - r: oldrel
+  - r: 3.4
     os: osx
   - r: devel
     os: osx
