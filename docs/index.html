@@ -21,8 +21,9 @@
   These functions are exported to R and as a C++ interface and are
   enabled for use with the 64 bit version of the Mersenne-Twister by
   Matsumoto and Nishimura (1998 &lt;doi:10.1145/272991.272995&gt;), the
-  default 64 bit generator from the PCG family as well as Xoroshiro128+
-  and Xoshiro256+.">
+  default 64 bit generator from the PCG family, Xoroshiro128+ and Xoshiro256+
+  as well as the 64 bit version of the 20 rounds Threefry engine (Salmon et al.,
+  2011 &lt;doi:10.1145/2063384.2063405&gt;) as provided by the package 'sitmo'.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -121,10 +122,10 @@ drat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentatio
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N &lt;-<span class="st"> </span><span class="fl">1e7</span>
 <span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.642       0.015       0.657</span>
+<span class="co">#&gt;       0.705       0.000       0.705</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.073       0.000       0.073</span></code></pre></div>
+<span class="co">#&gt;       0.072       0.003       0.075</span></code></pre></div>
 </div>
 </div>
   </div>

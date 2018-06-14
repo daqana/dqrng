@@ -30,6 +30,8 @@
 #'   \item{Xoroshiro128+ and Xoshiro256+}{RNGs developed by David Blackman and
 #'    Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
 #'     \url{http://xoshiro.di.unimi.it/} for more details.}
+#'   \item{Threefry}{The 64 bit version of the 20 rounds Threefry engine as
+#'    provided by \code{\link[sitmo]{sitmo-package}}}
 #' }
 #'
 #' The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as
