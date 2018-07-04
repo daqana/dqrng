@@ -7,12 +7,12 @@ os:
   - linux
   - osx
 r:
-  - oldrel
+  - 3.4
   - release
   - devel
 matrix:
   exclude:
-  - r: oldrel
+  - r: 3.4
     os: osx
   - r: devel
     os: osx
@@ -20,5 +20,7 @@ notifications:
   email:
     on_success: change
     on_failure: change
+r_packages:
+  - covr
 after_success:
   - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()' || true
