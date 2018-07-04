@@ -1,3 +1,7 @@
+# dqrng 0.0.4.1
+
+* New RNG: Threefry from package 'sitmo'
+
 # dqrng 0.0.4
 
 * Fix critical bug w.r.t. setting seeds

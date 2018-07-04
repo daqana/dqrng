@@ -103,8 +103,8 @@
 <p>The currently released version is available from CRAN via</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"dqrng"</span>)</code></pre></div>
 <p>Intermediate releases can also be obtained via <a href="https://cran.r-project.org/package=drat">drat</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"drat"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) <span class="kw">install.packages</span>(<span class="st">"drat"</span>)
-drat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/drat/topics/addRepo">addRepo</a></span>(<span class="st">"daqana"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (!<span class="kw">requireNamespace</span>(<span class="st">"drat"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)) <span class="kw">install.packages</span>(<span class="st">"drat"</span>)
+drat::<span class="kw">addRepo</span>(<span class="st">"daqana"</span>)
 <span class="kw">install.packages</span>(<span class="st">"dqrng"</span>)</code></pre></div>
 </div>
 <div id="example" class="section level2">
@@ -122,10 +122,10 @@ drat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentatio
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">N &lt;-<span class="st"> </span><span class="fl">1e7</span>
 <span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.705       0.000       0.705</span>
+<span class="co">#&gt;       0.667       0.012       0.679</span>
 <span class="kw">system.time</span>(<span class="kw"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(N))
 <span class="co">#&gt;        User      System verstrichen </span>
-<span class="co">#&gt;       0.072       0.003       0.075</span></code></pre></div>
+<span class="co">#&gt;       0.076       0.016       0.091</span></code></pre></div>
 </div>
 </div>
   </div>
