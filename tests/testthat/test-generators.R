@@ -47,6 +47,15 @@ test_that("Xoshiro256: setting seed produces identical uniformly distributed num
   expect_equal(u1, u2)
 })
 
+test_that("Threefry: setting seed produces identical uniformly distributed numbers", {
+  dqRNGkind("Threefry")
+  dqset.seed(seed)
+  u1 <- dqrunif(10)
+  dqset.seed(seed)
+  u2 <- dqrunif(10)
+  expect_equal(u1, u2)
+})
+
 test_that("non-existant RNG produces error", {
   expect_error(dqRNGkind("does_not_exist"))
 })

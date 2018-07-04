@@ -20,7 +20,7 @@
 #include <dqrng_distribution.h>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
-
+#include <threefry.h>
 
 namespace {
 dqrng::rng64_t rng = dqrng::generator();
@@ -52,6 +52,8 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
     rng =  dqrng::generator<dqrng::xoshiro256plus>(seed);
   } else if (kind == "pcg64") {
     rng =  dqrng::generator<pcg64>(seed);
+  } else if (kind == "threefry") {
+    rng =  dqrng::generator<sitmo::threefry_20_64>(seed);
   } else {
     Rcpp::stop("Unknown random generator kind: %s", kind);
   }

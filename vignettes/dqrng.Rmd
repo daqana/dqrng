@@ -175,6 +175,29 @@ system.time(splitmix_rnorm(1e7))
 ```
 
 Since SplitMix is a very fast RNG, the speed of this function is comparable to `dqrnorm`.
+Generally speaking you can use any C++11 compliant RNG with 64 bit output size.
+For example, here the 64 bit Threefry engine with 13 rounds from package sitmo is used:
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <cstdint>
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng)]]
+#include <dqrng_distribution.h>
+// [[Rcpp::depends(sitmo)]]
+#include <threefry.h>
+
+// [[Rcpp::export]]
+Rcpp::NumericVector threefry_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
+  auto rng = dqrng::generator<sitmo::threefry_13_64>(42);
+  dqrng::normal_distribution dist(mean, sd);
+  return dqrng::generate<dqrng::normal_distribution, Rcpp::NumericVector>(n, rng, dist);
+}
+/*** R
+threefry_rnorm(10)
+system.time(threefry_rnorm(1e7))
+*/
+```
+
 Alternatively, you could combine the included RNGs together with dqrng's tooling and some other distribution function.
 For example, this function generates random numbers according to the normal distribution using the standard library from C++11:
 
