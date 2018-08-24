@@ -34,6 +34,8 @@ See http://www.pcg-random.org for more details.
 RNGs developed by David Blackman and Sebastiano Vigna.
 They are used as default RNGs in Erlang and Lua.
 See http://xoshiro.di.unimi.it/ for more details.
+* **Threefry**  
+The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package 'sitmo'.
 
 Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples. 
 
