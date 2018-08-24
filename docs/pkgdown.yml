@@ -1,7 +1,0 @@
-pandoc: 1.17.2
-pkgdown: 1.1.0
-pkgdown_sha: ~
-articles:
-  dqrng: dqrng.html
-  parallel: parallel.html
-
