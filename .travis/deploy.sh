@@ -6,7 +6,7 @@ TARGET_BRANCH="gh-pages"
 
 function doCompile {
     Rscript -e 'covr::codecov()'
-    Rscript -e 'pkgdown::build()'
+    Rscript -e 'pkgdown::build_site()'
     mv docs/* out
 }
 
