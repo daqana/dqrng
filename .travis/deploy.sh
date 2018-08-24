@@ -6,6 +6,7 @@ TARGET_BRANCH="gh-pages"
 
 function doCompile {
     Rscript -e 'covr::codecov()'
+    R CMD INSTALL "${PKG_TARBALL}"
     Rscript -e 'pkgdown::build_site()'
     mv docs/* out
 }
