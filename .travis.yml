@@ -27,4 +27,4 @@ r_packages:
   - covr
   - pkgdown
 after_success:
-  - test "$TRAVIS_R_VERSION_STRING" = "release" && .travis/deploy.sh || true
+  - test "$TRAVIS_R_VERSION_STRING" = "release" -a "$TRAVIS_OS_NAME" == "linux" && .travis/deploy.sh || true
