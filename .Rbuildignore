@@ -5,6 +5,7 @@
 ^README-.*\.png$
 ^docs$
 ^\.travis\.yml$
+^.travis$
 ^codecov\.yml$
 ^appveyor\.yml$
 ^include$
