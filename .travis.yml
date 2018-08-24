@@ -16,11 +16,15 @@ matrix:
     os: osx
   - r: devel
     os: osx
+env:
+  global:
+  - ENCRYPTION_LABEL: "3dc1811797c0"
 notifications:
   email:
     on_success: change
     on_failure: change
 r_packages:
   - covr
+  - pkgdown
 after_success:
-  - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()' || true
+  - test "$TRAVIS_R_VERSION_STRING" = "release" && .travis/deploy.sh || true
