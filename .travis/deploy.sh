@@ -28,7 +28,7 @@ COMMIT_AUTHOR_EMAIL=`git show --no-patch --format='%ae' ${SHA}`
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
 git clone $REPO out
 cd out
-git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+git checkout $TARGET_BRANCH || (git checkout --orphan $TARGET_BRANCH; git rm -rf .)
 cd ..
 
 # Clean out existing contents
