@@ -78,7 +78,7 @@
       <h1>Parallel RNG usage</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2018-08-24</h4>
+            <h4 class="date">2018-08-28</h4>
       
       
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -120,9 +120,9 @@
 <a class="sourceLine" id="cb1-20" data-line-number="20">    <span class="kw">auto</span> gen = <span class="bu">std::</span>bind(dist, lrng);</a>
 <a class="sourceLine" id="cb1-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb1-22" data-line-number="22">    <span class="pp">#pragma omp for</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23">    <span class="cf">for</span> (<span class="dt">unsigned</span> <span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; ++i) {</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; ++i) {</a>
 <a class="sourceLine" id="cb1-24" data-line-number="24">      <span class="dt">double</span> lres(<span class="dv">0</span>);</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">      <span class="cf">for</span> (<span class="dt">unsigned</span> <span class="dt">int</span> j = <span class="dv">0</span>; j &lt; n; ++j) {</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">      <span class="cf">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; n; ++j) {</a>
 <a class="sourceLine" id="cb1-26" data-line-number="26">        lres += gen();</a>
 <a class="sourceLine" id="cb1-27" data-line-number="27">      }</a>
 <a class="sourceLine" id="cb1-28" data-line-number="28">      res[i] = lres / n;</a>
