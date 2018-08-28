@@ -1,6 +1,7 @@
 # dqrng 0.0.4.1
 
 * New RNG: Threefry from package 'sitmo'
+* Unit-Tests for the C++ interface
 
 # dqrng 0.0.4
 

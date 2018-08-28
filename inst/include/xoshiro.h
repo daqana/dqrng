@@ -124,7 +124,7 @@ using xoroshiro128plus = xoshiro<2, 24, 16, 37>;
  to 2^64 calls to next(); it can be used to generate 2^64
  non-overlapping subsequences for parallel computations. */
 template<>
-void xoroshiro128plus::jump() {
+inline void xoroshiro128plus::jump() {
   static const uint64_t JUMP[] = { 0xdf900294d8f554a5, 0x170865df4b3201fc };
 
   uint64_t s0 = 0;
@@ -162,7 +162,7 @@ using xoshiro256plus   = xoshiro<4, 17, 45, 0>;
  to 2^128 calls to next(); it can be used to generate 2^128
  non-overlapping subsequences for parallel computations. */
 template<>
-void xoshiro256plus::jump() {
+inline void xoshiro256plus::jump() {
   static const uint64_t JUMP[] = { 0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c };
 
   uint64_t s0 = 0;
