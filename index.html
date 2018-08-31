@@ -76,7 +76,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/daqana/dqrng">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -122,10 +129,10 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">system.time</span>(<span class="kw">rnorm</span>(N))</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;   0.950   0.044   0.995</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;   0.772   0.156   0.929</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">system.time</span>(<span class="kw"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(N))</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   0.113   0.032   0.146</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   0.068   0.192   0.261</span></a></code></pre></div>
 </div>
 </div>
   </div>
@@ -135,6 +142,8 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=dqrng">https://​cloud.r-project.org/​package=dqrng</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/daqana/dqrng">https://​github.com/​daqana/​dqrng</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/daqana/dqrng/issues">https://​github.com/​daqana/​dqrng/​issues</a>
 </li>
