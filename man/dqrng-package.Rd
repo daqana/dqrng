@@ -25,6 +25,7 @@ Several fast random number generators are provided as C++
 Useful links:
 \itemize{
   \item \url{https://www.daqana.org/dqrng}
+  \item \url{https://github.com/daqana/dqrng}
   \item Report bugs at \url{https://github.com/daqana/dqrng/issues}
 }
 

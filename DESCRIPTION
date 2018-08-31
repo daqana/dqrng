@@ -33,6 +33,6 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://www.daqana.org/dqrng
+URL: https://www.daqana.org/dqrng, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
 Encoding: UTF-8
