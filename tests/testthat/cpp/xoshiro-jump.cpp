@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng)]]
 #include <xoshiro.h>
+// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 bool xoroshiro_jump() {
