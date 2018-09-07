@@ -202,8 +202,6 @@ RcppExport SEXP _dqrng_RcppExport_registerCCallable() {
     return R_NilValue;
 }
 
-RcppExport SEXP run_testthat_tests();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_dqrng_dqset_seed", (DL_FUNC) &_dqrng_dqset_seed, 1},
     {"_dqrng_dqRNGkind", (DL_FUNC) &_dqrng_dqRNGkind, 2},
@@ -211,7 +209,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dqrng_dqrnorm", (DL_FUNC) &_dqrng_dqrnorm, 3},
     {"_dqrng_dqrexp", (DL_FUNC) &_dqrng_dqrexp, 2},
     {"_dqrng_RcppExport_registerCCallable", (DL_FUNC) &_dqrng_RcppExport_registerCCallable, 0},
-    {"run_testthat_tests",                  (DL_FUNC) &run_testthat_tests,                  0},
     {NULL, NULL, 0}
 };
 
