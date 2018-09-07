@@ -12,12 +12,24 @@ test_that("setting seed produces identical uniformly distributed numbers", {
   expect_true(seed_uniform(seed))
 })
 
+test_that("setting seed produces identical uniformly distributed scalar numbers", {
+  expect_true(seed_uniform_scalar(seed))
+})
+
 test_that("setting seed produces identical normaly distributed numbers", {
   expect_true(seed_normal(seed))
 })
 
+test_that("setting seed produces identical normaly distributed scalar numbers", {
+  expect_true(seed_normal_scalar(seed))
+})
+
 test_that("setting seed produces identical exponenetially distributed numbers", {
   expect_true(seed_exponential(seed))
+})
+
+test_that("setting seed produces identical exponenetially distributed scalar numbers", {
+  expect_true(seed_exponential_scalar(seed))
 })
 
 Rcpp::sourceCpp("cpp/xoshiro-jump.cpp")
