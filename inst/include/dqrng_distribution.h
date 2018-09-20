@@ -44,6 +44,68 @@ inline double uniform01(uint64_t x) {
   // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
   return (x >> 11) * (1. / (UINT64_C(1) << 53));
 }
+
+
+inline uint32_t random32(dqrng::random_64bit_generator& rng) {
+    static bool has_cache{false};
+    static uint32_t cache;
+    if (has_cache) {
+        has_cache = false;
+        return cache;
+    }
+    uint64_t random = rng();
+    cache = uint32_t(random);
+    has_cache = true;
+    return random >> 32;
+}
+
+/*
+ * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded32.cpp
+ * A C++ implementation methods and benchmarks for random numbers in a range
+ * (32-bit version)
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2018 Melissa E. O'Neill
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
+
+inline uint32_t bounded_rand(dqrng::random_64bit_generator& rng, uint32_t range) {
+    uint32_t x = random32(rng);
+    uint64_t m = uint64_t(x) * uint64_t(range);
+    uint32_t l = uint32_t(m);
+    if (l < range) {
+	uint32_t t = -range;
+	if (t >= range) {
+	    t -= range;
+	    if (t >= range)
+		t %= range;
+	}
+	while (l < t) {
+	    x = random32(rng);
+	    m = uint64_t(x) * uint64_t(range);
+	    l = uint32_t(m);
+	}
+    }
+    return m >> 32;
+}
 } // namespace dqrng
 
 namespace boost {

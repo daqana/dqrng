@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <boost/iterator/counting_iterator.hpp>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
@@ -92,4 +93,25 @@ Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
   dqrng::exponential_distribution dist(rate);
   return dqrng::generate<dqrng::exponential_distribution, Rcpp::NumericVector>(n, rng, dist);
+}
+
+// [[Rcpp::export(rng = false)]]
+Rcpp::IntegerVector dqsample_int(int m,
+                                 size_t n,
+                                 bool replace = false,
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+    Rcpp::IntegerVector result(Rcpp::no_init(n));
+    if (replace) {
+        std::generate(result.begin(), result.end(), [m] () {return dqrng::bounded_rand(*rng, m);});
+    } else {
+        std::vector<int> tmp(boost::counting_iterator<int>(0),
+                             boost::counting_iterator<int>(m));
+
+        for (size_t i = 0; i < n; ++i) {
+            int j = dqrng::bounded_rand(*rng, m);
+            result(i) = tmp[j] + 1;
+            tmp[j] = tmp[--m];
+        }
+    }
+    return result;
 }
