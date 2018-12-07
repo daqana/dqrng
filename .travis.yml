@@ -2,7 +2,7 @@
 
 language: R
 sudo: false
-dist: xenial
+dist: trusty # xenial
 latex: false
 fortran: false
 r_check_args: "--no-manual --as--cran"
