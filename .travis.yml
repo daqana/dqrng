@@ -3,6 +3,9 @@
 language: R
 sudo: false
 dist: xenial
+latex: false
+fortran: false
+r_check_args: "--no-manual --as--cran"
 cache: packages
 os:
   - linux
