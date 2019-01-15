@@ -10,6 +10,7 @@ T convert_seed(const unsigned char* raws, size_t N) {
     constexpr T upper=-1;
     static_assert(upper > 0, "integer type should be unsigned");
     static_assert(upper >= 255, "unsigned integer type should contain at least 8 bits");
+    constexpr T left_upper=upper >> 8;
 
     for (size_t i=0; i<N; ++i) {
         T current=raws[i];
@@ -17,7 +18,11 @@ T convert_seed(const unsigned char* raws, size_t N) {
             throw std::out_of_range("raw vector should only contain values in [0, 255]");
         }
 
+        if (left_upper < sum) { // effectively compare to upper/256, to avoid overflow upon shift.
+            throw std::out_of_range("raw vector implies an out-of-range seed");
+        }
         sum <<= 8;
+
         if (upper - current < sum) { // subtract first, to avoid overflow during check.
             throw std::out_of_range("raw vector implies an out-of-range seed");
         }

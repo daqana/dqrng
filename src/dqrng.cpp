@@ -36,12 +36,9 @@ void dqset_seed(const uint32_t seed) {
   rng->seed(_seed);
 }
 
-#include <iostream>
-
 // [[Rcpp::export(rng = false)]]
 void dqset_seed_raw(SEXP seed_vec) {
   uint64_t _seed = convert_seed<uint64_t>(seed_vec);
-  std::cout << _seed << std::endl;
   rng->seed(_seed);
 }
 
