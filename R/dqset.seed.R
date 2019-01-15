@@ -7,7 +7,7 @@
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
-#' @param seed  integer seed for the random number generator
+#' @param seed  integer seed for the random number generator, or a raw vector representing a seed.
 #' @param kind  string specifying the RNG (see details)
 #' @param normal_kind  ignored; included for compatibility with \code{\link{RNGkind}}
 #' @param n  number of  observations
@@ -44,11 +44,16 @@
 #' library(dqrng)
 #' dqRNGkind("Xoroshiro128+")
 #' dqset.seed(42)
+#' dqset.seed(generateRawSeeds(1, 64)[[1]])
 #' dqrunif(5, min = 2, max = 10)
 #' dqrexp(5, rate = 4)
 #' dqrnorm(5, mean = 5, sd = 3)
 #' @rdname dqrng-functions
 #' @export
 dqset.seed <- function(seed) {
-  dqset_seed(seed)
+  if (is.raw(seed)) {
+    dqset_seed_raw(seed)
+  } else {
+    dqset_seed(seed)
+  }
 }

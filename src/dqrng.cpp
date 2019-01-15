@@ -21,6 +21,7 @@
 #include <xoshiro.h>
 #include <pcg_random.hpp>
 #include <threefry.h>
+#include <convert_seed.h>
 
 namespace {
 dqrng::rng64_t rng = dqrng::generator();
@@ -32,6 +33,15 @@ dqrng::rng64_t rng = dqrng::generator();
 void dqset_seed(const uint32_t seed) {
   uint64_t seed2  = 1664525 * seed + 1013904223;
   uint64_t _seed = seed | (seed2 << 32);
+  rng->seed(_seed);
+}
+
+#include <iostream>
+
+// [[Rcpp::export(rng = false)]]
+void dqset_seed_raw(SEXP seed_vec) {
+  uint64_t _seed = convert_seed<uint64_t>(seed_vec);
+  std::cout << _seed << std::endl;
   rng->seed(_seed);
 }
 
