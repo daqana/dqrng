@@ -5,6 +5,10 @@ dqset_seed <- function(seed) {
     invisible(.Call(`_dqrng_dqset_seed`, seed))
 }
 
+dqset_seed_raw <- function(seed_vec) {
+    invisible(.Call(`_dqrng_dqset_seed_raw`, seed_vec))
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqRNGkind <- function(kind, normal_kind = "ignored") {

@@ -43,6 +43,25 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
+    inline void dqset_seed_raw(SEXP seed_vec) {
+        typedef SEXP(*Ptr_dqset_seed_raw)(SEXP);
+        static Ptr_dqset_seed_raw p_dqset_seed_raw = NULL;
+        if (p_dqset_seed_raw == NULL) {
+            validateSignature("void(*dqset_seed_raw)(SEXP)");
+            p_dqset_seed_raw = (Ptr_dqset_seed_raw)R_GetCCallable("dqrng", "_dqrng_dqset_seed_raw");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqset_seed_raw(Shield<SEXP>(Rcpp::wrap(seed_vec)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
         typedef SEXP(*Ptr_dqRNGkind)(SEXP,SEXP);
         static Ptr_dqRNGkind p_dqRNGkind = NULL;
