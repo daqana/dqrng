@@ -13,9 +13,9 @@
 #' unsigned integer by the following procedure:
 #' \enumerate{
 #' \item Start with a sum of zero.
-#' \item Add the last value of the vector.
+#' \item Add the first value of the vector.
 #' \item Left-shift the sum by 8.
-#' \item Add the next-left value of the vector, and repeat.
+#' \item Add the next value of the vector, and repeat.
 #' }
 #' 
 #' The aim is to facilitate R-level generation of seeds with sufficient 
@@ -27,14 +27,14 @@
 #' @author Aaron Lun
 #'
 #' @examples
-#' generateSeedVector(10, 64)
+#' generateRawSeeds(10, 64)
 #'
-#' generateSeedVector(5, 128)
+#' generateRawSeeds(5, 128)
 #'
-#' generateSeedVector(10, 50) # does not need to be divisible by 8.
+#' generateRawSeeds(10, 50) # does not need to be divisible by 8.
 #'
 #' @export
-generateSeedVector <- function(n, bits) {
+generateRawSeeds <- function(n, bits) {
     bits <- as.integer(bits)
     nvals <- ceiling(bits/8L)
     if (nvals==0L) {
