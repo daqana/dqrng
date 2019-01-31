@@ -1,0 +1,20 @@
+--- a/inst/include/pcg_extras.hpp
++++ b/inst/include/pcg_extras.hpp
+@@ -607,6 +607,8 @@ public:
+     }
+ };
+ 
++#ifdef STATIC_ARBITRARY_SEED
++
+ /*
+  * Sometimes you might want a distinct seed based on when the program
+  * was compiled.  That way, a particular instance of the program will
+@@ -628,6 +630,8 @@ public:
+                         __DATE__ __TIME__ __FILE__);
+ };
+ 
++#endif // STATIC_ARBITRARY_SEED
++
+ // Sometimes, when debugging or testing, it's handy to be able print the name
+ // of a (in human-readable form).  This code allows the idiom:
+ //
