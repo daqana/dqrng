@@ -1,6 +1,7 @@
 # dqrng 0.0.4.1
 
 * New RNG: Threefry from package 'sitmo'
+* Update PCG Headers
 * Unit-Tests for the C++ interface
 
 # dqrng 0.0.4
@@ -18,7 +19,7 @@
 # dqrng 0.0.2
 
 * `dqrng_distribution.h` can now be used independently of Rcpp
-* Replace `xorshift.hpp` and `xoroshiro.hpp` with `xoshiro.h`. 
+* Replace `xorshift.hpp` and `xoroshiro.hpp` with `xoshiro.h`.
   This implementation is directly derived from the original C implementations.
   It provides v1.0 of Xoroshiro128+ and Xoshiro256+.
 
