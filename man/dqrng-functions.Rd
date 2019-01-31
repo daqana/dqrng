@@ -35,7 +35,7 @@ dqset.seed(seed)
 
 \item{rate}{rate of the exponential distribution}
 
-\item{seed}{integer seed for the random number generator, or a raw vector representing a seed (see \code{\link{generateRawSeed}}).}
+\item{seed}{integer seed for the random number generator, or a raw vector representing a seed.}
 }
 \value{
 \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
@@ -71,6 +71,7 @@ provided by \code{boost.random}.
 library(dqrng)
 dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
+dqset.seed(generateRawSeeds(1, 64)[[1]])
 dqrunif(5, min = 2, max = 10)
 dqrexp(5, rate = 4)
 dqrnorm(5, mean = 5, sd = 3)
