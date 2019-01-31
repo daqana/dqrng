@@ -12,6 +12,8 @@ status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https
 [![Downloads](http://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](http://www.r-pkg.org/pkg/dqrng)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
+[![Codacy
+Badge](https://api.codacy.com/project/badge/Grade/cc38be1f5900415a84010acd9ef85ce1)](https://www.codacy.com/app/rstub/dqrng?utm_source=github.com&utm_medium=referral&utm_content=daqana/dqrng&utm_campaign=Badge_Grade)
 
 # dqrng
 
@@ -58,9 +60,14 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e7
 system.time(rnorm(N))
-#>    user  system elapsed 
-#>   0.755   0.024   0.779
+#>    user  system elapsed
+#>   0.724   0.012   0.736
 system.time(dqrnorm(N))
-#>    user  system elapsed 
-#>   0.078   0.016   0.093
+#>    user  system elapsed
+#>   0.076   0.016   0.092
 ```
+
+## Feedback
+
+All feedback (bug reports, security issues, feature requests, …) should
+be provided as [issues](https://github.com/daqana/dqrng/issues).

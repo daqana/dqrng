@@ -55,7 +55,7 @@ std::vector<double> parallel_random_sum(int n, int m, int ncores) {
   {
     dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
     lrng.jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps 
-    auto gen = std::bind(dist, lrng);
+    auto gen = std::bind(dist, std::ref(lrng));
 
     #pragma omp for
     for (int i = 0; i < m; ++i) {
@@ -108,7 +108,7 @@ struct RandomFill : public RcppParallel::Worker {
 
   void operator()(std::size_t begin, std::size_t end) {
     pcg64 rng(seed, end);
-    auto gen = std::bind(dist, rng);
+    auto gen = std::bind(dist, std::ref(rng));
     std::generate(output.begin() + begin * output.nrow(),
                   output.begin() + end * output.nrow(),
                   std::ref(gen));

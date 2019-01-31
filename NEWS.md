@@ -1,8 +1,9 @@
-# dqrng 0.0.4.1
+# dqrng 0.0.5
 
 * New RNG: Threefry from package 'sitmo'
-* Update PCG Headers
+* Update PCG Headers (c.f. #8)
 * Unit-Tests for the C++ interface
+* Define STRICT_R_HEADERS to prepare for future Rcpp (c.f. #6)
 
 # dqrng 0.0.4
 
