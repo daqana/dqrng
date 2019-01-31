@@ -60,14 +60,14 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e7
 system.time(rnorm(N))
-#>    user  system elapsed 
+#>    user  system elapsed
 #>   0.724   0.012   0.736
 system.time(dqrnorm(N))
-#>    user  system elapsed 
+#>    user  system elapsed
 #>   0.076   0.016   0.092
 ```
 
 ## Feedback
 
 All feedback (bug reports, security issues, feature requests, …) should
-be provided as [issues](https://githb.com/daqana/dqrng/issues).
+be provided as [issues](https://github.com/daqana/dqrng/issues).

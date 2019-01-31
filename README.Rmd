@@ -66,4 +66,4 @@ system.time(dqrnorm(N))
 
 ## Feedback
 
-All feedback (bug reports, security issues, feature requests, ...) should be provided as [issues](https://githb.com/daqana/dqrng/issues).
+All feedback (bug reports, security issues, feature requests, ...) should be provided as [issues](https://github.com/daqana/dqrng/issues).
