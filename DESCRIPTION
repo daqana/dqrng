@@ -1,7 +1,7 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.0.4.2
+Version: 0.0.5
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
@@ -27,8 +27,8 @@ License: AGPL-3 | file LICENSE
 Depends: R (>= 3.1.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
-RoxygenNote: 6.1.0
-Suggests: 
+RoxygenNote: 6.1.1
+Suggests:
     testthat,
     knitr,
     rmarkdown
