@@ -7,7 +7,7 @@
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
-#' @param seed  integer seed for the random number generator, or a raw vector representing a seed.
+#' @param seed  integer seed for the random number generator, or an integer vector representing a seed.
 #' @param kind  string specifying the RNG (see details)
 #' @param normal_kind  ignored; included for compatibility with \code{\link{RNGkind}}
 #' @param n  number of  observations
@@ -37,14 +37,22 @@
 #' The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as
 #' provided by \code{boost.random}.
 #'
+#' See \code{\link{generateSeedVectors}} for rapid generation of integer-vector
+#' seeds that provide 64 bits of entropy. These allow full exploration of 
+#' the state space of the 64-bit RNGs provided in this package.
+#'
 #' @seealso \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'          \code{\link{rnorm}}, and \code{\link{rexp}}
 #'
 #' @examples
 #' library(dqrng)
 #' dqRNGkind("Xoroshiro128+")
+#' 
+#' # Use integer scalar to set a seed.
 #' dqset.seed(42)
-#' dqset.seed(generateRawSeeds(1, 64)[[1]])
+#'
+#' 
+#' dqset.seed(generateSeedVectors(1, 64)[[1]])
 #' dqrunif(5, min = 2, max = 10)
 #' dqrexp(5, rate = 4)
 #' dqrnorm(5, mean = 5, sd = 3)

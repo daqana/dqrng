@@ -21,16 +21,20 @@
 #' 
 #' The aim is to facilitate R-level generation of seeds with sufficient 
 #' randomness to cover the entire state space of pseudo-random number 
-#' generators that require more than the ~32 bits available in a typical
+#' generators that require more than the ~32 bits available in an  
 #' \code{int}. It also preserves the integer nature of the seed, thus
 #' avoiding problems with casting double-precision numbers to integers.
+#'
+#' It is possible for the seed vector to contain \code{NA_integer_}
+#' values. This is not cause for alarm, as R uses \code{-INT_MAX} to 
+#' encode missing values in integer vectors. 
 #' 
 #' @author Aaron Lun
 #'
 #' @examples
-#' generateRawSeeds(10, 64)
+#' generateSeedVectors(10, 64)
 #'
-#' generateRawSeeds(5, 128)
+#' generateSeedVectors(5, 128)
 #'
 #' @export
 generateSeedVectors <- function(n, bits=64) {
