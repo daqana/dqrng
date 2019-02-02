@@ -10,6 +10,9 @@
 
 0 errors | 0 warnings | 0 notes
 
+The reported UBSAN errors seem to be false posititves, c.f.
+<https://github.com/RcppCore/Rcpp/issues/832>.
+
 ## Reverse dependencies
 
 dqrng currently has no reverse dependencies.
