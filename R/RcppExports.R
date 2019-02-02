@@ -5,8 +5,12 @@ dqset_seed <- function(seed) {
     invisible(.Call(`_dqrng_dqset_seed`, seed))
 }
 
-dqset_seed_raw <- function(seed_vec) {
-    invisible(.Call(`_dqrng_dqset_seed_raw`, seed_vec))
+dqset_seed_vector <- function(seed_vec) {
+    invisible(.Call(`_dqrng_dqset_seed_vector`, seed_vec))
+}
+
+dqset_create_seed_vectors <- function(nseeds, nwords) {
+    .Call(`_dqrng_dqset_create_seed_vectors`, nseeds, nwords)
 }
 
 #' @rdname dqrng-functions
