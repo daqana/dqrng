@@ -48,9 +48,7 @@ Rcpp::List dqset_create_seed_vectors(int nseeds, int nwords) {
   for (int i=0; i<nseeds; ++i) {
     Rcpp::IntegerVector current(nwords);
     for (auto& val : current) {
-      auto tmp=R_random_32();
-      tmp -= 2147483648; // avoid implementation-specific behaviour from int->unsigned cast.
-      val = tmp;
+      val = R_random_int();
     }
     output[i]=current;
   }
