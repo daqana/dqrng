@@ -19,7 +19,7 @@ inline uint32_t R_random_u32 () {
 inline int R_random_int () {
     const uint32_t sampled=R_random_u32();
     constexpr uint32_t max_int=2147483647; // See .Machine$integer.max.
-    if (sampled < max_int) { 
+    if (sampled <= max_int) { 
         return static_cast<int>(sampled);
     }
     
@@ -30,7 +30,7 @@ inline int R_random_int () {
 
 /* This is an internal function - not to be called by users. 
  * It converts a seed vector ('seeds') into a single unsigned
- * integer of specified type 'T' with all bits set according
+ * integer of specified type 'OUT' with all bits set according
  * to the combined bit pattern of the individual seed elements.
  * This is achieved by bit shifting, with the first element
  * of 'seeds' contributing the most significant bits in the output
@@ -49,7 +49,7 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
     static_assert(upper > 0, "integer type should be unsigned");
 
     constexpr TMP max_per_element=-1;
-    static_assert(upper >= max_per_element, "unsigned integer type should contain at least 32 bits");
+    static_assert(upper >= max_per_element, "output integer type should not be smaller than the temporary type");
 
     constexpr OUT left_upper=upper >> TMP_BITS;
 
@@ -70,10 +70,10 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
     return sum;
 }
 
-/* Start of user-visible functions here. 'convert_seed'
+/* Re-start of user-visible functions here. 'convert_seed'
  * is overloaded for direct use of input uint32_t's generated
- * by, e.g., std::random_device, to use int's from some other
- * source, or to use int's passed in from R.
+ * by, e.g., std::random_device; to use int's from some other
+ * source; or to use int's passed in from R.
  */
 
 template<typename T>
