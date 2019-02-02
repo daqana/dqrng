@@ -44,22 +44,27 @@ inline int R_random_int () {
 
 template<typename OUT, typename IN, typename TMP, unsigned int TMP_BITS>
 OUT convert_seed_internal(const IN* seeds, size_t N) {
-    OUT sum=0;
     constexpr OUT upper=-1;
-    static_assert(upper > 0, "integer type should be unsigned");
+    static_assert(upper > 0, "output integer type should be unsigned");
 
-    constexpr TMP max_per_element=-1;
-    static_assert(upper >= max_per_element, "output integer type should not be smaller than the temporary type");
+    constexpr TMP max_tmp=-1;
+    static_assert(max_tmp > 0, "temporary integer type should be unsigned");
+    static_assert(upper >= max_tmp, "output integer type should not be smaller than the temporary type");
 
-    constexpr OUT left_upper=upper >> TMP_BITS;
+    // Check to avoid UB from right-shifting by the length of OUT in bits.
+    constexpr bool not_same=upper > max_tmp;
+    constexpr OUT left_upper=(not_same ? upper >> TMP_BITS : 0);
 
+    OUT sum=0;
     for (size_t i=0; i<N; ++i) {
         OUT current=static_cast<TMP>(seeds[i]);
 
         if (left_upper < sum) { // avoid overflow upon shift.
             throw std::out_of_range("vector implies an out-of-range seed");
         }
-        sum <<= TMP_BITS;
+        if (not_same) { // avoid UB from left-shifting by the length of OUT in bits.
+            sum <<= TMP_BITS;
+        }
 
         if (upper - current < sum) { // subtract first, to avoid overflow during check.
             throw std::out_of_range("vector implies an out-of-range seed");
