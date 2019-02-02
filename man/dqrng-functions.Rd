@@ -73,13 +73,17 @@ the state space of the 64-bit RNGs provided in this package.
 }
 \examples{
 library(dqrng)
+
+# Set custom RNG.
 dqRNGkind("Xoroshiro128+")
 
-# Use integer scalar to set a seed.
+# Use an integer scalar to set a seed.
 dqset.seed(42)
 
+# Use an integer vector to set a seed.
+dqset.seed(c(31311L, 24123423L))
 
-dqset.seed(generateSeedVectors(1, 64)[[1]])
+# Random sampling from distributions.
 dqrunif(5, min = 2, max = 10)
 dqrexp(5, rate = 4)
 dqrnorm(5, mean = 5, sd = 3)
