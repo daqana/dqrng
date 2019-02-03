@@ -37,9 +37,22 @@ void dqset_seed(const uint32_t seed) {
 }
 
 // [[Rcpp::export(rng = false)]]
-void dqset_seed_raw(SEXP seed_vec) {
+void dqset_seed_vector(SEXP seed_vec) {
   uint64_t _seed = convert_seed<uint64_t>(seed_vec);
   rng->seed(_seed);
+}
+
+// [[Rcpp::export(rng = true)]]
+Rcpp::List dqset_create_seed_vectors(int nseeds, int nwords) {
+  Rcpp::List output(nseeds);
+  for (int i=0; i<nseeds; ++i) {
+    Rcpp::IntegerVector current(nwords);
+    for (auto& val : current) {
+      val = R_random_int();
+    }
+    output[i]=current;
+  }
+  return output;
 }
 
 //' @rdname dqrng-functions
