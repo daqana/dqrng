@@ -3,6 +3,8 @@
 
 #include <Rcpp.h>
 #include <stdexcept>
+#include <type_traits>
+#include <limits>
 
 /* This is an internal function - not to be called by users. 
  * It converts a seed vector ('seeds') into a single unsigned
@@ -12,37 +14,49 @@
  * of 'seeds' contributing the most significant bits in the output
  * and the last element contributing the least significant bits.
  *
- * Each element of 'seeds' is cast from 'IN' to 'TMP' prior to
- * bit operations. This is intended to eliminate signed-ness,
- * so 'TMP' should be the unsigned equivalent of 'int' with the
- * same number of bits (as specified by 'TMP_BITS').
+ * Each element of 'seeds' is cast from 'IN' to the corresponding
+ * unsigned type. 'IN' should have no more than last 'SHIFT' bits 
+ * set. Compile- or run-time errors will be raised for seeds
+ * that exceed the size of the maximum integer storable in 'OUT'.
  */
 
-template<typename OUT, typename IN, typename TMP, unsigned int TMP_BITS>
+template<typename OUT, typename IN, int SHIFT>
 OUT convert_seed_internal(const IN* seeds, size_t N) {
+    static_assert(std::is_unsigned<OUT>::value, "output integer type should be unsigned");
     constexpr OUT upper=-1;
-    static_assert(upper > 0, "output integer type should be unsigned");
-
-    constexpr TMP max_tmp=-1;
-    static_assert(max_tmp > 0, "temporary integer type should be unsigned");
-    static_assert(upper >= max_tmp, "output integer type should not be smaller than the temporary type");
 
     // Check to avoid UB from right-shifting by the length of OUT in bits.
-    constexpr bool not_same=upper > max_tmp;
-    constexpr OUT left_upper=(not_same ? upper >> TMP_BITS : 0);
+    constexpr int OUT_size=std::numeric_limits<OUT>::digits;
+    constexpr bool shiftable=OUT_size > SHIFT;
+    constexpr OUT left_upper=(shiftable ? upper >> SHIFT: 0);
+
+    typedef typename std::make_unsigned<IN>::type UIN;
+    constexpr int UIN_size=std::numeric_limits<UIN>::digits;
 
     OUT sum=0;
     for (size_t i=0; i<N; ++i) {
-        OUT current=static_cast<TMP>(seeds[i]);
+        UIN unsigned_seed=seeds[i];
+        if (UIN_size > OUT_size) { // Checking that the UIN value fits inside OUT.
+            if (unsigned_seed > upper) {
+                throw std::out_of_range("seed element out of range for possible integers");
+            }
+        }
 
-        if (left_upper < sum) { // avoid overflow upon shift.
+        OUT current=unsigned_seed;
+        if (UIN_size > SHIFT && shiftable) { // Checking that the seed value contains no more than SHIFT set bits.
+            if (current >> SHIFT != 0) { // using 'current' to avoid shift warnings from GCC on common 32-bit 'int' platforms.
+                throw std::runtime_error("seed element out of range for possible integers");
+            }
+        }
+
+        if (left_upper < sum) { // Avoid overflow upon right shift.
             throw std::out_of_range("vector implies an out-of-range seed");
         }
-        if (not_same) { // avoid UB from left-shifting by the length of OUT in bits.
-            sum <<= TMP_BITS;
+        if (shiftable) { // Avoid UB from left-shifting by the length of OUT in bits.
+            sum <<= SHIFT;
         }
 
-        if (upper - current < sum) { // subtract first, to avoid overflow during check.
+        if (upper - current < sum) { // Subtract first, to avoid overflow during check.
             throw std::out_of_range("vector implies an out-of-range seed");
         }
         sum |= current;
@@ -59,12 +73,12 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
 
 template<typename T>
 T convert_seed(const uint32_t* seeds, size_t N) {
-    return convert_seed_internal<T, uint32_t, uint32_t, 32>(seeds, N);
+    return convert_seed_internal<T, uint32_t, 32>(seeds, N);
 }
 
 template<typename T>
 T convert_seed(const int* seeds, size_t N) {
-    return convert_seed_internal<T, int, uint32_t, 32>(seeds, N); // all ints are 32-bit on platforms that compile R.
+    return convert_seed_internal<T, int, 32>(seeds, N); 
 }
 
 template<typename T>
