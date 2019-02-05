@@ -20,7 +20,7 @@
  * that exceed the size of the maximum integer storable in 'OUT'.
  */
 
-template<typename OUT, typename IN, int SHIFT>
+template<typename OUT, typename IN, int SHIFT=std::numeric_limits<typename std::make_unsigned<IN>::type>::digits>
 OUT convert_seed_internal(const IN* seeds, size_t N) {
     static_assert(std::is_unsigned<OUT>::value, "output integer type should be unsigned");
     constexpr OUT upper=-1;
@@ -49,7 +49,7 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
             }
         }
 
-        if (left_upper < sum) { // Avoid overflow upon right shift.
+        if (left_upper < sum) { // Avoid overflow upon left shift.
             throw std::out_of_range("vector implies an out-of-range seed");
         }
         if (shiftable) { // Avoid UB from left-shifting by the length of OUT in bits.
@@ -73,12 +73,12 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
 
 template<typename T>
 T convert_seed(const uint32_t* seeds, size_t N) {
-    return convert_seed_internal<T, uint32_t, 32>(seeds, N);
+    return convert_seed_internal<T, uint32_t>(seeds, N);
 }
 
 template<typename T>
 T convert_seed(const int* seeds, size_t N) {
-    return convert_seed_internal<T, int, 32>(seeds, N); 
+    return convert_seed_internal<T, int, 32>(seeds, N); // Enforce 32-bit shift, just in case.
 }
 
 template<typename T>
