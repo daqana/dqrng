@@ -35,19 +35,6 @@ void dqset_seed(Rcpp::IntegerVector seed) {
   rng->seed(_seed);
 }
 
-// [[Rcpp::export(rng = true)]]
-Rcpp::List dqset_create_seed_vectors(int nseeds, int nwords) {
-  Rcpp::List output(nseeds);
-  for (int i=0; i<nseeds; ++i) {
-    Rcpp::IntegerVector current(nwords);
-    for (auto& val : current) {
-      val = R_random_int();
-    }
-    output[i]=current;
-  }
-  return output;
-}
-
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]

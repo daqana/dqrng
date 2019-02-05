@@ -24,11 +24,11 @@ namespace dqrng {
         }
     }
 
-    inline void dqset_seed(const uint32_t seed) {
+    inline void dqset_seed(Rcpp::IntegerVector seed) {
         typedef SEXP(*Ptr_dqset_seed)(SEXP);
         static Ptr_dqset_seed p_dqset_seed = NULL;
         if (p_dqset_seed == NULL) {
-            validateSignature("void(*dqset_seed)(const uint32_t)");
+            validateSignature("void(*dqset_seed)(Rcpp::IntegerVector)");
             p_dqset_seed = (Ptr_dqset_seed)R_GetCCallable("dqrng", "_dqrng_dqset_seed");
         }
         RObject rcpp_result_gen;
@@ -41,46 +41,6 @@ namespace dqrng {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-    }
-
-    inline void dqset_seed_vector(SEXP seed_vec) {
-        typedef SEXP(*Ptr_dqset_seed_vector)(SEXP);
-        static Ptr_dqset_seed_vector p_dqset_seed_vector = NULL;
-        if (p_dqset_seed_vector == NULL) {
-            validateSignature("void(*dqset_seed_vector)(SEXP)");
-            p_dqset_seed_vector = (Ptr_dqset_seed_vector)R_GetCCallable("dqrng", "_dqrng_dqset_seed_vector");
-        }
-        RObject rcpp_result_gen;
-        {
-            rcpp_result_gen = p_dqset_seed_vector(Shield<SEXP>(Rcpp::wrap(seed_vec)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-    }
-
-    inline Rcpp::List dqset_create_seed_vectors(int nseeds, int nwords) {
-        typedef SEXP(*Ptr_dqset_create_seed_vectors)(SEXP,SEXP);
-        static Ptr_dqset_create_seed_vectors p_dqset_create_seed_vectors = NULL;
-        if (p_dqset_create_seed_vectors == NULL) {
-            validateSignature("Rcpp::List(*dqset_create_seed_vectors)(int,int)");
-            p_dqset_create_seed_vectors = (Ptr_dqset_create_seed_vectors)R_GetCCallable("dqrng", "_dqrng_dqset_create_seed_vectors");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_dqset_create_seed_vectors(Shield<SEXP>(Rcpp::wrap(nseeds)), Shield<SEXP>(Rcpp::wrap(nwords)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
     inline void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {

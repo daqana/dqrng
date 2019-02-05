@@ -39,6 +39,7 @@ Other contributors:
   \item David Blackman [contributor]
   \item Melissa O'Neill \email{oneill@pcg-random.org} [contributor]
   \item Sebastiano Vigna \email{vigna@acm.org} [contributor]
+  \item Aaron Lun [contributor]
 }
 
 }

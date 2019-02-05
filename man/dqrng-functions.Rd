@@ -35,7 +35,7 @@ dqset.seed(seed)
 
 \item{rate}{rate of the exponential distribution}
 
-\item{seed}{integer seed for the random number generator, or an integer vector representing a seed.}
+\item{seed}{integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.}
 }
 \value{
 \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
