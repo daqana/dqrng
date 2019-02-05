@@ -30,15 +30,8 @@ dqrng::rng64_t rng = dqrng::generator();
 // [[Rcpp::interfaces(r, cpp)]]
 
 // [[Rcpp::export(rng = false)]]
-void dqset_seed(const uint32_t seed) {
-  uint64_t seed2  = 1664525 * seed + 1013904223;
-  uint64_t _seed = seed | (seed2 << 32);
-  rng->seed(_seed);
-}
-
-// [[Rcpp::export(rng = false)]]
-void dqset_seed_vector(SEXP seed_vec) {
-  uint64_t _seed = convert_seed<uint64_t>(seed_vec);
+void dqset_seed(Rcpp::IntegerVector seed) {
+  uint64_t _seed = convert_seed<uint64_t>(seed);
   rng->seed(_seed);
 }
 

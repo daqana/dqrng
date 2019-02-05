@@ -92,8 +92,7 @@ T convert_seed(const int* seeds, size_t N) {
 }
 
 template<typename T>
-T convert_seed(SEXP input) {
-    Rcpp::IntegerVector seeds(input);
+T convert_seed(Rcpp::IntegerVector seeds) {
     return convert_seed<T>(seeds.begin(), seeds.size());
 }
 

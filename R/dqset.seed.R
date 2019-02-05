@@ -7,7 +7,7 @@
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
-#' @param seed  integer seed for the random number generator, or an integer vector representing a seed.
+#' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.
 #' @param kind  string specifying the RNG (see details)
 #' @param normal_kind  ignored; included for compatibility with \code{\link{RNGkind}}
 #' @param n  number of  observations
@@ -63,9 +63,5 @@
 #' @rdname dqrng-functions
 #' @export
 dqset.seed <- function(seed) {
-  if (length(seed) > 1L) {
-    dqset_seed_vector(seed)
-  } else {
-    dqset_seed(seed)
-  }
+  dqset_seed(seed)
 }
