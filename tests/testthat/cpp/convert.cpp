@@ -1,3 +1,5 @@
+// [[Rcpp::plugins(cpp11)]]
+
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng)]]
 #include "convert_seed.h"
