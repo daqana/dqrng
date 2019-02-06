@@ -45,11 +45,9 @@ Rcpp::List generateSeedVectors(int nseeds, int nwords=2) {
   for (int i=0; i<nseeds; ++i) {
     Rcpp::IntegerVector current(nwords);
     for (auto& val : current) {
-      val = R_random_int();
+      val = dqrng::R_random_int();
     }
     output[i]=current;
   }
   return output;
 }
-
-

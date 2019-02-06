@@ -6,6 +6,8 @@
 #include <type_traits>
 #include <limits>
 
+namespace dqrng {
+
 /* This is an internal function - not to be called by users. 
  * It converts a seed vector ('seeds') into a single unsigned
  * integer of specified type 'OUT' with all bits set according
@@ -84,6 +86,8 @@ T convert_seed(const int* seeds, size_t N) {
 template<typename T>
 T convert_seed(Rcpp::IntegerVector seeds) {
     return convert_seed<T>(seeds.begin(), seeds.size());
+}
+
 }
 
 #endif

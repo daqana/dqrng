@@ -3,6 +3,8 @@
 
 #include <Rcpp.h>
 
+namespace dqrng {
+
 /* Create a uint32_t or int seed using R's PRNGs. 
  * The uint32_t seed is more convnient from use within C++,
  * the int seed is more convenient if it needs to be passed back to R.
@@ -25,6 +27,8 @@ inline int R_random_int () {
     // Effectively reverse of the int->uint32_t cast.
     constexpr uint32_t max_uint=-1;
     return -static_cast<int>(max_uint - sampled) - 1;
+}
+
 }
 
 #endif

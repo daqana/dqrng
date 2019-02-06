@@ -31,7 +31,7 @@ dqrng::rng64_t rng = dqrng::generator();
 
 // [[Rcpp::export(rng = false)]]
 void dqset_seed(Rcpp::IntegerVector seed) {
-  uint64_t _seed = convert_seed<uint64_t>(seed);
+  uint64_t _seed = dqrng::convert_seed<uint64_t>(seed);
   rng->seed(_seed);
 }
 
