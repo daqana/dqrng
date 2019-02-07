@@ -1,13 +1,14 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.0.5
+Version: 0.0.5.1
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
     person("David Blackman", role = "ctb"),
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "ctb"),
-    person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb")
+    person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb"),
+    person("Aaron", "Lun", role="ctb")
     )
 Description: Several fast random number generators are provided as C++
   header only libraries: The PCG family by O'Neill (2014

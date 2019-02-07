@@ -35,7 +35,7 @@ dqset.seed(seed)
 
 \item{rate}{rate of the exponential distribution}
 
-\item{seed}{integer seed for the random number generator}
+\item{seed}{integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.}
 }
 \value{
 \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
@@ -66,11 +66,24 @@ Supported RNG kinds:
 
 The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as
 provided by \code{boost.random}.
+
+See \code{\link{generateSeedVectors}} for rapid generation of integer-vector
+seeds that provide 64 bits of entropy. These allow full exploration of 
+the state space of the 64-bit RNGs provided in this package.
 }
 \examples{
 library(dqrng)
+
+# Set custom RNG.
 dqRNGkind("Xoroshiro128+")
+
+# Use an integer scalar to set a seed.
 dqset.seed(42)
+
+# Use an integer vector to set a seed.
+dqset.seed(c(31311L, 24123423L))
+
+# Random sampling from distributions.
 dqrunif(5, min = 2, max = 10)
 dqrexp(5, rate = 4)
 dqrnorm(5, mean = 5, sd = 3)

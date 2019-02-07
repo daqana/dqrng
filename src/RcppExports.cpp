@@ -9,10 +9,10 @@
 using namespace Rcpp;
 
 // dqset_seed
-void dqset_seed(const uint32_t seed);
+void dqset_seed(Rcpp::IntegerVector seed);
 static SEXP _dqrng_dqset_seed_try(SEXP seedSEXP) {
 BEGIN_RCPP
-    Rcpp::traits::input_parameter< const uint32_t >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type seed(seedSEXP);
     dqset_seed(seed);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
@@ -177,12 +177,24 @@ RcppExport SEXP _dqrng_dqrexp(SEXP nSEXP, SEXP rateSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// generateSeedVectors
+Rcpp::List generateSeedVectors(int nseeds, int nwords);
+RcppExport SEXP _dqrng_generateSeedVectors(SEXP nseedsSEXP, SEXP nwordsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nseeds(nseedsSEXP);
+    Rcpp::traits::input_parameter< int >::type nwords(nwordsSEXP);
+    rcpp_result_gen = Rcpp::wrap(generateSeedVectors(nseeds, nwords));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _dqrng_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("void(*dqset_seed)(const uint32_t)");
+        signatures.insert("void(*dqset_seed)(Rcpp::IntegerVector)");
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrnorm)(size_t,double,double)");
@@ -208,6 +220,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dqrng_dqrunif", (DL_FUNC) &_dqrng_dqrunif, 3},
     {"_dqrng_dqrnorm", (DL_FUNC) &_dqrng_dqrnorm, 3},
     {"_dqrng_dqrexp", (DL_FUNC) &_dqrng_dqrexp, 2},
+    {"_dqrng_generateSeedVectors", (DL_FUNC) &_dqrng_generateSeedVectors, 2},
     {"_dqrng_RcppExport_registerCCallable", (DL_FUNC) &_dqrng_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
