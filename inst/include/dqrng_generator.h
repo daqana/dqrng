@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner (daqana GmbH)
+// Copyright 2018-2019 Ralf Stubner (daqana GmbH)
 //
 // This file is part of dqrng.
 //
@@ -19,13 +19,12 @@
 #define DQRNG_GENERATOR_H 1
 
 #include <cstdint>
-#include <chrono>
 #include <memory>
 #include <type_traits>
-#include <pcg_random.hpp>
+#include <xoshiro.h>
 
 namespace dqrng {
-using default_64bit_generator = pcg64;
+using default_64bit_generator = dqrng::xoroshiro128plus;
 
 class random_64bit_generator {
 public:

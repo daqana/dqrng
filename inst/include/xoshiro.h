@@ -1,6 +1,6 @@
 /*
  Original C Code written in 2016 and 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
- Adapted to C++ in 2018 by Ralf Stubner (daqana GmbH)
+ Adapted to C++ in 2018-2019 by Ralf Stubner (daqana GmbH)
 
  To the extent possible under law, the author has dedicated all copyright
  and related and neighboring rights to this software to the public domain
