@@ -9,6 +9,11 @@ Copyright: 2016, 2018 David Blackman and Sebastiano Vigna
 License: CC0
 URL: http://xoshiro.di.unimi.it/.
 
+Files: inst/include/convert_seed.h, inst/include/R_randgen.h,
+       src/generateSeedVector.cpp
+Copyright: 2019 Aaron Lun
+License: AGPL-3
+
 Files: *
-Copyright: 2018 Ralf Stubner (daqana GmbH)
+Copyright: 2018-2019 Ralf Stubner (daqana GmbH)
 License: AGPL-3
