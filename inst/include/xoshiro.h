@@ -12,12 +12,15 @@
 #define XOSHIRO_H 1
 
 #include <array>
-#include <dqrng_generator.h>
+#include <cstdint>
 
 namespace dqrng {
 template<size_t N, int_fast8_t A, int_fast8_t B, int_fast8_t C>
-class xoshiro : public random_64bit_generator {
+class xoshiro {
   static_assert(N == 2 || N == 4, "Unsupported size of RNG state.");
+public:
+  typedef uint64_t result_type;
+
 private:
   std::array<result_type, N> state;
 
@@ -73,6 +76,9 @@ private:
     }
 
 public:
+  inline static constexpr result_type min() {return 0.0;};
+  inline static constexpr result_type max() {return UINT64_MAX;};
+
   xoshiro(result_type _seed = 0x85c6ea9eb065ebeeULL) {
     seed(_seed);
   }
