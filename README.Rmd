@@ -50,7 +50,6 @@ Using the provided RNGs from R is deliberately similar to using R's build-in RNG
 
 ```{r example}
 library(dqrng)
-dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
 dqrexp(5, rate = 4)

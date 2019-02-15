@@ -47,12 +47,11 @@ build-in RNGs:
 
 ``` r
 library(dqrng)
-dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
-#> [1] 8.480202 6.582408 8.869840 5.062206 8.828782
+#> [1] 9.211802 2.616041 6.236331 4.588535 5.764814
 dqrexp(5, rate = 4)
-#> [1] 0.39374734 0.09218016 0.15409536 0.60380418 0.06477960
+#> [1] 0.35118613 0.17656197 0.06844976 0.16984095 0.10096744
 ```
 
 They are quite a bit faster, though:
@@ -60,11 +59,11 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e7
 system.time(rnorm(N))
-#>    user  system elapsed
-#>   0.724   0.012   0.736
+#>    user  system elapsed 
+#>   0.776   0.012   0.790
 system.time(dqrnorm(N))
-#>    user  system elapsed
-#>   0.076   0.016   0.092
+#>    user  system elapsed 
+#>   0.088   0.008   0.098
 ```
 
 ## Feedback

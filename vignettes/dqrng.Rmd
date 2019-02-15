@@ -116,6 +116,7 @@ Revisiting the example of approximating $\pi$ we can use:
 #include <Rcpp.h>
 #include <dqrng.h>
 
+using Rcpp::IntegerVector;
 using Rcpp::NumericVector;
 using Rcpp::sqrt;
 using Rcpp::sum;
@@ -124,7 +125,7 @@ using dqrng::dqrunif;
 // [[Rcpp::export]]
 double piCpp(const int n) {
   dqrng::dqRNGkind("Xoroshiro128+");
-  dqrng::dqset_seed(42);
+  dqrng::dqset_seed(IntegerVector::create(42));
   NumericVector x = dqrunif(n);
   NumericVector y = dqrunif(n);
   NumericVector d = sqrt(x*x + y*y);

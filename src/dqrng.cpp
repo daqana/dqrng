@@ -22,9 +22,14 @@
 #include <pcg_random.hpp>
 #include <threefry.h>
 #include <convert_seed.h>
+#include <R_randgen.h>
 
 namespace {
-dqrng::rng64_t rng = dqrng::generator();
+dqrng::rng64_t init() {
+  Rcpp::IntegerVector seed(2, dqrng::R_random_int);
+  return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
+}
+dqrng::rng64_t rng = init();
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -44,8 +49,6 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   uint64_t seed = rng->operator()();
   if (kind == "default") {
     rng =  dqrng::generator(seed);
-  } else if (kind == "mersenne-twister") {
-    rng =  dqrng::generator<std::mt19937_64>(seed);
   } else if (kind == "xoroshiro128+") {
     rng =  dqrng::generator<dqrng::xoroshiro128plus>(seed);
   } else if (kind == "xoshiro256+") {

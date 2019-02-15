@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner (daqana GmbH)
+// Copyright 2018-2019 Ralf Stubner (daqana GmbH)
 //
 // This file is part of dqrng.
 //
@@ -19,14 +19,12 @@
 #define DQRNG_GENERATOR_H 1
 
 #include <cstdint>
-#include <chrono>
 #include <memory>
-#include <random>
 #include <type_traits>
+#include <xoshiro.h>
 
 namespace dqrng {
-// conservative default
-using default_64bit_generator = std::mt19937_64;
+using default_64bit_generator = dqrng::xoroshiro128plus;
 
 class random_64bit_generator {
 public:
@@ -67,14 +65,6 @@ template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed) {
   return std::make_shared<RNG>(seed);
-}
-
-template<typename RNG = default_64bit_generator>
-rng64_t generator() {
-  uint64_t seed = std::random_device{}();
-  uint64_t time = std::chrono::system_clock::now().time_since_epoch().count();
-  seed = seed | time;
-  return generator<RNG>(seed);
 }
 } // namespace dqrng
 

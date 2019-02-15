@@ -1,3 +1,18 @@
+# dqrng 0.1.0
+
+## Breaking changes
+
+* An integer vector instead of a single `int` is used for seeding (Aaron Lun in #10)
+  * Single integer seeds lead to a different RNG state than before. 
+  * `dqrng::dqset_seed()` expects a `Rcpp::IntegerVector` instead of an `int`
+* Support for Mersenne-Twister has been removed, Xoroshiro128+ is now the default.
+
+## Other changes
+
+* New method `generateSeedVectors()` for generating a list of random `int`
+  vectors from R's RNG. These vectors can be used as seed (Aaron Lun in #10).
+* The initial state of the default RNG is now based on R's RNG.
+
 # dqrng 0.0.5
 
 * New RNG: Threefry from package 'sitmo'

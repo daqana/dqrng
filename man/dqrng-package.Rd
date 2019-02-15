@@ -15,11 +15,10 @@ Several fast random number generators are provided as C++
   are included. The latter two use the Ziggurat algorithm originally
   proposed by Marsaglia and Tsang (2000, <doi:10.18637/jss.v005.i08>).
   These functions are exported to R and as a C++ interface and are
-  enabled for use with the 64 bit version of the Mersenne-Twister by
-  Matsumoto and Nishimura (1998 <doi:10.1145/272991.272995>), the
-  default 64 bit generator from the PCG family, Xoroshiro128+ and Xoshiro256+
-  as well as the 64 bit version of the 20 rounds Threefry engine (Salmon et al.,
-  2011 <doi:10.1145/2063384.2063405>) as provided by the package 'sitmo'.
+  enabled for use with the default 64 bit generator from the PCG family,
+  Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds
+  Threefry engine (Salmon et al., 2011 <doi:10.1145/2063384.2063405>) as
+  provided by the package 'sitmo'.
 }
 \seealso{
 Useful links:
