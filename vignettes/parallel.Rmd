@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
 When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
 There are two main approaches to this problem:^[See for example http://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
 
-* Partition the the complete sequence of random numbers produced for one seed into sub-sequences and assign each process one sub-sequence.
-* Re-parametrize the generator to to produce non-overlapping sequences for the same seed.
+* Partition the complete sequence of random numbers produced for one seed into sub-sequences and assign each process one sub-sequence.
+* Re-parametrize the generator to produce non-overlapping sequences for the same seed.
 
 The RNGs included in `dqrng` offer at least one of these methods for parallel RNG usage.
 Currently these features can only be used from C++.
