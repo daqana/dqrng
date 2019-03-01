@@ -107,9 +107,10 @@ struct RandomFill : public RcppParallel::Worker {
   void operator()(std::size_t begin, std::size_t end) {
     pcg64 rng(seed, end);
     auto gen = std::bind(dist, std::ref(rng));
-    std::generate(output.begin() + begin * output.nrow(),
-                  output.begin() + end * output.nrow(),
-                  std::ref(gen));
+    for (std::size_t col = begin; col < end; ++col) {
+      RcppParallel::RMatrix<double>::Column column = output.column(col);
+      std::generate(column.begin(), column.end(), std::ref(gen));
+    }
   }
 };
 
