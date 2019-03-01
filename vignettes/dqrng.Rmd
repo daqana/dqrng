@@ -222,6 +222,8 @@ system.time(std_rnorm(1e7))
 ```
 
 Typically this is not as fast as `dqrnorm`, but the technique is useful to support distributions not (yet) included in dqrng.
+Note however, that the algorithms used for the distributions from C++11 are *implementation defined*.
+
 Finally you could directly use the base generators, which are provided as header-only libraries, without dqrng's tooling.
 For example, the following function uses the 32 bit PCG variant together with Boost's normal distribution function:
 
@@ -247,7 +249,43 @@ system.time(boost_pcg_rnorm(1e7))
 */
 ```
 
-This is quite fast since `boost::random::normal_distribution` uses the fast Ziggurat algorithm.
+This is quite fast since `boost::random::normal_distribution` uses the fast Ziggurat algorithm. 
+For some applications it is necessary to draw random numbers from multiple distributions with varying parameters.
+The following function uses a binomial distribution (from `boost.random`) as well as the normal distribution from `dqrng`.
+The parameters of the distributions are adjusted for every draw using `<distribution>::param_type`: 
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng, BH)]]
+#include <boost/random/binomial_distribution.hpp>
+#include <dqrng_distribution.h>
+#include <xoshiro.h>
+
+// aliases for the used ditributions
+using binomial = boost::random::binomial_distribution<int>;
+using normal = dqrng::normal_distribution;
+// [[Rcpp::export]]
+Rcpp::NumericMatrix multiple_distributions(int n) {
+  dqrng::xoshiro256plus rng(42);
+  // distributions with default parameters
+  binomial bernoulli;
+  normal normal1;
+  normal normal2;
+  Rcpp::NumericMatrix out(n, 3);
+  double p = 0.0;
+  for (int i = 0; i < n; ++i) {
+    p = double(i) / double(n);
+    out(i,0) = bernoulli(rng, binomial::param_type(1, p));
+    out(i,1) = normal1(rng, normal::param_type(p, 1.0));
+    out(i,2) = normal2(rng, normal::param_type(4.0, 3.0 - p));
+  }
+  Rcpp::colnames(out) = Rcpp::CharacterVector::create("Bernoulli", "Normal1", "Normal2");
+  return out;
+}
+
+/*** R
+multiple_distributions(5)
+*/
+```
 
 <!-- STATIC_ARBITRARY_SEED -->
-
