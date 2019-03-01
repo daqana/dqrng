@@ -24,9 +24,6 @@ Both the RNGs and the distribution functions are distributed as C++ header-only 
 
 Support for the following 64bit RNGs are currently included:
 
-* **Mersenne-Twister**  
-The 64 bit variant of the well-known Mersenne-Twister, which is also used as default.
-This is a conservative default that allows you to take advantage of the fast distribution functions provided by dqrng while staying close to R's default RNG (32 bit Mersenne-Twister).
 * **pcg64**
 The default 64 bit variant from the PCG family developed by Melissa O'Neill.
 See http://www.pcg-random.org for more details.
@@ -37,7 +34,7 @@ See http://xoshiro.di.unimi.it/ for more details.
 * **Threefry**  
 The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package 'sitmo'.
 
-Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples. 
+Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples and set as default RNG.
 
 ## Usage from R
 
