@@ -43,25 +43,23 @@ Care has been taken to keep the global RNG `rng` usable outside of the parallel 
 // [[Rcpp::plugins(openmp)]]
 #include <omp.h>
 
-// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::export]]
 std::vector<double> parallel_random_sum(int n, int m, int ncores) {
-  dqrng::uniform_distribution dist(0.0, 1.0);
-  dqrng::xoshiro256plus rng(42);
+  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
+  dqrng::xoshiro256plus rng(42);              // properly seeded rng
   std::vector<double> res(m);
   // ok to use rng here
   
   #pragma omp parallel num_threads(ncores)
   {
     dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
-    lrng.jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps 
-    auto gen = std::bind(dist, std::ref(lrng));
+    lrng.jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
 
     #pragma omp for
     for (int i = 0; i < m; ++i) {
       double lres(0);
       for (int j = 0; j < n; ++j) {
-        lres += gen();
+        lres += dist(lrng);
       }
       res[i] = lres / n;
     }
