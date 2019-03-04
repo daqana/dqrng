@@ -3,28 +3,24 @@
 language: R
 dist: xenial
 cache: packages
-os:
-  - linux
-  - osx
-r:
-  - 3.4
-  - release
-  - devel
+
 matrix:
-  exclude:
+  include:
   - r: 3.4
-    os: osx
+  - r: release
+    r_packages:
+    - covr
+    - pkgdown
+    after_success:
+    - Rscript -e "covr::codecov()"
+    deploy:
+      provider: script
+      script: Rscript -e 'pkgdown::deploy_site_github()'
+      skip_cleanup: true
   - r: devel
+  - r: release
     os: osx
-env:
-  global:
-  - ENCRYPTION_LABEL: "3dc1811797c0"
 notifications:
   email:
     on_success: change
     on_failure: change
-r_packages:
-  - covr
-  - pkgdown
-after_success:
-  - test "$TRAVIS_R_VERSION_STRING" = "release" -a "$TRAVIS_OS_NAME" == "linux" && .travis/deploy.sh || true
