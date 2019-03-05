@@ -21,10 +21,10 @@ UIN right_shift(UIN val) {
 }
 
 template<>
-uint16_t right_shift<32, uint16_t>(uint16_t val) { return 0; }
+uint16_t right_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
 
 template<>
-uint32_t right_shift<32, uint32_t>(uint32_t val) { return 0; }
+uint32_t right_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
 
 template<int SHIFT, typename UIN>
 UIN left_shift(UIN val) {
@@ -32,10 +32,10 @@ UIN left_shift(UIN val) {
 }
 
 template<>
-uint16_t left_shift<32, uint16_t>(uint16_t val) { return 0; }
+uint16_t left_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
 
 template<>
-uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; }
+uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
 
 /* This converts a seed vector ('seeds') into a single unsigned
  * integer of specified type 'OUT' with all bits set according
