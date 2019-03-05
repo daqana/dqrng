@@ -8,8 +8,36 @@
 
 namespace dqrng {
 
-/* This is an internal function - not to be called by users. 
- * It converts a seed vector ('seeds') into a single unsigned
+/* Internal functions, not to be called by users.
+ * These define a set of template specializations for the
+ * bitshifts, which avoids compilation warnings when the 
+ * shift is greater than or equal to the width of the 
+ * unsigned integer type (for 16 or 32-bit unsigned ints).
+ */
+
+template<int SHIFT, typename UIN>
+UIN right_shift(UIN val) {
+    return val >> SHIFT;
+}
+
+template<>
+uint16_t right_shift<32, uint16_t>(uint16_t val) { return 0; }
+
+template<>
+uint32_t right_shift<32, uint32_t>(uint32_t val) { return 0; }
+
+template<int SHIFT, typename UIN>
+UIN left_shift(UIN val) {
+    return val << SHIFT;
+}
+
+template<>
+uint16_t left_shift<32, uint16_t>(uint16_t val) { return 0; }
+
+template<>
+uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; }
+
+/* This converts a seed vector ('seeds') into a single unsigned
  * integer of specified type 'OUT' with all bits set according
  * to the combined bit pattern of the individual seed elements.
  * This is achieved by bit shifting, with the first element
@@ -30,7 +58,7 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
     // Check to avoid UB from right-shifting by the length of OUT in bits.
     constexpr int OUT_size=std::numeric_limits<OUT>::digits;
     constexpr bool shiftable=OUT_size > SHIFT;
-    constexpr OUT left_upper=(shiftable ? upper >> SHIFT: 0);
+    constexpr OUT left_upper=(shiftable ? upper >> SHIFT : 0); // evaluated at compile time; should not generate shift warnings.
 
     typedef typename std::make_unsigned<IN>::type UIN;
     constexpr int UIN_size=std::numeric_limits<UIN>::digits;
@@ -46,7 +74,7 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
 
         OUT current=unsigned_seed;
         if (UIN_size > SHIFT && shiftable) { // Checking that the seed value contains no more than SHIFT set bits.
-            if (current >> SHIFT != 0) { // using 'current' to avoid shift warnings from GCC on common 32-bit 'int' platforms.
+            if (right_shift<SHIFT>(current) != 0) {
                 throw std::runtime_error("seed element out of range for possible integers");
             }
         }
@@ -55,7 +83,7 @@ OUT convert_seed_internal(const IN* seeds, size_t N) {
             throw std::out_of_range("vector implies an out-of-range seed");
         }
         if (shiftable) { // Avoid UB from left-shifting by the length of OUT in bits.
-            sum <<= SHIFT;
+            sum = left_shift<SHIFT>(sum);
         }
 
         if (upper - current < sum) { // Subtract first, to avoid overflow during check.
