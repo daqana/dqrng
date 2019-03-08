@@ -21,6 +21,7 @@ test_that("conversion to 16-bit integers works correctly", {
     expect_identical(convert_16(c(0, 0, 65535)), "65535")
 
     # Reports errors.
+    skip_on_os("solaris")
     safe_expect_error(convert_16(-1), msg = "seed element out of range")
     safe_expect_error(convert_16(NA_integer_), msg = "seed element out of range")
     safe_expect_error(convert_16(65536), msg = "seed element out of range")
@@ -39,6 +40,7 @@ test_that("conversion to 32-bit integers works correctly", {
     expect_identical(convert_32(c(0, 0, -1)), "4294967295")
 
     # Reports errors.
+    skip_on_os("solaris")
     safe_expect_error(convert_32(c(1, 0)), msg = "vector implies an out-of-range seed")
 })
 
@@ -61,6 +63,7 @@ test_that("conversion to 64-bit integers works correctly", {
     expect_identical(convert_64(c(-1, -1)), "18446744073709551615")
 
     # Reports errors.
+    skip_on_os("solaris")
     safe_expect_error(convert_64(c(1, 1, 0)), msg = "vector implies an out-of-range seed")
 })
 
