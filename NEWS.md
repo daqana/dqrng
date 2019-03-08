@@ -1,3 +1,8 @@
+# dqrng 0.1.1
+
+* Use template specializations to avoid compiler warnings during tests (Aaron Lun in [#16](https://github.com/daqana/dqrng/pull/16))
+* Do not expect a particular error message on MacOS and skip exception throwing tests on Solaris.
+
 # dqrng 0.1.0
 
 ## Breaking changes
