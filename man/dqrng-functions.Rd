@@ -16,7 +16,7 @@ dqrnorm(n, mean = 0, sd = 1)
 
 dqrexp(n, rate = 1)
 
-dqset.seed(seed)
+dqset.seed(seed, stream = NULL)
 }
 \arguments{
 \item{kind}{string specifying the RNG (see details)}
@@ -36,6 +36,8 @@ dqset.seed(seed)
 \item{rate}{rate of the exponential distribution}
 
 \item{seed}{integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.}
+
+\item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 }
 \value{
 \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
@@ -79,8 +81,14 @@ dqRNGkind("Xoshiro256+")
 # Use an integer scalar to set a seed.
 dqset.seed(42)
 
+# Use integer scalars to set a seed and the stream.
+dqset.seed(42, 123)
+
 # Use an integer vector to set a seed.
 dqset.seed(c(31311L, 24123423L))
+
+# Use an integer vector to set a seed and a scalar to select the stream.
+dqset.seed(c(31311L, 24123423L), 123)
 
 # Random sampling from distributions.
 dqrunif(5, min = 2, max = 10)

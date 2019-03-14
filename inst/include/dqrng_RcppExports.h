@@ -24,16 +24,16 @@ namespace dqrng {
         }
     }
 
-    inline void dqset_seed(Rcpp::IntegerVector seed) {
-        typedef SEXP(*Ptr_dqset_seed)(SEXP);
+    inline void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
+        typedef SEXP(*Ptr_dqset_seed)(SEXP,SEXP);
         static Ptr_dqset_seed p_dqset_seed = NULL;
         if (p_dqset_seed == NULL) {
-            validateSignature("void(*dqset_seed)(Rcpp::IntegerVector)");
+            validateSignature("void(*dqset_seed)(Rcpp::IntegerVector,Rcpp::Nullable<Rcpp::IntegerVector>)");
             p_dqset_seed = (Ptr_dqset_seed)R_GetCCallable("dqrng", "_dqrng_dqset_seed");
         }
         RObject rcpp_result_gen;
         {
-            rcpp_result_gen = p_dqset_seed(Shield<SEXP>(Rcpp::wrap(seed)));
+            rcpp_result_gen = p_dqset_seed(Shield<SEXP>(Rcpp::wrap(seed)), Shield<SEXP>(Rcpp::wrap(stream)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

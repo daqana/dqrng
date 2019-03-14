@@ -9,18 +9,19 @@
 using namespace Rcpp;
 
 // dqset_seed
-void dqset_seed(Rcpp::IntegerVector seed);
-static SEXP _dqrng_dqset_seed_try(SEXP seedSEXP) {
+void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream);
+static SEXP _dqrng_dqset_seed_try(SEXP seedSEXP, SEXP streamSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type seed(seedSEXP);
-    dqset_seed(seed);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type stream(streamSEXP);
+    dqset_seed(seed, stream);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _dqrng_dqset_seed(SEXP seedSEXP) {
+RcppExport SEXP _dqrng_dqset_seed(SEXP seedSEXP, SEXP streamSEXP) {
     SEXP rcpp_result_gen;
     {
-        rcpp_result_gen = PROTECT(_dqrng_dqset_seed_try(seedSEXP));
+        rcpp_result_gen = PROTECT(_dqrng_dqset_seed_try(seedSEXP, streamSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -194,7 +195,7 @@ END_RCPP
 static int _dqrng_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("void(*dqset_seed)(Rcpp::IntegerVector)");
+        signatures.insert("void(*dqset_seed)(Rcpp::IntegerVector,Rcpp::Nullable<Rcpp::IntegerVector>)");
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrnorm)(size_t,double,double)");
@@ -215,7 +216,7 @@ RcppExport SEXP _dqrng_RcppExport_registerCCallable() {
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dqrng_dqset_seed", (DL_FUNC) &_dqrng_dqset_seed, 1},
+    {"_dqrng_dqset_seed", (DL_FUNC) &_dqrng_dqset_seed, 2},
     {"_dqrng_dqRNGkind", (DL_FUNC) &_dqrng_dqRNGkind, 2},
     {"_dqrng_dqrunif", (DL_FUNC) &_dqrng_dqrunif, 3},
     {"_dqrng_dqrnorm", (DL_FUNC) &_dqrng_dqrnorm, 3},
