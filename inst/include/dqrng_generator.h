@@ -69,7 +69,7 @@ void random_64bit_wrapper<::dqrng::xoroshiro128plus>::seed(result_type seed, res
 template<>
 void random_64bit_wrapper<::dqrng::xoshiro256plus>::seed(result_type seed, result_type stream) {
     gen.seed(seed);
-    gen.jump(stream);
+    gen.long_jump(stream);
 }
 
 template<>

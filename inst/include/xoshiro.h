@@ -99,6 +99,10 @@ public:
   void jump(uint64_t n) {
     for( ; n > 0; --n) jump();
   }
+  void long_jump();
+  void long_jump(uint64_t n) {
+    for( ; n > 0; --n) long_jump();
+  }
 };
 
 /* This is xoroshiro128+ 1.0, our best and fastest small-state generator
@@ -147,6 +151,30 @@ inline void xoroshiro128plus::jump() {
   state[0] = s0;
   state[1] = s1;
 }
+
+/* This is the long-jump function for the generator. It is equivalent to
+   2^96 calls to next(); it can be used to generate 2^32 starting points,
+   from each of which jump() will generate 2^32 non-overlapping
+   subsequences for parallel distributed computations. */
+template<>
+inline void xoroshiro128plus::long_jump(void) {
+	static const uint64_t LONG_JUMP[] = { 0xd2a98b26625eee7b, 0xdddf9b1090aa7ac1 };
+
+	uint64_t s0 = 0;
+	uint64_t s1 = 0;
+	for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
+		for(unsigned int b = 0; b < 64; b++) {
+			if (LONG_JUMP[i] & UINT64_C(1) << b) {
+				s0 ^= state[0];
+				s1 ^= state[1];
+			}
+			operator()();
+		}
+
+	state[0] = s0;
+	state[1] = s1;
+}
+
 /* This is xoshiro256+ 1.0, our best and fastest generator for floating-point
  numbers. We suggest to use its upper bits for floating-point
  generation, as it is slightly faster than xoshiro256**. It passes all
@@ -190,6 +218,35 @@ inline void xoshiro256plus::jump() {
   state[1] = s1;
   state[2] = s2;
   state[3] = s3;
+}
+
+/* This is the long-jump function for the generator. It is equivalent to
+   2^192 calls to next(); it can be used to generate 2^64 starting points,
+   from each of which jump() will generate 2^64 non-overlapping
+   subsequences for parallel distributed computations. */
+template<>
+inline void xoshiro256plus::long_jump(void) {
+	static const uint64_t LONG_JUMP[] = { 0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635 };
+
+	uint64_t s0 = 0;
+	uint64_t s1 = 0;
+	uint64_t s2 = 0;
+	uint64_t s3 = 0;
+	for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
+		for(unsigned int b = 0; b < 64; b++) {
+			if (LONG_JUMP[i] & UINT64_C(1) << b) {
+				s0 ^= state[0];
+				s1 ^= state[1];
+				s2 ^= state[2];
+				s3 ^= state[3];
+			}
+			operator()();
+		}
+
+	state[0] = s0;
+	state[1] = s1;
+	state[2] = s2;
+	state[3] = s3;
 }
 
 }
