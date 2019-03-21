@@ -53,7 +53,7 @@ std::vector<double> parallel_random_sum(int n, int m, int ncores) {
   #pragma omp parallel num_threads(ncores)
   {
     dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
-    lrng.jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
+    lrng.long_jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
 
     #pragma omp for
     for (int i = 0; i < m; ++i) {
