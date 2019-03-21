@@ -1,3 +1,8 @@
+# dqrng (unreleased)
+
+* Add R side support for selecting multiple streams for parallel usage.
+* Implement `long_jump()` for Xo(ro)shiro as alternative to `jump()` providing fewer streams with longer period.
+
 # dqrng 0.1.1
 
 * Use template specializations to avoid compiler warnings during tests (Aaron Lun in [#16](https://github.com/daqana/dqrng/pull/16))
@@ -7,7 +12,7 @@
 
 ## Breaking changes
 
-* An integer vector instead of a single `int` is used for seeding (Aaron Lun in #10)
+* An integer vector instead of a single `int` is used for seeding (Aaron Lun in [#10](https://github.com/daqana/dqrng/pull/10))
   * Single integer seeds lead to a different RNG state than before. 
   * `dqrng::dqset_seed()` expects a `Rcpp::IntegerVector` instead of an `int`
 * Support for Mersenne-Twister has been removed, Xoroshiro128+ is now the default.

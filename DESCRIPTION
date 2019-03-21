@@ -1,7 +1,7 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.1.1
+Version: 0.1.1.1
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
