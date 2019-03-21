@@ -19,19 +19,49 @@ knitr::opts_chunk$set(
 When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
 There are two main approaches to this problem:^[See for example http://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
 
-* Partition the complete sequence of random numbers produced for one seed into sub-sequences and assign each process one sub-sequence.
-* Re-parametrize the generator to produce non-overlapping sequences for the same seed.
+* Partition the complete sequence of random numbers produced for one seed into non-overlapping sequences and assign each process one sub-sequence.
+* Re-parametrize the generator to produce independent sequences for the same seed.
 
 The RNGs included in `dqrng` offer at least one of these methods for parallel RNG usage.
-Currently these features can only be used from C++.
+When using the R or C interface independent streams can be accessed using the two argument `dqset.seed(seed, stream)` or `dqset_seed(seed, stream)` functions.
+
+# Threefry: usage from R
+
+The Threefry engine uses internally a counter with $2^{256}$ possible states, which can be split into different substreams.
+When used from R or C with the two argument `dqset.seed` or `dqset_seed` this counter space is split into $2^{64}$ streams with $2^{192}$ possible states each.
+This is equivalent to $2^{64}$ streams with a period of $2^{194}$ each.
+
+In the following example a matrix with random numbers is generated in parallel using the parallel package.
+The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
+
+```{r}
+library(parallel)
+cl <- parallel::makeCluster(2)
+res <- clusterApply(cl, 1:8, function(stream, seed, N) {
+  library(dqrng)
+  dqRNGkind("Threefry")
+  dqset.seed(seed, stream)
+  dqrnorm(N)
+}, 42, 1e6)
+stopCluster(cl)
+
+res <- matrix(unlist(res), ncol = 8)
+symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
+       symbols = c(" ", "?", "!", "1"),
+       abbr.colnames = FALSE, corr = TRUE)
+```
+
+As expected the correlation matrix for the different columns is almost equal to the identity matrix.
+
 
 # Xo(ro)shiro: jump ahead with OpenMP
 
-The Xoshiro256+ generator has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences, which are $2^{128}$ random draws apart.
-The Xoroshiro128+ generator has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences, which are $2^{64}$ random draws apart. 
-You can go from one sub-sequence to the next using the `jump()` method and the convenience wrapper `jump(int n)`, which  advances to the `n`th sub-sequence.
+The Xoshiro256+ generator has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws appart.
+The Xoroshiro128+ generator has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws appart. 
+You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence.
+When used from R or C with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$ and $2^{64}$ random draws appart for Xoshiro256+ and Xoroshiro128+, respectively.
 
-As an example we draw and sum a large number of uniformly distributed numbers.
+As an example using C++ we draw and sum a large number of uniformly distributed numbers.
 This is done several times using OpenMP for parallelisation.
 Care has been taken to keep the global RNG `rng` usable outside of the parallel block.
 
@@ -84,6 +114,8 @@ Result:
 From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
 It offers the function [`advance(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
 In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
+When used from R or C with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams out of the possible $2^{127}$ separate streams.
+
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
