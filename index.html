@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.1</span>
       </span>
     </div>
 
@@ -128,10 +128,17 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(N))</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;   0.841   0.052   0.892</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;   0.855   0.040   0.895</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(N))</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   0.148   0.040   0.190</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   0.151   0.023   0.176</span></a></code></pre></div>
+<p>In addition they provide support for multiple independent streams for parallel usage:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="dv">42</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">u1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/dqrng-functions.html">dqrunif</a></span>(N)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="dv">42</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">u2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/dqrng-functions.html">dqrunif</a></span>(N)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/cor">cor</a></span>(u1, u2)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; [1] -0.0005787967</span></a></code></pre></div>
 </div>
 <div id="feedback" class="section level2">
 <h2 class="hasAnchor">

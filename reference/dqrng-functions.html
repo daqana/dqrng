@@ -68,7 +68,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.1</span>
       </span>
     </div>
 
@@ -146,7 +146,7 @@
 
 <span class='fu'>dqrexp</span>(<span class='no'>n</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
-<span class='fu'>dqset.seed</span>(<span class='no'>seed</span>)</pre>
+<span class='fu'>dqset.seed</span>(<span class='no'>seed</span>, <span class='kw'>stream</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,6 +186,10 @@
     <tr>
       <th>seed</th>
       <td><p>integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.</p></td>
+    </tr>
+    <tr>
+      <th>stream</th>
+      <td><p>integer used for selecting the RNG stream; either a scalar or a vector of length 2</p></td>
     </tr>
     </table>
     
@@ -227,11 +231,17 @@ the state space of the 64-bit RNGs provided in this package.</p>
 <span class='co'># Use an integer scalar to set a seed.</span>
 <span class='fu'>dqset.seed</span>(<span class='fl'>42</span>)
 
+<span class='co'># Use integer scalars to set a seed and the stream.</span>
+<span class='fu'>dqset.seed</span>(<span class='fl'>42</span>, <span class='fl'>123</span>)
+
 <span class='co'># Use an integer vector to set a seed.</span>
 <span class='fu'>dqset.seed</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>31311L</span>, <span class='fl'>24123423L</span>))
 
+<span class='co'># Use an integer vector to set a seed and a scalar to select the stream.</span>
+<span class='fu'>dqset.seed</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>31311L</span>, <span class='fl'>24123423L</span>), <span class='fl'>123</span>)
+
 <span class='co'># Random sampling from distributions.</span>
-<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 8.482403 4.173219 3.540447 9.396910 8.174129</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.14481656 0.69499011 0.32263698 0.04724194 0.33878028</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 6.830379 1.433176 2.632913 7.483174 7.075918</div></pre>
+<span class='fu'>dqrunif</span>(<span class='fl'>5</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 9.254756 2.169924 3.232695 8.859045 4.940842</div><div class='input'><span class='fu'>dqrexp</span>(<span class='fl'>5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; [1] 0.003025477 0.213876337 0.008051277 0.399246137 0.066848602</div><div class='input'><span class='fu'>dqrnorm</span>(<span class='fl'>5</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 1.399092 7.411358 7.145729 2.308440 6.766659</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
