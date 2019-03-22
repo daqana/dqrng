@@ -63,6 +63,16 @@ system.time(rnorm(N))
 system.time(dqrnorm(N))
 ```
 
+In addition they provide support for multiple independent streams for parallel usage:
+
+```{r parallel}
+dqset.seed(42, 1)
+u1 <- dqrunif(N)
+dqset.seed(42, 2)
+u2 <- dqrunif(N)
+cor(u1, u2)
+```
+
 ## Feedback
 
 All feedback (bug reports, security issues, feature requests, ...) should be provided as [issues](https://github.com/daqana/dqrng/issues).

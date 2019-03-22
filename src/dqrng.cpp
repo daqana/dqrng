@@ -35,9 +35,14 @@ dqrng::rng64_t rng = init();
 // [[Rcpp::interfaces(r, cpp)]]
 
 // [[Rcpp::export(rng = false)]]
-void dqset_seed(Rcpp::IntegerVector seed) {
+void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
   uint64_t _seed = dqrng::convert_seed<uint64_t>(seed);
-  rng->seed(_seed);
+  if (stream.isNotNull()) {
+      uint64_t _stream = dqrng::convert_seed<uint64_t>(stream.as());
+    rng->seed(_seed, _stream);
+  } else {
+    rng->seed(_seed);
+  }
 }
 
 //' @rdname dqrng-functions

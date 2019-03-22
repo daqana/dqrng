@@ -60,10 +60,22 @@ They are quite a bit faster, though:
 N <- 1e7
 system.time(rnorm(N))
 #>    user  system elapsed 
-#>   0.776   0.012   0.790
+#>   0.744   0.024   0.769
 system.time(dqrnorm(N))
 #>    user  system elapsed 
-#>   0.088   0.008   0.098
+#>   0.072   0.020   0.093
+```
+
+In addition they provide support for multiple streams for parallel
+usage:
+
+``` r
+dqset.seed(42, 1)
+u1 <- dqrunif(N)
+dqset.seed(42, 2)
+u2 <- dqrunif(N)
+cor(u1, u2)
+#> [1] -0.0005787967
 ```
 
 ## Feedback

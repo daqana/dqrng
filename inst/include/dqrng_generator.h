@@ -21,10 +21,13 @@
 #include <cstdint>
 #include <memory>
 #include <type_traits>
+#include <stdexcept>
 #include <xoshiro.h>
+#include <pcg_random.hpp>
+#include <threefry.h>
 
 namespace dqrng {
-using default_64bit_generator = dqrng::xoroshiro128plus;
+using default_64bit_generator = ::dqrng::xoroshiro128plus;
 
 class random_64bit_generator {
 public:
@@ -33,6 +36,7 @@ public:
   virtual ~random_64bit_generator() {};
   virtual result_type operator() () = 0;
   virtual void seed(result_type seed) = 0;
+  virtual void seed(result_type seed, result_type stream) = 0;
   result_type min() {return 0.0;};
   result_type max() {return UINT64_MAX;};
 };
@@ -53,7 +57,32 @@ public:
   random_64bit_wrapper(result_type seed) : gen(seed) {};
   virtual result_type operator() () {return gen();}
   virtual void seed(result_type seed) {gen.seed(seed);}
+  virtual void seed(result_type seed, result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
 };
+
+template<>
+void random_64bit_wrapper<::dqrng::xoroshiro128plus>::seed(result_type seed, result_type stream) {
+    gen.seed(seed);
+    gen.jump(stream);
+}
+
+template<>
+void random_64bit_wrapper<::dqrng::xoshiro256plus>::seed(result_type seed, result_type stream) {
+    gen.seed(seed);
+    gen.long_jump(stream);
+}
+
+template<>
+void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stream) {
+    gen.seed(seed, stream);
+}
+
+template<>
+void random_64bit_wrapper<sitmo::threefry_20_64>::seed(result_type seed, result_type stream) {
+    gen.seed(seed);
+    gen.set_counter(0, 0, 0, stream);
+}
+
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type

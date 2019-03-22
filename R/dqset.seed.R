@@ -8,6 +8,7 @@
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
 #' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.
+#' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param kind  string specifying the RNG (see details)
 #' @param normal_kind  ignored; included for compatibility with \code{\link{RNGkind}}
 #' @param n  number of  observations
@@ -52,8 +53,14 @@
 #' # Use an integer scalar to set a seed.
 #' dqset.seed(42)
 #'
+#' # Use integer scalars to set a seed and the stream.
+#' dqset.seed(42, 123)
+#'
 #' # Use an integer vector to set a seed.
 #' dqset.seed(c(31311L, 24123423L))
+#'
+#' # Use an integer vector to set a seed and a scalar to select the stream.
+#' dqset.seed(c(31311L, 24123423L), 123)
 #'
 #' # Random sampling from distributions.
 #' dqrunif(5, min = 2, max = 10)
@@ -61,6 +68,6 @@
 #' dqrnorm(5, mean = 5, sd = 3)
 #' @rdname dqrng-functions
 #' @export
-dqset.seed <- function(seed) {
-  dqset_seed(seed)
+dqset.seed <- function(seed, stream = NULL) {
+  dqset_seed(seed, stream)
 }

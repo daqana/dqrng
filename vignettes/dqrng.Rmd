@@ -138,14 +138,15 @@ Note that in C++ you have to use `dqrng::dqset_seed()`, whereas the analogue fun
 ### Using the header only library
 
 The RNG wrapper and distributions functions can be used from C++ by including `dqrng_generator.h` and `dqrng_distribution.h`.
+In order to use these header files, you have to use at least C++11 and link to the `BH` and `sitmo` packages as well.
 For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG.
 Here a minimal [SplitMix](http://xoroshiro.di.unimi.it/splitmix64.c) generator is used together with `dqrng::normal_distribution`:
 
 ```{r, eval=FALSE, engine='Rcpp'}
-#include <cstdint>
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng)]]
+// [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <dqrng_distribution.h>
+// [[Rcpp::plugins(cpp11)]]
 
 class SplitMix : public dqrng::random_64bit_generator {
 public:
@@ -157,6 +158,7 @@ public:
     return z ^ (z >> 31);
   }
   void seed(result_type seed) {state = seed;}
+  void seed(result_type seed, result_type stream) {state = seed;}
 
 private:
   result_type state;
@@ -179,12 +181,11 @@ Generally speaking you can use any C++11 compliant RNG with 64 bit output size.
 For example, here the 64 bit Threefry engine with 13 rounds from package sitmo is used:
 
 ```{r, eval=FALSE, engine='Rcpp'}
-#include <cstdint>
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng)]]
+// [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <dqrng_distribution.h>
-// [[Rcpp::depends(sitmo)]]
 #include <threefry.h>
+// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 Rcpp::NumericVector threefry_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
@@ -202,12 +203,12 @@ Alternatively, you could combine the included RNGs together with dqrng's tooling
 For example, this function generates random numbers according to the normal distribution using the standard library from C++11:
 
 ```{r, eval=FALSE, engine='Rcpp'}
-// [[Rcpp::plugins(cpp11)]]   
 #include <random>
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng)]]
+// [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <dqrng_distribution.h>
 #include <xoshiro.h>
+// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 Rcpp::NumericVector std_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
@@ -229,7 +230,7 @@ For example, the following function uses the 32 bit PCG variant together with Bo
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH)]]
+// [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <pcg_random.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -256,10 +257,11 @@ The parameters of the distributions are adjusted for every draw using `<distribu
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH)]]
+// [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <boost/random/binomial_distribution.hpp>
 #include <dqrng_distribution.h>
 #include <xoshiro.h>
+// [[Rcpp::plugins(cpp11)]]   
 
 // aliases for the used ditributions
 using binomial = boost::random::binomial_distribution<int>;
