@@ -110,6 +110,7 @@ inline uint32_t bounded_rand32(dqrng::random_64bit_generator& rng, uint32_t rang
     return m >> 32;
 }
 
+#ifdef LONG_VECTOR_SUPPORT
 inline uint64_t bounded_rand64(dqrng::random_64bit_generator& rng, uint64_t range) {
     uint64_t x = rng();
     pcg128_t m = pcg128_t(x) * pcg128_t(range);
@@ -129,6 +130,7 @@ inline uint64_t bounded_rand64(dqrng::random_64bit_generator& rng, uint64_t rang
     }
     return m >> 64;
 }
+#endif
 } // namespace dqrng
 
 namespace boost {
