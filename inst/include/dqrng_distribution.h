@@ -25,6 +25,8 @@
 #include <boost/random/exponential_distribution.hpp>
 #include <dqrng_generator.h>
 
+using pcg_extras::pcg128_t;
+
 namespace dqrng {
 // Boost's implementation allow for performance increasing spezializations
 using uniform_distribution = boost::random::uniform_real_distribution<double>;
@@ -61,8 +63,9 @@ inline uint32_t random32(dqrng::random_64bit_generator& rng) {
 
 /*
  * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded32.cpp
+ * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded64.cpp
  * A C++ implementation methods and benchmarks for random numbers in a range
- * (32-bit version)
+ * (64 and 32-bit version)
  *
  * The MIT License (MIT)
  *
@@ -87,24 +90,44 @@ inline uint32_t random32(dqrng::random_64bit_generator& rng) {
  * DEALINGS IN THE SOFTWARE.
  */
 
-inline uint32_t bounded_rand(dqrng::random_64bit_generator& rng, uint32_t range) {
+inline uint32_t bounded_rand32(dqrng::random_64bit_generator& rng, uint32_t range) {
     uint32_t x = random32(rng);
     uint64_t m = uint64_t(x) * uint64_t(range);
     uint32_t l = uint32_t(m);
     if (l < range) {
-	uint32_t t = -range;
-	if (t >= range) {
-	    t -= range;
-	    if (t >= range)
-		t %= range;
-	}
-	while (l < t) {
-	    x = random32(rng);
-	    m = uint64_t(x) * uint64_t(range);
-	    l = uint32_t(m);
-	}
+        uint32_t t = -range;
+        if (t >= range) {
+            t -= range;
+            if (t >= range)
+                t %= range;
+        }
+        while (l < t) {
+            x = random32(rng);
+            m = uint64_t(x) * uint64_t(range);
+            l = uint32_t(m);
+        }
     }
     return m >> 32;
+}
+
+inline uint64_t bounded_rand64(dqrng::random_64bit_generator& rng, uint64_t range) {
+    uint64_t x = rng();
+    pcg128_t m = pcg128_t(x) * pcg128_t(range);
+    uint64_t l = uint64_t(m);
+    if (l < range) {
+        uint64_t t = -range;
+        if (t >= range) {
+            t -= range;
+            if (t >= range)
+                t %= range;
+        }
+        while (l < t) {
+            x = rng();
+            m = pcg128_t(x) * pcg128_t(range);
+            l = uint64_t(m);
+        }
+    }
+    return m >> 64;
 }
 } // namespace dqrng
 
