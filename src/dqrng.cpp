@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <boost/unordered_set.hpp>
 #include <boost/iterator/counting_iterator.hpp>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
@@ -24,6 +25,7 @@
 #include <threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
+#include <flat_hash_map.hpp>
 
 namespace {
 dqrng::rng64_t init() {
@@ -102,16 +104,46 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
     Rcpp::IntegerVector result(Rcpp::no_init(n));
     if (replace) {
-        std::generate(result.begin(), result.end(), [m] () {return dqrng::bounded_rand(*rng, m);});
+        std::generate(result.begin(), result.end(), [m] () {return dqrng::bounded_rand32(*rng, m);});
     } else {
         std::vector<int> tmp(boost::counting_iterator<int>(0),
                              boost::counting_iterator<int>(m));
 
         for (size_t i = 0; i < n; ++i) {
-            int j = dqrng::bounded_rand(*rng, m);
+            int j = dqrng::bounded_rand32(*rng, m);
             result(i) = tmp[j] + 1;
             tmp[j] = tmp[--m];
         }
     }
     return result;
+}
+
+// [[Rcpp::export(rng = false)]]
+Rcpp::NumericVector dqsample_num(double m,
+                                 size_t n,
+                                 bool replace = false,
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+  uint64_t _m(m);
+  Rcpp::NumericVector result(Rcpp::no_init(n));
+  if (replace) {
+    std::generate(result.begin(), result.end(), [_m] () {return dqrng::bounded_rand64(*rng, _m);});
+  } else {
+    // https://stackoverflow.com/a/28287865/8416610
+    boost::unordered_set<uint64_t> elems(1.5 * n);
+    for (uint64_t r = _m - n; r < _m; ++r) {
+      uint64_t v = dqrng::bounded_rand64(*rng, r);
+      // there are two cases.
+      // v is not in candidates ==> add it
+      // v is in candidates ==> well, r is definitely not, because
+      // this is the first iteration in the loop that we could've
+      // picked something that big.
+
+      if (!elems.insert(v).second) {
+        elems.insert(r);
+      }
+    }
+    // TODO: shuffle result
+    std::copy(elems.begin(), elems.end(), result.begin());
+  }
+  return result;
 }

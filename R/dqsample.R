@@ -22,6 +22,8 @@ dqsample.int  <- function(n, size = n, replace = FALSE, prob = NULL) {
     if (!is.null(prob)) {
         warning("Using 'prob' is not supported yet. Using default 'sample.int'.")
         sample.int(n, size, replace, prob)
-    } else
+    } else if (n <= .Machine$integer.max)
         dqsample_int(n, size, replace, prob)
+    else
+        dqsample_num(n, size, replace, prob)
 }

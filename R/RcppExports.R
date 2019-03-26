@@ -33,6 +33,10 @@ dqsample_int <- function(m, n, replace = FALSE, probs = NULL) {
     .Call(`_dqrng_dqsample_int`, m, n, replace, probs)
 }
 
+dqsample_num <- function(m, n, replace = FALSE, probs = NULL) {
+    .Call(`_dqrng_dqsample_num`, m, n, replace, probs)
+}
+
 #' Generate seed as a integer vector
 #'
 #' @param nseeds Integer scalar, number of seeds to generate.
