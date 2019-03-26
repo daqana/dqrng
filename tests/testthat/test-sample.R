@@ -23,6 +23,7 @@ test_that("dqsample_int w/o replacement works", {
 })
 
 test_that("dqsample_num w/ replacement works", {
+    skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
     dqset.seed(seed)
     n <- 1e10
     k <- 1e5
@@ -33,6 +34,7 @@ test_that("dqsample_num w/ replacement works", {
 })
 
 test_that("dqsample_num w/o replacement works", {
+    skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
     dqset.seed(seed)
     n <- 1e10
     k <- 1e5

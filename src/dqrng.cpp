@@ -122,6 +122,9 @@ Rcpp::NumericVector dqsample_num(double m,
                                  size_t n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+#ifndef LONG_VECTOR_SUPPORT
+    Rcpp::stop("Long vectors are not supported");
+#else
   uint64_t _m(m);
   Rcpp::NumericVector result(Rcpp::no_init(n));
   if (replace) {
@@ -145,4 +148,5 @@ Rcpp::NumericVector dqsample_num(double m,
     std::copy(elems.begin(), elems.end(), result.begin());
   }
   return result;
+#endif
 }
