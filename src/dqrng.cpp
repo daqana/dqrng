@@ -25,7 +25,6 @@
 #include <threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
-#include <flat_hash_map.hpp>
 
 namespace {
 dqrng::rng64_t init() {
