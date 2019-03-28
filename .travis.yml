@@ -17,10 +17,7 @@ matrix:
     - Rscript -e "covr::codecov()"
     deploy:
       provider: script
-      script:
-      - Rscript -e 'devtools::install()'
-      - Rscript -e 'covrpage::covrpage_ci()'
-      - Rscript -e 'pkgdown::deploy_site_github()'
+      script: Rscript -e 'devtools::install(); covrpage::covrpage_ci(); pkgdown::deploy_site_github()'
       skip_cleanup: true
   - r: devel
   - r: release
