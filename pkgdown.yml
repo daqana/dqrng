@@ -4,4 +4,5 @@ pkgdown_sha: ~
 articles:
   dqrng: dqrng.html
   parallel: parallel.html
+  tests_and_coverage: tests_and_coverage.html
 
