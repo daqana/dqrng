@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner (daqana GmbH)
+// Copyright 2018-2019 Ralf Stubner (daqana GmbH)
 //
 // This file is part of dqrng.
 //
@@ -24,8 +24,6 @@
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/exponential_distribution.hpp>
 #include <dqrng_generator.h>
-
-using pcg_extras::pcg128_t;
 
 namespace dqrng {
 // Boost's implementation allow for performance increasing spezializations
@@ -112,6 +110,7 @@ inline uint32_t bounded_rand32(dqrng::random_64bit_generator& rng, uint32_t rang
 
 #ifdef LONG_VECTOR_SUPPORT
 inline uint64_t bounded_rand64(dqrng::random_64bit_generator& rng, uint64_t range) {
+    using pcg_extras::pcg128_t;
     uint64_t x = rng();
     pcg128_t m = pcg128_t(x) * pcg128_t(range);
     uint64_t l = uint64_t(m);
