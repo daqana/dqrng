@@ -16,7 +16,6 @@
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/unordered_set.hpp>
-#include <boost/iterator/counting_iterator.hpp>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
@@ -102,20 +101,20 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  size_t n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
-    Rcpp::IntegerVector result(Rcpp::no_init(n));
     if (replace) {
-        std::generate(result.begin(), result.end(), [m] () {return dqrng::bounded_rand32(*rng, m);});
+        Rcpp::IntegerVector result(Rcpp::no_init(n));
+        std::generate(result.begin(), result.end(), [m] () {return 1 + dqrng::bounded_rand32(*rng, m);});
+        return result;
     } else {
-        std::vector<int> tmp(boost::counting_iterator<int>(0),
-                             boost::counting_iterator<int>(m));
+        Rcpp::IntegerVector tmp(Rcpp::no_init(m));
+        std::iota(tmp.begin(), tmp.end(), 1);
 
         for (size_t i = 0; i < n; ++i) {
-            int j = dqrng::bounded_rand32(*rng, m);
-            result(i) = tmp[j] + 1;
-            tmp[j] = tmp[--m];
+            int j = i + dqrng::bounded_rand32(*rng, m - i);
+            std::swap(tmp[i], tmp[j]);
         }
+        return Rcpp::IntegerVector(tmp.begin(), tmp.begin() + n);
     }
-    return result;
 }
 
 // [[Rcpp::export(rng = false)]]
@@ -129,7 +128,7 @@ Rcpp::NumericVector dqsample_num(double m,
   uint64_t _m(m);
   Rcpp::NumericVector result(Rcpp::no_init(n));
   if (replace) {
-    std::generate(result.begin(), result.end(), [_m] () {return dqrng::bounded_rand64(*rng, _m);});
+    std::generate(result.begin(), result.end(), [_m] () {return 1 + dqrng::bounded_rand64(*rng, _m);});
   } else {
     // https://stackoverflow.com/a/28287865/8416610
     boost::unordered_set<uint64_t> elems(1.5 * n);
