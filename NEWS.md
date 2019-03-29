@@ -2,6 +2,7 @@
 
 * Add R side support for selecting multiple streams for parallel usage.
 * Implement `long_jump()` for Xo(ro)shiro as alternative to `jump()` providing fewer streams with longer period.
+* Handle R's RNG scope properly during initialisation.
 
 # dqrng 0.1.1
 
