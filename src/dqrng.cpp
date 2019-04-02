@@ -101,16 +101,17 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  size_t n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+    uint32_t _m(m);
     if (replace) {
         Rcpp::IntegerVector result(Rcpp::no_init(n));
-        std::generate(result.begin(), result.end(), [m] () {return 1 + dqrng::bounded_rand32(*rng, m);});
+        std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
         return result;
     } else {
-        Rcpp::IntegerVector tmp(Rcpp::no_init(m));
+        Rcpp::IntegerVector tmp(Rcpp::no_init(_m));
         std::iota(tmp.begin(), tmp.end(), 1);
 
-        for (size_t i = 0; i < n; ++i) {
-            int j = i + dqrng::bounded_rand32(*rng, m - i);
+        for (uint32_t i = 0; i < n; ++i) {
+            int j = i + (*rng)(_m - i);
             std::swap(tmp[i], tmp[j]);
         }
         return Rcpp::IntegerVector(tmp.begin(), tmp.begin() + n);
@@ -128,12 +129,12 @@ Rcpp::NumericVector dqsample_num(double m,
   uint64_t _m(m);
   Rcpp::NumericVector result(Rcpp::no_init(n));
   if (replace) {
-    std::generate(result.begin(), result.end(), [_m] () {return 1 + dqrng::bounded_rand64(*rng, _m);});
+    std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
   } else {
     // https://stackoverflow.com/a/28287865/8416610
     boost::unordered_set<uint64_t> elems(1.5 * n);
     for (uint64_t r = _m - n; r < _m; ++r) {
-      uint64_t v = dqrng::bounded_rand64(*rng, r);
+      uint64_t v = (*rng)(r);
       // there are two cases.
       // v is not in candidates ==> add it
       // v is in candidates ==> well, r is definitely not, because
