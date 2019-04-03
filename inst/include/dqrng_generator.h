@@ -132,7 +132,7 @@ public:
     uint64_t x = this->bit64();
     pcg128_t m = pcg128_t(x) * pcg128_t(range);
     uint64_t l = uint64_t(m);
-    if (l < range) {
+    if (l < range) { // # nocov start
       uint64_t t = -range;
       if (t >= range) {
         t -= range;
@@ -144,7 +144,7 @@ public:
         m = pcg128_t(x) * pcg128_t(range);
         l = uint64_t(m);
       }
-    }
+    } // # nocov end
     return m >> 64;
   }
 #endif
