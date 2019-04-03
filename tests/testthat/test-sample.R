@@ -22,6 +22,24 @@ test_that("dqsample_int w/o replacement works for vector", {
     expect_true(all(result >= 1) && all(result <= n))
 })
 
+test_that("dqsample_int w/o replacement works for shuffling a vector", {
+    dqset.seed(seed)
+    n <- 1e5
+    result <- dqsample(seq_len(n), replace = FALSE)
+    expect_equal(length(result), n)
+    expect_equal(length(unique(result)), n)
+    expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_int w/o replacement works for shuffling numbers", {
+    dqset.seed(seed)
+    n <- 1e5
+    result <- dqsample(n, replace = FALSE)
+    expect_equal(length(result), n)
+    expect_equal(length(unique(result)), n)
+    expect_true(all(result >= 1) && all(result <= n))
+})
+
 test_that("dqsample_int w/ replacement works", {
     dqset.seed(seed)
     n <- 1e5
