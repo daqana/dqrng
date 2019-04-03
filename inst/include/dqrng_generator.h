@@ -31,7 +31,7 @@ using default_64bit_generator = ::dqrng::xoroshiro128plus;
 
 class random_64bit_generator {
 public:
-  typedef uint64_t result_type;
+  using result_type = uint64_t;
 
   virtual ~random_64bit_generator() {};
   virtual result_type operator() () = 0;
