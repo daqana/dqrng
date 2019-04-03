@@ -81,3 +81,11 @@ test_that("dqsample_num w/o replacement works", {
     expect_equal(length(unique(result)), k)
     expect_true(all(result >= 1) && all(result <= n))
 })
+
+test_that("sampling with weights gives warning", {
+    dqset.seed(seed)
+    n <- 1e5
+    k <- 1e3
+    expect_warning(dqsample(n, k, replace = TRUE, prob = dqrunif(n)),
+                   "Using 'prob' is not supported yet. Using default 'sample.int'.")
+})
