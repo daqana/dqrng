@@ -101,8 +101,10 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  size_t n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+    if (!(m > 0 && n >= 0 && m >= n))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
     uint32_t _m(m);
-    if (replace) {
+    if (replace || n <= 1) {
         Rcpp::IntegerVector result(Rcpp::no_init(n));
         std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
         return result;
@@ -126,9 +128,11 @@ Rcpp::NumericVector dqsample_num(double m,
 #ifndef LONG_VECTOR_SUPPORT
     Rcpp::stop("Long vectors are not supported");
 #else
+  if (!(m > 0 && n >= 0 && m >= n))
+    Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
   uint64_t _m(m);
   Rcpp::NumericVector result(Rcpp::no_init(n));
-  if (replace) {
+  if (replace || n <= 1) {
     std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
   } else {
     // https://stackoverflow.com/a/28287865/8416610
