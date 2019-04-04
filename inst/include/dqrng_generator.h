@@ -55,8 +55,8 @@ class random_64bit_wrapper : public random_64bit_generator {
   static_assert(RNG::min() == 0, "Provided RNG has wrong minimum.");
 private:
   RNG gen;
-  bool has_cache;
-  uint32_t cache{false};
+  bool has_cache{false};
+  uint32_t cache;
 
   uint64_t bit64() {return gen();}
   uint32_t bit32() {
