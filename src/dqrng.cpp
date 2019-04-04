@@ -98,21 +98,23 @@ Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
 
 // [[Rcpp::export(rng = false)]]
 Rcpp::IntegerVector dqsample_int(int m,
-                                 size_t n,
+                                 int n,
                                  bool replace = false,
-                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                 int offset = 0) {
     if (!(m > 0 && n >= 0 && m >= n))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
     uint32_t _m(m);
     if (replace || n <= 1) {
         Rcpp::IntegerVector result(Rcpp::no_init(n));
-        std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
+        std::generate(result.begin(), result.end(),
+                      [_m, offset] () {return static_cast<int>(offset + (*rng)(_m));});
         return result;
     } else {
         Rcpp::IntegerVector tmp(Rcpp::no_init(_m));
-        std::iota(tmp.begin(), tmp.end(), 1);
+        std::iota(tmp.begin(), tmp.end(), offset);
 
-        for (uint32_t i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             int j = i + (*rng)(_m - i);
             std::swap(tmp[i], tmp[j]);
         }
@@ -122,22 +124,25 @@ Rcpp::IntegerVector dqsample_int(int m,
 
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqsample_num(double m,
-                                 size_t n,
+                                 double n,
                                  bool replace = false,
-                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                 int offset = 0) {
 #ifndef LONG_VECTOR_SUPPORT
     Rcpp::stop("Long vectors are not supported");
 #else
   if (!(m > 0 && n >= 0 && m >= n))
     Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
   uint64_t _m(m);
-  Rcpp::NumericVector result(Rcpp::no_init(n));
+  uint64_t _n(n);
+  Rcpp::NumericVector result(Rcpp::no_init(_n));
   if (replace || n <= 1) {
-    std::generate(result.begin(), result.end(), [_m] () {return 1 + (*rng)(_m);});
+    std::generate(result.begin(), result.end(),
+                  [_m, offset] () {return static_cast<double>(offset + (*rng)(_m));});
   } else {
     // https://stackoverflow.com/a/28287865/8416610
-    boost::unordered_set<uint64_t> elems(1.5 * n);
-    for (uint64_t r = _m - n; r < _m; ++r) {
+    boost::unordered_set<uint64_t> elems(1.5 * _n);
+    for (uint64_t r = _m - _n; r < _m; ++r) {
       uint64_t v = (*rng)(r);
       // there are two cases.
       // v is not in candidates ==> add it
@@ -145,8 +150,8 @@ Rcpp::NumericVector dqsample_num(double m,
       // this is the first iteration in the loop that we could've
       // picked something that big.
 
-      if (!elems.insert(v).second) {
-        elems.insert(r);
+      if (!elems.insert(offset + v).second) {
+        elems.insert(offset + r);
       }
     }
     // TODO: shuffle result

@@ -122,16 +122,16 @@ namespace dqrng {
         return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::IntegerVector dqsample_int(int m, size_t n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
-        typedef SEXP(*Ptr_dqsample_int)(SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::IntegerVector dqsample_int(int m, int n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue, int offset = 0) {
+        typedef SEXP(*Ptr_dqsample_int)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dqsample_int p_dqsample_int = NULL;
         if (p_dqsample_int == NULL) {
-            validateSignature("Rcpp::IntegerVector(*dqsample_int)(int,size_t,bool,Rcpp::Nullable<Rcpp::NumericVector>)");
+            validateSignature("Rcpp::IntegerVector(*dqsample_int)(int,int,bool,Rcpp::Nullable<Rcpp::NumericVector>,int)");
             p_dqsample_int = (Ptr_dqsample_int)R_GetCCallable("dqrng", "_dqrng_dqsample_int");
         }
         RObject rcpp_result_gen;
         {
-            rcpp_result_gen = p_dqsample_int(Shield<SEXP>(Rcpp::wrap(m)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(replace)), Shield<SEXP>(Rcpp::wrap(probs)));
+            rcpp_result_gen = p_dqsample_int(Shield<SEXP>(Rcpp::wrap(m)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(replace)), Shield<SEXP>(Rcpp::wrap(probs)), Shield<SEXP>(Rcpp::wrap(offset)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -142,16 +142,16 @@ namespace dqrng {
         return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::NumericVector dqsample_num(double m, size_t n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue) {
-        typedef SEXP(*Ptr_dqsample_num)(SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::NumericVector dqsample_num(double m, double n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue, int offset = 0) {
+        typedef SEXP(*Ptr_dqsample_num)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dqsample_num p_dqsample_num = NULL;
         if (p_dqsample_num == NULL) {
-            validateSignature("Rcpp::NumericVector(*dqsample_num)(double,size_t,bool,Rcpp::Nullable<Rcpp::NumericVector>)");
+            validateSignature("Rcpp::NumericVector(*dqsample_num)(double,double,bool,Rcpp::Nullable<Rcpp::NumericVector>,int)");
             p_dqsample_num = (Ptr_dqsample_num)R_GetCCallable("dqrng", "_dqrng_dqsample_num");
         }
         RObject rcpp_result_gen;
         {
-            rcpp_result_gen = p_dqsample_num(Shield<SEXP>(Rcpp::wrap(m)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(replace)), Shield<SEXP>(Rcpp::wrap(probs)));
+            rcpp_result_gen = p_dqsample_num(Shield<SEXP>(Rcpp::wrap(m)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(replace)), Shield<SEXP>(Rcpp::wrap(probs)), Shield<SEXP>(Rcpp::wrap(offset)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
