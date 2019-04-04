@@ -97,6 +97,81 @@ Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
   return dqrng::generate<dqrng::exponential_distribution, Rcpp::NumericVector>(n, rng, dist);
 }
 
+// code for sampling
+namespace dqrng {
+namespace sample {
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> replacement(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+    std::generate(result.begin(), result.end(),
+                  [m, offset] () {return static_cast<storage_t>(offset + (*rng)(m));});
+    return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> no_replacement_shuffle(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
+    std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
+    for (INT i = 0; i < n; ++i) {
+        std::swap(tmp[i], tmp[i + (*rng)(m - i)]);
+    }
+    return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> no_replacement_hashset(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+    dqrng::minimal_hash_set<INT> elems(n);
+    for (INT i = 0; i < n; ++i) {
+        for (;;) {
+            INT v = (*rng)(m);
+            if (elems.insert(v)) {
+                result(i) = static_cast<storage_t>(offset + v);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> no_replacement_bitset(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+    boost::dynamic_bitset<> elems(m);
+    for (INT i = 0; i < n; ++i) {
+        for (;;) {
+            INT v = (*rng)(m);
+            if (!elems.test_set(v)) {
+                result(i) = static_cast<storage_t>(offset + v);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> sample(INT m, INT n, bool replace, int offset) {
+    if (replace || n <= 1) {
+        return dqrng::sample::replacement<RTYPE, INT>(m, n, offset);
+    } else {
+        if (m < 2 * n) {
+            return dqrng::sample::no_replacement_shuffle<RTYPE, INT>(m, n, offset);
+        } else if (m < 1000 * n) {
+            return dqrng::sample::no_replacement_bitset<RTYPE, INT>(m, n, offset);
+        } else {
+            return dqrng::sample::no_replacement_hashset<RTYPE, INT>(m, n, offset);
+        }
+    }
+}
+} // sample
+} // dqrng
+
+
 // [[Rcpp::export(rng = false)]]
 Rcpp::IntegerVector dqsample_int(int m,
                                  int n,
@@ -105,47 +180,7 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  int offset = 0) {
     if (!(m > 0 && n >= 0 && m >= n))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
-    uint32_t _m(m);
-    uint32_t _n(n);
-    Rcpp::IntegerVector result(Rcpp::no_init(_n));
-    if (replace || n <= 1) {
-        std::generate(result.begin(), result.end(),
-                      [_m, offset] () {return static_cast<int>(offset + (*rng)(_m));});
-    } else {
-        if (m < 2 * n) {
-            Rcpp::IntegerVector tmp(Rcpp::no_init(_m));
-            std::iota(tmp.begin(), tmp.end(), offset);
-
-            for (uint32_t i = 0; i < _n; ++i) {
-                uint32_t j = i + (*rng)(_m - i);
-                std::swap(tmp[i], tmp[j]);
-            }
-            std::copy(tmp.begin(), tmp.begin() + n, result.begin());
-        } else if (m < 1000 * n) {
-            boost::dynamic_bitset<> elems(_m);
-            for (uint32_t i = 0; i < _n; ++i) {
-                for (;;) {
-                    uint32_t v = (*rng)(_m);
-                    if (!elems.test_set(v)) {
-                        result(i) = offset + v;
-                        break;
-                    }
-                }
-            }
-        } else {
-            dqrng::minimal_hash_set<uint32_t> elems(_n);
-            for (uint32_t i = 0; i < _n; ++i) {
-                for (;;) {
-                    uint32_t v = (*rng)(_m);
-                    if (elems.insert(v)) {
-                        result(i) = offset + v;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return result;
+    return dqrng::sample::sample<INTSXP, uint32_t>(uint32_t(m), uint32_t(n), replace, offset);
 }
 
 // [[Rcpp::export(rng = false)]]
@@ -157,48 +192,8 @@ Rcpp::NumericVector dqsample_num(double m,
 #ifndef LONG_VECTOR_SUPPORT
     Rcpp::stop("Long vectors are not supported");
 #else
-  if (!(m > 0 && n >= 0 && m >= n))
-    Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
-  uint64_t _m(m);
-  uint64_t _n(n);
-  Rcpp::NumericVector result(Rcpp::no_init(_n));
-  if (replace || n <= 1) {
-    std::generate(result.begin(), result.end(),
-                  [_m, offset] () {return static_cast<double>(offset + (*rng)(_m));});
-  } else {
-    if (m < 2.0 * n) {
-      Rcpp::NumericVector tmp(Rcpp::no_init(_m));
-      std::iota(tmp.begin(), tmp.end(), offset);
-
-      for (uint64_t i = 0; i < _n; ++i) {
-        uint64_t j = i + (*rng)(_m - i);
-        std::swap(tmp[i], tmp[j]);
-      }
-      std::copy(tmp.begin(), tmp.begin() + _n, result.begin());
-    } else if (m < 1000.0 * n) {
-      boost::dynamic_bitset<> elems(_m);
-      for (uint64_t i = 0; i < _n; ++i) {
-        for (;;) {
-          uint64_t v = (*rng)(_m);
-          if (!elems.test_set(v)) {
-            result(i) = offset + v;
-            break;
-          }
-        }
-      }
-    } else {
-      dqrng::minimal_hash_set<uint64_t> elems(_n);
-      for (uint64_t i = 0; i < n; ++i) {
-        for (;;) {
-          uint64_t v = (*rng)(_m);
-          if (elems.insert(v)) {
-            result(i) = offset + v;
-            break;
-          }
-        }
-      }
-    }
-  }
-  return result;
+    if (!(m > 0 && n >= 0 && m >= n))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
+    return dqrng::sample::sample<REALSXP, uint64_t>(uint64_t(m), uint64_t(n), replace, offset);
 #endif
 }
