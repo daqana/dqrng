@@ -125,9 +125,9 @@ Rcpp::IntegerVector dqsample_int(int m,
             boost::dynamic_bitset<> elems(_m);
             for (uint32_t i = 0; i < _n; ++i) {
                 for (;;) {
-                    uint32_t v = offset + (*rng)(_m);
+                    uint32_t v = (*rng)(_m);
                     if (!elems.test_set(v)) {
-                        result(i) = v;
+                        result(i) = offset + v;
                         break;
                     }
                 }
@@ -136,9 +136,9 @@ Rcpp::IntegerVector dqsample_int(int m,
             dqrng::minimal_hash_set<uint32_t> elems(_n);
             for (uint32_t i = 0; i < _n; ++i) {
                 for (;;) {
-                    uint32_t v = offset + (*rng)(_m);
+                    uint32_t v = (*rng)(_m);
                     if (elems.insert(v)) {
-                        result(i) = v;
+                        result(i) = offset + v;
                         break;
                     }
                 }
@@ -179,9 +179,9 @@ Rcpp::NumericVector dqsample_num(double m,
       boost::dynamic_bitset<> elems(_m);
       for (uint64_t i = 0; i < _n; ++i) {
         for (;;) {
-          uint64_t v = offset + (*rng)(_m);
+          uint64_t v = (*rng)(_m);
           if (!elems.test_set(v)) {
-            result(i) = v;
+            result(i) = offset + v;
             break;
           }
         }
@@ -190,9 +190,9 @@ Rcpp::NumericVector dqsample_num(double m,
       dqrng::minimal_hash_set<uint64_t> elems(_n);
       for (uint64_t i = 0; i < n; ++i) {
         for (;;) {
-          uint64_t v = offset + (*rng)(_m);
+          uint64_t v = (*rng)(_m);
           if (elems.insert(v)) {
-            result(i) = v;
+            result(i) = offset + v;
             break;
           }
         }
