@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <boost/unordered_set.hpp>
+#include <boost/dynamic_bitset.hpp>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
@@ -24,6 +24,7 @@
 #include <threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
+#include <minimal_hash_set.h>
 
 namespace {
 dqrng::rng64_t init() {
@@ -105,21 +106,46 @@ Rcpp::IntegerVector dqsample_int(int m,
     if (!(m > 0 && n >= 0 && m >= n))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
     uint32_t _m(m);
+    uint32_t _n(n);
+    Rcpp::IntegerVector result(Rcpp::no_init(_n));
     if (replace || n <= 1) {
-        Rcpp::IntegerVector result(Rcpp::no_init(n));
         std::generate(result.begin(), result.end(),
                       [_m, offset] () {return static_cast<int>(offset + (*rng)(_m));});
-        return result;
     } else {
-        Rcpp::IntegerVector tmp(Rcpp::no_init(_m));
-        std::iota(tmp.begin(), tmp.end(), offset);
+        if (m < 2 * n) {
+            Rcpp::IntegerVector tmp(Rcpp::no_init(_m));
+            std::iota(tmp.begin(), tmp.end(), offset);
 
-        for (int i = 0; i < n; ++i) {
-            int j = i + (*rng)(_m - i);
-            std::swap(tmp[i], tmp[j]);
+            for (uint32_t i = 0; i < _n; ++i) {
+                uint32_t j = i + (*rng)(_m - i);
+                std::swap(tmp[i], tmp[j]);
+            }
+            std::copy(tmp.begin(), tmp.begin() + n, result.begin());
+        } else if (m < 1000 * n) {
+            boost::dynamic_bitset<> elems(_m);
+            for (uint32_t i = 0; i < _n; ++i) {
+                for (;;) {
+                    uint32_t v = offset + (*rng)(_m);
+                    if (!elems.test_set(v)) {
+                        result(i) = v;
+                        break;
+                    }
+                }
+            }
+        } else {
+            dqrng::minimal_hash_set<uint32_t> elems(_n);
+            for (uint32_t i = 0; i < _n; ++i) {
+                for (;;) {
+                    uint32_t v = offset + (*rng)(_m);
+                    if (elems.insert(v)) {
+                        result(i) = v;
+                        break;
+                    }
+                }
+            }
         }
-        return Rcpp::IntegerVector(tmp.begin(), tmp.begin() + n);
     }
+    return result;
 }
 
 // [[Rcpp::export(rng = false)]]
@@ -140,22 +166,38 @@ Rcpp::NumericVector dqsample_num(double m,
     std::generate(result.begin(), result.end(),
                   [_m, offset] () {return static_cast<double>(offset + (*rng)(_m));});
   } else {
-    // https://stackoverflow.com/a/28287865/8416610
-    boost::unordered_set<uint64_t> elems(1.5 * _n);
-    for (uint64_t r = _m - _n; r < _m; ++r) {
-      uint64_t v = (*rng)(r);
-      // there are two cases.
-      // v is not in candidates ==> add it
-      // v is in candidates ==> well, r is definitely not, because
-      // this is the first iteration in the loop that we could've
-      // picked something that big.
+    if (m < 2.0 * n) {
+      Rcpp::NumericVector tmp(Rcpp::no_init(_m));
+      std::iota(tmp.begin(), tmp.end(), offset);
 
-      if (!elems.insert(offset + v).second) {
-        elems.insert(offset + r);
+      for (uint64_t i = 0; i < _n; ++i) {
+        uint64_t j = i + (*rng)(_m - i);
+        std::swap(tmp[i], tmp[j]);
+      }
+      std::copy(tmp.begin(), tmp.begin() + _n, result.begin());
+    } else if (m < 1000.0 * n) {
+      boost::dynamic_bitset<> elems(_m);
+      for (uint64_t i = 0; i < _n; ++i) {
+        for (;;) {
+          uint64_t v = offset + (*rng)(_m);
+          if (!elems.test_set(v)) {
+            result(i) = v;
+            break;
+          }
+        }
+      }
+    } else {
+      dqrng::minimal_hash_set<uint64_t> elems(_n);
+      for (uint64_t i = 0; i < n; ++i) {
+        for (;;) {
+          uint64_t v = offset + (*rng)(_m);
+          if (elems.insert(v)) {
+            result(i) = v;
+            break;
+          }
+        }
       }
     }
-    // TODO: shuffle result
-    std::copy(elems.begin(), elems.end(), result.begin());
   }
   return result;
 #endif
