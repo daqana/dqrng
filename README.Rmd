@@ -58,14 +58,42 @@ dqrexp(5, rate = 4)
 They are quite a bit faster, though:
 
 ```{r performance}
-N <- 1e7
-system.time(rnorm(N))
-system.time(dqrnorm(N))
+N <- 1e4
+bm <- bench::mark(rnorm(N), dqrnorm(N), check = FALSE)
+bm[, 1:5]
 ```
 
-In addition they provide support for multiple independent streams for parallel usage:
+This is also true for the provided sampling functions with replacement:
+
+```{r sampling1}
+m <- 1e7
+n <- 1e5
+bm <- bench::mark(sample.int(m, n, replace = TRUE),
+                  sample.int(1e3*m, n, replace = TRUE),
+                  dqsample.int(m, n, replace = TRUE),
+                  dqsample.int(1e3*m, n, replace = TRUE),
+                  check = FALSE)
+bm[, 1:5]
+```
+
+And without replacement:
+
+```{r sampling2}
+bm <- bench::mark(sample.int(m, n),
+                  sample.int(1e3*m, n),
+                  sample.int(m, n, useHash = TRUE),
+                  dqsample.int(m, n),
+                  dqsample.int(1e3*m, n),
+                  check = FALSE)
+bm[, 1:5]
+```
+
+Note that sampling from `10^10` elements triggers "long-vector support" in R.
+
+In addition the RNGs provide support for multiple independent streams for parallel usage:
 
 ```{r parallel}
+N <- 1e7
 dqset.seed(42, 1)
 u1 <- dqrunif(N)
 dqset.seed(42, 2)

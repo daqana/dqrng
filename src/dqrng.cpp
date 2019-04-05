@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner (daqana GmbH)
+// Copyright 2018-2019 Ralf Stubner (daqana GmbH)
 //
 // This file is part of dqrng.
 //
@@ -122,7 +122,7 @@ inline Rcpp::Vector<RTYPE> no_replacement_shuffle(INT m, INT n, int offset) {
         return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
 }
 
-    template<int RTYPE, typename INT, typename SET>
+template<int RTYPE, typename INT, typename SET>
 inline Rcpp::Vector<RTYPE> no_replacement_set(INT m, INT n, int offset) {
     using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
     Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
