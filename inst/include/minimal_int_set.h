@@ -15,16 +15,24 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MINIMAL_HASH_SET_H
-#define MINIMAL_HASH_SET_H 1
+#ifndef MINIMAL_INT_SET_H
+#define MINIMAL_INT_SET_H 1
 
 #include <cstdint>
 #include <stdexcept>
+#include <boost/dynamic_bitset.hpp>
+
+// Two set implementations meant to store n integers out of m possible values.
+// Common interface:
+// * ctor (m, n)
+// * bool insert(entry, check = true)
+//   returns true if insert succesfull and check == true
 
 namespace dqrng {
 template<typename T = uint32_t>
 class minimal_hash_set {
 private:
+  // open addressing
   T* entries;
   T empty = -1;
   std::size_t total;
@@ -36,14 +44,17 @@ private:
   // quadratic probing
   std::size_t probe(T entry, std::size_t step) {return (step * step + step)/2;}
 
-public:
   minimal_hash_set(std::size_t n) {
+    // total will be between 1.5 * n and 3 * n
     total = 1 << static_cast<int>(std::ceil(std::log2(1.5 * n)));
     mask = total - 1;
     entries = new T[total];
     for (std::size_t i = 0; i < total; ++i)
       entries[i] = empty;
   };
+
+public:
+  minimal_hash_set(std::size_t m, std::size_t n) : minimal_hash_set(n) {};
 
   ~minimal_hash_set() {delete[] entries;}
 
@@ -64,5 +75,27 @@ public:
     return true;
   }
 };
+
+class minimal_bit_set {
+ private:
+    boost::dynamic_bitset<> entries;
+
+    minimal_bit_set(std::size_t m) {
+        entries.resize(m);
+    };
+
+ public:
+    minimal_bit_set(std::size_t m, std::size_t n) : minimal_bit_set(m) {};
+
+    ~minimal_bit_set() {};
+
+    bool insert(std::size_t entry, bool check = true) {
+        if (check)
+            return !entries.test_set(entry);
+
+        entries.set(entry);
+        return true;
+    };
+};
 }
-#endif // MINIMAL_HASH_SET_H
+#endif // MINIMAL_INT_SET_H

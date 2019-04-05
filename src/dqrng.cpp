@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <boost/dynamic_bitset.hpp>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
@@ -24,7 +23,7 @@
 #include <threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
-#include <minimal_hash_set.h>
+#include <minimal_int_set.h>
 
 namespace {
 dqrng::rng64_t init() {
@@ -123,32 +122,15 @@ inline Rcpp::Vector<RTYPE> no_replacement_shuffle(INT m, INT n, int offset) {
         return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
 }
 
-template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> no_replacement_hashset(INT m, INT n, int offset) {
+    template<int RTYPE, typename INT, typename SET>
+inline Rcpp::Vector<RTYPE> no_replacement_set(INT m, INT n, int offset) {
     using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
     Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
-    dqrng::minimal_hash_set<INT> elems(n);
+    SET elems(m, n);
     for (INT i = 0; i < n; ++i) {
         for (;;) {
             INT v = (*rng)(m);
             if (elems.insert(v)) {
-                result(i) = static_cast<storage_t>(offset + v);
-                break;
-            }
-        }
-    }
-    return result;
-}
-
-template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> no_replacement_bitset(INT m, INT n, int offset) {
-    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
-    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
-    boost::dynamic_bitset<> elems(m);
-    for (INT i = 0; i < n; ++i) {
-        for (;;) {
-            INT v = (*rng)(m);
-            if (!elems.test_set(v)) {
                 result(i) = static_cast<storage_t>(offset + v);
                 break;
             }
@@ -165,9 +147,9 @@ inline Rcpp::Vector<RTYPE> sample(INT m, INT n, bool replace, int offset) {
         if (m < 2 * n) {
             return dqrng::sample::no_replacement_shuffle<RTYPE, INT>(m, n, offset);
         } else if (m < 1000 * n) {
-            return dqrng::sample::no_replacement_bitset<RTYPE, INT>(m, n, offset);
+            return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_bit_set>(m, n, offset);
         } else {
-            return dqrng::sample::no_replacement_hashset<RTYPE, INT>(m, n, offset);
+            return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_hash_set<INT>>(m, n, offset);
         }
     }
 }
