@@ -117,7 +117,10 @@ inline Rcpp::Vector<RTYPE> no_replacement_shuffle(INT m, INT n, int offset) {
     for (INT i = 0; i < n; ++i) {
         std::swap(tmp[i], tmp[i + (*rng)(m - i)]);
     }
-    return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
+    if (m == n)
+        return tmp;
+    else
+        return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
 }
 
 template<int RTYPE, typename INT>
