@@ -57,19 +57,64 @@ dqrexp(5, rate = 4)
 They are quite a bit faster, though:
 
 ``` r
-N <- 1e7
-system.time(rnorm(N))
-#>    user  system elapsed 
-#>   0.744   0.024   0.769
-system.time(dqrnorm(N))
-#>    user  system elapsed 
-#>   0.072   0.020   0.093
+N <- 1e4
+bm <- bench::mark(rnorm(N), dqrnorm(N), check = FALSE)
+bm[, 1:5]
+#> # A tibble: 2 x 5
+#>   expression      min     mean   median      max
+#>   <chr>      <bch:tm> <bch:tm> <bch:tm> <bch:tm>
+#> 1 rnorm(N)      594µs  702.6µs  684.7µs   1.03ms
+#> 2 dqrnorm(N)   57.7µs   71.5µs   69.5µs 189.16µs
 ```
 
-In addition they provide support for multiple streams for parallel
-usage:
+This is also true for the provided sampling functions with replacement:
 
 ``` r
+m <- 1e7
+n <- 1e5
+bm <- bench::mark(sample.int(m, n, replace = TRUE),
+                  sample.int(1e3*m, n, replace = TRUE),
+                  dqsample.int(m, n, replace = TRUE),
+                  dqsample.int(1e3*m, n, replace = TRUE),
+                  check = FALSE)
+bm[, 1:5]
+#> # A tibble: 4 x 5
+#>   expression                                  min     mean  median      max
+#>   <chr>                                  <bch:tm> <bch:tm> <bch:t> <bch:tm>
+#> 1 sample.int(m, n, replace = TRUE)       904.62µs   1.01ms 981.3µs   1.81ms
+#> 2 sample.int(1000 * m, n, replace = TRU…   1.69ms   1.85ms   1.8ms   2.75ms
+#> 3 dqsample.int(m, n, replace = TRUE)     294.47µs 335.16µs 328.8µs 514.47µs
+#> 4 dqsample.int(1000 * m, n, replace = T… 314.42µs 363.91µs 358.5µs 568.85µs
+```
+
+And without replacement:
+
+``` r
+bm <- bench::mark(sample.int(m, n),
+                  sample.int(1e3*m, n),
+                  sample.int(m, n, useHash = TRUE),
+                  dqsample.int(m, n),
+                  dqsample.int(1e3*m, n),
+                  check = FALSE)
+bm[, 1:5]
+#> # A tibble: 5 x 5
+#>   expression                            min     mean   median      max
+#>   <chr>                            <bch:tm> <bch:tm> <bch:tm> <bch:tm>
+#> 1 sample.int(m, n)                  19.02ms  19.62ms  19.43ms  20.41ms
+#> 2 sample.int(1000 * m, n)            5.25ms   6.12ms   5.57ms   9.31ms
+#> 3 sample.int(m, n, useHash = TRUE)   3.39ms   3.81ms   3.52ms   6.97ms
+#> 4 dqsample.int(m, n)                  1.2ms   1.52ms   1.38ms   4.66ms
+#> 5 dqsample.int(1000 * m, n)           1.7ms   2.16ms   1.95ms   4.85ms
+```
+
+Note that sampling from `10^10` elements triggers “long-vector support”
+in R.
+
+In addition the RNGs provide support for multiple independent streams
+for parallel usage:
+
+``` r
+N <- 1e7
 dqset.seed(42, 1)
 u1 <- dqrunif(N)
 dqset.seed(42, 2)

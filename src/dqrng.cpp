@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner (daqana GmbH)
+// Copyright 2018-2019 Ralf Stubner (daqana GmbH)
 //
 // This file is part of dqrng.
 //
@@ -23,6 +23,7 @@
 #include <threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
+#include <minimal_int_set.h>
 
 namespace {
 dqrng::rng64_t init() {
@@ -93,4 +94,93 @@ Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
   dqrng::exponential_distribution dist(rate);
   return dqrng::generate<dqrng::exponential_distribution, Rcpp::NumericVector>(n, rng, dist);
+}
+
+// code for sampling
+namespace dqrng {
+namespace sample {
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> replacement(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+    std::generate(result.begin(), result.end(),
+                  [m, offset] () {return static_cast<storage_t>(offset + (*rng)(m));});
+    return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> no_replacement_shuffle(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
+    std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
+    for (INT i = 0; i < n; ++i) {
+        std::swap(tmp[i], tmp[i + (*rng)(m - i)]);
+    }
+    if (m == n)
+        return tmp;
+    else
+        return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
+}
+
+template<int RTYPE, typename INT, typename SET>
+inline Rcpp::Vector<RTYPE> no_replacement_set(INT m, INT n, int offset) {
+    using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+    Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+    SET elems(m, n);
+    for (INT i = 0; i < n; ++i) {
+        for (;;) {
+            INT v = (*rng)(m);
+            if (elems.insert(v)) {
+                result(i) = static_cast<storage_t>(offset + v);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> sample(INT m, INT n, bool replace, int offset) {
+    if (replace || n <= 1) {
+        return dqrng::sample::replacement<RTYPE, INT>(m, n, offset);
+    } else {
+        if (!(m >= n))
+            Rcpp::stop("Argument requirements not fulfilled: m >= n");
+        if (m < 2 * n) {
+            return dqrng::sample::no_replacement_shuffle<RTYPE, INT>(m, n, offset);
+        } else if (m < 1000 * n) {
+            return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_bit_set>(m, n, offset);
+        } else {
+            return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_hash_set<INT>>(m, n, offset);
+        }
+    }
+}
+} // sample
+} // dqrng
+
+
+// [[Rcpp::export(rng = false)]]
+Rcpp::IntegerVector dqsample_int(int m,
+                                 int n,
+                                 bool replace = false,
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                 int offset = 0) {
+    if (!(m > 0 && n >= 0))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
+    return dqrng::sample::sample<INTSXP, uint32_t>(uint32_t(m), uint32_t(n), replace, offset);
+}
+
+// [[Rcpp::export(rng = false)]]
+Rcpp::NumericVector dqsample_num(double m,
+                                 double n,
+                                 bool replace = false,
+                                 Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                 int offset = 0) {
+#ifndef LONG_VECTOR_SUPPORT
+    Rcpp::stop("Long vectors are not supported");
+#else
+    if (!(m > 0 && n >= 0))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
+    return dqrng::sample::sample<REALSXP, uint64_t>(uint64_t(m), uint64_t(n), replace, offset);
+#endif
 }

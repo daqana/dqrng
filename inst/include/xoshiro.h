@@ -19,7 +19,7 @@ template<size_t N, int_fast8_t A, int_fast8_t B, int_fast8_t C>
 class xoshiro {
   static_assert(N == 2 || N == 4, "Unsupported size of RNG state.");
 public:
-  typedef uint64_t result_type;
+  using result_type = uint64_t;
 
 private:
   std::array<result_type, N> state;
