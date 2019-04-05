@@ -43,6 +43,7 @@ Using these RNGs from R is deliberately similar to using R's build-in RNGs:
 * `dqRNGkind()` is analogue to `RNGkind()` and sets the RNG
 * `dqset.seed()` is analogue to `set.seed()` and sets the seed
 * `dqrunif()`, `dqrnorm()`, and `dqrexp()` are analogue to `runif()`, `rnorm()`, and `rexp()` and sample from uniform, normal or exponential distributions
+* `dqsample()` and `dqsample.int` are analogue to `sample`  and ` sample.int` for creating random samples of vectors and vector indices
 
 Let's look at the classical example of calculating $\pi$ via simulation. The 
 basic idea is to generate a large number of random points within the unit 
@@ -91,6 +92,17 @@ system.time(rnorm(N))
 system.time(dqrnorm(N))
 ```
 
+As well as for sampling with and without replacement:
+
+```{r}
+system.time(for (i in 1:100)   sample.int(N, N/100, replace = TRUE))
+system.time(for (i in 1:100) dqsample.int(N, N/100, replace = TRUE))
+system.time(for (i in 1:100)   sample.int(N, N/100))
+system.time(for (i in 1:100) dqsample.int(N, N/100))
+```
+
+
+
 ## Usage from C++
 
 The RNGs and distributions functions can also be used from C++ at various levels of abstraction.
@@ -134,6 +146,25 @@ system.time(cat("pi ~= ", piCpp(1e7), "\n"))
 ```
 
 Note that in C++ you have to use `dqrng::dqset_seed()`, whereas the analogue function in the R interface is called `dqrng::dqset.seed()`.
+For sampling with and without replacement `dqrng::dqsample_int()` and `dqrng::dqsample_num()` are the analogue of `dqrng::dqsample.int()` in the R interface:
+
+```{r, eval=FALSE, engine='Rcpp'}
+// [[Rcpp::depends(dqrng)]]
+#include <Rcpp.h>
+#include <dqrng.h>
+
+// [[Rcpp::export]]
+void sampleCpp(const int n) {
+  dqrng::dqRNGkind("Xoroshiro128+");
+  dqrng::dqset_seed(Rcpp::IntegerVector::create(42));
+  Rcpp::IntegerVector sample = dqrng::dqsample_int(n, n/100, true);
+  Rcpp::Rcout << sample << std::endl;
+}
+/*** R
+sampleCpp(1000)
+*/
+```
+
 
 ### Using the header only library
 
