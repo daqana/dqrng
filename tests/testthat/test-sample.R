@@ -128,9 +128,11 @@ test_that("error cases", {
     expect_error(dqsample(10, 20), "Argument requirements not fulfilled: m >= n")
     expect_silent(dqsample(10, 20, replace = TRUE))
     expect_error(dqsample(10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
-    expect_error(dqsample(1e10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
     expect_error(dqsample(-10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
-    # -10 is treated as a one-element vector!
+    # -10 is treated as a one-element vector by dqsample but not by dqsample.int
     expect_error(dqsample(-10, 20), "Argument requirements not fulfilled: m >= n")
     expect_error(dqsample.int(-10, 20), "Argument requirements not fulfilled: m > 0 && n >= 0")
+
+    skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
+    expect_error(dqsample(1e10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
 })
