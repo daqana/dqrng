@@ -122,3 +122,15 @@ test_that("sampling with weights gives warning", {
     expect_warning(dqsample(n, k, replace = TRUE, prob = dqrunif(n)),
                    "Using 'prob' is not supported yet. Using default 'sample.int'.")
 })
+
+test_that("error cases", {
+    dqset.seed(seed)
+    expect_error(dqsample(10, 20), "Argument requirements not fulfilled: m >= n")
+    expect_silent(dqsample(10, 20, replace = TRUE))
+    expect_error(dqsample(10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
+    expect_error(dqsample(1e10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
+    expect_error(dqsample(-10, -20), "Argument requirements not fulfilled: m > 0 && n >= 0")
+    # -10 is treated as a one-element vector!
+    expect_error(dqsample(-10, 20), "Argument requirements not fulfilled: m >= n")
+    expect_error(dqsample.int(-10, 20), "Argument requirements not fulfilled: m > 0 && n >= 0")
+})

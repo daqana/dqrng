@@ -144,6 +144,8 @@ inline Rcpp::Vector<RTYPE> sample(INT m, INT n, bool replace, int offset) {
     if (replace || n <= 1) {
         return dqrng::sample::replacement<RTYPE, INT>(m, n, offset);
     } else {
+        if (!(m >= n))
+            Rcpp::stop("Argument requirements not fulfilled: m >= n");
         if (m < 2 * n) {
             return dqrng::sample::no_replacement_shuffle<RTYPE, INT>(m, n, offset);
         } else if (m < 1000 * n) {
@@ -163,8 +165,8 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
                                  int offset = 0) {
-    if (!(m > 0 && n >= 0 && m >= n))
-        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
+    if (!(m > 0 && n >= 0))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
     return dqrng::sample::sample<INTSXP, uint32_t>(uint32_t(m), uint32_t(n), replace, offset);
 }
 
@@ -177,8 +179,8 @@ Rcpp::NumericVector dqsample_num(double m,
 #ifndef LONG_VECTOR_SUPPORT
     Rcpp::stop("Long vectors are not supported");
 #else
-    if (!(m > 0 && n >= 0 && m >= n))
-        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0 && m >= n");
+    if (!(m > 0 && n >= 0))
+        Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
     return dqrng::sample::sample<REALSXP, uint64_t>(uint64_t(m), uint64_t(n), replace, offset);
 #endif
 }
