@@ -128,13 +128,11 @@ inline Rcpp::Vector<RTYPE> no_replacement_set(INT m, INT n, int offset) {
     Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
     SET elems(m, n);
     for (INT i = 0; i < n; ++i) {
-        for (;;) {
-            INT v = (*rng)(m);
-            if (elems.insert(v)) {
-                result(i) = static_cast<storage_t>(offset + v);
-                break;
-            }
+        INT v = (*rng)(m);
+        while (!elems.insert(v)) {
+            v = (*rng)(m);
         }
+        result(i) = static_cast<storage_t>(offset + v);
     }
     return result;
 }
