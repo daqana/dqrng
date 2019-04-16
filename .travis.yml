@@ -11,6 +11,7 @@ matrix:
     r_packages:
     - bench
     - covr
+    - devtools
     - pkgdown
     r_github_packages: 
     - metrumresearchgroup/covrpage
