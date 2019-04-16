@@ -27,7 +27,6 @@
 
 namespace {
 dqrng::rng64_t init() {
-  Rcpp::RNGScope rngScope;
   Rcpp::IntegerVector seed(2, dqrng::R_random_int);
   return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
 }
