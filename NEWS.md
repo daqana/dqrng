@@ -1,9 +1,13 @@
 # dqrng (unreleased)
 
 * Add R side support for selecting multiple streams for parallel usage.
-* Implement `long_jump()` for Xo(ro)shiro as alternative to `jump()` providing fewer streams with longer period.
+* Implement `long_jump()` for Xo(ro)shiro as alternative to `jump()`
+  providing fewer streams with longer period.
 * Handle R's RNG scope properly during initialisation.
-* New functions `dqsample` and `dqsample.int` using an unbiased sampling algorithm
+* New functions `dqsample` and `dqsample.int` using an unbiased sampling
+  algorithm.
+* Use `R_unif_index()` instead of `unif_rand()` to retrieve random data
+  from R's RNG in `generateSeedVectors()`.
 
 # dqrng 0.1.1
 
@@ -15,7 +19,7 @@
 ## Breaking changes
 
 * An integer vector instead of a single `int` is used for seeding (Aaron Lun in [#10](https://github.com/daqana/dqrng/pull/10))
-  * Single integer seeds lead to a different RNG state than before. 
+  * Single integer seeds lead to a different RNG state than before.
   * `dqrng::dqset_seed()` expects a `Rcpp::IntegerVector` instead of an `int`
 * Support for Mersenne-Twister has been removed, Xoroshiro128+ is now the default.
 
