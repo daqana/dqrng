@@ -11,3 +11,4 @@
 ^appveyor\.yml$
 ^include$
 ^cran-comments\.md$
+^revdep$

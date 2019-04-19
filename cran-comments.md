@@ -1,14 +1,8 @@
-Bug fix release to address build failures on CRAN:
+This release brings new features and one bug fix w.r.t. handling of the
+RNG state. 
 
-* On CRAN-MacOS the text given to a C++ exception is not propagated to R. The 
-  tests have been adjusted to not expect a particular error message on MacOS.
-
-* On CRAN-Solaris (at least) one test that intentionally triggers a C++ exception
-  leads to a segmentation fault. Since I cannot reproduce this behavior
-  anywhere else, I have disabled exception throwing tests on Solaris.
-
-* Some template specializations where introduced to inhibit (false-positive)
-  compiler warnings during the tests.
+The reported UBSAN errors seem to be false positives, c.f.
+<https://github.com/RcppCore/Rcpp/issues/832>.
 
 ## Test environments
 * local:  Debian stable with R 3.5
@@ -22,9 +16,10 @@ Bug fix release to address build failures on CRAN:
 
 0 errors | 0 warnings | 0 notes
 
-The reported UBSAN errors seem to be false positives, c.f.
-<https://github.com/RcppCore/Rcpp/issues/832>.
-
 ## Reverse dependencies
 
-dqrng currently has no reverse dependencies on CRAN.
+We checked 1 reverse dependency on CRAN, comparing `R CMD check` results across
+CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
