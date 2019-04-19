@@ -14,6 +14,7 @@ status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
 [![Codacy
 Badge](https://api.codacy.com/project/badge/Grade/cc38be1f5900415a84010acd9ef85ce1)](https://www.codacy.com/app/rstub/dqrng?utm_source=github.com&utm_medium=referral&utm_content=daqana/dqrng&utm_campaign=Badge_Grade)
+[![Dependencies](https://tinyverse.netlify.com/badge/dqrng)](https://cran.r-project.org/package=dqrng)
 
 # dqrng
 
@@ -63,8 +64,8 @@ bm[, 1:5]
 #> # A tibble: 2 x 5
 #>   expression      min     mean   median      max
 #>   <chr>      <bch:tm> <bch:tm> <bch:tm> <bch:tm>
-#> 1 rnorm(N)      594µs  702.6µs  684.7µs   1.03ms
-#> 2 dqrnorm(N)   57.7µs   71.5µs   69.5µs 189.16µs
+#> 1 rnorm(N)    596.9µs  736.8µs  704.9µs   1.32ms
+#> 2 dqrnorm(N)   60.4µs   74.3µs   70.1µs 183.22µs
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,12 +80,12 @@ bm <- bench::mark(sample.int(m, n, replace = TRUE),
                   check = FALSE)
 bm[, 1:5]
 #> # A tibble: 4 x 5
-#>   expression                                  min     mean  median      max
-#>   <chr>                                  <bch:tm> <bch:tm> <bch:t> <bch:tm>
-#> 1 sample.int(m, n, replace = TRUE)       904.62µs   1.01ms 981.3µs   1.81ms
-#> 2 sample.int(1000 * m, n, replace = TRU…   1.69ms   1.85ms   1.8ms   2.75ms
-#> 3 dqsample.int(m, n, replace = TRUE)     294.47µs 335.16µs 328.8µs 514.47µs
-#> 4 dqsample.int(1000 * m, n, replace = T… 314.42µs 363.91µs 358.5µs 568.85µs
+#>   expression                                 min     mean   median      max
+#>   <chr>                                 <bch:tm> <bch:tm> <bch:tm> <bch:tm>
+#> 1 sample.int(m, n, replace = TRUE)      905.37µs   1.09ms   1.07ms    1.8ms
+#> 2 sample.int(1000 * m, n, replace = TR…   1.69ms   1.94ms   1.89ms   2.72ms
+#> 3 dqsample.int(m, n, replace = TRUE)    258.52µs 293.13µs 286.91µs 477.62µs
+#> 4 dqsample.int(1000 * m, n, replace = … 326.02µs 395.52µs 375.15µs 793.72µs
 ```
 
 And without replacement:
@@ -100,11 +101,11 @@ bm[, 1:5]
 #> # A tibble: 5 x 5
 #>   expression                            min     mean   median      max
 #>   <chr>                            <bch:tm> <bch:tm> <bch:tm> <bch:tm>
-#> 1 sample.int(m, n)                  19.02ms  19.62ms  19.43ms  20.41ms
-#> 2 sample.int(1000 * m, n)            5.25ms   6.12ms   5.57ms   9.31ms
-#> 3 sample.int(m, n, useHash = TRUE)   3.39ms   3.81ms   3.52ms   6.97ms
-#> 4 dqsample.int(m, n)                  1.2ms   1.52ms   1.38ms   4.66ms
-#> 5 dqsample.int(1000 * m, n)           1.7ms   2.16ms   1.95ms   4.85ms
+#> 1 sample.int(m, n)                  19.12ms  20.41ms  19.86ms  22.25ms
+#> 2 sample.int(1000 * m, n)            5.08ms   6.37ms   5.82ms  10.96ms
+#> 3 sample.int(m, n, useHash = TRUE)   3.31ms   4.07ms   3.69ms    7.7ms
+#> 4 dqsample.int(m, n)                 1.27ms   1.57ms   1.39ms   4.04ms
+#> 5 dqsample.int(1000 * m, n)          1.71ms   2.29ms   2.01ms   6.01ms
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
