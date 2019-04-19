@@ -132,10 +132,10 @@
 <a class="sourceLine" id="cb4-2" data-line-number="2">bm &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/bench/topics/mark">mark</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(N), <span class="kw"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(N), <span class="dt">check =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">bm[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; # A tibble: 2 x 5</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;   expression      min     mean   median      max</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)    801.1µs    836µs  829.6µs   1.08ms</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)   74.4µs   83.9µs   79.5µs   1.76ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;   expression      min     mean   median       max</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;  &lt;bch:tm&gt;</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)      751µs  793.9µs    785µs  999.65µs</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)   72.5µs   81.7µs     78µs    1.77ms</span></a></code></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">m &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="fl">1e5</span></a>
@@ -148,10 +148,10 @@
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; # A tibble: 4 x 5</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;   expression                                 min     mean   median      max</span></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;                                 &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)        1.11ms   1.18ms   1.16ms   1.59ms</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TR…   2.13ms   2.42ms   2.23ms   3.65ms</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)    380.44µs    445µs 434.06µs 900.11µs</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = … 416.36µs 669.36µs 501.56µs   2.04ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)         1.1ms   1.14ms   1.13ms    1.4ms</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TR…   2.11ms   2.31ms   2.17ms   3.46ms</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)    375.91µs 418.51µs 409.56µs   1.95ms</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = … 405.38µs 574.71µs 462.72µs 944.72µs</span></a></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bm &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/bench/topics/mark">mark</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(m, n),</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">                  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span>m, n),</a>
@@ -165,11 +165,11 @@
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; # A tibble: 5 x 5</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   expression                            min     mean   median      max</span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;                            &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                   43.3ms  51.84ms  44.39ms 116.16ms</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)            5.53ms   6.67ms   6.41ms  11.33ms</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   3.61ms   4.33ms   4.09ms   8.39ms</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.59ms   1.86ms   1.78ms   6.51ms</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          2.13ms   2.88ms   2.72ms   8.46ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                  33.07ms  37.43ms   33.5ms  89.53ms</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)            5.24ms   5.82ms   5.48ms   10.7ms</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)    3.5ms   3.81ms   3.65ms   7.44ms</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.52ms   1.71ms   1.63ms   6.42ms</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)           1.9ms   2.36ms   2.29ms   8.55ms</span></a></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
@@ -226,6 +226,7 @@
 <li><a href="http://www.r-pkg.org/pkg/dqrng"><img src="http://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen" alt="Downloads"></a></li>
 <li><a href="https://bestpractices.coreinfrastructure.org/projects/2157"><img src="https://bestpractices.coreinfrastructure.org/projects/2157/badge" alt="CII Best Practices"></a></li>
 <li><a href="https://www.codacy.com/app/rstub/dqrng?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=daqana/dqrng&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/cc38be1f5900415a84010acd9ef85ce1" alt="Codacy Badge"></a></li>
+<li><a href="https://cran.r-project.org/package=dqrng"><img src="https://tinyverse.netlify.com/badge/dqrng" alt="Dependencies"></a></li>
 </ul>
 </div>
 </div>
