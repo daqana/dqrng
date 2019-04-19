@@ -23,6 +23,7 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/exponential_distribution.hpp>
+#include <dqrng_generator.h>
 
 namespace dqrng {
 // Boost's implementation allow for performance increasing spezializations
