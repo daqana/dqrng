@@ -1,0 +1,115 @@
+---
+title: "C++ API"
+author: "Ralf Stubner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{C++ API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The RNGs and distributions functions can also be used from C++ at various levels of abstraction.
+Technically there are three ways to make use of dqrng at the C++ level:
+
+* use `// [[Rcpp::depends(dqrng)]]` together with `Rcpp::sourceCpp()`
+* use `Rcpp::cppFunction(depends = "dqrng", ...)`
+* use an R package with `LinkingTo: dqrng`
+
+The following functions are also available if you include `dqrng.h`.
+
+## Setting seed and RNG type
+
+```cpp
+void dqrng::dqset_seed(Rcpp::IntegerVector seed, 
+                       Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue)
+void dqrng::dqRNGkind(std::string kind, const std::string& normal_kind = "ignored")
+```
+
+`seed`
+:    seed for the RNG; length 1 or 2
+
+`stream`
+:    RNG stream to use; length 1 or 2
+
+`kind`
+:    string specifying the RNG, One of "pcg64", "Xoroshiro128+", "Xoshiro256+" or "Threefry"
+
+`normal-kind`
+:    ignored; included for compatibility with `RNGkind`
+
+## Random variates with uniform distribution
+
+```cpp
+Rcpp::NumericVector dqrng::dqrunif(size_t n, double min = 0.0, double max = 1.0)
+double dqrng::runif(double min = 0.0, double max = 1.0)
+```
+`n`	
+:   number of observations
+
+`min`
+:   lower limit of the uniform distribution
+
+`max`
+:   upper limit of the uniform distribution
+
+## Random variates with normal distribution
+
+```cpp
+Rcpp::NumericVector dqrng::dqrnorm(size_t n, double mean = 0.0, double sd = 1.0)
+double dqrng::rnorm(double mean = 0.0, double sd = 1.0)
+```
+
+`n`	
+:   number of observations
+
+`mean`
+:   mean value of the normal distribution
+
+`sd`
+:   standard deviation of the normal distribution
+
+## Random variates with exponential distribution
+
+```cpp
+Rcpp::NumericVector dqrng::dqrexp(size_t n, double rate = 1.0)
+double dqrng::rexp(double rate = 1.0)
+```
+
+`n`	
+:   number of observations
+
+`rate`
+:   rate of the exponential distribution
+
+## Random sampling
+
+```cpp
+Rcpp::IntegerVector dqrng::dqsample_int(int m, int n, bool replace = false,
+                                        Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                        int offset = 0)
+Rcpp::NumericVector dqrng::dqsample_num(double m, double n, bool replace = false,
+                                        Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
+                                        int offset = 0)
+```
+
+`m`
+:    a positive number, the number of items to choose from
+
+`n`
+:    a non-negative number giving the number of items to choose
+
+`replace`
+:    should sampling be with replacement?
+
+`prob`
+:    a vector of probability weights for obtaining the elements of the vector being sampled (currently ignored)
+
+`offset`
+:    sample from range `[offset, offset + m)`
+
+The two functions are used for "normal" and "long-vector" support in R.
