@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -137,8 +137,8 @@
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; # A tibble: 2 x 5</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;   expression      min     mean   median      max</span></a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   &lt;chr&gt;      &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)      791µs    825µs  814.5µs   1.08ms</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)     83µs     94µs   89.8µs   1.77ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)    764.9µs  789.7µs    785µs   1.03ms</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)   82.8µs   92.6µs   87.6µs   3.38ms</span></a></code></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">m &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="fl">1e5</span></a>
@@ -149,12 +149,12 @@
 <a class="sourceLine" id="cb5-7" data-line-number="7">                  <span class="dt">check =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8">bm[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; # A tibble: 4 x 5</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;   expression                                  min     mean   median     max</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;                                  &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:t&gt;</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)         1.11ms   1.15ms   1.14ms  1.52ms</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRU…   2.12ms   2.33ms   2.19ms   2.8ms</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)      334.5µs 385.24µs 374.56µs  2.09ms</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = T… 414.51µs 595.89µs 477.83µs  1.67ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;   expression                                 min     mean   median      max</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;                                 &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)         1.1ms   1.14ms   1.12ms    1.4ms</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TR…   2.11ms    2.3ms   2.17ms   3.46ms</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)    333.55µs 381.65µs 366.52µs   1.36ms</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = … 409.27µs 571.29µs 453.93µs 968.11µs</span></a></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bm &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/bench/topics/mark">mark</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(m, n),</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">                  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span>m, n),</a>
@@ -168,11 +168,11 @@
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; # A tibble: 5 x 5</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   expression                            min     mean   median      max</span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   &lt;chr&gt;                            &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                  35.75ms  41.73ms  36.45ms  97.23ms</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)            5.27ms   5.96ms   5.67ms  10.81ms</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   3.52ms   3.87ms   3.71ms   8.57ms</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.53ms   1.74ms   1.65ms   6.47ms</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.96ms   2.47ms   2.32ms    8.5ms</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                  34.61ms  39.46ms  35.28ms  91.02ms</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)            5.25ms   5.92ms   5.57ms  12.18ms</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   3.51ms    3.8ms   3.65ms   7.46ms</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.49ms   1.69ms   1.61ms    5.9ms</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.96ms   2.41ms   2.28ms   7.28ms</span></a></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
@@ -226,7 +226,7 @@
 <li><a href="https://ci.appveyor.com/project/rstub/dqrng"><img src="https://ci.appveyor.com/api/projects/status/github/daqana/dqrng?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
 <li><a href="https://cran.r-project.org/package=dqrng"><img src="https://www.r-pkg.org/badges/version/dqrng" alt="CRAN status"></a></li>
 <li><a href="https://codecov.io/github/daqana/dqrng?branch=master"><img src="https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
-<li><a href="http://www.r-pkg.org/pkg/dqrng"><img src="http://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen" alt="Downloads"></a></li>
+<li><a href="https://www.r-pkg.org/pkg/dqrng"><img src="https://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen" alt="Downloads"></a></li>
 <li><a href="https://bestpractices.coreinfrastructure.org/projects/2157"><img src="https://bestpractices.coreinfrastructure.org/projects/2157/badge" alt="CII Best Practices"></a></li>
 <li><a href="https://www.codacy.com/app/rstub/dqrng?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=daqana/dqrng&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/cc38be1f5900415a84010acd9ef85ce1" alt="Codacy Badge"></a></li>
 <li><a href="https://cran.r-project.org/package=dqrng"><img src="https://tinyverse.netlify.com/badge/dqrng" alt="Dependencies"></a></li>
