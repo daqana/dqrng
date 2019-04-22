@@ -1,3 +1,5 @@
+# dqrng (unreleased)
+
 # dqrng 0.2.0
 
 * Add R side support for selecting multiple streams for parallel usage.
