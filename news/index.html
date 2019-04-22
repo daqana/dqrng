@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.1</span>
       </span>
     </div>
 
@@ -124,6 +124,19 @@
       <small>Source: <a href='https://github.com/daqana/dqrng/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dqrng-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#dqrng-0-2-0" class="anchor"></a>dqrng 0.2.0<small> 2019-04-22 </small>
+</h1>
+<ul>
+<li>Add R side support for selecting multiple streams for parallel usage.</li>
+<li>Implement <code>long_jump()</code> for Xo(ro)shiro as alternative to <code>jump()</code> providing fewer streams with longer period.</li>
+<li>Handle R’s RNG scope properly during initialisation.</li>
+<li>New functions <code>dqsample</code> and <code>dqsample.int</code> using an unbiased sampling algorithm.</li>
+<li>Use <code>R_unif_index()</code> instead of <code>unif_rand()</code> to retrieve random data from R’s RNG in <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code>.</li>
+<li>Scalar RNGs in the C++ API: dqrng::runif, dqrng::rnorm and dqrng::rexp</li>
+</ul>
+</div>
     <div id="dqrng-0-1-1" class="section level1">
 <h1 class="page-header">
 <a href="#dqrng-0-1-1" class="anchor"></a>dqrng 0.1.1<small> 2019-03-11 </small>
@@ -215,6 +228,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#dqrng-0-2-0">0.2.0</a></li>
         <li><a href="#dqrng-0-1-1">0.1.1</a></li>
         <li><a href="#dqrng-0-1-0">0.1.0</a></li>
         <li><a href="#dqrng-0-0-5">0.0.5</a></li>
