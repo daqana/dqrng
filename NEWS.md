@@ -1,4 +1,4 @@
-# dqrng (unreleased)
+# dqrng 0.2.0
 
 * Add R side support for selecting multiple streams for parallel usage.
 * Implement `long_jump()` for Xo(ro)shiro as alternative to `jump()`
