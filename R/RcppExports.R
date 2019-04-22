@@ -17,16 +17,28 @@ dqrunif <- function(n, min = 0.0, max = 1.0) {
     .Call(`_dqrng_dqrunif`, n, min, max)
 }
 
+runif <- function(min = 0.0, max = 1.0) {
+    .Call(`_dqrng_runif`, min, max)
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqrnorm <- function(n, mean = 0.0, sd = 1.0) {
     .Call(`_dqrng_dqrnorm`, n, mean, sd)
 }
 
+rnorm <- function(mean = 0.0, sd = 1.0) {
+    .Call(`_dqrng_rnorm`, mean, sd)
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqrexp <- function(n, rate = 1.0) {
     .Call(`_dqrng_dqrexp`, n, rate)
+}
+
+rexp <- function(rate = 1.0) {
+    .Call(`_dqrng_rexp`, rate)
 }
 
 dqsample_int <- function(m, n, replace = FALSE, probs = NULL, offset = 0L) {

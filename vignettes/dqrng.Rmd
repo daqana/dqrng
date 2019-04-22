@@ -118,6 +118,7 @@ Here only the first approach is shown.
 
 The functions available in R directly call corresponding C++ functions.
 These functions are also available at the C++ level if you include `dqrng.h`.
+The full ist of functions is available with `vignette("cpp-api", package = "dqrng")`.
 Revisiting the example of approximating $\pi$ we can use:
 
 ```{r, eval=FALSE, engine='Rcpp'}

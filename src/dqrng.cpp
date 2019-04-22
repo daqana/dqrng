@@ -32,6 +32,14 @@ dqrng::rng64_t init() {
   return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
 }
 dqrng::rng64_t rng = init();
+
+using generator = double(*)();
+dqrng::uniform_distribution uniform{};
+generator runif_impl = [] () {return uniform(*rng);};
+dqrng::normal_distribution normal{};
+generator rnorm_impl = [] () {return normal(*rng);};
+dqrng::exponential_distribution exponential{};
+generator rexp_impl = [] () {return exponential(*rng);};
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -74,26 +82,53 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
   if(max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
-     return 2. * dqrunif(n, min/2., max/2.);
+    return 2. * dqrunif(n, min/2., max/2.);
 
-  dqrng::uniform_distribution dist(min, max);
-  return dqrng::generate<dqrng::uniform_distribution, Rcpp::NumericVector>(n, rng, dist);
+  using parm_t = decltype(uniform)::param_type;
+  uniform.param(parm_t(min, max));
+  return Rcpp::NumericVector(n, runif_impl);
+}
+
+// [[Rcpp::export(rng = false)]]
+double runif(double min = 0.0, double max = 1.0) {
+  if(max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
+    return 2. * runif(min/2., max/2.);
+
+  using parm_t = decltype(uniform)::param_type;
+  uniform.param(parm_t(min, max));
+  return runif_impl();
 }
 
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
-  dqrng::normal_distribution dist(mean, sd);
-  return dqrng::generate<dqrng::normal_distribution, Rcpp::NumericVector>(n, rng, dist);
+  using parm_t = decltype(normal)::param_type;
+  normal.param(parm_t(mean, sd));
+  return Rcpp::NumericVector(n, rnorm_impl);
+}
+
+// [[Rcpp::export(rng = false)]]
+double rnorm(double mean = 0.0, double sd = 1.0) {
+  using parm_t = decltype(normal)::param_type;
+  normal.param(parm_t(mean, sd));
+  return rnorm_impl();
 }
 
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
-  dqrng::exponential_distribution dist(rate);
-  return dqrng::generate<dqrng::exponential_distribution, Rcpp::NumericVector>(n, rng, dist);
+  using parm_t = decltype(exponential)::param_type;
+  exponential.param(parm_t(rate));
+  return Rcpp::NumericVector(n, rexp_impl);
+}
+
+// [[Rcpp::export(rng = false)]]
+double rexp(double rate = 1.0) {
+  using parm_t = decltype(exponential)::param_type;
+  exponential.param(parm_t(rate));
+  return rexp_impl();
 }
 
 // code for sampling

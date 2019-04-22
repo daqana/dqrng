@@ -82,6 +82,26 @@ namespace dqrng {
         return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
     }
 
+    inline double runif(double min = 0.0, double max = 1.0) {
+        typedef SEXP(*Ptr_runif)(SEXP,SEXP);
+        static Ptr_runif p_runif = NULL;
+        if (p_runif == NULL) {
+            validateSignature("double(*runif)(double,double)");
+            p_runif = (Ptr_runif)R_GetCCallable("dqrng", "_dqrng_runif");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_runif(Shield<SEXP>(Rcpp::wrap(min)), Shield<SEXP>(Rcpp::wrap(max)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
     inline Rcpp::NumericVector dqrnorm(size_t n, double mean = 0.0, double sd = 1.0) {
         typedef SEXP(*Ptr_dqrnorm)(SEXP,SEXP,SEXP);
         static Ptr_dqrnorm p_dqrnorm = NULL;
@@ -102,6 +122,26 @@ namespace dqrng {
         return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
     }
 
+    inline double rnorm(double mean = 0.0, double sd = 1.0) {
+        typedef SEXP(*Ptr_rnorm)(SEXP,SEXP);
+        static Ptr_rnorm p_rnorm = NULL;
+        if (p_rnorm == NULL) {
+            validateSignature("double(*rnorm)(double,double)");
+            p_rnorm = (Ptr_rnorm)R_GetCCallable("dqrng", "_dqrng_rnorm");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_rnorm(Shield<SEXP>(Rcpp::wrap(mean)), Shield<SEXP>(Rcpp::wrap(sd)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
     inline Rcpp::NumericVector dqrexp(size_t n, double rate = 1.0) {
         typedef SEXP(*Ptr_dqrexp)(SEXP,SEXP);
         static Ptr_dqrexp p_dqrexp = NULL;
@@ -120,6 +160,26 @@ namespace dqrng {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
+    }
+
+    inline double rexp(double rate = 1.0) {
+        typedef SEXP(*Ptr_rexp)(SEXP);
+        static Ptr_rexp p_rexp = NULL;
+        if (p_rexp == NULL) {
+            validateSignature("double(*rexp)(double)");
+            p_rexp = (Ptr_rexp)R_GetCCallable("dqrng", "_dqrng_rexp");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_rexp(Shield<SEXP>(Rcpp::wrap(rate)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
     }
 
     inline Rcpp::IntegerVector dqsample_int(int m, int n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue, int offset = 0) {

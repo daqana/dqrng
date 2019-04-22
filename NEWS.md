@@ -8,6 +8,7 @@
   algorithm.
 * Use `R_unif_index()` instead of `unif_rand()` to retrieve random data
   from R's RNG in `generateSeedVectors()`.
+* Scalar RNGs in the C++ API: dqrng::runif, dqrng::rnorm and dqrng::rexp
 
 # dqrng 0.1.1
 
