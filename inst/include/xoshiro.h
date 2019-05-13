@@ -13,6 +13,9 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
+#include <algorithm>
+#include <type_traits>
 
 namespace dqrng {
 template<size_t N, int_fast8_t A, int_fast8_t B, int_fast8_t C>
