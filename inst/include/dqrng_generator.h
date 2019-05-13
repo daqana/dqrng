@@ -18,7 +18,7 @@
 #ifndef DQRNG_GENERATOR_H
 #define DQRNG_GENERATOR_H 1
 
-#include <cstdint>
+#include <mystdint.h>
 #include <memory>
 #include <type_traits>
 #include <stdexcept>

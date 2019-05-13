@@ -12,7 +12,7 @@
 #define XOSHIRO_H 1
 
 #include <array>
-#include <cstdint>
+#include <mystdint.h>
 #include <functional>
 #include <algorithm>
 #include <type_traits>
