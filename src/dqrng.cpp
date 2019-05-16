@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <mystdint.h>
 #include <Rcpp.h>
 #include <dqrng_generator.h>
 #include <dqrng_distribution.h>
