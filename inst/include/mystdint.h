@@ -30,5 +30,10 @@
 # undef _UNDEF__STDC_CONSTANT_MACROS
 #endif
 
+// define our own UINT64_MAX in case it is still missing
+#ifndef UINT64_MAX
+#include <limits>
+#define UINT64_MAX std::numeric_limits<std::uint64_t>::max()
+#endif
 
 #endif // MYSTDINT_H
