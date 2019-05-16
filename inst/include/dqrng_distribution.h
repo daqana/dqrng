@@ -18,7 +18,7 @@
 #ifndef DQRNG_DISTRIBUTION_H
 #define DQRNG_DISTRIBUTION_H 1
 
-#include <cstdint>
+#include <mystdint.h>
 #include <memory>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/random/normal_distribution.hpp>
@@ -34,7 +34,7 @@ using exponential_distribution = boost::random::exponential_distribution<double>
 
 inline double uniform01(uint64_t x) {
   // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
-  return (x >> 11) * (1. / (UINT64_C(1) << 53));
+  return (x >> 11) * (1. / (uint64_t(1) << 53));
 }
 } // namespace dqrng
 
