@@ -12,7 +12,7 @@
 #define XOSHIRO_H 1
 
 #include <array>
-#include <cstdint>
+#include <mystdint.h>
 #include <functional>
 #include <algorithm>
 #include <type_traits>
@@ -144,7 +144,7 @@ inline void xoroshiro128plus::jump() {
   uint64_t s1 = 0;
   for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
     for(unsigned int b = 0; b < 64; b++) {
-      if (JUMP[i] & UINT64_C(1) << b) {
+      if (JUMP[i] & uint64_t(1) << b) {
         s0 ^= state[0];
         s1 ^= state[1];
       }
@@ -167,7 +167,7 @@ inline void xoroshiro128plus::long_jump(void) {
 	uint64_t s1 = 0;
 	for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
 		for(unsigned int b = 0; b < 64; b++) {
-			if (LONG_JUMP[i] & UINT64_C(1) << b) {
+			if (LONG_JUMP[i] & uint64_t(1) << b) {
 				s0 ^= state[0];
 				s1 ^= state[1];
 			}
@@ -208,7 +208,7 @@ inline void xoshiro256plus::jump() {
   uint64_t s3 = 0;
   for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
     for(unsigned int b = 0; b < 64; b++) {
-      if (JUMP[i] & UINT64_C(1) << b) {
+      if (JUMP[i] & uint64_t(1) << b) {
         s0 ^= state[0];
         s1 ^= state[1];
         s2 ^= state[2];
@@ -237,7 +237,7 @@ inline void xoshiro256plus::long_jump(void) {
 	uint64_t s3 = 0;
 	for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
 		for(unsigned int b = 0; b < 64; b++) {
-			if (LONG_JUMP[i] & UINT64_C(1) << b) {
+			if (LONG_JUMP[i] & uint64_t(1) << b) {
 				s0 ^= state[0];
 				s1 ^= state[1];
 				s2 ^= state[2];
