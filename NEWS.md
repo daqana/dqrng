@@ -1,6 +1,8 @@
 # dqrng (unreleased)
 
 * Make template specialisations `inline` and include required standard headers (Aaron Lun in [#29](https://github.com/daqana/dqrng/pull/29) fixing [#28](https://github.com/daqana/dqrng/issues/28))
+* Add workaraound for new C++ compiler with old libc ([#30](https://github.com/daqana/dqrng/pull/30) fixing [#27](https://github.com/daqana/dqrng/issues/27))
+* update maintainer's email address
 
 # dqrng 0.2.0
 

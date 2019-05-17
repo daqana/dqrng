@@ -1,20 +1,21 @@
-This release brings new features and one bug fix w.r.t. handling of the
-RNG state. 
+This release updates the maintainer's email address and brings two bug fixes.
 
 The reported UBSAN errors seem to be false positives, c.f.
 <https://github.com/RcppCore/Rcpp/issues/832>.
 
 ## Test environments
-* local:  Debian stable with R 3.5
+* local:  Debian stable with R 3.6
 * Travis-CI:
-    * Ubuntu Xenial, R 3.5, R 3.4, and R-devel
-    * MacOS, R 3.5
-* AppVeyor: Windows, R 3.5
+    * Ubuntu Xenial, R 3.6, R 3.5, and R-devel
+    * MacOS, R 3.6
+* AppVeyor: Windows, R 3.6
 * winbuilder: Windows, R-devel
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+* Maintainer's email address has changed.
 
 ## Reverse dependencies
 

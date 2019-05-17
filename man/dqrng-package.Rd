@@ -30,7 +30,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ralf Stubner \email{ralf.stubner@daqana.com}
+\strong{Maintainer}: Ralf Stubner \email{ralf.stubner@gmail.com}
 
 Other contributors:
 \itemize{
