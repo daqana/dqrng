@@ -10,8 +10,8 @@ namespace dqrng {
 
 /* Internal functions, not to be called by users.
  * These define a set of template specializations for the
- * bitshifts, which avoids compilation warnings when the 
- * shift is greater than or equal to the width of the 
+ * bitshifts, which avoids compilation warnings when the
+ * shift is greater than or equal to the width of the
  * unsigned integer type (for 16 or 32-bit unsigned ints).
  */
 
@@ -21,10 +21,10 @@ UIN right_shift(UIN val) {
 }
 
 template<>
-uint16_t right_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
+inline uint16_t right_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
 
 template<>
-uint32_t right_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
+inline uint32_t right_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
 
 template<int SHIFT, typename UIN>
 UIN left_shift(UIN val) {
@@ -32,10 +32,10 @@ UIN left_shift(UIN val) {
 }
 
 template<>
-uint16_t left_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
+inline uint16_t left_shift<32, uint16_t>(uint16_t val) { return 0; } // # nocov
 
 template<>
-uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
+inline uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
 
 /* This converts a seed vector ('seeds') into a single unsigned
  * integer of specified type 'OUT' with all bits set according
@@ -45,7 +45,7 @@ uint32_t left_shift<32, uint32_t>(uint32_t val) { return 0; } // # nocov
  * and the last element contributing the least significant bits.
  *
  * Each element of 'seeds' is cast from 'IN' to the corresponding
- * unsigned type. 'IN' should have no more than last 'SHIFT' bits 
+ * unsigned type. 'IN' should have no more than last 'SHIFT' bits
  * set. Compile- or run-time errors will be raised for seeds
  * that exceed the size of the maximum integer storable in 'OUT'.
  */
