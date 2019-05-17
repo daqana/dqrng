@@ -61,7 +61,7 @@ They are quite a bit faster, though:
 ```{r performance}
 N <- 1e4
 bm <- bench::mark(rnorm(N), dqrnorm(N), check = FALSE)
-bm[, 1:5]
+bm[, 1:4]
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -74,7 +74,7 @@ bm <- bench::mark(sample.int(m, n, replace = TRUE),
                   dqsample.int(m, n, replace = TRUE),
                   dqsample.int(1e3*m, n, replace = TRUE),
                   check = FALSE)
-bm[, 1:5]
+bm[, 1:4]
 ```
 
 And without replacement:
@@ -86,7 +86,7 @@ bm <- bench::mark(sample.int(m, n),
                   dqsample.int(m, n),
                   dqsample.int(1e3*m, n),
                   check = FALSE)
-bm[, 1:5]
+bm[, 1:4]
 ```
 
 Note that sampling from `10^10` elements triggers "long-vector support" in R.

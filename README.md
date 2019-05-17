@@ -60,12 +60,12 @@ They are quite a bit faster, though:
 ``` r
 N <- 1e4
 bm <- bench::mark(rnorm(N), dqrnorm(N), check = FALSE)
-bm[, 1:5]
-#> # A tibble: 2 x 5
-#>   expression      min     mean   median      max
-#>   <chr>      <bch:tm> <bch:tm> <bch:tm> <bch:tm>
-#> 1 rnorm(N)      657µs  752.4µs  727.5µs   1.09ms
-#> 2 dqrnorm(N)     72µs   85.8µs   80.8µs 166.02µs
+bm[, 1:4]
+#> # A tibble: 2 x 4
+#>   expression      min   median `itr/sec`
+#>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
+#> 1 rnorm(N)      630µs  720.7µs     1366.
+#> 2 dqrnorm(N)   71.3µs   80.9µs    11897.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -78,14 +78,14 @@ bm <- bench::mark(sample.int(m, n, replace = TRUE),
                   dqsample.int(m, n, replace = TRUE),
                   dqsample.int(1e3*m, n, replace = TRUE),
                   check = FALSE)
-bm[, 1:5]
-#> # A tibble: 4 x 5
-#>   expression                                 min     mean   median      max
-#>   <chr>                                 <bch:tm> <bch:tm> <bch:tm> <bch:tm>
-#> 1 sample.int(m, n, replace = TRUE)      905.05µs   1.11ms   1.08ms   1.81ms
-#> 2 sample.int(1000 * m, n, replace = TR…   1.69ms   1.97ms   1.92ms   2.85ms
-#> 3 dqsample.int(m, n, replace = TRUE)    274.76µs 333.97µs 315.47µs 604.48µs
-#> 4 dqsample.int(1000 * m, n, replace = … 340.61µs 413.71µs 377.36µs 888.39µs
+bm[, 1:4]
+#> # A tibble: 4 x 4
+#>   expression                                     min   median `itr/sec`
+#>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n, replace = TRUE)            5.93ms   6.39ms      153.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     7.26ms   7.85ms      127.
+#> 3 dqsample.int(m, n, replace = TRUE)        288.92µs 339.85µs     2774.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69µs 379.22µs     2369.
 ```
 
 And without replacement:
@@ -97,15 +97,17 @@ bm <- bench::mark(sample.int(m, n),
                   dqsample.int(m, n),
                   dqsample.int(1e3*m, n),
                   check = FALSE)
-bm[, 1:5]
-#> # A tibble: 5 x 5
-#>   expression                            min     mean   median      max
-#>   <chr>                            <bch:tm> <bch:tm> <bch:tm> <bch:tm>
-#> 1 sample.int(m, n)                  21.97ms  21.97ms  21.97ms  21.97ms
-#> 2 sample.int(1000 * m, n)            5.21ms   6.34ms   5.78ms  11.28ms
-#> 3 sample.int(m, n, useHash = TRUE)   3.25ms   3.97ms   3.61ms   8.43ms
-#> 4 dqsample.int(m, n)                  1.2ms   1.62ms    1.4ms   4.37ms
-#> 5 dqsample.int(1000 * m, n)          1.77ms   2.32ms   2.09ms   4.87ms
+#> Warning: Some expressions had a GC in every iteration; so filtering is
+#> disabled.
+bm[, 1:4]
+#> # A tibble: 5 x 4
+#>   expression                            min   median `itr/sec`
+#>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n)                  34.22ms  36.02ms      26.0
+#> 2 sample.int(1000 * m, n)           11.99ms  12.97ms      72.6
+#> 3 sample.int(m, n, useHash = TRUE)    9.3ms  10.09ms      92.7
+#> 4 dqsample.int(m, n)                 1.34ms   1.49ms     596. 
+#> 5 dqsample.int(1000 * m, n)          1.69ms   2.03ms     434.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
