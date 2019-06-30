@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.1</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1>Tests and Coverage</h1>
             
-            <h4 class="date">24 June, 2019 15:10:09</h4>
+            <h4 class="date">30 June, 2019 14:54:27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/tests_and_coverage.Rmd"><code>vignettes/tests_and_coverage.Rmd</code></a></small>
       <div class="hidden name"><code>tests_and_coverage.Rmd</code></div>
@@ -147,7 +147,7 @@
 <tr class="odd">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-convert.R">test-convert.R</a></td>
 <td align="right">62</td>
-<td align="right">0.172</td>
+<td align="right">0.119</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -156,8 +156,8 @@
 </tr>
 <tr class="even">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R">test-cpp.R</a></td>
-<td align="right">9</td>
-<td align="right">0.015</td>
+<td align="right">11</td>
+<td align="right">0.016</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -166,8 +166,8 @@
 </tr>
 <tr class="odd">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-default.R">test-default.R</a></td>
-<td align="right">6</td>
-<td align="right">0.009</td>
+<td align="right">8</td>
+<td align="right">0.010</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -177,7 +177,7 @@
 <tr class="even">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-generators.R">test-generators.R</a></td>
 <td align="right">16</td>
-<td align="right">0.017</td>
+<td align="right">0.012</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -187,7 +187,7 @@
 <tr class="odd">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-sample.R">test-sample.R</a></td>
 <td align="right">41</td>
-<td align="right">39.949</td>
+<td align="right">38.403</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -233,7 +233,7 @@
 <td align="left">conversion to 16-bit integers works correctly</td>
 <td align="left">WARNING</td>
 <td align="right">13</td>
-<td align="right">0.079</td>
+<td align="right">0.076</td>
 <td align="left">⚠️</td>
 </tr>
 <tr class="even">
@@ -242,7 +242,7 @@
 <td align="left">conversion to 32-bit integers works correctly</td>
 <td align="left">WARNING</td>
 <td align="right">9</td>
-<td align="right">0.063</td>
+<td align="right">0.017</td>
 <td align="left">⚠️</td>
 </tr>
 <tr class="odd">
@@ -251,7 +251,7 @@
 <td align="left">conversion to 64-bit integers works correctly</td>
 <td align="left">WARNING</td>
 <td align="right">15</td>
-<td align="right">0.014</td>
+<td align="right">0.011</td>
 <td align="left">⚠️</td>
 </tr>
 <tr class="even">
@@ -260,7 +260,7 @@
 <td align="left">unsigned/signed methods are consistent</td>
 <td align="left">PASS</td>
 <td align="right">25</td>
-<td align="right">0.016</td>
+<td align="right">0.015</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -293,6 +293,24 @@
 <tr class="even">
 <td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L20">test-cpp.R</a></td>
 <td align="left">C++</td>
+<td align="left">Min and max can be equal for scalar numbers</td>
+<td align="left">PASS</td>
+<td align="right">1</td>
+<td align="right">0.001</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L24_L25">test-cpp.R</a></td>
+<td align="left">C++</td>
+<td align="left">Min must not be larger than max</td>
+<td align="left">PASS</td>
+<td align="right">1</td>
+<td align="right">0.003</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L29">test-cpp.R</a></td>
+<td align="left">C++</td>
 <td align="left">setting seed produces identical normaly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
@@ -300,7 +318,7 @@
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L24">test-cpp.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L33">test-cpp.R</a></td>
 <td align="left">C++</td>
 <td align="left">setting seed produces identical normaly distributed scalar numbers</td>
 <td align="left">PASS</td>
@@ -309,7 +327,7 @@
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L28">test-cpp.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L37">test-cpp.R</a></td>
 <td align="left">C++</td>
 <td align="left">setting seed produces identical exponenetially distributed numbers</td>
 <td align="left">PASS</td>
@@ -318,7 +336,7 @@
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L32">test-cpp.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L41">test-cpp.R</a></td>
 <td align="left">C++</td>
 <td align="left">setting seed produces identical exponenetially distributed scalar numbers</td>
 <td align="left">PASS</td>
@@ -327,21 +345,21 @@
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L38">test-cpp.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L47">test-cpp.R</a></td>
 <td align="left">C++</td>
 <td align="left">jump() for xoroshiro128+ works</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.004</td>
+<td align="right">0.002</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L42">test-cpp.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-cpp.R#L51">test-cpp.R</a></td>
 <td align="left">C++</td>
 <td align="left">jump() for xoshiro256+ works</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.002</td>
+<td align="right">0.001</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -350,7 +368,7 @@
 <td align="left">consecutive calls yield different random numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.002</td>
+<td align="right">0.001</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -359,7 +377,7 @@
 <td align="left">setting seed produces identical uniformly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.003</td>
+<td align="right">0.002</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -390,12 +408,30 @@
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-default.R#L47">test-default.R</a></td>
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-default.R#L46">test-default.R</a></td>
 <td align="left">default generator</td>
 <td align="left">numbers can be generated in maximum range</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
 <td align="right">0.001</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-default.R#L52">test-default.R</a></td>
+<td align="left">default generator</td>
+<td align="left">min and max can be equal</td>
+<td align="left">PASS</td>
+<td align="right">1</td>
+<td align="right">0.001</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://github.com/daqana/dqrng/tree/HEAD/tests/testthat/test-default.R#L57_L58">test-default.R</a></td>
+<td align="left">default generator</td>
+<td align="left">min must not be larger than max</td>
+<td align="left">PASS</td>
+<td align="right">1</td>
+<td align="right">0.002</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -494,7 +530,7 @@
 <td align="left">Xoshiro256: setting seed and stream produces identical uniformly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.001</td>
+<td align="right">0.000</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -503,7 +539,7 @@
 <td align="left">Xoshiro256: setting same seed but different stream produces different uniformly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.001</td>
+<td align="right">0.000</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -512,7 +548,7 @@
 <td align="left">Threefry: setting seed produces identical uniformly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.001</td>
+<td align="right">0.000</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -530,7 +566,7 @@
 <td align="left">Threefry: setting same seed but different stream produces different uniformly distributed numbers</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.001</td>
+<td align="right">0.000</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -539,7 +575,7 @@
 <td align="left">non-existant RNG produces error</td>
 <td align="left">PASS</td>
 <td align="right">1</td>
-<td align="right">0.002</td>
+<td align="right">0.001</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -548,7 +584,7 @@
 <td align="left">dqsample_int w/ replacement works for vector</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.003</td>
+<td align="right">0.011</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -557,7 +593,7 @@
 <td align="left">dqsample_int w/o replacement works for vector</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.002</td>
+<td align="right">0.007</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -566,7 +602,7 @@
 <td align="left">dqsample_int w/o replacement works for shuffling a vector</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.029</td>
+<td align="right">0.031</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -575,7 +611,7 @@
 <td align="left">dqsample_int w/o replacement works for shuffling numbers</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.029</td>
+<td align="right">0.031</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -584,7 +620,7 @@
 <td align="left">dqsample_int w/ replacement works</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.002</td>
+<td align="right">0.003</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -602,7 +638,7 @@
 <td align="left">dqsample_int w/o replacement works with low rate</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.002</td>
+<td align="right">0.003</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -611,7 +647,7 @@
 <td align="left">dqsample_num w/ replacement works</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">0.011</td>
+<td align="right">0.016</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -638,7 +674,7 @@
 <td align="left">dqsample_num w/o replacement works with medium rate</td>
 <td align="left">PASS</td>
 <td align="right">3</td>
-<td align="right">39.829</td>
+<td align="right">38.258</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -656,7 +692,7 @@
 <td align="left">error cases</td>
 <td align="left">PASS</td>
 <td align="right">7</td>
-<td align="right">0.011</td>
+<td align="right">0.012</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -706,7 +742,7 @@
 <tr class="even">
 <td align="left">Platform</td>
 <td align="left">x86_64-pc-linux-gnu (64-bit)</td>
-<td><a href="https://travis-ci.org/daqana/dqrng/jobs/549791681" target="_blank"><span title="Built on Travis"><img src="https://github.com/metrumresearchgroup/covrpage/blob/master/inst/logo/travis.png?raw=true"></span></a></td>
+<td><a href="https://travis-ci.org/daqana/dqrng/jobs/552425669" target="_blank"><span title="Built on Travis"><img src="https://github.com/metrumresearchgroup/covrpage/blob/master/inst/logo/travis.png?raw=true"></span></a></td>
 </tr>
 <tr class="odd">
 <td align="left">Running</td>
