@@ -82,6 +82,10 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
+  if (min > max)
+    Rcpp::stop("Error: 'min' must not be larger than 'max'!");
+  if (min == max)
+    return Rcpp::NumericVector(n, min);
   if(max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
     return 2. * dqrunif(n, min/2., max/2.);
 
@@ -92,7 +96,11 @@ Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
 
 // [[Rcpp::export(rng = false)]]
 double runif(double min = 0.0, double max = 1.0) {
-  if(max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
+  if (min > max)
+    Rcpp::stop("'min' must not be larger than 'max'!");
+  if (min == max)
+    return min;
+  if (max / 2. - min / 2. > (std::numeric_limits<double>::max)() / 2.)
     return 2. * runif(min/2., max/2.);
 
   using parm_t = decltype(uniform)::param_type;

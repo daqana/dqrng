@@ -1,3 +1,8 @@
+# dqrng (unreleased)
+
+* For uniform random numbers take short-cut for min == max and throw error for min > max
+  ([#34](https://github.com/daqana/dqrng/pull/34) fixing [#33](https://github.com/daqana/dqrng/issues/33))
+
 # dqrng 0.2.1
 
 * Make template specialisations `inline` and include required standard headers (Aaron Lun in [#29](https://github.com/daqana/dqrng/pull/29) fixing [#28](https://github.com/daqana/dqrng/issues/28))

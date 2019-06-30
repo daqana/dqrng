@@ -29,6 +29,23 @@ bool seed_uniform_scalar(Rcpp::IntegerVector seed) {
 }
 
 // [[Rcpp::export]]
+bool seed_uniform_scalar_min_eq_max(Rcpp::IntegerVector seed) {
+  dqrng::dqset_seed(seed);
+  double m = 47.11;
+  double u = dqrng::runif(m, m);
+  return u == m;
+}
+
+// [[Rcpp::export]]
+bool seed_uniform_scalar_min_gt_max(Rcpp::IntegerVector seed) {
+  dqrng::dqset_seed(seed);
+  double min = 47.11;
+  double max = 42;
+  double u = dqrng::runif(min, max);
+  return u >= min && u <= max;
+}
+
+// [[Rcpp::export]]
 bool seed_normal(Rcpp::IntegerVector seed) {
   dqrng::dqset_seed(seed);
   Rcpp::NumericVector n1 = dqrng::dqrnorm(10);

@@ -16,6 +16,15 @@ test_that("setting seed produces identical uniformly distributed scalar numbers"
   expect_true(seed_uniform_scalar(seed))
 })
 
+test_that("Min and max can be equal for scalar numbers", {
+  expect_true(seed_uniform_scalar_min_eq_max(seed))
+})
+
+test_that("Min must not be larger than max", {
+  expect_error(seed_uniform_scalar_min_gt_max(seed),
+               "'min' must not be larger than 'max'!")
+})
+
 test_that("setting seed produces identical normaly distributed numbers", {
   expect_true(seed_normal(seed))
 })
