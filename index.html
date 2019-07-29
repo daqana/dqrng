@@ -137,8 +137,8 @@
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; # A tibble: 2 x 4</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;   expression      min   median `itr/sec`</span></a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)      760µs  777.9µs     1274.</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)   82.9µs   87.4µs    10732.</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 1 rnorm(N)    750.1µs  780.2µs     1262.</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 2 dqrnorm(N)   81.6µs   87.8µs    10560.</span></a></code></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">m &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="fl">1e5</span></a>
@@ -151,10 +151,10 @@
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; # A tibble: 4 x 4</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;   expression                                     min   median `itr/sec`</span></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;   &lt;bch:expr&gt;                                &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            7.61ms   7.78ms      127.</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     9.22ms   9.52ms      105.</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)         356.3µs 390.77µs     2530.</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 410.32µs  447.7µs     1790.</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)             7.6ms   7.87ms      126.</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     9.25ms   9.62ms      104.</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        358.29µs 409.05µs     2255.</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 411.37µs 558.17µs     1619.</span></a></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">bm &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/bench/topics/mark">mark</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(m, n),</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">                  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span>m, n),</a>
@@ -168,11 +168,11 @@
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; # A tibble: 5 x 4</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   expression                            min   median `itr/sec`</span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                  45.02ms  45.92ms      19.2</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)           12.55ms  13.27ms      74.0</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)  10.85ms  11.55ms      85.8</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.49ms   1.82ms     533. </span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.96ms   2.43ms     390.</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 1 sample.int(m, n)                   46.9ms  47.68ms      18.4</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 2 sample.int(1000 * m, n)              13ms  14.07ms      70.1</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)  10.82ms  12.08ms      81.9</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 4 dqsample.int(m, n)                 1.52ms   1.68ms     549. </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.97ms    2.4ms     397.</span></a></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="fl">1e7</span></a>
