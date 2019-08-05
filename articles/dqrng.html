@@ -92,7 +92,7 @@
       <h1>Fast Pseudo Random Number Generators for R</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2019-07-29</h4>
+            <h4 class="date">2019-08-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/dqrng.Rmd"><code>vignettes/dqrng.Rmd</code></a></small>
       <div class="hidden name"><code>dqrng.Rmd</code></div>
@@ -143,7 +143,7 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; pi ~=  3.140899</span></a>
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   1.043   0.132   1.176</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   0.968   0.180   1.148</span></a></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dqrng)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)</a>
@@ -151,41 +151,41 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"pi ~= "</span>, <span class="kw">piR</span>(N, <span class="dt">rng =</span> dqrunif), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>))</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; pi ~=  3.14042</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   0.321   0.140   0.462</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   0.290   0.163   0.455</span></a></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Uniform">runif</a></span>(N))</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;   0.336   0.024   0.360</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;   0.322   0.040   0.363</span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrunif</a></span>(N))</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;   0.051   0.032   0.083</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;    0.04    0.04    0.08</span></a></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Exponential">rexp</a></span>(N))</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;   0.498   0.040   0.538</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;   0.495   0.035   0.531</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrexp</a></span>(N))</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   0.076   0.036   0.112</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;   0.082   0.029   0.110</span></a></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(N))</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;   0.757   0.028   0.786</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;   0.741   0.039   0.781</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="kw"><a href="../reference/dqrng-functions.html">dqrnorm</a></span>(N))</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;   0.096   0.028   0.124</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;   0.071   0.052   0.123</span></a></code></pre></div>
 <p>As well as for sampling with and without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>)   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(N, N<span class="op">/</span><span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;   0.807   0.008   0.815</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;   0.802   0.003   0.806</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) <span class="kw"><a href="../reference/dqsample.html">dqsample.int</a></span>(N, N<span class="op">/</span><span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   0.042   0.017   0.057</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   0.040   0.016   0.056</span></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>)   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample.int</a></span>(N, N<span class="op">/</span><span class="dv">100</span>))</a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   3.027   1.876   4.906</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   2.903   1.688   4.593</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) <span class="kw"><a href="../reference/dqsample.html">dqsample.int</a></span>(N, N<span class="op">/</span><span class="dv">100</span>))</a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   0.167   0.020   0.187</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;   0.170   0.008   0.178</span></a></code></pre></div>
 </div>
 <div id="usage-from-c" class="section level2">
 <h2 class="hasAnchor">
