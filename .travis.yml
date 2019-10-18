@@ -13,7 +13,7 @@ matrix:
     - covr
     - devtools
     - pkgdown
-    r_github_packages: 
+    r_github_packages:
     - metrumresearchgroup/covrpage
     after_success:
     - Rscript -e "covr::codecov()"
@@ -24,6 +24,10 @@ matrix:
   - r: devel
   - r: release
     os: osx
+addons:
+  apt:
+    packages:
+      - devscripts
 notifications:
   email:
     on_success: change
