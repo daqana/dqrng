@@ -142,7 +142,7 @@
 <ul>
 <li>Make template specialisations <code>inline</code> and include required standard headers (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/29"><a href='https://github.com/daqana/dqrng/issues/29'>#29</a></a> fixing <a href="https://github.com/daqana/dqrng/issues/28"><a href='https://github.com/daqana/dqrng/issues/28'>#28</a></a>)</li>
 <li>Add workaraound for new C++ compiler with old libc (<a href="https://github.com/daqana/dqrng/pull/30"><a href='https://github.com/daqana/dqrng/issues/30'>#30</a></a> fixing <a href="https://github.com/daqana/dqrng/issues/27"><a href='https://github.com/daqana/dqrng/issues/27'>#27</a></a>)</li>
-<li>update maintainerâs email address</li>
+<li>update maintainer’s email address</li>
 </ul>
 </div>
     <div id="dqrng-0-2-0" class="section level1">
@@ -152,9 +152,9 @@
 <ul>
 <li>Add R side support for selecting multiple streams for parallel usage.</li>
 <li>Implement <code>long_jump()</code> for Xo(ro)shiro as alternative to <code>jump()</code> providing fewer streams with longer period.</li>
-<li>Handle Râs RNG scope properly during initialisation.</li>
+<li>Handle R’s RNG scope properly during initialisation.</li>
 <li>New functions <code>dqsample</code> and <code>dqsample.int</code> using an unbiased sampling algorithm.</li>
-<li>Use <code>R_unif_index()</code> instead of <code>unif_rand()</code> to retrieve random data from Râs RNG in <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code>.</li>
+<li>Use <code>R_unif_index()</code> instead of <code>unif_rand()</code> to retrieve random data from R’s RNG in <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code>.</li>
 <li>Scalar RNGs in the C++ API: dqrng::runif, dqrng::rnorm and dqrng::rexp</li>
 </ul>
 </div>
@@ -190,8 +190,8 @@
 <h2 class="hasAnchor">
 <a href="#other-changes" class="anchor"></a>Other changes</h2>
 <ul>
-<li>New method <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code> for generating a list of random <code>int</code> vectors from Râs RNG. These vectors can be used as seed (Aaron Lun in <a href='https://github.com/daqana/dqrng/issues/10'>#10</a>).</li>
-<li>The initial state of the default RNG is now based on Râs RNG.</li>
+<li>New method <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code> for generating a list of random <code>int</code> vectors from R’s RNG. These vectors can be used as seed (Aaron Lun in <a href='https://github.com/daqana/dqrng/issues/10'>#10</a>).</li>
+<li>The initial state of the default RNG is now based on R’s RNG.</li>
 </ul>
 </div>
 </div>
@@ -200,7 +200,7 @@
 <a href="#dqrng-0-0-5" class="anchor"></a>dqrng 0.0.5<small> 2019-01-31 </small>
 </h1>
 <ul>
-<li>New RNG: Threefry from package âsitmoâ</li>
+<li>New RNG: Threefry from package ‘sitmo’</li>
 <li>Update PCG Headers (c.f. <a href='https://github.com/daqana/dqrng/issues/8'>#8</a>)</li>
 <li>Unit-Tests for the C++ interface</li>
 <li>Define STRICT_R_HEADERS to prepare for future Rcpp (c.f. <a href='https://github.com/daqana/dqrng/issues/6'>#6</a>)</li>
@@ -260,7 +260,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

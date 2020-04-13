@@ -121,7 +121,7 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>Using the provided RNGs from R is deliberately similar to using Râs build-in RNGs:</p>
+<p>Using the provided RNGs from R is deliberately similar to using R’s build-in RNGs:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dqrng</span>)
 <span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="fl">42</span>)
 <span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span>(<span class="fl">5</span>, <span class="kw">min</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">max</span> <span class="kw">=</span> <span class="fl">10</span>)
@@ -135,8 +135,8 @@
 <span class="co">#&gt; # A tibble: 2 x 4</span>
 <span class="co">#&gt;   expression      min   median `itr/sec`</span>
 <span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 rnorm(N)      630Âµs  720.7Âµs     1366.</span>
-<span class="co">#&gt; 2 dqrnorm(N)   71.3Âµs   80.9Âµs    11897.</span></pre></div>
+<span class="co">#&gt; 1 rnorm(N)      630µs  720.7µs     1366.</span>
+<span class="co">#&gt; 2 dqrnorm(N)   71.3µs   80.9µs    11897.</span></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="r"><span class="no">m</span> <span class="kw">&lt;-</span> <span class="fl">1e7</span>
 <span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">1e5</span>
@@ -151,8 +151,8 @@
 <span class="co">#&gt;   &lt;bch:expr&gt;                                &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            5.93ms   6.39ms      153.</span>
 <span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     7.26ms   7.85ms      127.</span>
-<span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        288.92Âµs 339.85Âµs     2774.</span>
-<span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69Âµs 379.22Âµs     2369.</span></pre></div>
+<span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        288.92µs 339.85µs     2774.</span>
+<span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69µs 379.22µs     2369.</span></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="r"><span class="no">bm</span> <span class="kw">&lt;-</span> <span class="kw pkg">bench</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>),
                   <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fl">1e3</span>*<span class="no">m</span>, <span class="no">n</span>),
@@ -171,7 +171,7 @@
 <span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)    9.3ms  10.09ms      92.7</span>
 <span class="co">#&gt; 4 dqsample.int(m, n)                 1.34ms   1.49ms     596. </span>
 <span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.69ms   2.03ms     434.</span></pre></div>
-<p>Note that sampling from <code>10^10</code> elements triggers âlong-vector supportâ in R.</p>
+<p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="r"><span class="no">N</span> <span class="kw">&lt;-</span> <span class="fl">1e7</span>
 <span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="fl">42</span>, <span class="fl">1</span>)
@@ -184,7 +184,7 @@
 <div id="feedback" class="section level2">
 <h2 class="hasAnchor">
 <a href="#feedback" class="anchor"></a>Feedback</h2>
-<p>All feedback (bug reports, security issues, feature requests, â¦) should be provided as <a href="https://github.com/daqana/dqrng/issues">issues</a>.</p>
+<p>All feedback (bug reports, security issues, feature requests, …) should be provided as <a href="https://github.com/daqana/dqrng/issues">issues</a>.</p>
 </div>
 </div>
 
@@ -240,7 +240,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
