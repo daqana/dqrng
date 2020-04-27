@@ -29,6 +29,8 @@ addons:
   apt:
     packages:
       - devscripts
+brew_packages:
+  - checkbashisms
 notifications:
   email:
     on_success: change
