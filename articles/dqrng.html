@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Fast Pseudo Random Number Generators for R</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2020-05-04</h4>
+            <h4 class="date">2020-05-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/dqrng.Rmd"><code>vignettes/dqrng.Rmd</code></a></small>
       <div class="hidden name"><code>dqrng.Rmd</code></div>
@@ -145,7 +145,7 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"pi ~= "</span>, <span class="fu">piR</span>(<span class="no">N</span>), <span class="st">"\n"</span>))
 <span class="co">#&gt; pi ~=  3.140899</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.794   0.120   0.914</span></pre></body></html></div>
+<span class="co">#&gt;   0.784   0.136   0.920</span></pre></body></html></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dqrng</span>)
 <span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span>(<span class="st">"Xoroshiro128+"</span>)
@@ -153,41 +153,41 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"pi ~= "</span>, <span class="fu">piR</span>(<span class="no">N</span>, <span class="kw">rng</span> <span class="kw">=</span> <span class="no">dqrunif</span>), <span class="st">"\n"</span>))
 <span class="co">#&gt; pi ~=  3.14042</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.216   0.156   0.372</span></pre></body></html></div>
+<span class="co">#&gt;   0.293   0.092   0.386</span></pre></body></html></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.271   0.012   0.283</span>
+<span class="co">#&gt;   0.263   0.020   0.283</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.043   0.024   0.066</span></pre></body></html></div>
+<span class="co">#&gt;   0.046   0.020   0.066</span></pre></body></html></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.417   0.024   0.442</span>
+<span class="co">#&gt;   0.414   0.028   0.442</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="../reference/dqrng-functions.html">dqrexp</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.060   0.036   0.096</span></pre></body></html></div>
+<span class="co">#&gt;   0.076   0.020   0.095</span></pre></body></html></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.594   0.033   0.625</span>
+<span class="co">#&gt;   0.601   0.020   0.621</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span>(<span class="no">N</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.081   0.017   0.097</span></pre></body></html></div>
+<span class="co">#&gt;   0.069   0.028   0.097</span></pre></body></html></div>
 <p>As well as for sampling with and without replacement:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">100</span>)   <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">N</span>, <span class="no">N</span>/<span class="fl">100</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.616   0.020   0.636</span>
+<span class="co">#&gt;   0.618   0.016   0.634</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">100</span>) <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span>(<span class="no">N</span>, <span class="no">N</span>/<span class="fl">100</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.032   0.016   0.047</span>
+<span class="co">#&gt;   0.044   0.004   0.048</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">100</span>)   <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">N</span>, <span class="no">N</span>/<span class="fl">100</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   2.081   1.501   3.581</span>
+<span class="co">#&gt;   2.134   1.545   3.679</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">100</span>) <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span>(<span class="no">N</span>, <span class="no">N</span>/<span class="fl">100</span>))
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.152   0.000   0.152</span></pre></body></html></div>
+<span class="co">#&gt;   0.137   0.020   0.157</span></pre></body></html></div>
 </div>
 <div id="usage-from-c" class="section level2">
 <h2 class="hasAnchor">
