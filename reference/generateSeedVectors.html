@@ -141,7 +141,7 @@
     <p>Generate seed as a integer vector</p>
     </div>
 
-    <pre class="usage"><span class='fu'>generateSeedVectors</span>(<span class='no'>nseeds</span>, <span class='kw'>nwords</span> <span class='kw'>=</span> <span class='fl'>2L</span>)</pre>
+    <pre class="usage"><span class='fu'>generateSeedVectors</span>(<span class='kw'>nseeds</span>, nwords = <span class='fl'>2L</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,9 +179,13 @@ avoiding problems with casting double-precision numbers to integers.</p>
 <p>It is possible for the seed vector to contain <code>NA_integer_</code>
 values. This should not be cause for alarm, as R uses <code>-INT_MAX</code> 
 to encode missing values in integer vectors.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>generateSeedVectors</span>(<span class='fl'>10</span>, <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+    <pre class="examples"><div class='input'><span class='fu'>generateSeedVectors</span>(<span class='fl'>10</span>, <span class='fl'>2</span>)
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] -711550517   31749989
 #&gt; 
 #&gt; [[2]]
@@ -211,7 +215,8 @@ to encode missing values in integer vectors.</p>
 #&gt; [[10]]
 #&gt; [1] -947899323  280124077
 #&gt; </div><div class='input'>
-<span class='fu'>generateSeedVectors</span>(<span class='fl'>5</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>generateSeedVectors</span>(<span class='fl'>5</span>, <span class='fl'>4</span>)
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1]  1176015342 -1734070009 -1965061269  1918590747
 #&gt; 
 #&gt; [[2]]
@@ -242,7 +247,7 @@ to encode missing values in integer vectors.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

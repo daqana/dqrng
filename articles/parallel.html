@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Parallel RNG usage</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2020-09-07</h4>
+            <h4 class="date">2020-09-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/parallel.Rmd"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -108,26 +108,27 @@
 <li>Partition the complete sequence of random numbers produced for one seed into non-overlapping sequences and assign each process one sub-sequence.</li>
 <li>Re-parametrize the generator to produce independent sequences for the same seed.</li>
 </ul>
-<p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. When using the R or C++ interface independent streams can be accessed using the two argument <code><a href="../reference/dqrng-functions.html">dqset.seed(seed, stream)</a></code> or <code>dqset_seed(seed, stream)</code> functions.</p>
+<p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. When using the R or C++ interface independent streams can be accessed using the two argument <code><a href="../reference/dqRNGkind.html">dqset.seed(seed, stream)</a></code> or <code>dqset_seed(seed, stream)</code> functions.</p>
 <div id="threefry-usage-from-r" class="section level1">
 <h1 class="hasAnchor">
 <a href="#threefry-usage-from-r" class="anchor"></a>Threefry: usage from R</h1>
 <p>The Threefry engine uses internally a counter with <span class="math inline">\(2^{256}\)</span> possible states, which can be split into different substreams. When used from R or C++ with the two argument <code>dqset.seed</code> or <code>dqset_seed</code> this counter space is split into <span class="math inline">\(2^{64}\)</span> streams with <span class="math inline">\(2^{192}\)</span> possible states each. This is equivalent to <span class="math inline">\(2^{64}\)</span> streams with a period of <span class="math inline">\(2^{194}\)</span> each.</p>
 <p>In the following example a matrix with random numbers is generated in parallel using the parallel package. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">parallel</span>)
-<span class="no">cl</span> <span class="kw">&lt;-</span> <span class="kw pkg">parallel</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span>(<span class="fl">2</span>)
-<span class="no">res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html">clusterApply</a></span>(<span class="no">cl</span>, <span class="fl">1</span>:<span class="fl">8</span>, <span class="kw">function</span>(<span class="no">stream</span>, <span class="no">seed</span>, <span class="no">N</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dqrng</span>)
-  <span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span>(<span class="st">"Threefry"</span>)
-  <span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span>(<span class="no">seed</span>, <span class="no">stream</span>)
-  <span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span>(<span class="no">N</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">parallel</span>)
+<span class="kw">cl</span> <span class="op">&lt;-</span> <span class="kw">parallel</span>::<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span>(<span class="fl">2</span>)
+<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html">clusterApply</a></span>(<span class="kw">cl</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="fu">function</span>(<span class="kw">stream</span>, <span class="kw">seed</span>, <span class="kw">N</span>) {
+  <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.daqana.org/dqrng">dqrng</a></span>)
+  <span class="fu"><a href="../reference/dqRNGkind.html">dqRNGkind</a></span>(<span class="st">"Threefry"</span>)
+  <span class="fu"><a href="../reference/dqRNGkind.html">dqset.seed</a></span>(<span class="kw">seed</span>, <span class="kw">stream</span>)
+  <span class="fu"><a href="../reference/dqRNGkind.html">dqrnorm</a></span>(<span class="kw">N</span>)
 }, <span class="fl">42</span>, <span class="fl">1e6</span>)
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span>(<span class="no">cl</span>)
+<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span>(<span class="kw">cl</span>)
 
-<span class="no">res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">res</span>), <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">8</span>)
-<span class="fu"><a href="https://rdrr.io/r/stats/symnum.html">symnum</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="no">res</span>), <span class="kw">cutpoints</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span>),
-       <span class="kw">symbols</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span>),
-       <span class="kw">abbr.colnames</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">corr</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw">res</span>), ncol = <span class="fl">8</span>)
+<span class="fu"><a href="https://rdrr.io/r/stats/symnum.html">symnum</a></span>(x = <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="kw">res</span>), cutpoints = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span>),
+       symbols = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span>),
+       abbr.colnames = <span class="fl">FALSE</span>, corr = <span class="fl">TRUE</span>)
 <span class="co">#&gt;                     </span>
 <span class="co">#&gt; [1,] 1              </span>
 <span class="co">#&gt; [2,]   1            </span>
@@ -138,7 +139,8 @@
 <span class="co">#&gt; [7,]     ?       1  </span>
 <span class="co">#&gt; [8,]         ?     1</span>
 <span class="co">#&gt; attr(,"legend")</span>
-<span class="co">#&gt; [1] 0 ' ' 0.001 '?' 0.003 '!' 0.999 '1' 1</span></pre></body></html></div>
+<span class="co">#&gt; [1] 0 ' ' 0.001 '?' 0.003 '!' 0.999 '1' 1</span>
+</pre></div>
 <p>As expected the correlation matrix for the different columns is almost equal to the identity matrix.</p>
 </div>
 <div id="xoroshiro-jump-ahead-with-openmp" class="section level1">
@@ -274,7 +276,7 @@ attr(,"legend")
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

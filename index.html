@@ -112,57 +112,68 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The currently released version is available from CRAN via</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dqrng"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dqrng"</span>)
+</pre></div>
 <p>Intermediate releases can also be obtained via <a href="https://cran.r-project.org/package=drat">drat</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"drat"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"drat"</span>)
-<span class="kw pkg">drat</span><span class="kw ns">::</span><span class="fu">addRepo</span>(<span class="st">"daqana"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dqrng"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"drat"</span>, quietly = <span class="fl">TRUE</span>)) <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"drat"</span>)
+<span class="kw">drat</span>::<span class="fu">addRepo</span>(<span class="st">"daqana"</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dqrng"</span>)
+</pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>Using the provided RNGs from R is deliberately similar to using R’s build-in RNGs:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dqrng</span>)
-<span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="fl">42</span>)
-<span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span>(<span class="fl">5</span>, <span class="kw">min</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">max</span> <span class="kw">=</span> <span class="fl">10</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.daqana.org/dqrng">dqrng</a></span>)
+<span class="fu"><a href="reference/dqRNGkind.html">dqset.seed</a></span>(<span class="fl">42</span>)
+<span class="fu"><a href="reference/dqRNGkind.html">dqrunif</a></span>(<span class="fl">5</span>, min = <span class="fl">2</span>, max = <span class="fl">10</span>)
 <span class="co">#&gt; [1] 9.211802 2.616041 6.236331 4.588535 5.764814</span>
-<span class="fu"><a href="reference/dqrng-functions.html">dqrexp</a></span>(<span class="fl">5</span>, <span class="kw">rate</span> <span class="kw">=</span> <span class="fl">4</span>)
-<span class="co">#&gt; [1] 0.35118613 0.17656197 0.06844976 0.16984095 0.10096744</span></pre></div>
+<span class="fu"><a href="reference/dqRNGkind.html">dqrexp</a></span>(<span class="fl">5</span>, rate = <span class="fl">4</span>)
+<span class="co">#&gt; [1] 0.35118613 0.17656197 0.06844976 0.16984095 0.10096744</span>
+</pre></div>
 <p>They are quite a bit faster, though:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">N</span> <span class="kw">&lt;-</span> <span class="fl">1e4</span>
-<span class="no">bm</span> <span class="kw">&lt;-</span> <span class="kw pkg">bench</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="no">N</span>), <span class="fu"><a href="reference/dqrng-functions.html">dqrnorm</a></span>(<span class="no">N</span>), <span class="kw">check</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">bm</span>[, <span class="fl">1</span>:<span class="fl">4</span>]
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">N</span> <span class="op">&lt;-</span> <span class="fl">1e4</span>
+<span class="kw">bm</span> <span class="op">&lt;-</span> <span class="kw">bench</span>::<span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">N</span>), <span class="fu"><a href="reference/dqRNGkind.html">dqrnorm</a></span>(<span class="kw">N</span>), check = <span class="fl">FALSE</span>)
+<span class="kw">bm</span>[, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>]
 <span class="co">#&gt; # A tibble: 2 x 4</span>
 <span class="co">#&gt;   expression      min   median `itr/sec`</span>
 <span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 rnorm(N)      630µs  720.7µs     1366.</span>
-<span class="co">#&gt; 2 dqrnorm(N)   71.3µs   80.9µs    11897.</span></pre></div>
+<span class="co">#&gt; 2 dqrnorm(N)   71.3µs   80.9µs    11897.</span>
+</pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">m</span> <span class="kw">&lt;-</span> <span class="fl">1e7</span>
-<span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">1e5</span>
-<span class="no">bm</span> <span class="kw">&lt;-</span> <span class="kw pkg">bench</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fl">1e3</span>*<span class="no">m</span>, <span class="no">n</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="fl">1e3</span>*<span class="no">m</span>, <span class="no">n</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                  <span class="kw">check</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">bm</span>[, <span class="fl">1</span>:<span class="fl">4</span>]
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">m</span> <span class="op">&lt;-</span> <span class="fl">1e7</span>
+<span class="kw">n</span> <span class="op">&lt;-</span> <span class="fl">1e5</span>
+<span class="kw">bm</span> <span class="op">&lt;-</span> <span class="kw">bench</span>::<span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="kw">m</span>, <span class="kw">n</span>, replace = <span class="fl">TRUE</span>),
+                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span><span class="kw">m</span>, <span class="kw">n</span>, replace = <span class="fl">TRUE</span>),
+                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="kw">m</span>, <span class="kw">n</span>, replace = <span class="fl">TRUE</span>),
+                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span><span class="kw">m</span>, <span class="kw">n</span>, replace = <span class="fl">TRUE</span>),
+                  check = <span class="fl">FALSE</span>)
+<span class="kw">bm</span>[, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>]
 <span class="co">#&gt; # A tibble: 4 x 4</span>
 <span class="co">#&gt;   expression                                     min   median `itr/sec`</span>
 <span class="co">#&gt;   &lt;bch:expr&gt;                                &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            5.93ms   6.39ms      153.</span>
 <span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     7.26ms   7.85ms      127.</span>
 <span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        288.92µs 339.85µs     2774.</span>
-<span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69µs 379.22µs     2369.</span></pre></div>
+<span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69µs 379.22µs     2369.</span>
+</pre></div>
 <p>And without replacement:</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">bm</span> <span class="kw">&lt;-</span> <span class="kw pkg">bench</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>),
-                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fl">1e3</span>*<span class="no">m</span>, <span class="no">n</span>),
-                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>, <span class="kw">useHash</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="no">m</span>, <span class="no">n</span>),
-                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="fl">1e3</span>*<span class="no">m</span>, <span class="no">n</span>),
-                  <span class="kw">check</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">bm</span> <span class="op">&lt;-</span> <span class="kw">bench</span>::<span class="fu"><a href="https://rdrr.io/pkg/bench/man/mark.html">mark</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="kw">m</span>, <span class="kw">n</span>),
+                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span><span class="kw">m</span>, <span class="kw">n</span>),
+                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span>(<span class="kw">m</span>, <span class="kw">n</span>, useHash = <span class="fl">TRUE</span>),
+                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="kw">m</span>, <span class="kw">n</span>),
+                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span>(<span class="fl">1e3</span><span class="op">*</span><span class="kw">m</span>, <span class="kw">n</span>),
+                  check = <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning: Some expressions had a GC in every iteration; so filtering is</span>
 <span class="co">#&gt; disabled.</span>
-<span class="no">bm</span>[, <span class="fl">1</span>:<span class="fl">4</span>]
+<span class="kw">bm</span>[, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>]
 <span class="co">#&gt; # A tibble: 5 x 4</span>
 <span class="co">#&gt;   expression                            min   median `itr/sec`</span>
 <span class="co">#&gt;   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span>
@@ -170,16 +181,19 @@
 <span class="co">#&gt; 2 sample.int(1000 * m, n)           11.99ms  12.97ms      72.6</span>
 <span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)    9.3ms  10.09ms      92.7</span>
 <span class="co">#&gt; 4 dqsample.int(m, n)                 1.34ms   1.49ms     596. </span>
-<span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.69ms   2.03ms     434.</span></pre></div>
+<span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.69ms   2.03ms     434.</span>
+</pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="no">N</span> <span class="kw">&lt;-</span> <span class="fl">1e7</span>
-<span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="fl">42</span>, <span class="fl">1</span>)
-<span class="no">u1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span>(<span class="no">N</span>)
-<span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span>(<span class="fl">42</span>, <span class="fl">2</span>)
-<span class="no">u2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span>(<span class="no">N</span>)
-<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="no">u1</span>, <span class="no">u2</span>)
-<span class="co">#&gt; [1] -0.0005787967</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">N</span> <span class="op">&lt;-</span> <span class="fl">1e7</span>
+<span class="fu"><a href="reference/dqRNGkind.html">dqset.seed</a></span>(<span class="fl">42</span>, <span class="fl">1</span>)
+<span class="kw">u1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dqRNGkind.html">dqrunif</a></span>(<span class="kw">N</span>)
+<span class="fu"><a href="reference/dqRNGkind.html">dqset.seed</a></span>(<span class="fl">42</span>, <span class="fl">2</span>)
+<span class="kw">u2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dqRNGkind.html">dqrunif</a></span>(<span class="kw">N</span>)
+<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="kw">u1</span>, <span class="kw">u2</span>)
+<span class="co">#&gt; [1] -0.0005787967</span>
+</pre></div>
 </div>
 <div id="feedback" class="section level2">
 <h2 class="hasAnchor">
@@ -240,7 +254,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
