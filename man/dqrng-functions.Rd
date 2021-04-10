@@ -35,7 +35,7 @@ dqset.seed(seed, stream = NULL)
 
 \item{rate}{rate of the exponential distribution}
 
-\item{seed}{integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.}
+\item{seed}{integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed. Maybe \code{NULL}, see details.}
 
 \item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 }
@@ -71,6 +71,9 @@ provided by \code{boost.random}.
 See \code{\link{generateSeedVectors}} for rapid generation of integer-vector
 seeds that provide 64 bits of entropy. These allow full exploration of
 the state space of the 64-bit RNGs provided in this package.
+
+If the provided \code{seed} is \code{NULL}, a seed is genenrated from R's RNG
+without state alteration.
 }
 \examples{
 library(dqrng)

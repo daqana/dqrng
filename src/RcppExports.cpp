@@ -9,10 +9,10 @@
 using namespace Rcpp;
 
 // dqset_seed
-void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream);
+void dqset_seed(Rcpp::Nullable<Rcpp::IntegerVector> seed, Rcpp::Nullable<Rcpp::IntegerVector> stream);
 static SEXP _dqrng_dqset_seed_try(SEXP seedSEXP, SEXP streamSEXP) {
 BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type stream(streamSEXP);
     dqset_seed(seed, stream);
     return R_NilValue;
@@ -370,7 +370,7 @@ END_RCPP
 static int _dqrng_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("void(*dqset_seed)(Rcpp::IntegerVector,Rcpp::Nullable<Rcpp::IntegerVector>)");
+        signatures.insert("void(*dqset_seed)(Rcpp::Nullable<Rcpp::IntegerVector>,Rcpp::Nullable<Rcpp::IntegerVector>)");
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("double(*runif)(double,double)");
