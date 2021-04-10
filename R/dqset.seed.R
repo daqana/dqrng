@@ -7,7 +7,7 @@
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
-#' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed.
+#' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed. Maybe \code{NULL}, see details.
 #' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param kind  string specifying the RNG (see details)
 #' @param normal_kind  ignored; included for compatibility with \code{\link{RNGkind}}
@@ -40,6 +40,9 @@
 #' See \code{\link{generateSeedVectors}} for rapid generation of integer-vector
 #' seeds that provide 64 bits of entropy. These allow full exploration of
 #' the state space of the 64-bit RNGs provided in this package.
+#'
+#' If the provided \code{seed} is \code{NULL}, a seed is genenrated from R's RNG
+#' without state alteration.
 #'
 #' @seealso \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'          \code{\link{rnorm}}, and \code{\link{rexp}}

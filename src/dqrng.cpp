@@ -32,7 +32,7 @@ dqrng::rng64_t init() {
   Rcpp::IntegerVector seed(2, dqrng::R_random_int);
   return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
 }
-dqrng::rng64_t rng = init();
+dqrng::rng64_t rng = nullptr;
 
 using generator = double(*)();
 dqrng::uniform_distribution uniform{};
@@ -46,13 +46,18 @@ generator rexp_impl = [] () {return exponential(*rng);};
 // [[Rcpp::interfaces(r, cpp)]]
 
 // [[Rcpp::export(rng = false)]]
-void dqset_seed(Rcpp::IntegerVector seed, Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
-  uint64_t _seed = dqrng::convert_seed<uint64_t>(seed);
-  if (stream.isNotNull()) {
-      uint64_t _stream = dqrng::convert_seed<uint64_t>(stream.as());
-    rng->seed(_seed, _stream);
+void dqset_seed(Rcpp::Nullable<Rcpp::IntegerVector> seed,
+                Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
+  if (seed.isNull()) {
+    rng = init();
   } else {
-    rng->seed(_seed);
+    uint64_t _seed = dqrng::convert_seed<uint64_t>(seed.as());
+    if (stream.isNotNull()) {
+      uint64_t _stream = dqrng::convert_seed<uint64_t>(stream.as());
+      rng->seed(_seed, _stream);
+    } else {
+      rng->seed(_seed);
+    }
   }
 }
 
