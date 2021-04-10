@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![R build
+status](https://github.com/daqana/dqrng/workflows/R-CMD-check/badge.svg)](https://github.com/daqana/dqrng/actions)
 [![Travis build
 status](https://travis-ci.org/daqana/dqrng.svg?branch=master)](https://travis-ci.org/daqana/dqrng)
 [![AppVeyor build
@@ -64,8 +66,8 @@ bm[, 1:4]
 #> # A tibble: 2 x 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)      630µs  720.7µs     1366.
-#> 2 dqrnorm(N)   71.3µs   80.9µs    11897.
+#> 1 rnorm(N)      598µs    647µs     1498.
+#> 2 dqrnorm(N)     87µs    114µs     8486.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -82,10 +84,10 @@ bm[, 1:4]
 #> # A tibble: 4 x 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            5.93ms   6.39ms      153.
-#> 2 sample.int(1000 * m, n, replace = TRUE)     7.26ms   7.85ms      127.
-#> 3 dqsample.int(m, n, replace = TRUE)        288.92µs 339.85µs     2774.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 346.69µs 379.22µs     2369.
+#> 1 sample.int(m, n, replace = TRUE)            6.99ms   7.25ms      133.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.56ms   8.97ms      111.
+#> 3 dqsample.int(m, n, replace = TRUE)         304.6µs 331.62µs     2724.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 395.24µs 440.19µs     1921.
 ```
 
 And without replacement:
@@ -97,17 +99,16 @@ bm <- bench::mark(sample.int(m, n),
                   dqsample.int(m, n),
                   dqsample.int(1e3*m, n),
                   check = FALSE)
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
 bm[, 1:4]
 #> # A tibble: 5 x 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  34.22ms  36.02ms      26.0
-#> 2 sample.int(1000 * m, n)           11.99ms  12.97ms      72.6
-#> 3 sample.int(m, n, useHash = TRUE)    9.3ms  10.09ms      92.7
-#> 4 dqsample.int(m, n)                 1.34ms   1.49ms     596. 
-#> 5 dqsample.int(1000 * m, n)          1.69ms   2.03ms     434.
+#> 1 sample.int(m, n)                  26.04ms  26.45ms      36.3
+#> 2 sample.int(1000 * m, n)           11.83ms   13.5ms      70.6
+#> 3 sample.int(m, n, useHash = TRUE)   9.39ms   10.3ms      93.7
+#> 4 dqsample.int(m, n)               944.11µs   1.03ms     871. 
+#> 5 dqsample.int(1000 * m, n)          1.92ms   2.54ms     312.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
