@@ -12,3 +12,4 @@
 ^include$
 ^cran-comments\.md$
 ^revdep$
+^\.github$
