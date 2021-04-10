@@ -34,7 +34,7 @@ This is equivalent to $2^{64}$ streams with a period of $2^{194}$ each.
 In the following example a matrix with random numbers is generated in parallel using the parallel package.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
-```{r}
+```{r, eval=FALSE}
 library(parallel)
 cl <- parallel::makeCluster(2)
 res <- clusterApply(cl, 1:8, function(stream, seed, N) {
@@ -50,6 +50,19 @@ symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
        symbols = c(" ", "?", "!", "1"),
        abbr.colnames = FALSE, corr = TRUE)
 ```
+
+Correlation matrix:
+
+    [1,] 1              
+    [2,]   1            
+    [3,]   ? 1          
+    [4,]   ? ? 1        
+    [5,] ?     ? 1      
+    [6,]     ?     1    
+    [7,]     ?       1  
+    [8,]         ?     1
+    attr(,"legend")
+    [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
 
 As expected the correlation matrix for the different columns is almost equal to the identity matrix.
 
