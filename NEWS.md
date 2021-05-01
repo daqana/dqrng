@@ -1,5 +1,14 @@
 # dqrng (unreleased)
 
+## Breaking changes
+
+* The initial state of `dqrng`'s RNG is based on R's RNG, which used to advance R's RNG state.
+  The implementation has been changed to preserve R's RNG state, which is less surprising but
+  can change the outcome of current scripts.
+  ([#44](https://github.com/daqana/dqrng/pull/34) fixing [#43](https://github.com/daqana/dqrng/issues/33))
+
+## Other changes
+
 * For uniform random numbers take short-cut for min == max and throw error for min > max
   ([#34](https://github.com/daqana/dqrng/pull/34) fixing [#33](https://github.com/daqana/dqrng/issues/33))
 
