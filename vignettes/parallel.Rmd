@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
-There are two main approaches to this problem:^[See for example http://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
+There are two main approaches to this problem:^[See for example https://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
 
 * Partition the complete sequence of random numbers produced for one seed into non-overlapping sequences and assign each process one sub-sequence.
 * Re-parametrize the generator to produce independent sequences for the same seed.
@@ -126,8 +126,8 @@ Result:
 # PCG: multiple streams with RcppParallel
 
 From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
-It offers the function [`advance(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
-In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](http://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](http://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
+It offers the function [`advance(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
+In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
 When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams out of the possible $2^{127}$ separate streams.
 
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.

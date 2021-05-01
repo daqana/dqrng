@@ -23,10 +23,10 @@
 #' @details Supported RNG kinds:
 #' \describe{
 #'   \item{pcg64}{The default 64 bit variant from the PCG family developed by
-#'    Melissa O'Neill. See \url{http://www.pcg-random.org} for more details.}
+#'    Melissa O'Neill. See \url{https://www.pcg-random.org/} for more details.}
 #'   \item{Xoroshiro128+ and Xoshiro256+}{RNGs developed by David Blackman and
 #'    Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
-#'     \url{http://xoshiro.di.unimi.it/} for more details.}
+#'     \url{https://xoshiro.di.unimi.it/} for more details.}
 #'   \item{Threefry}{The 64 bit version of the 20 rounds Threefry engine as
 #'    provided by \code{\link[sitmo]{sitmo-package}}}
 #' }

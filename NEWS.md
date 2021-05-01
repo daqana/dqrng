@@ -1,4 +1,4 @@
-# dqrng (unreleased)
+# dqrng 0.3.0
 
 ## Breaking changes
 
