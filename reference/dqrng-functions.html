@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -210,10 +210,10 @@
 
     <p>Supported RNG kinds:</p><dl>
   <dt>pcg64</dt><dd><p>The default 64 bit variant from the PCG family developed by
-   Melissa O'Neill. See <a href='http://www.pcg-random.org'>http://www.pcg-random.org</a> for more details.</p></dd>
+   Melissa O'Neill. See <a href='https://www.pcg-random.org/'>https://www.pcg-random.org/</a> for more details.</p></dd>
   <dt>Xoroshiro128+ and Xoshiro256+</dt><dd><p>RNGs developed by David Blackman and
    Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
-    <a href='http://xoshiro.di.unimi.it/'>http://xoshiro.di.unimi.it/</a> for more details.</p></dd>
+    <a href='https://xoshiro.di.unimi.it/'>https://xoshiro.di.unimi.it/</a> for more details.</p></dd>
   <dt>Threefry</dt><dd><p>The 64 bit version of the 20 rounds Threefry engine as
    provided by <code><a href='https://rdrr.io/pkg/sitmo/man/sitmo-package.html'>sitmo-package</a></code></p></dd>
 
@@ -234,7 +234,7 @@ without state alteration.</p>
          <code><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></code>, and <code><a href='https://rdrr.io/r/stats/Exponential.html'>rexp</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://www.daqana.org/dqrng'>dqrng</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://daqana.github.io/dqrng/'>dqrng</a></span><span class='op'>)</span>
 
 <span class='co'># Set custom RNG.</span>
 <span class='fu'>dqRNGkind</span><span class='op'>(</span><span class='st'>"Xoshiro256+"</span><span class='op'>)</span>

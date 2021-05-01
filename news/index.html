@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -132,6 +132,25 @@
       <small>Source: <a href='https://github.com/daqana/dqrng/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="dqrng-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#dqrng-030" class="anchor"></a>dqrng 0.3.0<small> Unreleased </small>
+</h1>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>The initial state of <code>dqrng</code>’s RNG is based on R’s RNG, which used to advance R’s RNG state. The implementation has been changed to preserve R’s RNG state, which is less surprising but can change the outcome of current scripts. (<a href="https://github.com/daqana/dqrng/pull/34"><a href='https://github.com/daqana/dqrng/issues/44'>#44</a></a> fixing <a href="https://github.com/daqana/dqrng/issues/33"><a href='https://github.com/daqana/dqrng/issues/43'>#43</a></a>)</li>
+</ul>
+</div>
+<div id="other-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-changes" class="anchor"></a>Other changes</h2>
+<ul>
+<li>For uniform random numbers take short-cut for min == max and throw error for min &gt; max (<a href="https://github.com/daqana/dqrng/pull/34"><a href='https://github.com/daqana/dqrng/issues/34'>#34</a></a> fixing <a href="https://github.com/daqana/dqrng/issues/33"><a href='https://github.com/daqana/dqrng/issues/33'>#33</a></a>)</li>
+</ul>
+</div>
+</div>
     <div id="dqrng-021" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.1">
 <a href="#dqrng-021" class="anchor"></a>dqrng 0.2.1<small> 2019-05-17 </small>
