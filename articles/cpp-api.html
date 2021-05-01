@@ -62,9 +62,6 @@
     <li>
       <a href="../articles/parallel.html">Parallel RNG usage</a>
     </li>
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -88,13 +85,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="cpp-api_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>C++ API</h1>
                         <h4 class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2021-04-26</h4>
+            <h4 class="date">2021-05-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/cpp-api.Rmd"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -116,9 +113,9 @@
 <div id="setting-seed-and-rng-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setting-seed-and-rng-type" class="anchor"></a>Setting seed and RNG type</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="dt">void</span> dqrng::dqset_seed(Rcpp::IntegerVector seed, </a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">                       Rcpp::Nullable&lt;Rcpp::IntegerVector&gt; stream = R_NilValue)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="dt">void</span> dqrng::dqRNGkind(<span class="bu">std::</span>string kind, <span class="at">const</span> <span class="bu">std::</span>string&amp; normal_kind = <span class="st">"ignored"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">void</span> dqrng::dqset_seed(Rcpp::IntegerVector seed, </span>
+<span id="cb1-2"><a href="#cb1-2"></a>                       Rcpp::Nullable&lt;Rcpp::IntegerVector&gt; stream = R_NilValue)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="dt">void</span> dqrng::dqRNGkind(<span class="bu">std::</span>string kind, <span class="at">const</span> <span class="bu">std::</span>string&amp; normal_kind = <span class="st">"ignored"</span>)</span></code></pre></div>
 <dl>
 <dt><code>seed</code></dt>
 <dd>seed for the RNG; length 1 or 2
@@ -137,8 +134,8 @@
 <div id="random-variates-with-uniform-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#random-variates-with-uniform-distribution" class="anchor"></a>Random variates with uniform distribution</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb2-1" data-line-number="1">Rcpp::NumericVector dqrng::dqrunif(<span class="dt">size_t</span> n, <span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="dt">double</span> dqrng::runif(<span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1"></a>Rcpp::NumericVector dqrng::dqrunif(<span class="dt">size_t</span> n, <span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">double</span> dqrng::runif(<span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>number of observations
@@ -154,8 +151,8 @@
 <div id="random-variates-with-normal-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#random-variates-with-normal-distribution" class="anchor"></a>Random variates with normal distribution</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb3-1" data-line-number="1">Rcpp::NumericVector dqrng::dqrnorm(<span class="dt">size_t</span> n, <span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="dt">double</span> dqrng::rnorm(<span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1"></a>Rcpp::NumericVector dqrng::dqrnorm(<span class="dt">size_t</span> n, <span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">double</span> dqrng::rnorm(<span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>number of observations
@@ -171,8 +168,8 @@
 <div id="random-variates-with-exponential-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#random-variates-with-exponential-distribution" class="anchor"></a>Random variates with exponential distribution</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb4-1" data-line-number="1">Rcpp::NumericVector dqrng::dqrexp(<span class="dt">size_t</span> n, <span class="dt">double</span> rate = <span class="fl">1.0</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="dt">double</span> dqrng::rexp(<span class="dt">double</span> rate = <span class="fl">1.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a>Rcpp::NumericVector dqrng::dqrexp(<span class="dt">size_t</span> n, <span class="dt">double</span> rate = <span class="fl">1.0</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">double</span> dqrng::rexp(<span class="dt">double</span> rate = <span class="fl">1.0</span>)</span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>number of observations
@@ -185,12 +182,12 @@
 <div id="random-sampling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#random-sampling" class="anchor"></a>Random sampling</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><a class="sourceLine" id="cb5-1" data-line-number="1">Rcpp::IntegerVector dqrng::dqsample_int(<span class="dt">int</span> m, <span class="dt">int</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">Rcpp::NumericVector dqrng::dqsample_num(<span class="dt">double</span> m, <span class="dt">double</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a>Rcpp::IntegerVector dqrng::dqsample_int(<span class="dt">int</span> m, <span class="dt">int</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</span>
+<span id="cb5-2"><a href="#cb5-2"></a>                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>Rcpp::NumericVector dqrng::dqsample_num(<span class="dt">double</span> m, <span class="dt">double</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</span>
+<span id="cb5-6"><a href="#cb5-6"></a>                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</span></code></pre></div>
 <dl>
 <dt><code>m</code></dt>
 <dd>a positive number, the number of items to choose from

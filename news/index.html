@@ -102,9 +102,6 @@
     <li>
       <a href="../articles/parallel.html">Parallel RNG usage</a>
     </li>
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -135,9 +132,9 @@
       <small>Source: <a href='https://github.com/daqana/dqrng/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="dqrng-0-2-1" class="section level1">
+    <div id="dqrng-021" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.1">
-<a href="#dqrng-0-2-1" class="anchor"></a>dqrng 0.2.1<small> 2019-05-17 </small>
+<a href="#dqrng-021" class="anchor"></a>dqrng 0.2.1<small> 2019-05-17 </small>
 </h1>
 <ul>
 <li>Make template specialisations <code>inline</code> and include required standard headers (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/29"><a href='https://github.com/daqana/dqrng/issues/29'>#29</a></a> fixing <a href="https://github.com/daqana/dqrng/issues/28"><a href='https://github.com/daqana/dqrng/issues/28'>#28</a></a>)</li>
@@ -145,9 +142,9 @@
 <li>update maintainer’s email address</li>
 </ul>
 </div>
-    <div id="dqrng-0-2-0" class="section level1">
+    <div id="dqrng-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#dqrng-0-2-0" class="anchor"></a>dqrng 0.2.0<small> 2019-04-22 </small>
+<a href="#dqrng-020" class="anchor"></a>dqrng 0.2.0<small> 2019-04-22 </small>
 </h1>
 <ul>
 <li>Add R side support for selecting multiple streams for parallel usage.</li>
@@ -158,22 +155,22 @@
 <li>Scalar RNGs in the C++ API: dqrng::runif, dqrng::rnorm and dqrng::rexp</li>
 </ul>
 </div>
-    <div id="dqrng-0-1-1" class="section level1">
+    <div id="dqrng-011" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.1">
-<a href="#dqrng-0-1-1" class="anchor"></a>dqrng 0.1.1<small> 2019-03-11 </small>
+<a href="#dqrng-011" class="anchor"></a>dqrng 0.1.1<small> 2019-03-11 </small>
 </h1>
 <ul>
 <li>Use template specializations to avoid compiler warnings during tests (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/16"><a href='https://github.com/daqana/dqrng/issues/16'>#16</a></a>)</li>
 <li>Do not expect a particular error message on MacOS and skip exception throwing tests on Solaris.</li>
 </ul>
 </div>
-    <div id="dqrng-0-1-0" class="section level1">
+    <div id="dqrng-010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
-<a href="#dqrng-0-1-0" class="anchor"></a>dqrng 0.1.0<small> 2019-03-04 </small>
+<a href="#dqrng-010" class="anchor"></a>dqrng 0.1.0<small> 2019-03-04 </small>
 </h1>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>An integer vector instead of a single <code>int</code> is used for seeding (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/10"><a href='https://github.com/daqana/dqrng/issues/10'>#10</a></a>)
 <ul>
@@ -186,18 +183,18 @@
 <li>Support for Mersenne-Twister has been removed, Xoroshiro128+ is now the default.</li>
 </ul>
 </div>
-<div id="other-changes" class="section level2">
+<div id="other-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-changes" class="anchor"></a>Other changes</h2>
+<a href="#other-changes-1" class="anchor"></a>Other changes</h2>
 <ul>
 <li>New method <code><a href="../reference/generateSeedVectors.html">generateSeedVectors()</a></code> for generating a list of random <code>int</code> vectors from R’s RNG. These vectors can be used as seed (Aaron Lun in <a href='https://github.com/daqana/dqrng/issues/10'>#10</a>).</li>
 <li>The initial state of the default RNG is now based on R’s RNG.</li>
 </ul>
 </div>
 </div>
-    <div id="dqrng-0-0-5" class="section level1">
+    <div id="dqrng-005" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.5">
-<a href="#dqrng-0-0-5" class="anchor"></a>dqrng 0.0.5<small> 2019-01-31 </small>
+<a href="#dqrng-005" class="anchor"></a>dqrng 0.0.5<small> 2019-01-31 </small>
 </h1>
 <ul>
 <li>New RNG: Threefry from package ‘sitmo’</li>
@@ -206,9 +203,9 @@
 <li>Define STRICT_R_HEADERS to prepare for future Rcpp (c.f. <a href='https://github.com/daqana/dqrng/issues/6'>#6</a>)</li>
 </ul>
 </div>
-    <div id="dqrng-0-0-4" class="section level1">
+    <div id="dqrng-004" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.4">
-<a href="#dqrng-0-0-4" class="anchor"></a>dqrng 0.0.4<small> 2018-06-08 </small>
+<a href="#dqrng-004" class="anchor"></a>dqrng 0.0.4<small> 2018-06-08 </small>
 </h1>
 <ul>
 <li>Fix critical bug w.r.t. setting seeds</li>
@@ -217,17 +214,17 @@
 <li>New vignette on parallel usage</li>
 </ul>
 </div>
-    <div id="dqrng-0-0-3" class="section level1">
+    <div id="dqrng-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
-<a href="#dqrng-0-0-3" class="anchor"></a>dqrng 0.0.3<small> 2018-05-14 </small>
+<a href="#dqrng-003" class="anchor"></a>dqrng 0.0.3<small> 2018-05-14 </small>
 </h1>
 <ul>
 <li>PCG has been patched to compile on Solaris.</li>
 </ul>
 </div>
-    <div id="dqrng-0-0-2" class="section level1">
+    <div id="dqrng-002" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.2">
-<a href="#dqrng-0-0-2" class="anchor"></a>dqrng 0.0.2<small> 2018-05-11 </small>
+<a href="#dqrng-002" class="anchor"></a>dqrng 0.0.2<small> 2018-05-11 </small>
 </h1>
 <ul>
 <li>
@@ -235,9 +232,9 @@
 <li>Replace <code>xorshift.hpp</code> and <code>xoroshiro.hpp</code> with <code>xoshiro.h</code>. This implementation is directly derived from the original C implementations. It provides v1.0 of Xoroshiro128+ and Xoshiro256+.</li>
 </ul>
 </div>
-    <div id="dqrng-0-0-1" class="section level1">
+    <div id="dqrng-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
-<a href="#dqrng-0-0-1" class="anchor"></a>dqrng 0.0.1<small> Unreleased </small>
+<a href="#dqrng-001" class="anchor"></a>dqrng 0.0.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>First public release.</li>
