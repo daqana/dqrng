@@ -53,7 +53,7 @@ implementation in R where we can switch the RNG might look like this:
 
 ```{r}
 N <- 1e7
-piR <- function(n, rng = runif) {
+piR <- function(n, rng = stats::runif) {
     x <- rng(n)
     y <- rng(n)
     4 * sum(sqrt(x^2 + y^2) < 1.0) / n
@@ -68,28 +68,28 @@ Using dqrng is about three times faster:
 library(dqrng)
 dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
-system.time(cat("pi ~= ", piR(N, rng = dqrunif), "\n"))
+system.time(cat("pi ~= ", piR(N, rng = dqrng::dqrunif), "\n"))
 ```
 
 Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater: 
 
 ```{r}
-system.time(runif(N))
-system.time(dqrunif(N))
+system.time(stats::runif(N))
+system.time(dqrng::dqrunif(N))
 ```
 
 Similar for the exponential distribution:
 
 ```{r}
-system.time(rexp(N))
-system.time(dqrexp(N))
+system.time(stats::rexp(N))
+system.time(dqrng::dqrexp(N))
 ```
 
 And for the normal distribution:
 
 ```{r}
-system.time(rnorm(N))
-system.time(dqrnorm(N))
+system.time(stats::rnorm(N))
+system.time(dqrng::dqrnorm(N))
 ```
 
 As well as for sampling with and without replacement:
