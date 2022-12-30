@@ -35,12 +35,13 @@ install.packages("dqrng")
 ```
 
 Intermediate releases can also be obtained via
-[drat](https://cran.r-project.org/package=drat):
+[r-universe](https://daqana.r-universe.dev/ui#package:dqrng):
 
 ```r
-if (!requireNamespace("drat", quietly = TRUE)) install.packages("drat")
-drat::addRepo("daqana")
-install.packages("dqrng")
+options(repos = c(
+  rstub = 'https://daqana.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+install.packages('dqrng')
 ```
 
 ## Example
