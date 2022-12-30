@@ -21,12 +21,13 @@
 
 #include <mystdint.h>
 #include <dqrng_generator.h>
+#include <dqrng_distribution.h>
 #include <minimal_int_set.h>
 
 namespace dqrng {
 namespace sample {
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> replacement(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> replacement(const dqrng::rng64_t &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
   std::generate(result.begin(), result.end(),
@@ -35,7 +36,7 @@ inline Rcpp::Vector<RTYPE> replacement(dqrng::rng64_t &rng, INT m, INT n, int of
 }
 
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> no_replacement_shuffle(const dqrng::rng64_t &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
   std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
@@ -49,7 +50,7 @@ inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::rng64_t &rng, INT m, IN
 }
 
 template<int RTYPE, typename INT, typename SET>
-inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> no_replacement_set(const dqrng::rng64_t &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
   SET elems(m, n);
@@ -64,7 +65,7 @@ inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::rng64_t &rng, INT m, INT n,
 }
 
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset) {
+inline Rcpp::Vector<RTYPE> sample(const dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset) {
   if (replace || n <= 1) {
     return dqrng::sample::replacement<RTYPE, INT>(rng, m, n, offset);
   } else {
@@ -76,6 +77,75 @@ inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replac
       return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_bit_set>(rng, m, n, offset);
     } else {
       return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_hash_set<INT>>(rng, m, n, offset);
+    }
+  }
+}
+
+template<int RTYPE, typename INT>
+inline INT roulette_wheel_selection(const dqrng::rng64_t &rng, INT m, Rcpp::NumericVector probs, double max_probs) {
+  while (true) {
+    INT index = (*rng)(m);
+    if (dqrng::uniform01((*rng)()) < probs(index) / max_probs)
+      return index;
+  }
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> replacement_prob(const dqrng::rng64_t &rng, INT m, INT n, Rcpp::NumericVector probs, int offset) {
+  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+  double max_probs = Rcpp::max(probs);
+  Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+  std::generate(result.begin(), result.end(),
+                [rng, m, probs, max_probs, offset] () {
+                  return static_cast<storage_t>(offset + roulette_wheel_selection<RTYPE, INT>(rng, m, probs, max_probs));
+                });
+  return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> no_replacement_shuffle_prob(const dqrng::rng64_t &rng, INT m, INT n, Rcpp::NumericVector probs, int offset) {
+  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+  double max_probs = Rcpp::max(probs);
+  Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
+  std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
+  for (INT i = 0; i < n; ++i) {
+    std::swap(tmp[i], tmp[i + roulette_wheel_selection<RTYPE, INT>(rng, m - i, probs, max_probs)]);
+  }
+  if (m == n)
+    return tmp;
+  else
+    return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
+}
+
+template<int RTYPE, typename INT, typename SET>
+inline Rcpp::Vector<RTYPE> no_replacement_set_prob(const dqrng::rng64_t &rng, INT m, INT n, Rcpp::NumericVector probs, int offset) {
+  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
+  double max_probs = Rcpp::max(probs);
+  Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+  SET elems(m, n);
+  for (INT i = 0; i < n; ++i) {
+    INT v = roulette_wheel_selection<RTYPE, INT>(rng, m, probs, max_probs);
+    while (!elems.insert(v)) {
+      v = roulette_wheel_selection<RTYPE, INT>(rng, m, probs, max_probs);
+    }
+    result(i) = static_cast<storage_t>(offset + v);
+  }
+  return result;
+}
+
+template<int RTYPE, typename INT>
+inline Rcpp::Vector<RTYPE> sample_prob(const dqrng::rng64_t &rng, INT m, INT n, bool replace, Rcpp::NumericVector probs, int offset) {
+  if (replace || n <= 1) {
+    return dqrng::sample::replacement_prob<RTYPE, INT>(rng, m, n, probs, offset);
+  } else {
+    if (!(m >= n))
+      Rcpp::stop("Argument requirements not fulfilled: m >= n");
+    if (m < 2 * n) {
+      return dqrng::sample::no_replacement_shuffle_prob<RTYPE, INT>(rng, m, n, probs, offset);
+    } else if (m < 1000 * n) {
+      return dqrng::sample::no_replacement_set_prob<RTYPE, INT, dqrng::minimal_bit_set>(rng, m, n, probs, offset);
+    } else {
+      return dqrng::sample::no_replacement_set_prob<RTYPE, INT, dqrng::minimal_hash_set<INT>>(rng, m, n, probs, offset);
     }
   }
 }
