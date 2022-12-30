@@ -1,3 +1,9 @@
+# dqrng 0.3.0.1
+
+* Implement weighted sampling with and without replacement.
+  ([#47](https://github.com/daqana/dqrng/pull/47) fixing [#18](https://github.com/daqana/dqrng/issues/18))
+
+
 # dqrng 0.3.0
 
 ## Breaking changes
