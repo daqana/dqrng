@@ -73,9 +73,10 @@ test_that("dqsample_int w/o replacement works with low rate", {
 test_that("dqsample_num w/ replacement works", {
     skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
     dqset.seed(seed)
-    n <- 1e10
-    k <- 1e5
-    result <- dqsample(n, k, replace = TRUE)
+    # use a shorter vector and internal function for performance reasons
+    n <- 1e5
+    k <- 1e2
+    result <- dqrng:::dqsample_num(n, k, replace = TRUE, offset = 1L)
     expect_equal(length(result), k)
     expect_lte(length(unique(result)), k)
     expect_true(all(result >= 1) && all(result <= n))
@@ -96,9 +97,10 @@ test_that("dqsample_num w/o replacement works with high rate", {
 test_that("dqsample_num w/o replacement works with low rate", {
     skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
     dqset.seed(seed)
-    n <- 1e10
-    k <- 1e5
-    result <- dqsample(n, k, replace = FALSE)
+    # use a shorter vector and internal function for performance reasons
+    n <- 1e5
+    k <- 1e2
+    result <- dqrng:::dqsample_num(n, k, replace = FALSE, offset = 1L)
     expect_equal(length(result), k)
     expect_equal(length(unique(result)), k)
     expect_true(all(result >= 1) && all(result <= n))
@@ -107,22 +109,65 @@ test_that("dqsample_num w/o replacement works with low rate", {
 test_that("dqsample_num w/o replacement works with medium rate", {
     skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
     dqset.seed(seed)
-    n <- 1e10
-    k <- 1e8
-    result <- dqsample(n, k, replace = FALSE)
+    # use a shorter vector and internal function for performance reasons
+    n <- 1e5
+    k <- 1e4
+    result <- dqrng:::dqsample_num(n, k, replace = FALSE, offset = 1)
     expect_equal(length(result), k)
     expect_equal(length(unique(result)), k)
     expect_true(all(result >= 1) && all(result <= n))
 })
 
-test_that("dqsample_int w/o replacement and w/ weights works with medium rate", {
+test_that("dqsample_int w/ replacement and w/ weights works", {
     dqset.seed(seed)
     n <- 1e5
     k <- 1e3
     result <- dqsample(n, k, replace = FALSE, prob = dqrunif(n))
     expect_equal(length(result), k)
-    expect_equal(length(unique(result)), k)
+    expect_lte(length(unique(result)), k)
     expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_int w/o replacement and w/ weights works with high rate", {
+  dqset.seed(seed)
+  n <- 1e5
+  k <- 6e4
+  result <- dqsample(n, k, replace = FALSE, prob = dqrunif(n))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_int w/o replacement and w/ weights works with medium rate", {
+  dqset.seed(seed)
+  n <- 1e5
+  k <- 1e3
+  result <- dqsample(n, k, replace = FALSE, prob = dqrunif(n))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_int w/o replacement and w/ weights works with low rate", {
+  dqset.seed(seed)
+  n <- 1e5
+  k <- 1e1
+  result <- dqsample(n, k, replace = FALSE, prob = dqrunif(n))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_num w/ replacement and w/ weights works", {
+  skip_if(.Machine$sizeof.pointer <= 4, "No long-vector support")
+  dqset.seed(seed)
+  # use a shorter vector and internal function for performance reasons
+  n <- 1e5
+  k <- 1e2
+  result <- dqrng:::dqsample_num(n, k, replace = TRUE, prob = dqrunif(n), offset = 1L)
+  expect_equal(length(result), k)
+  expect_lte(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
 })
 
 test_that("error cases", {
