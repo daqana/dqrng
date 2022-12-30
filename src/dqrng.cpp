@@ -154,10 +154,7 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  int offset = 0) {
     if (!(m > 0 && n >= 0))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
-    if (probs.isNull())
-        return dqrng::sample::sample<INTSXP, uint32_t>(rng, uint32_t(m), uint32_t(n), replace, offset);
-    else
-        return dqrng::sample::sample_prob<INTSXP, uint32_t>(rng, uint32_t(m), uint32_t(n), replace, probs.as(), offset);
+    return dqrng::sample::sample<INTSXP, uint32_t>(rng, uint32_t(m), uint32_t(n), replace, probs, offset);
 }
 
 // [[Rcpp::export(rng = false)]]
@@ -171,9 +168,6 @@ Rcpp::NumericVector dqsample_num(double m,
 #else
     if (!(m > 0 && n >= 0))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
-    if (probs.isNull())
-        return dqrng::sample::sample<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, offset);
-    else
-        return dqrng::sample::sample_prob<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, probs.as(), offset);
+    return dqrng::sample::sample<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, probs, offset);
 #endif
 }
