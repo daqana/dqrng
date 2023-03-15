@@ -1,9 +1,9 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   cpp-api: cpp-api.html
   dqrng: dqrng.html
   parallel: parallel.html
-last_built: 2021-05-01T10:01Z
+last_built: 2023-03-15T19:38Z
 

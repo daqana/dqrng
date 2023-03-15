@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/dqrng.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/daqana/dqrng/">
+  <a href="https://github.com/daqana/dqrng/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -89,11 +85,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Parallel RNG usage</h1>
-                        <h4 class="author">Ralf Stubner</h4>
+                        <h4 data-toc-skip class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2021-05-01</h4>
+            <h4 data-toc-skip class="date">2023-03-15</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/parallel.Rmd"><code>vignettes/parallel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
 
     </div>
@@ -105,27 +101,27 @@
 <li>Partition the complete sequence of random numbers produced for one seed into non-overlapping sequences and assign each process one sub-sequence.</li>
 <li>Re-parametrize the generator to produce independent sequences for the same seed.</li>
 </ul>
-<p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. When using the R or C++ interface independent streams can be accessed using the two argument <code><a href="../reference/dqRNGkind.html">dqset.seed(seed, stream)</a></code> or <code>dqset_seed(seed, stream)</code> functions.</p>
-<div id="threefry-usage-from-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#threefry-usage-from-r" class="anchor"></a>Threefry: usage from R</h1>
+<p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. When using the R or C++ interface independent streams can be accessed using the two argument <code>dqset.seed(seed, stream)</code> or <code>dqset_seed(seed, stream)</code> functions.</p>
+<div class="section level2">
+<h2 id="threefry-usage-from-r">Threefry: usage from R<a class="anchor" aria-label="anchor" href="#threefry-usage-from-r"></a>
+</h2>
 <p>The Threefry engine uses internally a counter with <span class="math inline">\(2^{256}\)</span> possible states, which can be split into different substreams. When used from R or C++ with the two argument <code>dqset.seed</code> or <code>dqset_seed</code> this counter space is split into <span class="math inline">\(2^{64}\)</span> streams with <span class="math inline">\(2^{192}\)</span> possible states each. This is equivalent to <span class="math inline">\(2^{64}\)</span> streams with a period of <span class="math inline">\(2^{194}\)</span> each.</p>
 <p>In the following example a matrix with random numbers is generated in parallel using the parallel package. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html">clusterApply</a></span><span class="op">(</span><span class="va">cl</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="kw">function</span><span class="op">(</span><span class="va">stream</span>, <span class="va">seed</span>, <span class="va">N</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/">dqrng</a></span><span class="op">)</span>
-  <span class="fu"><a href="../reference/dqRNGkind.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Threefry"</span><span class="op">)</span>
-  <span class="fu"><a href="../reference/dqRNGkind.html">dqset.seed</a></span><span class="op">(</span><span class="va">seed</span>, <span class="va">stream</span><span class="op">)</span>
-  <span class="fu"><a href="../reference/dqRNGkind.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>
-<span class="op">}</span>, <span class="fl">42</span>, <span class="fl">1e6</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/symnum.html">symnum</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, cutpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span><span class="op">)</span>,
-       symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span><span class="op">)</span>,
-       abbr.colnames <span class="op">=</span> <span class="cn">FALSE</span>, corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterApply</a></span><span class="op">(</span><span class="va">cl</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="kw">function</span><span class="op">(</span><span class="va">stream</span>, <span class="va">seed</span>, <span class="va">N</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Threefry"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="va">seed</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span></span>
+<span><span class="op">}</span>, <span class="fl">42</span>, <span class="fl">1e6</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/symnum.html" class="external-link">symnum</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, cutpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span><span class="op">)</span>,</span>
+<span>       symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span><span class="op">)</span>,</span>
+<span>       abbr.colnames <span class="op">=</span> <span class="cn">FALSE</span>, corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Correlation matrix:</p>
 <pre><code>[1,] 1              
 [2,]   1            
@@ -139,9 +135,9 @@ attr(,"legend")
 [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1</code></pre>
 <p>As expected the correlation matrix for the different columns is almost equal to the identity matrix.</p>
 </div>
-<div id="xoroshiro-jump-ahead-with-openmp" class="section level1">
-<h1 class="hasAnchor">
-<a href="#xoroshiro-jump-ahead-with-openmp" class="anchor"></a>Xo(ro)shiro: jump ahead with OpenMP</h1>
+<div class="section level2">
+<h2 id="xoroshiro-jump-ahead-with-openmp">Xo(ro)shiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoroshiro-jump-ahead-with-openmp"></a>
+</h2>
 <p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws appart. The Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as <span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws appart. You can go from one sub-sequence to the next using the <code>jump()</code> or <code>long_jump()</code> method and the convenience wrapper <code>jump(int n)</code> or <code>long_jump(int n)</code>, which advances to the <code>n</code>th sub-sequence. When used from R or C++ with the two argument <code>dqset.seed</code> and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws appart for Xoshiro256+ and Xoroshiro128+, respectively.</p>
 <p>As an example using C++ we draw and sum a large number of uniformly distributed numbers. This is done several times using OpenMP for parallelisation. Care has been taken to keep the global RNG <code>rng</code> usable outside of the parallel block.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
@@ -183,10 +179,10 @@ attr(,"legend")
 <p>Result:</p>
 <pre><code>[1] 0.5001591 0.5000428 0.4999855 0.4999706 0.5000061 0.4999447 0.4999188 0.5001192</code></pre>
 </div>
-<div id="pcg-multiple-streams-with-rcppparallel" class="section level1">
-<h1 class="hasAnchor">
-<a href="#pcg-multiple-streams-with-rcppparallel" class="anchor"></a>PCG: multiple streams with RcppParallel</h1>
-<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream"><code>set_stream(int n)</code></a> or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor">two argument constructor</a> with <code>seed</code> and <code>stream</code>. When used from R or C++ with the two argument <code>dqset.seed</code> and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams out of the possible <span class="math inline">\(2^{127}\)</span> separate streams.</p>
+<div class="section level2">
+<h2 id="pcg-multiple-streams-with-rcppparallel">PCG: multiple streams with RcppParallel<a class="anchor" aria-label="anchor" href="#pcg-multiple-streams-with-rcppparallel"></a>
+</h2>
+<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a> or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two argument constructor</a> with <code>seed</code> and <code>stream</code>. When used from R or C++ with the two argument <code>dqset.seed</code> and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams out of the possible <span class="math inline">\(2^{127}\)</span> separate streams.</p>
 <p>In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
@@ -252,7 +248,7 @@ attr(,"legend")
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>See for example <a href="https://www.pcg-random.org/posts/critiquing-pcg-streams.html" class="uri">https://www.pcg-random.org/posts/critiquing-pcg-streams.html</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>See for example <a href="https://www.pcg-random.org/posts/critiquing-pcg-streams.html" class="external-link uri">https://www.pcg-random.org/posts/critiquing-pcg-streams.html</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -268,11 +264,13 @@ attr(,"legend")
 
 
       <footer><div class="copyright">
-  <p>Developed by Ralf Stubner.</p>
+  <p></p>
+<p>Developed by Ralf Stubner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -280,6 +278,8 @@ attr(,"legend")
 
   
 
+
+  
 
   </body>
 </html>

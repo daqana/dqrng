@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/dqrng.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/daqana/dqrng/">
+  <a href="https://github.com/daqana/dqrng/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -89,11 +85,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Fast Pseudo Random Number Generators for R</h1>
-                        <h4 class="author">Ralf Stubner</h4>
+                        <h4 data-toc-skip class="author">Ralf Stubner</h4>
             
-            <h4 class="date">2021-05-01</h4>
+            <h4 data-toc-skip class="date">2023-03-15</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/master/vignettes/dqrng.Rmd"><code>vignettes/dqrng.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/dqrng.Rmd" class="external-link"><code>vignettes/dqrng.Rmd</code></a></small>
       <div class="hidden name"><code>dqrng.Rmd</code></div>
 
     </div>
@@ -101,113 +97,113 @@
     
     
 <p>The dqrng package provides fast random number generators (RNG) with good statistical properties for usage with R. It combines these RNGs with fast distribution functions to sample from uniform, normal or exponential distributions. Both the RNGs and the distribution functions are distributed as C++ header-only library.</p>
-<div id="supported-random-number-generators" class="section level2">
-<h2 class="hasAnchor">
-<a href="#supported-random-number-generators" class="anchor"></a>Supported Random Number Generators</h2>
+<div class="section level2">
+<h2 id="supported-random-number-generators">Supported Random Number Generators<a class="anchor" aria-label="anchor" href="#supported-random-number-generators"></a>
+</h2>
 <p>Support for the following 64bit RNGs are currently included:</p>
 <ul>
 <li>
-<strong>pcg64</strong> The default 64 bit variant from the PCG family developed by Melissa O’Neill. See <a href="https://www.pcg-random.org/" class="uri">https://www.pcg-random.org/</a> for more details.</li>
+<strong>pcg64</strong> The default 64 bit variant from the PCG family developed by Melissa O’Neill. See <a href="https://www.pcg-random.org/" class="external-link uri">https://www.pcg-random.org/</a> for more details.</li>
 <li>
 <strong>Xoroshiro128+</strong> and <strong>Xoshiro256+</strong><br>
-RNGs developed by David Blackman and Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See <a href="https://xoroshiro.di.unimi.it/" class="uri">https://xoroshiro.di.unimi.it/</a> for more details.</li>
+RNGs developed by David Blackman and Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See <a href="https://xoroshiro.di.unimi.it/" class="external-link uri">https://xoroshiro.di.unimi.it/</a> for more details.</li>
 <li>
 <strong>Threefry</strong><br>
 The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package ‘sitmo’.</li>
 </ul>
 <p>Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples and set as default RNG.</p>
 </div>
-<div id="usage-from-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage-from-r" class="anchor"></a>Usage from R</h2>
+<div class="section level2">
+<h2 id="usage-from-r">Usage from R<a class="anchor" aria-label="anchor" href="#usage-from-r"></a>
+</h2>
 <p>Using these RNGs from R is deliberately similar to using R’s build-in RNGs:</p>
 <ul>
 <li>
-<code><a href="../reference/dqRNGkind.html">dqRNGkind()</a></code> is analogue to <code><a href="https://rdrr.io/r/base/Random.html">RNGkind()</a></code> and sets the RNG</li>
+<code><a href="../reference/dqrng-functions.html">dqRNGkind()</a></code> is analogue to <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind()</a></code> and sets the RNG</li>
 <li>
-<code><a href="../reference/dqRNGkind.html">dqset.seed()</a></code> is analogue to <code><a href="https://rdrr.io/r/base/Random.html">set.seed()</a></code> and sets the seed</li>
+<code><a href="../reference/dqrng-functions.html">dqset.seed()</a></code> is analogue to <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> and sets the seed</li>
 <li>
-<code><a href="../reference/dqRNGkind.html">dqrunif()</a></code>, <code><a href="../reference/dqRNGkind.html">dqrnorm()</a></code>, and <code><a href="../reference/dqRNGkind.html">dqrexp()</a></code> are analogue to <code><a href="https://rdrr.io/r/stats/Uniform.html">runif()</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html">rnorm()</a></code>, and <code><a href="https://rdrr.io/r/stats/Exponential.html">rexp()</a></code> and sample from uniform, normal or exponential distributions</li>
+<code><a href="../reference/dqrng-functions.html">dqrunif()</a></code>, <code><a href="../reference/dqrng-functions.html">dqrnorm()</a></code>, and <code><a href="../reference/dqrng-functions.html">dqrexp()</a></code> are analogue to <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm()</a></code>, and <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp()</a></code> and sample from uniform, normal or exponential distributions</li>
 <li>
 <code><a href="../reference/dqsample.html">dqsample()</a></code> and <code>dqsample.int</code> are analogue to <code>sample</code> and <code>sample.int</code> for creating random samples of vectors and vector indices</li>
 </ul>
 <p>Let’s look at the classical example of calculating <span class="math inline">\(\pi\)</span> via simulation. The basic idea is to generate a large number of random points within the unit square. An approximation for <span class="math inline">\(\pi\)</span> can then be calculated from the ratio of points within the unit circle to the total number of points. A vectorized implementation in R where we can switch the RNG might look like this:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e7</span>
-<span class="va">piR</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">rng</span> <span class="op">=</span> <span class="va">runif</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">rng</span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
-    <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rng</span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
-    <span class="fl">4</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">/</span> <span class="va">n</span>
-<span class="op">}</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; pi ~=  3.140899</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.891   0.104   1.059</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e7</span></span>
+<span><span class="va">piR</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">rng</span> <span class="op">=</span> <span class="va">runif</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">rng</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>    <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rng</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>    <span class="fl">4</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">/</span> <span class="va">n</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; pi ~=  3.140899</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.974   0.121   1.157</span></span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/">dqrng</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/dqRNGkind.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Xoroshiro128+"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/dqRNGkind.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span>, rng <span class="op">=</span> <span class="va">dqrunif</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; pi ~=  3.14042</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    0.32    0.08    0.40</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Xoroshiro128+"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span>, rng <span class="op">=</span> <span class="va">dqrunif</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; pi ~=  3.14042</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.334   0.084   0.420</span></span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the RNGs alone has to be even greater:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.292   0.001   0.293</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqRNGkind.html">dqrunif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.046   0.000   0.046</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.303   0.000   0.304</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.058   0.000   0.059</span></span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.451   0.004   0.461</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqRNGkind.html">dqrexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.081   0.001   0.087</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.454   0.001   0.455</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.080   0.000   0.081</span></span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.694   0.005   0.705</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqRNGkind.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.091   0.001   0.092</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.745   0.001   0.748</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.103   0.000   0.103</span></span></code></pre></div>
 <p>As well as for sampling with and without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.632   0.018   0.671</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.046   0.009   0.055</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   2.143   0.168   2.336</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.130   0.009   0.140</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.640   0.015   0.657</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.043   0.009   0.052</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   2.343   0.163   3.091</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    user  system elapsed </span></span>
+<span><span class="co">#&gt;   0.135   0.013   0.149</span></span></code></pre></div>
 </div>
-<div id="usage-from-c" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage-from-c" class="anchor"></a>Usage from C++</h2>
+<div class="section level2">
+<h2 id="usage-from-c">Usage from C++<a class="anchor" aria-label="anchor" href="#usage-from-c"></a>
+</h2>
 <p>The RNGs and distributions functions can also be used from C++ at various levels of abstraction. Technically there are three ways to make use of dqrng at the C++ level:</p>
 <ul>
-<li>use <code>// [[Rcpp::depends(dqrng)]]</code> together with <code><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html">Rcpp::sourceCpp()</a></code>
+<li>use <code>// [[Rcpp::depends(dqrng)]]</code> together with <code><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">Rcpp::sourceCpp()</a></code>
 </li>
-<li>use <code><a href="https://rdrr.io/pkg/Rcpp/man/cppFunction.html">Rcpp::cppFunction(depends = "dqrng", ...)</a></code>
+<li>use <code>Rcpp::cppFunction(depends = "dqrng", ...)</code>
 </li>
 <li>use an R package with <code>LinkingTo: dqrng</code>
 </li>
 </ul>
 <p>Here only the first approach is shown.</p>
-<div id="using-the-compiled-library-functions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-compiled-library-functions" class="anchor"></a>Using the compiled library functions</h3>
+<div class="section level3">
+<h3 id="using-the-compiled-library-functions">Using the compiled library functions<a class="anchor" aria-label="anchor" href="#using-the-compiled-library-functions"></a>
+</h3>
 <p>The functions available in R directly call corresponding C++ functions. These functions are also available at the C++ level if you include <code>dqrng.h</code>. The full ist of functions is available with <code><a href="../articles/cpp-api.html">vignette("cpp-api", package = "dqrng")</a></code>. Revisiting the example of approximating <span class="math inline">\(\pi\)</span> we can use:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
@@ -231,7 +227,7 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <span id="cb7-20"><a href="#cb7-20"></a><span class="co">/*** R</span></span>
 <span id="cb7-21"><a href="#cb7-21"></a><span class="co">system.time(cat("pi ~= ", piCpp(1e7), "\n"))</span></span>
 <span id="cb7-22"><a href="#cb7-22"></a><span class="co">*/</span></span></code></pre></div>
-<p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>, whereas the analogue function in the R interface is called <code><a href="../reference/dqRNGkind.html">dqrng::dqset.seed()</a></code>. For sampling with and without replacement <code>dqrng::dqsample_int()</code> and <code>dqrng::dqsample_num()</code> are the analogue of <code><a href="../reference/dqsample.html">dqrng::dqsample.int()</a></code> in the R interface:</p>
+<p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>, whereas the analogue function in the R interface is called <code><a href="../reference/dqrng-functions.html">dqrng::dqset.seed()</a></code>. For sampling with and without replacement <code>dqrng::dqsample_int()</code> and <code>dqrng::dqsample_num()</code> are the analogue of <code><a href="../reference/dqsample.html">dqrng::dqsample.int()</a></code> in the R interface:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
@@ -247,10 +243,10 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 <span id="cb8-13"><a href="#cb8-13"></a><span class="co">sampleCpp(1000)</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a><span class="co">*/</span></span></code></pre></div>
 </div>
-<div id="using-the-header-only-library" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-header-only-library" class="anchor"></a>Using the header only library</h3>
-<p>The RNG wrapper and distributions functions can be used from C++ by including <code>dqrng_generator.h</code> and <code>dqrng_distribution.h</code>. In order to use these header files, you have to use at least C++11 and link to the <code>BH</code> and <code>sitmo</code> packages as well. For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG. Here a minimal <a href="https://xoroshiro.di.unimi.it/splitmix64.c">SplitMix</a> generator is used together with <code>dqrng::normal_distribution</code>:</p>
+<div class="section level3">
+<h3 id="using-the-header-only-library">Using the header only library<a class="anchor" aria-label="anchor" href="#using-the-header-only-library"></a>
+</h3>
+<p>The RNG wrapper and distributions functions can be used from C++ by including <code>dqrng_generator.h</code> and <code>dqrng_distribution.h</code>. In order to use these header files, you have to use at least C++11 and link to the <code>BH</code> and <code>sitmo</code> packages as well. For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG. Here a minimal <a href="https://xoroshiro.di.unimi.it/splitmix64.c" class="external-link">SplitMix</a> generator is used together with <code>dqrng::normal_distribution</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
@@ -394,11 +390,13 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 
 
       <footer><div class="copyright">
-  <p>Developed by Ralf Stubner.</p>
+  <p></p>
+<p>Developed by Ralf Stubner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -406,6 +404,8 @@ The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as pro
 
   
 
+
+  
 
   </body>
 </html>
