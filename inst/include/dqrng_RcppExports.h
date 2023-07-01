@@ -182,6 +182,26 @@ namespace dqrng {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
+    inline Rcpp::IntegerVector dqrrademacher(size_t n) {
+        typedef SEXP(*Ptr_dqrrademacher)(SEXP);
+        static Ptr_dqrrademacher p_dqrrademacher = NULL;
+        if (p_dqrrademacher == NULL) {
+            validateSignature("Rcpp::IntegerVector(*dqrrademacher)(size_t)");
+            p_dqrrademacher = (Ptr_dqrrademacher)R_GetCCallable("dqrng", "_dqrng_dqrrademacher");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrrademacher(Shield<SEXP>(Rcpp::wrap(n)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
+    }
+
     inline Rcpp::IntegerVector dqsample_int(int m, int n, bool replace = false, Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue, int offset = 0) {
         typedef SEXP(*Ptr_dqsample_int)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dqsample_int p_dqsample_int = NULL;

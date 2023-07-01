@@ -41,6 +41,7 @@ dqrng::normal_distribution normal{};
 generator rnorm_impl = [] () {return normal(*rng);};
 dqrng::exponential_distribution exponential{};
 generator rexp_impl = [] () {return exponential(*rng);};
+auto ruint64t_impl = [] () {return static_cast<uint64_t>((*rng)());};
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -143,6 +144,46 @@ double rexp(double rate = 1.0) {
   using parm_t = decltype(exponential)::param_type;
   exponential.param(parm_t(rate));
   return rexp_impl();
+}
+
+//' Sample Rademacher distribution really fast
+//' 
+//' @description This uses a fancy trick to draw Rademacher weights very 
+//'   quickly. To do so, the function draws from 1:(2^31 - 1), and then 
+//'   uses each bit of the integer to determine 31 values of 0/1. This
+//'   allows for 31 Rademacher random variables to be drawn per random draw.
+//'   Taking those bits * 2 - 1 gives the Rademacher random variables.
+//'
+//' @param n Integer, number of random variables to draw
+//' 
+//' @return integer vector of length n with values -1 or 1
+//' 
+//' @export
+// [[Rcpp::export(rng = false)]]
+Rcpp::IntegerVector dqrrademacher(size_t n) {
+  size_t n_ints = ceil(n / 31.0);
+  std::vector<uint64_t> rand_ints(n_ints);
+  std::generate(rand_ints.begin(), rand_ints.end(), ruint64t_impl);
+
+  Rcpp::IntegerVector res(n);
+
+  int k = 0;
+  for (int i = 0; i < n_ints - 1; ++i) {
+    uint64_t curr = rand_ints[i];
+    
+    for (int j = 31; j >= 0; j--) {
+      res[k] = ((curr >> j) & 1) * 2 - 1;
+      k++;
+    }
+  }
+
+  uint64_t curr = rand_ints[n_ints];
+  for (int j = 31; j >= 31 - (n % 31); j--) {
+    res[k] = ((curr >> j) & 1) * 2 - 1;
+    k++;
+  }
+
+  return res;
 }
 
 // code for sampling
