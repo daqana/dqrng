@@ -5,6 +5,7 @@
 \alias{dqrunif}
 \alias{dqrnorm}
 \alias{dqrexp}
+\alias{dqrrademacher}
 \alias{dqset.seed}
 \title{R interface}
 \usage{
@@ -15,6 +16,8 @@ dqrunif(n, min = 0, max = 1)
 dqrnorm(n, mean = 0, sd = 1)
 
 dqrexp(n, rate = 1)
+
+dqrrademacher(n)
 
 dqset.seed(seed, stream = NULL)
 }

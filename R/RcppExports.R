@@ -41,18 +41,7 @@ rexp <- function(rate = 1.0) {
     .Call(`_dqrng_rexp`, rate)
 }
 
-#' Sample Rademacher distribution really fast
-#' 
-#' @description This uses a fancy trick to draw Rademacher weights very 
-#'   quickly. To do so, the function draws from 1:(2^31 - 1), and then 
-#'   uses each bit of the integer to determine 31 values of 0/1. This
-#'   allows for 31 Rademacher random variables to be drawn per random draw.
-#'   Taking those bits * 2 - 1 gives the Rademacher random variables.
-#'
-#' @param n Integer, number of random variables to draw
-#' 
-#' @return integer vector of length n with values -1 or 1
-#' 
+#' @rdname dqrng-functions
 #' @export
 dqrrademacher <- function(n) {
     .Call(`_dqrng_dqrrademacher`, n)
