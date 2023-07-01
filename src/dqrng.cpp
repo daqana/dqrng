@@ -153,7 +153,6 @@ Rcpp::IntegerVector dqrrademacher(size_t n) {
   size_t n_ints = ceil(n / 64.0);
   std::vector<uint64_t> rand_ints(n_ints);
   std::generate(rand_ints.begin(), rand_ints.end(), ruint64t_impl);
-  Rcpp::Rcout << rand_ints[0] << std::endl;
 
   Rcpp::IntegerVector res(n);
   int k = 0;
