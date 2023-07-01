@@ -24,5 +24,5 @@ dqsample.int(n, size = n, replace = FALSE, prob = NULL)
 Unbiased Random Samples and Permutations
 }
 \seealso{
-\code{link{sample}} and \code{\link{sample.int}}
+\code{\link{sample}} and \code{\link{sample.int}}
 }

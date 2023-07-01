@@ -5,7 +5,12 @@
 #'   according to a uniform, normal and exponential distribution. These
 #'   functions are modeled after the \code{base} functions
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
-#'   \code{\link{rnorm}}, and \code{\link{rexp}}.
+#'   \code{\link{rnorm}}, and \code{\link{rexp}}. 
+#' 
+#'   \code{dqrrademacher} uses a fast algorithm to generate random 
+#'   Rademacher variables (-1 and 1 with equal probability). To do so, it 
+#'   generates a random 64 bit integer and then uses each bit to generate 
+#'   a 0/1 variable. This generates 64 integers per random number generation.
 #'
 #' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed. Maybe \code{NULL}, see details.
 #' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
@@ -18,7 +23,7 @@
 #' @param sd  standard deviation of the normal distribution
 #' @param rate  rate of the exponential distribution
 #'
-#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
+#' @return \code{dqrunif}, \code{dqrnorm}, \code{dqrexp}, and \code{dqrrademacher} return a numeric vector of length \code{n}.
 #'
 #' @details Supported RNG kinds:
 #' \describe{

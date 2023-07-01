@@ -40,7 +40,7 @@ dqset.seed(seed, stream = NULL)
 \item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 }
 \value{
-\code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
+\code{dqrunif}, \code{dqrnorm}, \code{dqrexp}, and \code{dqrrademacher} return a numeric vector of length \code{n}.
 }
 \description{
 The \code{dqrng} package provides several fast random number
@@ -48,7 +48,12 @@ The \code{dqrng} package provides several fast random number
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the \code{base} functions
   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
-  \code{\link{rnorm}}, and \code{\link{rexp}}.
+  \code{\link{rnorm}}, and \code{\link{rexp}}. 
+
+  \code{dqrrademacher} uses a fast algorithm to generate random 
+  Rademacher variables (-1 and 1 with equal probability). To do so, it 
+  generates a random 64 bit integer and then uses each bit to generate 
+  a 0/1 variable. This generates 64 integers per random number generation.
 }
 \details{
 Supported RNG kinds:
