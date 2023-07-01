@@ -161,7 +161,7 @@ double rexp(double rate = 1.0) {
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::IntegerVector dqrrademacher(size_t n) {
-  size_t n_ints = ceil(n / 31.0);
+  size_t n_ints = ceil(n / 63.0);
   std::vector<uint64_t> rand_ints(n_ints);
   std::generate(rand_ints.begin(), rand_ints.end(), ruint64t_impl);
 
@@ -171,14 +171,14 @@ Rcpp::IntegerVector dqrrademacher(size_t n) {
   for (int i = 0; i < n_ints - 1; ++i) {
     uint64_t curr = rand_ints[i];
     
-    for (int j = 31; j >= 0; j--) {
+    for (int j = 63; j >= 0; j--) {
       res[k] = ((curr >> j) & 1) * 2 - 1;
       k++;
     }
   }
 
   uint64_t curr = rand_ints[n_ints];
-  for (int j = 31; j >= 31 - (n % 31); j--) {
+  for (int j = 63; j >= 63 - (n % 63); j--) {
     res[k] = ((curr >> j) & 1) * 2 - 1;
     k++;
   }
