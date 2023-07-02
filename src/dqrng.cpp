@@ -152,17 +152,17 @@ Rcpp::IntegerVector dqrrademacher(size_t n) {
   Rcpp::IntegerVector res = Rcpp::no_init(n);
   size_t k = 0;
   for (size_t i = 0; i < ceil(n / 64.0) - 1; ++i) {
-    uint64_t curr = (*rng)();
+    uint64_t bits = (*rng)();
     
     for (int j = 0; j <= 63; ++j) {
-      res[k] = ((curr >> j) & 1) * 2 - 1;
+      res[k] = ((bits >> j) & 1) * 2 - 1;
       k++;
     }
   }
 
-  uint64_t curr = (*rng)();
+  uint64_t bits = (*rng)();
   for (int j = 0; k < n; ++k, ++j) {
-    res[k] = ((curr >> j) & 1) * 2 - 1;    
+    res[k] = ((bits >> j) & 1) * 2 - 1;    
   }
 
   return res;
