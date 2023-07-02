@@ -41,7 +41,6 @@ dqrng::normal_distribution normal{};
 generator rnorm_impl = [] () {return normal(*rng);};
 dqrng::exponential_distribution exponential{};
 generator rexp_impl = [] () {return exponential(*rng);};
-auto ruint64t_impl = [] () {return static_cast<uint64_t>((*rng)());};
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -150,23 +149,19 @@ double rexp(double rate = 1.0) {
 //' @export
 // [[Rcpp::export(rng = false)]]
 Rcpp::IntegerVector dqrrademacher(size_t n) {
-  size_t n_ints = ceil(n / 64.0);
-  std::vector<uint64_t> rand_ints(n_ints);
-  std::generate(rand_ints.begin(), rand_ints.end(), ruint64t_impl);
-
-  Rcpp::IntegerVector res(n);
-  int k = 0;
-  for (int i = 0; i < n_ints - 1; ++i) {
-    uint64_t curr = rand_ints[i];
+  Rcpp::IntegerVector res = Rcpp::no_init(n);
+  size_t k = 0;
+  for (size_t i = 0; i < ceil(n / 64.0) - 1; ++i) {
+    uint64_t curr = (*rng)();
     
-    for (int j = 63; j >= 0; j--) {
+    for (int j = 0; j <= 63; ++j) {
       res[k] = ((curr >> j) & 1) * 2 - 1;
       k++;
     }
   }
 
-  uint64_t curr = rand_ints[n_ints - 1];
-  for (int j = 63; k < n; ++k, --j) {
+  uint64_t curr = (*rng)();
+  for (int j = 0; k < n; ++k, ++j) {
     res[k] = ((curr >> j) & 1) * 2 - 1;    
   }
 

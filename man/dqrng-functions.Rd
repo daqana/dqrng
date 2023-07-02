@@ -43,7 +43,7 @@ dqset.seed(seed, stream = NULL)
 \item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 }
 \value{
-\code{dqrunif}, \code{dqrnorm}, \code{dqrexp}, and \code{dqrrademacher} return a numeric vector of length \code{n}.
+\code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}. \code{dqrrademacher} returns an integer vector of length \code{n}.
 }
 \description{
 The \code{dqrng} package provides several fast random number
