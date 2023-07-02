@@ -154,14 +154,13 @@ Rcpp::IntegerVector dqrrademacher(size_t n) {
   for (size_t i = 0; i < ceil(n / 64.0) - 1; ++i) {
     uint64_t bits = (*rng)();
     
-    for (int j = 0; j <= 63; ++j) {
+    for (int j = 0; j <= 63; ++j, ++k) {
       res[k] = ((bits >> j) & 1) * 2 - 1;
-      k++;
     }
   }
 
   uint64_t bits = (*rng)();
-  for (int j = 0; k < n; ++k, ++j) {
+  for (int j = 0; k < n; ++j, ++k) {
     res[k] = ((bits >> j) & 1) * 2 - 1;    
   }
 
