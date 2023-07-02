@@ -23,7 +23,7 @@
 #' @param sd  standard deviation of the normal distribution
 #' @param rate  rate of the exponential distribution
 #'
-#' @return \code{dqrunif}, \code{dqrnorm}, \code{dqrexp}, and \code{dqrrademacher} return a numeric vector of length \code{n}.
+#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}. \code{dqrrademacher} returns an integer vector of length \code{n}.
 #'
 #' @details Supported RNG kinds:
 #' \describe{
