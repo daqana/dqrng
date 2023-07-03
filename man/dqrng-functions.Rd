@@ -51,11 +51,11 @@ The \code{dqrng} package provides several fast random number
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the \code{base} functions
   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
-  \code{\link{rnorm}}, and \code{\link{rexp}}. 
+  \code{\link{rnorm}}, and \code{\link{rexp}}.
 
-  \code{dqrrademacher} uses a fast algorithm to generate random 
-  Rademacher variables (-1 and 1 with equal probability). To do so, it 
-  generates a random 64 bit integer and then uses each bit to generate 
+  \code{dqrrademacher} uses a fast algorithm to generate random
+  Rademacher variables (-1 and 1 with equal probability). To do so, it
+  generates a random 64 bit integer and then uses each bit to generate
   a 0/1 variable. This generates 64 integers per random number generation.
 }
 \details{
@@ -80,7 +80,7 @@ See \code{\link{generateSeedVectors}} for rapid generation of integer-vector
 seeds that provide 64 bits of entropy. These allow full exploration of
 the state space of the 64-bit RNGs provided in this package.
 
-If the provided \code{seed} is \code{NULL}, a seed is genenrated from R's RNG
+If the provided \code{seed} is \code{NULL}, a seed is generated from R's RNG
 without state alteration.
 }
 \examples{
