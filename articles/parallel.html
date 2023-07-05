@@ -81,13 +81,14 @@
 
       
 
-      </header><script src="parallel_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Parallel RNG usage</h1>
-                        <h4 data-toc-skip class="author">Ralf Stubner</h4>
+                        <h4 data-toc-skip class="author">Ralf
+Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-03-15</h4>
+            <h4 data-toc-skip class="date">2023-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -96,17 +97,37 @@
 
     
     
-<p>When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap. There are two main approaches to this problem:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>When you want to use random number generators (RNG) for parallel
+computations, you need to make sure that the sequences of random numbers
+used by the different processes do not overlap. There are two main
+approaches to this problem:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <ul>
-<li>Partition the complete sequence of random numbers produced for one seed into non-overlapping sequences and assign each process one sub-sequence.</li>
-<li>Re-parametrize the generator to produce independent sequences for the same seed.</li>
+<li>Partition the complete sequence of random numbers produced for one
+seed into non-overlapping sequences and assign each process one
+sub-sequence.</li>
+<li>Re-parametrize the generator to produce independent sequences for
+the same seed.</li>
 </ul>
-<p>The RNGs included in <code>dqrng</code> offer at least one of these methods for parallel RNG usage. When using the R or C++ interface independent streams can be accessed using the two argument <code>dqset.seed(seed, stream)</code> or <code>dqset_seed(seed, stream)</code> functions.</p>
+<p>The RNGs included in <code>dqrng</code> offer at least one of these
+methods for parallel RNG usage. When using the R or C++ interface
+independent streams can be accessed using the two argument
+<code>dqset.seed(seed, stream)</code> or
+<code>dqset_seed(seed, stream)</code> functions.</p>
 <div class="section level2">
 <h2 id="threefry-usage-from-r">Threefry: usage from R<a class="anchor" aria-label="anchor" href="#threefry-usage-from-r"></a>
 </h2>
-<p>The Threefry engine uses internally a counter with <span class="math inline">\(2^{256}\)</span> possible states, which can be split into different substreams. When used from R or C++ with the two argument <code>dqset.seed</code> or <code>dqset_seed</code> this counter space is split into <span class="math inline">\(2^{64}\)</span> streams with <span class="math inline">\(2^{192}\)</span> possible states each. This is equivalent to <span class="math inline">\(2^{64}\)</span> streams with a period of <span class="math inline">\(2^{194}\)</span> each.</p>
-<p>In the following example a matrix with random numbers is generated in parallel using the parallel package. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
+<p>The Threefry engine uses internally a counter with <span class="math inline">\(2^{256}\)</span> possible states, which can be
+split into different substreams. When used from R or C++ with the two
+argument <code>dqset.seed</code> or <code>dqset_seed</code> this counter
+space is split into <span class="math inline">\(2^{64}\)</span> streams
+with <span class="math inline">\(2^{192}\)</span> possible states each.
+This is equivalent to <span class="math inline">\(2^{64}\)</span>
+streams with a period of <span class="math inline">\(2^{194}\)</span>
+each.</p>
+<p>In the following example a matrix with random numbers is generated in
+parallel using the parallel package. The resulting correlation matrix
+should be close to the identity matrix if the different streams are
+independent:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
 <span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
@@ -133,97 +154,122 @@
 [8,]         ?     1
 attr(,"legend")
 [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1</code></pre>
-<p>As expected the correlation matrix for the different columns is almost equal to the identity matrix.</p>
+<p>As expected the correlation matrix for the different columns is
+almost equal to the identity matrix.</p>
 </div>
 <div class="section level2">
 <h2 id="xoroshiro-jump-ahead-with-openmp">Xo(ro)shiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoroshiro-jump-ahead-with-openmp"></a>
 </h2>
-<p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws appart. The Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as <span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws appart. You can go from one sub-sequence to the next using the <code>jump()</code> or <code>long_jump()</code> method and the convenience wrapper <code>jump(int n)</code> or <code>long_jump(int n)</code>, which advances to the <code>n</code>th sub-sequence. When used from R or C++ with the two argument <code>dqset.seed</code> and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws appart for Xoshiro256+ and Xoroshiro128+, respectively.</p>
-<p>As an example using C++ we draw and sum a large number of uniformly distributed numbers. This is done several times using OpenMP for parallelisation. Care has been taken to keep the global RNG <code>rng</code> usable outside of the parallel block.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">// [[Rcpp::plugins(openmp)]]</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; parallel_random_sum(<span class="dt">int</span> n, <span class="dt">int</span> m, <span class="dt">int</span> ncores) {</span>
-<span id="cb3-11"><a href="#cb3-11"></a>  dqrng::uniform_distribution dist(<span class="fl">0.0</span>, <span class="fl">1.0</span>); <span class="co">// Uniform distribution [0,1)</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>  dqrng::xoshiro256plus rng(<span class="dv">42</span>);              <span class="co">// properly seeded rng</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>  <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; res(m);</span>
-<span id="cb3-14"><a href="#cb3-14"></a>  <span class="co">// ok to use rng here</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>  </span>
-<span id="cb3-16"><a href="#cb3-16"></a>  <span class="pp">#pragma omp parallel num_threads(ncores)</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a>  {</span>
-<span id="cb3-18"><a href="#cb3-18"></a>    dqrng::xoshiro256plus lrng(rng);      <span class="co">// make thread local copy of rng </span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>    lrng.long_jump(omp_get_thread_num() + <span class="dv">1</span>);  <span class="co">// advance rng by 1 ... ncores jumps</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a></span>
-<span id="cb3-21"><a href="#cb3-21"></a>    <span class="pp">#pragma omp for</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; ++i) {</span>
-<span id="cb3-23"><a href="#cb3-23"></a>      <span class="dt">double</span> lres(<span class="dv">0</span>);</span>
-<span id="cb3-24"><a href="#cb3-24"></a>      <span class="cf">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; n; ++j) {</span>
-<span id="cb3-25"><a href="#cb3-25"></a>        lres += dist(lrng);</span>
-<span id="cb3-26"><a href="#cb3-26"></a>      }</span>
-<span id="cb3-27"><a href="#cb3-27"></a>      res[i] = lres / n;</span>
-<span id="cb3-28"><a href="#cb3-28"></a>    }</span>
-<span id="cb3-29"><a href="#cb3-29"></a>  }</span>
-<span id="cb3-30"><a href="#cb3-30"></a>  <span class="co">// ok to use rng here</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a>  <span class="cf">return</span> res;</span>
-<span id="cb3-32"><a href="#cb3-32"></a>}</span>
-<span id="cb3-33"><a href="#cb3-33"></a></span>
-<span id="cb3-34"><a href="#cb3-34"></a><span class="co">/*** R</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a><span class="co">parallel_random_sum(1e7, 8, 4)</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="co">*/</span></span></code></pre></div>
+<p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as
+<span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws appart. The
+Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as
+<span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws appart. You can go
+from one sub-sequence to the next using the <code>jump()</code> or
+<code>long_jump()</code> method and the convenience wrapper
+<code>jump(int n)</code> or <code>long_jump(int n)</code>, which
+advances to the <code>n</code>th sub-sequence. When used from R or C++
+with the two argument <code>dqset.seed</code> and
+<code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws appart for
+Xoshiro256+ and Xoroshiro128+, respectively.</p>
+<p>As an example using C++ we draw and sum a large number of uniformly
+distributed numbers. This is done several times using OpenMP for
+parallelisation. Care has been taken to keep the global RNG
+<code>rng</code> usable outside of the parallel block.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(openmp)]]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> parallel_random_sum<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> ncores<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>uniform_distribution dist<span class="op">(</span><span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span> <span class="co">// Uniform distribution [0,1)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>xoshiro256plus rng<span class="op">(</span><span class="dv">42</span><span class="op">);</span>              <span class="co">// properly seeded rng</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> res<span class="op">(</span>m<span class="op">);</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="pp">#pragma omp parallel num_threads(ncores)</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    dqrng<span class="op">::</span>xoshiro256plus lrng<span class="op">(</span>rng<span class="op">);</span>      <span class="co">// make thread local copy of rng </span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    lrng<span class="op">.</span>long_jump<span class="op">(</span>omp_get_thread_num<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">// advance rng by 1 ... ncores jumps</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">double</span> lres<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        lres <span class="op">+=</span> dist<span class="op">(</span>lrng<span class="op">);</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      res<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> lres <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">parallel_random_sum(1e7, 8, 4)</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Result:</p>
 <pre><code>[1] 0.5001591 0.5000428 0.4999855 0.4999706 0.5000061 0.4999447 0.4999188 0.5001192</code></pre>
 </div>
 <div class="section level2">
 <h2 id="pcg-multiple-streams-with-rcppparallel">PCG: multiple streams with RcppParallel<a class="anchor" aria-label="anchor" href="#pcg-multiple-streams-with-rcppparallel"></a>
 </h2>
-<p>From the PCG family we will look at pcg64, a 64-bit generator with a period of <span class="math inline">\(2^{128}\)</span>. It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>, which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a> or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two argument constructor</a> with <code>seed</code> and <code>stream</code>. When used from R or C++ with the two argument <code>dqset.seed</code> and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams out of the possible <span class="math inline">\(2^{127}\)</span> separate streams.</p>
-<p>In the following example a matrix with random numbers is generated in parallel using RcppParallel. The resulting correlation matrix should be close to the identity matrix if the different streams are independent:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">// [[Rcpp::depends(RcppParallel)]]</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="pp">#include </span><span class="im">&lt;RcppParallel.h&gt;</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="kw">struct</span> RandomFill : <span class="kw">public</span> RcppParallel::Worker {</span>
-<span id="cb5-10"><a href="#cb5-10"></a>  RcppParallel::RMatrix&lt;<span class="dt">double</span>&gt; output;</span>
-<span id="cb5-11"><a href="#cb5-11"></a>  <span class="dt">uint64_t</span> seed;</span>
-<span id="cb5-12"><a href="#cb5-12"></a>  dqrng::normal_distribution dist{<span class="fl">0.0</span>, <span class="fl">1.0</span>};</span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>  RandomFill(Rcpp::NumericMatrix output, <span class="at">const</span> <span class="dt">uint64_t</span> seed) : output(output), seed(seed) {};</span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>  <span class="dt">void</span> <span class="kw">operator</span>()(<span class="bu">std::</span>size_t begin, <span class="bu">std::</span>size_t end) {</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    pcg64 rng(seed, end);</span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="kw">auto</span> gen = <span class="bu">std::</span>bind(dist, <span class="bu">std::</span>ref(rng));</span>
-<span id="cb5-19"><a href="#cb5-19"></a>    <span class="cf">for</span> (<span class="bu">std::</span>size_t col = begin; col &lt; end; ++col) {</span>
-<span id="cb5-20"><a href="#cb5-20"></a>      RcppParallel::RMatrix&lt;<span class="dt">double</span>&gt;::Column column = output.column(col);</span>
-<span id="cb5-21"><a href="#cb5-21"></a>      <span class="bu">std::</span>generate(column.begin(), column.end(), <span class="bu">std::</span>ref(gen));</span>
-<span id="cb5-22"><a href="#cb5-22"></a>    }</span>
-<span id="cb5-23"><a href="#cb5-23"></a>  }</span>
-<span id="cb5-24"><a href="#cb5-24"></a>};</span>
-<span id="cb5-25"><a href="#cb5-25"></a></span>
-<span id="cb5-26"><a href="#cb5-26"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>Rcpp::NumericMatrix parallel_random_matrix(<span class="at">const</span> <span class="dt">int</span> n, <span class="at">const</span> <span class="dt">int</span> m, <span class="at">const</span> <span class="dt">int</span> ncores) {</span>
-<span id="cb5-28"><a href="#cb5-28"></a>  Rcpp::NumericMatrix res(n, m);</span>
-<span id="cb5-29"><a href="#cb5-29"></a>  RandomFill randomFill(res, <span class="dv">42</span>);</span>
-<span id="cb5-30"><a href="#cb5-30"></a>  RcppParallel::parallelFor(<span class="dv">0</span>, m, randomFill, m/ncores + <span class="dv">1</span>);</span>
-<span id="cb5-31"><a href="#cb5-31"></a>  <span class="cf">return</span> res;</span>
-<span id="cb5-32"><a href="#cb5-32"></a>}</span>
-<span id="cb5-33"><a href="#cb5-33"></a></span>
-<span id="cb5-34"><a href="#cb5-34"></a><span class="co">/*** R</span></span>
-<span id="cb5-35"><a href="#cb5-35"></a><span class="co">res &lt;- parallel_random_matrix(1e6, 8, 4)</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a><span class="co">head(res)</span></span>
-<span id="cb5-37"><a href="#cb5-37"></a><span class="co">symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),</span></span>
-<span id="cb5-38"><a href="#cb5-38"></a><span class="co">       symbols = c(" ", "?", "!", "1"),</span></span>
-<span id="cb5-39"><a href="#cb5-39"></a><span class="co">       abbr.colnames = FALSE, corr = TRUE)</span></span>
-<span id="cb5-40"><a href="#cb5-40"></a><span class="co">*/</span></span></code></pre></div>
+<p>From the PCG family we will look at pcg64, a 64-bit generator with a
+period of <span class="math inline">\(2^{128}\)</span>. It offers the
+function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>,
+which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be
+enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a>
+or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two
+argument constructor</a> with <code>seed</code> and <code>stream</code>.
+When used from R or C++ with the two argument <code>dqset.seed</code>
+and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams out of the possible <span class="math inline">\(2^{127}\)</span> separate streams.</p>
+<p>In the following example a matrix with random numbers is generated in
+parallel using RcppParallel. The resulting correlation matrix should be
+close to the identity matrix if the different streams are
+independent:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(RcppParallel)]]</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;RcppParallel.h&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RandomFill <span class="op">:</span> <span class="kw">public</span> RcppParallel<span class="op">::</span>Worker <span class="op">{</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  RcppParallel<span class="op">::</span>RMatrix<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> output<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint64_t</span> seed<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">{</span><span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">};</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  RandomFill<span class="op">(</span>Rcpp<span class="op">::</span>NumericMatrix output<span class="op">,</span> <span class="at">const</span> <span class="dt">uint64_t</span> seed<span class="op">)</span> <span class="op">:</span> output<span class="op">(</span>output<span class="op">),</span> seed<span class="op">(</span>seed<span class="op">)</span> <span class="op">{};</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">void</span> <span class="kw">operator</span><span class="op">()(</span><span class="bu">std::</span>size_t<span class="op"> </span>begin<span class="op">,</span> <span class="bu">std::</span>size_t<span class="op"> </span>end<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    pcg64 rng<span class="op">(</span>seed<span class="op">,</span> end<span class="op">);</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> gen <span class="op">=</span> <span class="bu">std::</span>bind<span class="op">(</span>dist<span class="op">,</span> <span class="bu">std::</span>ref<span class="op">(</span>rng<span class="op">));</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>size_t<span class="op"> </span>col <span class="op">=</span> begin<span class="op">;</span> col <span class="op">&lt;</span> end<span class="op">;</span> <span class="op">++</span>col<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      RcppParallel<span class="op">::</span>RMatrix<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;::</span>Column column <span class="op">=</span> output<span class="op">.</span>column<span class="op">(</span>col<span class="op">);</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>generate<span class="op">(</span>column<span class="op">.</span>begin<span class="op">(),</span> column<span class="op">.</span>end<span class="op">(),</span> <span class="bu">std::</span>ref<span class="op">(</span>gen<span class="op">));</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericMatrix parallel_random_matrix<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">int</span> m<span class="op">,</span> <span class="at">const</span> <span class="dt">int</span> ncores<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericMatrix res<span class="op">(</span>n<span class="op">,</span> m<span class="op">);</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  RandomFill randomFill<span class="op">(</span>res<span class="op">,</span> <span class="dv">42</span><span class="op">);</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  RcppParallel<span class="op">::</span>parallelFor<span class="op">(</span><span class="dv">0</span><span class="op">,</span> m<span class="op">,</span> randomFill<span class="op">,</span> m<span class="op">/</span>ncores <span class="op">+</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">res &lt;- parallel_random_matrix(1e6, 8, 4)</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">head(res)</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">       symbols = c(" ", "?", "!", "1"),</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">       abbr.colnames = FALSE, corr = TRUE)</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Head of the random matrix:</p>
 <pre><code>           [,1]       [,2]        [,3]       [,4]       [,5]       [,6]       [,7]       [,8]
 [1,]  0.7114429  1.2642926 -0.47149983  0.4277034 -0.3709571  0.4336255  0.8185977  0.3505209
@@ -243,9 +289,10 @@ attr(,"legend")
 [8,]   ?     ?     1
 attr(,"legend")
 [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1</code></pre>
-<p>So as expected the correlation matrix is almost equal to the identity matrix.</p>
+<p>So as expected the correlation matrix is almost equal to the identity
+matrix.</p>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
 <li id="fn1"><p>See for example <a href="https://www.pcg-random.org/posts/critiquing-pcg-streams.html" class="external-link uri">https://www.pcg-random.org/posts/critiquing-pcg-streams.html</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>

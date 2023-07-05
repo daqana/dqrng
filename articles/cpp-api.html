@@ -81,13 +81,14 @@
 
       
 
-      </header><script src="cpp-api_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>C++ API</h1>
-                        <h4 data-toc-skip class="author">Ralf Stubner</h4>
+                        <h4 data-toc-skip class="author">Ralf
+Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-03-15</h4>
+            <h4 data-toc-skip class="date">2023-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/cpp-api.Rmd" class="external-link"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -96,112 +97,136 @@
 
     
     
-<p>The RNGs and distributions functions can also be used from C++ at various levels of abstraction. Technically there are three ways to make use of dqrng at the C++ level:</p>
+<p>The RNGs and distributions functions can also be used from C++ at
+various levels of abstraction. Technically there are three ways to make
+use of dqrng at the C++ level:</p>
 <ul>
-<li>use <code>// [[Rcpp::depends(dqrng)]]</code> together with <code><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">Rcpp::sourceCpp()</a></code>
+<li>use <code>// [[Rcpp::depends(dqrng)]]</code> together with
+<code><a href="https://rdrr.io/pkg/Rcpp/man/sourceCpp.html" class="external-link">Rcpp::sourceCpp()</a></code>
 </li>
 <li>use <code>Rcpp::cppFunction(depends = "dqrng", ...)</code>
 </li>
 <li>use an R package with <code>LinkingTo: dqrng</code>
 </li>
 </ul>
-<p>The following functions are also available if you include <code>dqrng.h</code>.</p>
+<p>The following functions are also available if you include
+<code>dqrng.h</code>.</p>
 <div class="section level2">
 <h2 id="setting-seed-and-rng-type">Setting seed and RNG type<a class="anchor" aria-label="anchor" href="#setting-seed-and-rng-type"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">void</span> dqrng::dqset_seed(Rcpp::IntegerVector seed, </span>
-<span id="cb1-2"><a href="#cb1-2"></a>                       Rcpp::Nullable&lt;Rcpp::IntegerVector&gt; stream = R_NilValue)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="dt">void</span> dqrng::dqRNGkind(<span class="bu">std::</span>string kind, <span class="at">const</span> <span class="bu">std::</span>string&amp; normal_kind = <span class="st">"ignored"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> dqrng<span class="op">::</span>dqset_seed<span class="op">(</span>Rcpp<span class="op">::</span>IntegerVector seed<span class="op">,</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                       Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>IntegerVector<span class="op">&gt;</span> stream <span class="op">=</span> R_NilValue<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> dqrng<span class="op">::</span>dqRNGkind<span class="op">(</span><span class="bu">std::</span>string<span class="op"> </span>kind<span class="op">,</span> <span class="at">const</span> <span class="bu">std::</span>string<span class="op">&amp;</span> normal_kind <span class="op">=</span> <span class="st">"ignored"</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>seed</code></dt>
-<dd>seed for the RNG; length 1 or 2
+<dd>
+seed for the RNG; length 1 or 2
 </dd>
 <dt><code>stream</code></dt>
-<dd>RNG stream to use; length 1 or 2
+<dd>
+RNG stream to use; length 1 or 2
 </dd>
 <dt><code>kind</code></dt>
-<dd>string specifying the RNG, One of “pcg64”, “Xoroshiro128+”, “Xoshiro256+” or “Threefry”
+<dd>
+string specifying the RNG, One of “pcg64”, “Xoroshiro128+”,
+“Xoshiro256+” or “Threefry”
 </dd>
 <dt><code>normal-kind</code></dt>
-<dd>ignored; included for compatibility with <code>RNGkind</code>
+<dd>
+ignored; included for compatibility with <code>RNGkind</code>
 </dd>
 </dl>
 </div>
 <div class="section level2">
 <h2 id="random-variates-with-uniform-distribution">Random variates with uniform distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-uniform-distribution"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1"></a>Rcpp::NumericVector dqrng::dqrunif(<span class="dt">size_t</span> n, <span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">double</span> dqrng::runif(<span class="dt">double</span> min = <span class="fl">0.0</span>, <span class="dt">double</span> max = <span class="fl">1.0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrunif<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> min <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>runif<span class="op">(</span><span class="dt">double</span> min <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
-<dd>number of observations
+<dd>
+number of observations
 </dd>
 <dt><code>min</code></dt>
-<dd>lower limit of the uniform distribution
+<dd>
+lower limit of the uniform distribution
 </dd>
 <dt><code>max</code></dt>
-<dd>upper limit of the uniform distribution
+<dd>
+upper limit of the uniform distribution
 </dd>
 </dl>
 </div>
 <div class="section level2">
 <h2 id="random-variates-with-normal-distribution">Random variates with normal distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-normal-distribution"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1"></a>Rcpp::NumericVector dqrng::dqrnorm(<span class="dt">size_t</span> n, <span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">double</span> dqrng::rnorm(<span class="dt">double</span> mean = <span class="fl">0.0</span>, <span class="dt">double</span> sd = <span class="fl">1.0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrnorm<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>rnorm<span class="op">(</span><span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
-<dd>number of observations
+<dd>
+number of observations
 </dd>
 <dt><code>mean</code></dt>
-<dd>mean value of the normal distribution
+<dd>
+mean value of the normal distribution
 </dd>
 <dt><code>sd</code></dt>
-<dd>standard deviation of the normal distribution
+<dd>
+standard deviation of the normal distribution
 </dd>
 </dl>
 </div>
 <div class="section level2">
 <h2 id="random-variates-with-exponential-distribution">Random variates with exponential distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-exponential-distribution"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a>Rcpp::NumericVector dqrng::dqrexp(<span class="dt">size_t</span> n, <span class="dt">double</span> rate = <span class="fl">1.0</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">double</span> dqrng::rexp(<span class="dt">double</span> rate = <span class="fl">1.0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrexp<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> rate <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>rexp<span class="op">(</span><span class="dt">double</span> rate <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
-<dd>number of observations
+<dd>
+number of observations
 </dd>
 <dt><code>rate</code></dt>
-<dd>rate of the exponential distribution
+<dd>
+rate of the exponential distribution
 </dd>
 </dl>
 </div>
 <div class="section level2">
 <h2 id="random-sampling">Random sampling<a class="anchor" aria-label="anchor" href="#random-sampling"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a>Rcpp::IntegerVector dqrng::dqsample_int(<span class="dt">int</span> m, <span class="dt">int</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</span>
-<span id="cb5-2"><a href="#cb5-2"></a>                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</span>
-<span id="cb5-3"><a href="#cb5-3"></a>                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>Rcpp::NumericVector dqrng::dqsample_num(<span class="dt">double</span> m, <span class="dt">double</span> n, <span class="dt">bool</span> replace = <span class="kw">false</span>,</span>
-<span id="cb5-5"><a href="#cb5-5"></a>                                        Rcpp::Nullable&lt;Rcpp::NumericVector&gt; probs = R_NilValue,</span>
-<span id="cb5-6"><a href="#cb5-6"></a>                                        <span class="dt">int</span> offset = <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqsample_int<span class="op">(</span><span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqsample_num<span class="op">(</span><span class="dt">double</span> m<span class="op">,</span> <span class="dt">double</span> n<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>m</code></dt>
-<dd>a positive number, the number of items to choose from
+<dd>
+a positive number, the number of items to choose from
 </dd>
 <dt><code>n</code></dt>
-<dd>a non-negative number giving the number of items to choose
+<dd>
+a non-negative number giving the number of items to choose
 </dd>
 <dt><code>replace</code></dt>
-<dd>should sampling be with replacement?
+<dd>
+should sampling be with replacement?
 </dd>
 <dt><code>prob</code></dt>
-<dd>a vector of probability weights for obtaining the elements of the vector being sampled (currently ignored)
+<dd>
+a vector of probability weights for obtaining the elements of the vector
+being sampled (currently ignored)
 </dd>
 <dt><code>offset</code></dt>
-<dd>sample from range <code>[offset, offset + m)</code>
+<dd>
+sample from range <code>[offset, offset + m)</code>
 </dd>
 </dl>
-<p>The two functions are used for “normal” and “long-vector” support in R.</p>
+<p>The two functions are used for “normal” and “long-vector” support in
+R.</p>
 </div>
   </div>
 

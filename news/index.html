@@ -67,10 +67,12 @@
 <h2 class="page-header" data-toc-text="0.3.0" id="dqrng-030">dqrng 0.3.0<small>2021-05-01</small><a class="anchor" aria-label="anchor" href="#dqrng-030"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-3-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
-<ul><li>The initial state of <code>dqrng</code>’s RNG is based on R’s RNG, which used to advance R’s RNG state. The implementation has been changed to preserve R’s RNG state, which is less surprising but can change the outcome of current scripts. (<a href="https://github.com/daqana/dqrng/pull/34" class="external-link">#44</a> fixing <a href="https://github.com/daqana/dqrng/issues/33" class="external-link">#43</a>)</li></ul></div>
+<ul><li>The initial state of <code>dqrng</code>’s RNG is based on R’s RNG, which used to advance R’s RNG state. The implementation has been changed to preserve R’s RNG state, which is less surprising but can change the outcome of current scripts. (<a href="https://github.com/daqana/dqrng/pull/34" class="external-link">#44</a> fixing <a href="https://github.com/daqana/dqrng/issues/33" class="external-link">#43</a>)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="other-changes-0-3-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-3-0"></a></h3>
-<ul><li>For uniform random numbers take short-cut for min == max and throw error for min &gt; max (<a href="https://github.com/daqana/dqrng/pull/34" class="external-link">#34</a> fixing <a href="https://github.com/daqana/dqrng/issues/33" class="external-link">#33</a>)</li></ul></div>
+<ul><li>For uniform random numbers take short-cut for min == max and throw error for min &gt; max (<a href="https://github.com/daqana/dqrng/pull/34" class="external-link">#34</a> fixing <a href="https://github.com/daqana/dqrng/issues/33" class="external-link">#33</a>)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="dqrng-021">dqrng 0.2.1<small>2019-05-17</small><a class="anchor" aria-label="anchor" href="#dqrng-021"></a></h2>
@@ -96,7 +98,8 @@
 <h2 class="page-header" data-toc-text="0.1.0" id="dqrng-010">dqrng 0.1.0<small>2019-03-04</small><a class="anchor" aria-label="anchor" href="#dqrng-010"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-1-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-1-0"></a></h3>
-<ul><li>An integer vector instead of a single <code>int</code> is used for seeding (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/10" class="external-link">#10</a>)<ul><li>Single integer seeds lead to a different RNG state than before.</li>
+<ul><li>An integer vector instead of a single <code>int</code> is used for seeding (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/10" class="external-link">#10</a>)
+<ul><li>Single integer seeds lead to a different RNG state than before.</li>
 <li>
 <code>dqrng::dqset_seed()</code> expects a <code>Rcpp::IntegerVector</code> instead of an <code>int</code>
 </li>
@@ -125,7 +128,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.3" id="dqrng-003">dqrng 0.0.3<small>2018-05-14</small><a class="anchor" aria-label="anchor" href="#dqrng-003"></a></h2>
-<ul><li>PCG has been patched to compile on Solaris.</li></ul></div>
+<ul><li>PCG has been patched to compile on Solaris.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.2" id="dqrng-002">dqrng 0.0.2<small>2018-05-11</small><a class="anchor" aria-label="anchor" href="#dqrng-002"></a></h2>
 <ul><li>
@@ -134,7 +138,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.1" id="dqrng-001">dqrng 0.0.1<a class="anchor" aria-label="anchor" href="#dqrng-001"></a></h2>
-<ul><li>First public release.</li></ul></div>
+<ul><li>First public release.</li>
+</ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

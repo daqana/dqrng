@@ -4,7 +4,11 @@
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the base functions
   set.seed, RNGkind, runif,
-  rnorm, and rexp."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+  rnorm, and rexp.
+dqrrademacher uses a fast algorithm to generate random
+  Rademacher variables (-1 and 1 with equal probability). To do so, it
+  generates a random 64 bit integer and then uses each bit to generate
+  a 0/1 variable. This generates 64 integers per random number generation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -76,6 +80,10 @@
   functions are modeled after the <code>base</code> functions
   <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code>, <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></code>, <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></code>,
   <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></code>, and <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></code>.</p>
+<p><code>dqrrademacher</code> uses a fast algorithm to generate random
+  Rademacher variables (-1 and 1 with equal probability). To do so, it
+  generates a random 64 bit integer and then uses each bit to generate
+  a 0/1 variable. This generates 64 integers per random number generation.</p>
     </div>
 
     <div id="ref-usage">
@@ -86,6 +94,8 @@
 <span><span class="fu">dqrnorm</span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dqrexp</span><span class="op">(</span><span class="va">n</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dqrrademacher</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dqset.seed</span><span class="op">(</span><span class="va">seed</span>, stream <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -136,7 +146,7 @@
     <h2>Value</h2>
     
 
-<p><code>dqrunif</code>, <code>dqrnorm</code>, and <code>dqrexp</code> return a numeric vector of length <code>n</code>.</p>
+<p><code>dqrunif</code>, <code>dqrnorm</code>, and <code>dqrexp</code> return a numeric vector of length <code>n</code>. <code>dqrrademacher</code> returns an integer vector of length <code>n</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -161,7 +171,7 @@ provided by <code>boost.random</code>.</p>
 <p>See <code><a href="generateSeedVectors.html">generateSeedVectors</a></code> for rapid generation of integer-vector
 seeds that provide 64 bits of entropy. These allow full exploration of
 the state space of the 64-bit RNGs provided in this package.</p>
-<p>If the provided <code>seed</code> is <code>NULL</code>, a seed is genenrated from R's RNG
+<p>If the provided <code>seed</code> is <code>NULL</code>, a seed is generated from R's RNG
 without state alteration.</p>
     </div>
     <div id="see-also">
