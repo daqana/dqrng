@@ -2,6 +2,8 @@
 
 export(dqRNGkind)
 export(dqrexp)
+export(dqrmvnorm)
+export(dqrmvt)
 export(dqrnorm)
 export(dqrrademacher)
 export(dqrunif)

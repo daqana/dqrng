@@ -35,7 +35,8 @@ RoxygenNote: 7.2.3
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    mvtnorm (>= 1.2-3)
 VignetteBuilder: knitr
 URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues

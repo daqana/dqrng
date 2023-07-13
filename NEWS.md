@@ -4,6 +4,8 @@
 * Implement weighted sampling with and without replacement.
   Move sampling methods to separate header file, allowing for parallel usage.
   ([#47](https://github.com/daqana/dqrng/pull/47) fixing [#18](https://github.com/daqana/dqrng/issues/18) and [#26](https://github.com/daqana/dqrng/issues/26))
+* New methods `dqrmvnorm` and `dqrmvt` sampling from multivariate normal and t distribution.
+  This uses the methods implemented in the `mvtnorm` package and uses `dqrnorm`.
 
 # dqrng 0.3.0
 
