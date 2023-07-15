@@ -3,6 +3,7 @@
 export(dqRNGkind)
 export(dqrexp)
 export(dqrnorm)
+export(dqrrademacher)
 export(dqrunif)
 export(dqsample)
 export(dqsample.int)

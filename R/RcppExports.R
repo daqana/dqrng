@@ -41,6 +41,12 @@ rexp <- function(rate = 1.0) {
     .Call(`_dqrng_rexp`, rate)
 }
 
+#' @rdname dqrng-functions
+#' @export
+dqrrademacher <- function(n) {
+    .Call(`_dqrng_dqrrademacher`, n)
+}
+
 dqsample_int <- function(m, n, replace = FALSE, probs = NULL, offset = 0L) {
     .Call(`_dqrng_dqsample_int`, m, n, replace, probs, offset)
 }

@@ -1,8 +1,8 @@
-# dqrng 0.3.0.1
+# dgrng (unreleased)
 
+* new method `dqrrademacher` for drawing Rademacher weights (Kyle Butts in [#50](https://github.com/daqana/dqrng/pull/50 fixing [#49](https://github.com/daqana/dqrng/pull/49))
 * Implement weighted sampling with and without replacement.
   ([#47](https://github.com/daqana/dqrng/pull/47) fixing [#18](https://github.com/daqana/dqrng/issues/18))
-
 
 # dqrng 0.3.0
 

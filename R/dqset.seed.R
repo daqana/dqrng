@@ -7,6 +7,11 @@
 #'   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'   \code{\link{rnorm}}, and \code{\link{rexp}}.
 #'
+#'   \code{dqrrademacher} uses a fast algorithm to generate random
+#'   Rademacher variables (-1 and 1 with equal probability). To do so, it
+#'   generates a random 64 bit integer and then uses each bit to generate
+#'   a 0/1 variable. This generates 64 integers per random number generation.
+#'
 #' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed. Maybe \code{NULL}, see details.
 #' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param kind  string specifying the RNG (see details)
@@ -18,7 +23,7 @@
 #' @param sd  standard deviation of the normal distribution
 #' @param rate  rate of the exponential distribution
 #'
-#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}.
+#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}. \code{dqrrademacher} returns an integer vector of length \code{n}.
 #'
 #' @details Supported RNG kinds:
 #' \describe{
@@ -41,7 +46,7 @@
 #' seeds that provide 64 bits of entropy. These allow full exploration of
 #' the state space of the 64-bit RNGs provided in this package.
 #'
-#' If the provided \code{seed} is \code{NULL}, a seed is genenrated from R's RNG
+#' If the provided \code{seed} is \code{NULL}, a seed is generated from R's RNG
 #' without state alteration.
 #'
 #' @seealso \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},

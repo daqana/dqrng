@@ -146,6 +146,28 @@ double rexp(double rate = 1.0) {
   return rexp_impl();
 }
 
+//' @rdname dqrng-functions
+//' @export
+// [[Rcpp::export(rng = false)]]
+Rcpp::IntegerVector dqrrademacher(size_t n) {
+  Rcpp::IntegerVector res = Rcpp::no_init(n);
+  size_t k = 0;
+  for (size_t i = 0; i < ceil(n / 64.0) - 1; ++i) {
+    uint64_t bits = (*rng)();
+
+    for (int j = 0; j <= 63; ++j, ++k) {
+      res[k] = ((bits >> j) & 1) * 2 - 1;
+    }
+  }
+
+  uint64_t bits = (*rng)();
+  for (int j = 0; k < n; ++j, ++k) {
+    res[k] = ((bits >> j) & 1) * 2 - 1;
+  }
+
+  return res;
+}
+
 // [[Rcpp::export(rng = false)]]
 Rcpp::IntegerVector dqsample_int(int m,
                                  int n,
