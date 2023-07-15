@@ -1,0 +1,211 @@
+---
+title: "Fast sampling methods"
+author: "Ralf Stubner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fast sampling methods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+evaluate <- FALSE
+require(bench)
+```
+
+Random sampling from a fixed set is used in many areas of statistical computing.
+The performance of this operation can be critical, especially when the sampled set is large.
+The fast RNGs provided in this package make very fast sampling possible when combined with suitably fast algorithms.  
+
+## Benchmarks
+
+By combining fast RNGs with a fast methods for creating [integers in a range](http://www.pcg-random.org/posts/bounded-rands.html) one gets good performance for sampling with replacement:
+
+```{r replacement, eval=evaluate}
+library(dqrng)
+m <- 1e6
+n <- 1e4
+bm <- bench::mark(sample.int(m, n, replace = TRUE),
+                  sample.int(1e4*m, n, replace = TRUE),
+                  dqsample.int(m, n, replace = TRUE),
+                  dqsample.int(1e4*m, n, replace = TRUE),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/replacement.RDS")
+} else {
+  bm <- readRDS("data/replacement.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+
+
+
+Note that sampling from `10^10` integers triggers "[long-vector support](https://stat.ethz.ch/R-manual/R-devel/library/base/html/LongVectors.html)" in R.
+
+When sampling _without_ replacement one has to consider an appropriate algorithm for making sure that no entry is repeated. When more than 50% of the population are sampled, dqrng shuffles an appropriate part of the full list and returns that. The algorithm used in R is similar but dqrng has the edge with respect to performance:
+
+```{r no-replacement-high, eval=evaluate}
+library(dqrng)
+m <- 1e6
+n <- 6e5
+bm <- bench::mark(sample.int(m, n),
+                  dqsample.int(m, n),
+                  check = FALSE, min_iterations = 50)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/no-replacement-high.RDS")
+} else {
+  bm <- readRDS("data/no-replacement-high.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+For lower sampling ratios a set based rejection sampling algorithm is used by dqrng. In principle, R can make use of a similar algorithm based on a hashset. However, it is only used for larger input vectors even though it is faster than the default method. The algorithm in dqrng, which is based on a [bitset](https://lemire.me/blog/2012/11/13/fast-sets-of-integers/), is even faster, though:
+
+```{r no-replacement-medium, eval=evaluate}
+library(dqrng)
+m <- 1e6
+n <- 1e4
+bm <- bench::mark(sample.int(m, n),
+                  sample.int(m, n, useHash = TRUE),
+                  dqsample.int(m, n),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/no-replacement-medium.RDS")
+} else {
+  bm <- readRDS("data/no-replacement-medium.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+As one decreases the sampling rate even more, dqrng switches to a hashset based rejection sampling. Both hashset based methods have similar performance and are much faster than R's default method.
+
+```{r no-replacement-low, eval=evaluate}
+library(dqrng)
+m <- 1e6
+n <- 1e2
+bm <- bench::mark(sample.int(m, n),
+                  sample.int(m, n, useHash = TRUE),
+                  dqsample.int(m, n),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/no-replacement-low.RDS")
+} else {
+  bm <- readRDS("data/no-replacement-low.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+For larger sampling ranges R uses the hashset by default, though `dqsample.int`  is still faster:
+
+```{r no-replacement-long, eval=evaluate}
+library(dqrng)
+m <- 1e10
+n <- 1e5
+bm <- bench::mark(sample.int(m, n),
+                  dqsample.int(m, n),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/no-replacement-long.RDS")
+} else {
+  bm <- readRDS("data/no-replacement-long.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+The same algorithms but combined with a different selection method are used to obtain weighted sampling, both with replacement:
+
+```{r weighted-replacement, eval=evaluate}
+m <- 1e6
+n <- 1e4
+prob <- dqrunif(m)
+bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
+                  dqsample.int(m, n, replace = TRUE, prob = prob),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/weighted-replacement.RDS")
+} else {
+  bm <- readRDS("data/weighted-replacement.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+And without replacement:
+
+```{r weighted-no-replacement, eval=evaluate}
+bm <- bench::mark(sample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/weighted-no-replacement.RDS")
+} else {
+  bm <- readRDS("data/weighted-no-replacement.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+Especially for weighted sampling without replacement the performance advantage compared with R's default methods is particularly large. 
+
+
+## Technicalities
+
+The following methods are used for sampling without replacement. The algorithms are presented in R-like pseudo code, even though the real implementation is in C++. For sampling rates above 50%, a partial [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) is used:
+
+```{r, eval=FALSE}
+no_replace_shuffle <- function(m, n) {
+  tmp <- seq_len(m)
+  for (i in seq_len(n))
+    swap(tmp[i], tmp[i + random_int(m-i)])
+  tmp[1:n]
+}
+```
+
+where `random_int(m-i)`  returns a random integer in `[0, m-i]`. Since the full population is kept in memory, this method is only suitable for high selection rates. One could expect that [reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling) should work well for lower selection rates. However, in my tests set based algorithms were faster:
+
+```{r, eval=FALSE}
+no_replace_set <- function(m, n) {
+  result <- vector(mode = "...", length = n) # integer or numeric
+  elems <- new(set, m, n) # set object for storing n objects out of m possible values
+  for (i in seq_len(n))
+    while (TRUE) {
+      v = random_int(m)
+      if (elems.insert(v)) {
+        result[i] = v
+        break
+      }
+    }
+  result
+}
+```
+
+Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `m` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `n`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `n` and not with `m`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
+
+So far only un-weighted sampling was considered.
+However, the same algorithms can be used for weighted sampling, when `random_int(m)`, which uniformly selects one of `m` elements, is replaced with a function that selects one of `m` elements based on their weights.
+One such algorithm is [stochastic acceptance](https://doi.org/10.1016/j.physa.2011.12.004), which is particularly well suited in combination with fast RNGs:
+
+> 1. Select randomly one of the individuals (say, $i$). The selection is done with uniform probability $1/N$, which does not depend on the individual’s fitness $w_i$.
+> 2. With probability $w_i/w_\max$, where $w_\max = \max\{w_i\}_{i=1}^N$ is the maximal fitness in the population, the selection is accepted. Otherwise, the procedure is repeated from step 1 (i.e., in the case of rejection, another selection attempt is made).
+
+For sampling with replacement the above algorithm can be directly applied.
+For sampling without replacement, one might consider updating $w_\max$ whenever the element with the maximum weight has been selected.
+However, this is not necessary since one can stick to the original $w_\max$ at the cost of a slightly reduced acceptance rate.
