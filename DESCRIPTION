@@ -20,7 +20,7 @@ Description: Several fast random number generators are provided as C++
   proposed by Marsaglia and Tsang (2000, <doi:10.18637/jss.v005.i08>).
   The fast sampling methods support weighted and unweighted sampling both with 
   and without replacement. For weighted sampling  a stochastic acceptance method
-  suggested by Lipowski and Lipowska (2012, <doi:10.1016/j.physa.2011.12.004.>)
+  suggested by Lipowski and Lipowska (2012, <doi:10.1016/j.physa.2011.12.004>)
   is used. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
   Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds

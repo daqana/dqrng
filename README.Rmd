@@ -106,7 +106,7 @@ And without replacement:
 
 ```{r sampling4}
 bm <- bench::mark(sample.int(m, n, prob = prob),
-                dqsample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
                   check = FALSE)
 bm[, 1:4]
 ```

@@ -65,7 +65,7 @@ inline Rcpp::Vector<RTYPE> no_replacement_set(std::function<INT(INT)> selector, 
   return result;
 }
 
-template<int RTYPE, typename INT>
+template<typename INT>
 inline INT roulette_wheel_selection(const dqrng::rng64_t &rng, INT m, Rcpp::NumericVector probs, double max_probs) {
   while (true) {
     INT index = (*rng)(m);
@@ -85,7 +85,7 @@ inline Rcpp::Vector<RTYPE> sample(const dqrng::rng64_t &rng,
   if (probs.isNotNull()) {
     Rcpp::NumericVector tmp = probs.as();
     double max_probs = Rcpp::max(tmp);
-    selector = [rng, tmp, max_probs] (INT m) {return roulette_wheel_selection<RTYPE, INT>(rng, m, tmp, max_probs);};
+    selector = [rng, tmp, max_probs] (INT m) {return roulette_wheel_selection<INT>(rng, m, tmp, max_probs);};
   }
   if (replace || n <= 1) {
     return dqrng::sample::replacement<RTYPE, INT>(selector, m, n, offset);
