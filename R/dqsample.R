@@ -4,7 +4,7 @@
 ##' @param size	 a non-negative integer giving the number of items to choose.
 ##' @param replace	should sampling be with replacement?
 ##' @param prob	 a vector of probability weights for obtaining the elements of the vector being sampled.
-##' @seealso \code{\link{sample}} and \code{\link{sample.int}}
+##' @seealso \code{vignette("sample", package = "dqrng")}, \code{\link{sample}} and \code{\link{sample.int}}
 ##' @export
 dqsample <- function(x, size, replace = FALSE, prob = NULL) {
     if(length(x) == 1L && is.numeric(x) && is.finite(x) && x >= 1) {
@@ -19,10 +19,7 @@ dqsample <- function(x, size, replace = FALSE, prob = NULL) {
 ##' @rdname dqsample
 ##' @export
 dqsample.int  <- function(n, size = n, replace = FALSE, prob = NULL) {
-    if (!is.null(prob)) {
-        warning("Using 'prob' is not supported yet. Using default 'sample.int'.")
-        sample.int(n, size, replace, prob)
-    } else if (n <= .Machine$integer.max)
+    if (n <= .Machine$integer.max)
         dqsample_int(n, size, replace, prob, 1L)
     else
         dqsample_num(n, size, replace, prob, 1L)

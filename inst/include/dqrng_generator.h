@@ -1,4 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
+// Copyright 2023 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -73,6 +74,7 @@ private:
 public:
   random_64bit_wrapper() : gen() {};
   random_64bit_wrapper(result_type seed) : gen(seed) {};
+  random_64bit_wrapper(result_type seed, result_type stream) : gen(seed, stream) {};
   virtual result_type operator() () {return this->bit64();}
   virtual void seed(result_type seed) {cache = false; gen.seed(seed);}
   virtual void seed(result_type seed, result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
@@ -188,6 +190,18 @@ template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed) {
   return std::make_shared<RNG>(seed);
+}
+
+template<typename RNG = default_64bit_generator>
+typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
+generator (uint64_t seed, uint64_t stream) {
+  return std::make_shared<random_64bit_wrapper<RNG>>(seed, stream);
+}
+
+template<typename RNG = default_64bit_generator>
+typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
+generator (uint64_t seed, uint64_t stream) {
+  return std::make_shared<RNG>(seed, stream);
 }
 } // namespace dqrng
 

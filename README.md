@@ -29,12 +29,13 @@ install.packages("dqrng")
 ```
 
 Intermediate releases can also be obtained via
-[drat](https://cran.r-project.org/package=drat):
+[r-universe](https://rstub.r-universe.dev/dqrng):
 
 ``` r
-if (!requireNamespace("drat", quietly = TRUE)) install.packages("drat")
-drat::addRepo("daqana")
-install.packages("dqrng")
+options(repos = c(
+  rstub = 'https://rstub.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+install.packages('dqrng')
 ```
 
 ## Example
@@ -57,11 +58,11 @@ They are quite a bit faster, though:
 N <- 1e4
 bm <- bench::mark(rnorm(N), dqrnorm(N), check = FALSE)
 bm[, 1:4]
-#> # A tibble: 2 x 4
+#> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)    598.9µs    670µs     1414.
-#> 2 dqrnorm(N)   85.5µs     89µs     9663.
+#> 1 rnorm(N)      612µs  685.2µs     1397.
+#> 2 dqrnorm(N)     86µs   88.6µs    10388.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -75,13 +76,13 @@ bm <- bench::mark(sample.int(m, n, replace = TRUE),
                   dqsample.int(1e3*m, n, replace = TRUE),
                   check = FALSE)
 bm[, 1:4]
-#> # A tibble: 4 x 4
+#> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            6.94ms   7.52ms      131.
-#> 2 sample.int(1000 * m, n, replace = TRUE)      8.8ms   9.64ms      101.
-#> 3 dqsample.int(m, n, replace = TRUE)        304.75µs 444.96µs     2207.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 397.96µs 675.24µs     1502.
+#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.63ms     114. 
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   9.55ms      96.1
+#> 3 dqsample.int(m, n, replace = TRUE)        482.21µs 810.29µs    1254. 
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 492.79µs 822.86µs    1275.
 ```
 
 And without replacement:
@@ -93,20 +94,55 @@ bm <- bench::mark(sample.int(m, n),
                   dqsample.int(m, n),
                   dqsample.int(1e3*m, n),
                   check = FALSE)
-#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is
+#> disabled.
 bm[, 1:4]
-#> # A tibble: 5 x 4
+#> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  38.59ms  51.73ms      19.6
-#> 2 sample.int(1000 * m, n)           11.98ms  15.34ms      63.9
-#> 3 sample.int(m, n, useHash = TRUE)   9.94ms  12.73ms      71.5
-#> 4 dqsample.int(m, n)               942.04µs   1.05ms     755. 
-#> 5 dqsample.int(1000 * m, n)          1.86ms   2.44ms     315.
+#> 1 sample.int(m, n)                   40.1ms  42.54ms      23.5
+#> 2 sample.int(1000 * m, n)           12.19ms  14.38ms      67.8
+#> 3 sample.int(m, n, useHash = TRUE)   9.43ms  11.17ms      81.9
+#> 4 dqsample.int(m, n)                 1.22ms   1.35ms     638. 
+#> 5 dqsample.int(1000 * m, n)          1.98ms   2.51ms     358.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
 in R.
+
+It is also possible to use weighted sampling both with replacement:
+
+``` r
+m <- 1e6
+n <- 1e4
+prob <- dqrunif(m)
+bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
+                  dqsample.int(m, n, replace = TRUE, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+#> # A tibble: 2 × 4
+#>   expression                                           min   median `itr/sec`
+#>   <bch:expr>                                      <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n, replace = TRUE, prob = prob)    22.02ms  23.82ms      41.7
+#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.05ms   5.41ms     183.
+```
+
+And without replacement:
+
+``` r
+bm <- bench::mark(sample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+#> # A tibble: 2 × 4
+#>   expression                           min   median `itr/sec`
+#>   <bch:expr>                      <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n, prob = prob)     13.63s   13.63s    0.0734
+#> 2 dqsample.int(m, n, prob = prob)   5.16ms   5.63ms  175.
+```
+
+Especially for weighted sampling without replacement the performance
+advantage compared with R’s default methods is particularly large.
 
 In addition the RNGs provide support for multiple independent streams
 for parallel usage:

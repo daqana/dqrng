@@ -107,7 +107,7 @@ Rcpp::NumericVector dqrng::dqsample_num(double m, double n, bool replace = false
 :    should sampling be with replacement?
 
 `prob`
-:    a vector of probability weights for obtaining the elements of the vector being sampled (currently ignored)
+:    a vector of probability weights for obtaining the elements of the vector being sampled
 
 `offset`
 :    sample from range `[offset, offset + m)`
