@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.2</span>
       </span>
     </div>
 
@@ -39,6 +39,9 @@
     </li>
     <li>
       <a href="../articles/parallel.html">Parallel RNG usage</a>
+    </li>
+    <li>
+      <a href="../articles/sample.html">Fast sampling methods</a>
     </li>
   </ul></li>
 <li>
@@ -115,51 +118,51 @@ to encode missing values in integer vectors.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">generateSeedVectors</span><span class="op">(</span><span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1657393073 -367875577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1616028309 1711773938</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1804153202 1452695839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -105385726  865507467</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -456292351 -1264800647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -957779162 -807521577</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  594147446 1929727495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  1618414826 -1940834525</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  726725920 -692511430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1883007755 -663588418</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   985229084 -1516758797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2077995912  136040185</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  428462311 -293298367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  325857302 -107209673</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -826390208  699024732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1978573922  1881898105</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -293856219 -1875940029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  818209898 2031849185</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1920363279 1262821574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2075198256  -685263245</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">generateSeedVectors</span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -506477661  1642587091  -365054948 -2071385087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   485834453   688669467  1813983245 -1672552374</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1179924649  -615351141  -671460135   933487176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1166187518  2143282811   941984718   595873532</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1802792732  1313815072  -441748420   987540859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -985070883  -804273430 -1665938795  1443733715</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -649242631 -1692151623   240477459  -273521797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2066312381  1276480174  1058303077   397137769</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1583303287  1642833355 -1370402654 -1559231488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   -4997341 1202077043  473408889  562925162</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
