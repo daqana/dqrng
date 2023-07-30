@@ -29,11 +29,11 @@ install.packages("dqrng")
 ```
 
 Intermediate releases can also be obtained via
-[r-universe](https://daqana.r-universe.dev/ui#package:dqrng):
+[r-universe](https://rstub.r-universe.dev/dqrng):
 
 ``` r
 options(repos = c(
-  rstub = 'https://daqana.r-universe.dev',
+  rstub = 'https://rstub.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
 install.packages('dqrng')
 ```
@@ -61,8 +61,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)    644.7µs  684.7µs     1345.
-#> 2 dqrnorm(N)   85.5µs   89.1µs     9447.
+#> 1 rnorm(N)      612µs  685.2µs     1397.
+#> 2 dqrnorm(N)     86µs   88.6µs    10388.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +79,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.59ms      128.
-#> 2 sample.int(1000 * m, n, replace = TRUE)     8.66ms   9.68ms      103.
-#> 3 dqsample.int(m, n, replace = TRUE)        514.08µs 584.28µs     1523.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 491.36µs 851.22µs     1199.
+#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.63ms     114. 
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   9.55ms      96.1
+#> 3 dqsample.int(m, n, replace = TRUE)        482.21µs 810.29µs    1254. 
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 492.79µs 822.86µs    1275.
 ```
 
 And without replacement:
@@ -94,16 +94,17 @@ bm <- bench::mark(sample.int(m, n),
                   dqsample.int(m, n),
                   dqsample.int(1e3*m, n),
                   check = FALSE)
-#> Warning: Some expressions had a GC in every iteration; so filtering is disabled.
+#> Warning: Some expressions had a GC in every iteration; so filtering is
+#> disabled.
 bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  44.21ms  47.54ms      21.0
-#> 2 sample.int(1000 * m, n)           14.47ms  16.47ms      58.4
-#> 3 sample.int(m, n, useHash = TRUE)   9.35ms  13.13ms      77.0
-#> 4 dqsample.int(m, n)                 1.22ms   1.44ms     546. 
-#> 5 dqsample.int(1000 * m, n)          2.11ms   2.92ms     271.
+#> 1 sample.int(m, n)                   40.1ms  42.54ms      23.5
+#> 2 sample.int(1000 * m, n)           12.19ms  14.38ms      67.8
+#> 3 sample.int(m, n, useHash = TRUE)   9.43ms  11.17ms      81.9
+#> 4 dqsample.int(m, n)                 1.22ms   1.35ms     638. 
+#> 5 dqsample.int(1000 * m, n)          1.98ms   2.51ms     358.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
@@ -122,22 +123,22 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression                                           min   median `itr/sec`
 #>   <bch:expr>                                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE, prob = prob)    23.06ms  25.92ms      36.8
-#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.03ms   5.54ms     173.
+#> 1 sample.int(m, n, replace = TRUE, prob = prob)    22.02ms  23.82ms      41.7
+#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.05ms   5.41ms     183.
 ```
 
 And without replacement:
 
 ``` r
 bm <- bench::mark(sample.int(m, n, prob = prob),
-                dqsample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
                   check = FALSE)
 bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression                           min   median `itr/sec`
 #>   <bch:expr>                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, prob = prob)     15.53s   15.53s    0.0644
-#> 2 dqsample.int(m, n, prob = prob)   5.22ms   5.85ms  163.
+#> 1 sample.int(m, n, prob = prob)     13.63s   13.63s    0.0734
+#> 2 dqsample.int(m, n, prob = prob)   5.16ms   5.63ms  175.
 ```
 
 Especially for weighted sampling without replacement the performance

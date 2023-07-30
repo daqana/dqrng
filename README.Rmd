@@ -35,11 +35,11 @@ install.packages("dqrng")
 ```
 
 Intermediate releases can also be obtained via
-[r-universe](https://daqana.r-universe.dev/ui#package:dqrng):
+[r-universe](https://rstub.r-universe.dev/dqrng):
 
 ```r
 options(repos = c(
-  rstub = 'https://daqana.r-universe.dev',
+  rstub = 'https://rstub.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
 install.packages('dqrng')
 ```
