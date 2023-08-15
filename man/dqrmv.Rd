@@ -2,12 +2,9 @@
 % Please edit documentation in R/dqrmv.R
 \name{dqrmvnorm}
 \alias{dqrmvnorm}
-\alias{dqrmvt}
 \title{Multivariate Distributions}
 \usage{
 dqrmvnorm(n, ...)
-
-dqrmvt(n, ...)
 }
 \arguments{
 \item{n}{number of  observations}
@@ -15,7 +12,7 @@ dqrmvt(n, ...)
 \item{...}{forwarded to \code{\link[mvtnorm]{rmvnorm}} or \code{\link[mvtnorm]{rmvt}}}
 }
 \value{
-numeric matrix of multivariate normal or t-distributed variables
+numeric matrix of multivariate normal distributed variables
 }
 \description{
 Multivariate Distributions
@@ -26,10 +23,7 @@ x <- dqrmvnorm(n=500, mean=c(1,2), sigma=sigma)
 colMeans(x)
 var(x)
 plot(x)
-## X ~ t_3(0, diag(2))
-x <- dqrmvt(100, sigma = diag(2), df = 3) # t_3(0, diag(2)) sample
-plot(x)
 }
 \seealso{
-\code{\link[mvtnorm]{rmvnorm}} and \code{\link[mvtnorm]{rmvt}}
+\code{\link[mvtnorm]{rmvnorm}}
 }

@@ -3,8 +3,8 @@
 #' @param n  number of  observations
 #' @param ... forwarded to \code{\link[mvtnorm]{rmvnorm}} or \code{\link[mvtnorm]{rmvt}}
 #'
-#' @return numeric matrix of multivariate normal or t-distributed variables
-#' @seealso \code{\link[mvtnorm]{rmvnorm}} and \code{\link[mvtnorm]{rmvt}}
+#' @return numeric matrix of multivariate normal distributed variables
+#' @seealso \code{\link[mvtnorm]{rmvnorm}}
 #'
 #' @export
 #'
