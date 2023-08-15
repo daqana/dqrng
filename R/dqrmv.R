@@ -24,20 +24,3 @@ dqrmvnorm <- function(n, ...) {
   }
   mvtnorm::rmvnorm(n, ..., rnorm = dqrnorm)
 }
-
-#' @export
-#'
-#' @rdname dqrmv
-#' @examples
-#' ## X ~ t_3(0, diag(2))
-#' x <- dqrmvt(100, sigma = diag(2), df = 3) # t_3(0, diag(2)) sample
-#' plot(x)
-dqrmvt <- function(n, ...) {
-  if (!requireNamespace("mvtnorm", quietly = TRUE)) {
-    stop(
-      "Package \"mvtnorm\" must be installed to use this function.",
-      call. = FALSE
-    )
-  }
-  mvtnorm::rmvt(n, ..., rnorm = dqrnorm)
-}
