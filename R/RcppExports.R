@@ -99,5 +99,5 @@ generateSeedVectors <- function(nseeds, nwords = 2L) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_dqrng_RcppExport_registerCCallable', PACKAGE = 'dqrng')
+    .Call(`_dqrng_RcppExport_registerCCallable`)
 })
