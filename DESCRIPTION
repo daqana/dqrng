@@ -37,7 +37,6 @@ Suggests:
     knitr,
     rmarkdown,
     mvtnorm (>= 1.2-3)
-Additional_repositories: https://r-forge.r-universe.dev
 VignetteBuilder: knitr
 URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
