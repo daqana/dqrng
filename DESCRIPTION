@@ -1,7 +1,7 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.3.0.3
+Version: 0.3.1
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
@@ -19,10 +19,8 @@ Description: Several fast random number generators are provided as C++
   numbers according to a uniform, normal and exponential distribution
   are included. The latter two use the Ziggurat algorithm originally
   proposed by Marsaglia and Tsang (2000, <doi:10.18637/jss.v005.i08>).
-  The fast sampling methods support weighted and unweighted sampling both with 
-  and without replacement. For weighted sampling  a stochastic acceptance method
-  suggested by Lipowski and Lipowska (2012, <doi:10.1016/j.physa.2011.12.004>)
-  is used. These functions are exported to R and as a C++ interface and are
+  The fast sampling methods support unweighted sampling both with and without
+  replacement. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
   Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds
   Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
@@ -36,7 +34,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    mvtnorm (>= 1.2-3)
+    mvtnorm (>= 1.2-3),
+    bench
 VignetteBuilder: knitr
 URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
