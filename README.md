@@ -6,7 +6,7 @@ status](https://github.com/daqana/dqrng/workflows/R-CMD-check/badge.svg)](https:
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng)
 [![Coverage
-status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/dqrng?branch=master)
+status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://app.codecov.io/github/daqana/dqrng?branch=master)
 [![Downloads](https://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](https://www.r-pkg.org/pkg/dqrng)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
