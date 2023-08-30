@@ -26,7 +26,7 @@ Description: Several fast random number generators are provided as C++
   Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
   provided by the package 'sitmo'.
 License: AGPL-3 | file LICENSE
-Depends: R (>= 3.1.0)
+Depends: R (>= 3.5.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
 RoxygenNote: 7.2.3
