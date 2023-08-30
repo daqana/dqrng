@@ -1,12 +1,12 @@
-This release makes sure that R's RNG state is not change upon loading the package.
+This release brings two new functions, dqrmvnorm and dqrrademacher
 
 ## Test environments
 
-* local:  Debian testing with R 4.0
+* local:  Ubuntu with R 4.3
 * Github Actions:
-    * Ubuntu, R 4.0 and R-devel
-    * MacOS, R 4.0
-    * Windows, R 4.0
+    * Ubuntu, R-release and R-devel
+    * MacOS, R-release
+    * Windows, R-release
 * winbuilder: Windows, R-devel
 
 ## R CMD check results
@@ -15,7 +15,7 @@ This release makes sure that R's RNG state is not change upon loading the packag
 
 ## Reverse dependencies
 
-We checked 7 reverse dependencies (3 from CRAN + 4 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 13 reverse dependencies (9 from CRAN + 3 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
- * We failed to check 0 packages
+ * We failed to check 2 packages
