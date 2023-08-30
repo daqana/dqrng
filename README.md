@@ -110,40 +110,6 @@ bm[, 1:4]
 Note that sampling from `10^10` elements triggers “long-vector support”
 in R.
 
-It is also possible to use weighted sampling both with replacement:
-
-``` r
-m <- 1e6
-n <- 1e4
-prob <- dqrunif(m)
-bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
-                  dqsample.int(m, n, replace = TRUE, prob = prob),
-                  check = FALSE)
-bm[, 1:4]
-#> # A tibble: 2 × 4
-#>   expression                                           min   median `itr/sec`
-#>   <bch:expr>                                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE, prob = prob)    22.02ms  23.82ms      41.7
-#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.05ms   5.41ms     183.
-```
-
-And without replacement:
-
-``` r
-bm <- bench::mark(sample.int(m, n, prob = prob),
-                  dqsample.int(m, n, prob = prob),
-                  check = FALSE)
-bm[, 1:4]
-#> # A tibble: 2 × 4
-#>   expression                           min   median `itr/sec`
-#>   <bch:expr>                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, prob = prob)     13.63s   13.63s    0.0734
-#> 2 dqsample.int(m, n, prob = prob)   5.16ms   5.63ms  175.
-```
-
-Especially for weighted sampling without replacement the performance
-advantage compared with R’s default methods is particularly large.
-
 In addition the RNGs provide support for multiple independent streams
 for parallel usage:
 
