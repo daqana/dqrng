@@ -24,7 +24,7 @@ The fast RNGs provided in this package make very fast sampling possible when com
 
 ## Benchmarks
 
-By combining fast RNGs with a fast methods for creating [integers in a range](http://www.pcg-random.org/posts/bounded-rands.html) one gets good performance for sampling with replacement:
+By combining fast RNGs with a fast methods for creating [integers in a range](https://www.pcg-random.org/posts/bounded-rands.html) one gets good performance for sampling with replacement:
 
 ```{r replacement, eval=evaluate}
 library(dqrng)

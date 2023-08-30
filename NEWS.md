@@ -1,6 +1,6 @@
 # dgrng 0.3.1
 
-* new method `dqrrademacher` for drawing Rademacher weights (Kyle Butts in [#50](https://github.com/daqana/dqrng/pull/50 fixing [#49](https://github.com/daqana/dqrng/pull/49))
+* new method `dqrrademacher` for drawing Rademacher weights (Kyle Butts in [#50](https://github.com/daqana/dqrng/pull/50) fixing [#49](https://github.com/daqana/dqrng/pull/49))
 * Move sampling methods to separate header file, allowing for parallel usage.
 * New method `dqrmvnorm` sampling from a multivariate normal distribution.
   This uses the methods implemented in the `mvtnorm` package and uses `dqrnorm`.
