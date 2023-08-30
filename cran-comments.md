@@ -1,4 +1,7 @@
-This release brings two new functions, dqrmvnorm and dqrrademacher
+This release brings two new functions, dqrmvnorm and dqrrademacher.
+It also fixes two NOTEs
+* C++11 is no longer requested explicitly
+* "sitmo" is added to Suggests in addition to LinkingTo to satisfy xref requirements
 
 ## Test environments
 
