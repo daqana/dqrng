@@ -20,10 +20,8 @@
   numbers according to a uniform, normal and exponential distribution
   are included. The latter two use the Ziggurat algorithm originally
   proposed by Marsaglia and Tsang (2000, &lt;doi:10.18637/jss.v005.i08&gt;).
-  The fast sampling methods support weighted and unweighted sampling both with 
-  and without replacement. For weighted sampling  a stochastic acceptance method
-  suggested by Lipowski and Lipowska (2012, &lt;doi:10.1016/j.physa.2011.12.004&gt;)
-  is used. These functions are exported to R and as a C++ interface and are
+  The fast sampling methods support unweighted sampling both with and without
+  replacement. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
   Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds
   Threefry engine (Salmon et al., 2011, &lt;doi:10.1145/2063384.2063405&gt;) as
@@ -48,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
@@ -134,7 +132,7 @@
 <p>They are quite a bit faster, though:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="fu"><a href="reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="fu"><a href="reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">bm</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec`</span></span>
@@ -145,7 +143,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e7</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e5</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fl">1e3</span><span class="op">*</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="fl">1e3</span><span class="op">*</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -160,7 +158,7 @@
 <span><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 492.79µs 822.86µs    1275.</span></span></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fl">1e3</span><span class="op">*</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, useHash <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
@@ -178,34 +176,8 @@
 <span><span class="co">#&gt; 4 dqsample.int(m, n)                 1.22ms   1.35ms     638. </span></span>
 <span><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.98ms   2.51ms     358.</span></span></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
-<p>It is also possible to use weighted sampling both with replacement:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
-<span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">bm</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
-<span><span class="co">#&gt;   expression                                           min   median `itr/sec`</span></span>
-<span><span class="co">#&gt;   &lt;bch:expr&gt;                                      &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE, prob = prob)    22.02ms  23.82ms      41.7</span></span>
-<span><span class="co">#&gt; 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.05ms   5.41ms     183.</span></span></code></pre></div>
-<p>And without replacement:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  <span class="fu"><a href="reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">bm</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
-<span><span class="co">#&gt;   expression                           min   median `itr/sec`</span></span>
-<span><span class="co">#&gt;   &lt;bch:expr&gt;                      &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n, prob = prob)     13.63s   13.63s    0.0734</span></span>
-<span><span class="co">#&gt; 2 dqsample.int(m, n, prob = prob)   5.16ms   5.63ms  175.</span></span></code></pre></div>
-<p>Especially for weighted sampling without replacement the performance advantage compared with R’s default methods is particularly large.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e7</span></span>
 <span><span class="fu"><a href="reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">u1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span></span>

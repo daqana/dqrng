@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-08-27</h4>
+            <h4 data-toc-skip class="date">2023-08-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/sample.Rmd" class="external-link"><code>vignettes/sample.Rmd</code></a></small>
       <div class="hidden name"><code>sample.Rmd</code></div>
@@ -108,24 +108,24 @@ algorithms.</p>
 <div class="section level2">
 <h2 id="benchmarks">Benchmarks<a class="anchor" aria-label="anchor" href="#benchmarks"></a>
 </h2>
-<p>By combining fast RNGs with a fast methods for creating <a href="http://www.pcg-random.org/posts/bounded-rands.html" class="external-link">integers in a
+<p>By combining fast RNGs with a fast methods for creating <a href="https://www.pcg-random.org/posts/bounded-rands.html" class="external-link">integers in a
 range</a> one gets good performance for sampling with replacement:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fl">1e4</span><span class="op">*</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="fl">1e4</span><span class="op">*</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="48%">
-<col width="14%">
-<col width="14%">
-<col width="11%">
-<col width="11%">
+<col width="54%">
+<col width="10%">
+<col width="10%">
+<col width="12%">
+<col width="12%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">expression</th>
@@ -137,31 +137,31 @@ range</a> one gets good performance for sampling with replacement:</p>
 <tbody>
 <tr class="odd">
 <td align="left">sample.int(m, n, replace = TRUE)</td>
-<td align="right">4.332840e-04</td>
-<td align="right">4.750484e-04</td>
+<td align="right">433.3µs</td>
+<td align="right">475µs</td>
 <td align="right">1999.342</td>
-<td align="right">50288</td>
+<td align="right">49.1KB</td>
 </tr>
 <tr class="even">
 <td align="left">sample.int(10000 * m, n, replace = TRUE)</td>
-<td align="right">8.460152e-04</td>
-<td align="right">9.003752e-04</td>
+<td align="right">846µs</td>
+<td align="right">900.4µs</td>
 <td align="right">1072.688</td>
-<td align="right">82600</td>
+<td align="right">80.7KB</td>
 </tr>
 <tr class="odd">
 <td align="left">dqsample.int(m, n, replace = TRUE)</td>
-<td align="right">4.761992e-05</td>
-<td align="right">5.002553e-05</td>
+<td align="right">47.6µs</td>
+<td align="right">50µs</td>
 <td align="right">17170.274</td>
-<td align="right">59592</td>
+<td align="right">58.2KB</td>
 </tr>
 <tr class="even">
 <td align="left">dqsample.int(10000 * m, n, replace = TRUE)</td>
-<td align="right">5.327608e-05</td>
-<td align="right">5.754706e-05</td>
+<td align="right">53.3µs</td>
+<td align="right">57.5µs</td>
 <td align="right">14311.590</td>
-<td align="right">84848</td>
+<td align="right">82.9KB</td>
 </tr>
 </tbody>
 </table>
@@ -176,7 +176,7 @@ in R is similar but dqrng has the edge with respect to performance:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">6e5</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  check <span class="op">=</span> <span class="cn">FALSE</span>, min_iterations <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -190,17 +190,17 @@ in R is similar but dqrng has the edge with respect to performance:</p>
 <tbody>
 <tr class="odd">
 <td align="left">sample.int(m, n)</td>
-<td align="right">0.05595910</td>
-<td align="right">0.06371229</td>
+<td align="right">55.96ms</td>
+<td align="right">63.7ms</td>
 <td align="right">15.45168</td>
-<td align="right">6402656</td>
+<td align="right">6.11MB</td>
 </tr>
 <tr class="even">
 <td align="left">dqsample.int(m, n)</td>
-<td align="right">0.00816365</td>
-<td align="right">0.01032316</td>
+<td align="right">8.16ms</td>
+<td align="right">10.3ms</td>
 <td align="right">90.04322</td>
-<td align="right">6400096</td>
+<td align="right">6.1MB</td>
 </tr>
 </tbody>
 </table>
@@ -214,17 +214,17 @@ is even faster, though:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, useHash <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="41%">
-<col width="16%">
-<col width="16%">
+<col width="47%">
+<col width="11%">
 <col width="12%">
-<col width="12%">
+<col width="14%">
+<col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">expression</th>
@@ -236,24 +236,24 @@ is even faster, though:</p>
 <tbody>
 <tr class="odd">
 <td align="left">sample.int(m, n)</td>
-<td align="right">1.192838e-03</td>
-<td align="right">0.0019367411</td>
+<td align="right">1.19ms</td>
+<td align="right">1.94ms</td>
 <td align="right">433.0223</td>
-<td align="right">4042656</td>
+<td align="right">3.85MB</td>
 </tr>
 <tr class="even">
 <td align="left">sample.int(m, n, useHash = TRUE)</td>
-<td align="right">5.909050e-04</td>
-<td align="right">0.0006578130</td>
+<td align="right">590.9µs</td>
+<td align="right">657.81µs</td>
 <td align="right">1427.8970</td>
-<td align="right">173720</td>
+<td align="right">169.65KB</td>
 </tr>
 <tr class="odd">
 <td align="left">dqsample.int(m, n)</td>
-<td align="right">9.965699e-05</td>
-<td align="right">0.0001026175</td>
+<td align="right">99.66µs</td>
+<td align="right">102.62µs</td>
 <td align="right">8678.4395</td>
-<td align="right">40048</td>
+<td align="right">39.11KB</td>
 </tr>
 </tbody>
 </table>
@@ -264,17 +264,17 @@ similar performance and are much faster than R’s default method.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e2</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, useHash <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="40%">
-<col width="16%">
-<col width="16%">
-<col width="14%">
+<col width="45%">
 <col width="12%">
+<col width="12%">
+<col width="16%">
+<col width="13%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">expression</th>
@@ -286,24 +286,24 @@ similar performance and are much faster than R’s default method.</p>
 <tbody>
 <tr class="odd">
 <td align="left">sample.int(m, n)</td>
-<td align="right">4.788712e-04</td>
-<td align="right">6.928451e-04</td>
+<td align="right">478.87µs</td>
+<td align="right">692.85µs</td>
 <td align="right">799.9916</td>
-<td align="right">4003056</td>
+<td align="right">3.82MB</td>
 </tr>
 <tr class="even">
 <td align="left">sample.int(m, n, useHash = TRUE)</td>
-<td align="right">1.463806e-05</td>
-<td align="right">1.656706e-05</td>
+<td align="right">14.64µs</td>
+<td align="right">16.57µs</td>
 <td align="right">56302.7572</td>
-<td align="right">4072</td>
+<td align="right">3.98KB</td>
 </tr>
 <tr class="odd">
 <td align="left">dqsample.int(m, n)</td>
-<td align="right">4.761037e-06</td>
-<td align="right">5.415990e-06</td>
+<td align="right">4.76µs</td>
+<td align="right">5.42µs</td>
 <td align="right">158618.5998</td>
-<td align="right">448</td>
+<td align="right">448B</td>
 </tr>
 </tbody>
 </table>
@@ -313,7 +313,7 @@ similar performance and are much faster than R’s default method.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e10</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e5</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
 <span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -327,100 +327,20 @@ similar performance and are much faster than R’s default method.</p>
 <tbody>
 <tr class="odd">
 <td align="left">sample.int(m, n)</td>
-<td align="right">0.012448217</td>
-<td align="right">0.016431330</td>
+<td align="right">12.45ms</td>
+<td align="right">16.43ms</td>
 <td align="right">58.97732</td>
-<td align="right">1851224</td>
+<td align="right">1.76MB</td>
 </tr>
 <tr class="even">
 <td align="left">dqsample.int(m, n)</td>
-<td align="right">0.001982163</td>
-<td align="right">0.003035903</td>
+<td align="right">1.98ms</td>
+<td align="right">3.04ms</td>
 <td align="right">302.74952</td>
-<td align="right">800048</td>
+<td align="right">781.3KB</td>
 </tr>
 </tbody>
 </table>
-<p>The same algorithms but combined with a different selection method
-are used to obtain weighted sampling, both with replacement:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
-<span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="52%">
-<col width="13%">
-<col width="13%">
-<col width="10%">
-<col width="10%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">expression</th>
-<th align="right">min</th>
-<th align="right">median</th>
-<th align="right">itr/sec</th>
-<th align="right">mem_alloc</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">sample.int(m, n, replace = TRUE, prob = prob)</td>
-<td align="right">0.022589995</td>
-<td align="right">0.023950481</td>
-<td align="right">40.93832</td>
-<td align="right">12042696</td>
-</tr>
-<tr class="even">
-<td align="left">dqsample.int(m, n, replace = TRUE, prob = prob)</td>
-<td align="right">0.005113458</td>
-<td align="right">0.005497366</td>
-<td align="right">174.39864</td>
-<td align="right">40048</td>
-</tr>
-</tbody>
-</table>
-<p>And without replacement:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span>, prob <span class="op">=</span> <span class="va">prob</span><span class="op">)</span>,</span>
-<span>                  check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="40%">
-<col width="16%">
-<col width="16%">
-<col width="15%">
-<col width="12%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">expression</th>
-<th align="right">min</th>
-<th align="right">median</th>
-<th align="right">itr/sec</th>
-<th align="right">mem_alloc</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">sample.int(m, n, prob = prob)</td>
-<td align="right">14.504429930</td>
-<td align="right">14.504429930</td>
-<td align="right">0.0689445</td>
-<td align="right">12042696</td>
-</tr>
-<tr class="even">
-<td align="left">dqsample.int(m, n, prob = prob)</td>
-<td align="right">0.005157271</td>
-<td align="right">0.005645775</td>
-<td align="right">171.6651402</td>
-<td align="right">40048</td>
-</tr>
-</tbody>
-</table>
-<p>Especially for weighted sampling without replacement the performance
-advantage compared with R’s default methods is particularly large.</p>
 </div>
 <div class="section level2">
 <h2 id="technicalities">Technicalities<a class="anchor" aria-label="anchor" href="#technicalities"></a>
@@ -429,7 +349,7 @@ advantage compared with R’s default methods is particularly large.</p>
 algorithms are presented in R-like pseudo code, even though the real
 implementation is in C++. For sampling rates above 50%, a partial <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle" class="external-link">Fisher-Yates
 shuffle</a> is used:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">no_replace_shuffle</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
@@ -442,7 +362,7 @@ method is only suitable for high selection rates. One could expect that
 <a href="https://en.wikipedia.org/wiki/Reservoir_sampling" class="external-link">reservoir
 sampling</a> should work well for lower selection rates. However, in my
 tests set based algorithms were faster:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">no_replace_set</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"..."</span>, length <span class="op">=</span> <span class="va">n</span><span class="op">)</span> <span class="co"># integer or numeric</span></span>
 <span>  <span class="va">elems</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">set</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span> <span class="co"># set object for storing n objects out of m possible values</span></span>
@@ -470,31 +390,6 @@ sampling algorithm</a> would be superior, but this was not the case in
 my tests, probably because it requires a final shuffling of the result
 to get a random <em>permutation</em> instead of a random
 <em>combination</em>.</p>
-<p>So far only un-weighted sampling was considered. However, the same
-algorithms can be used for weighted sampling, when
-<code>random_int(m)</code>, which uniformly selects one of
-<code>m</code> elements, is replaced with a function that selects one of
-<code>m</code> elements based on their weights. One such algorithm is <a href="https://doi.org/10.1016/j.physa.2011.12.004" class="external-link">stochastic
-acceptance</a>, which is particularly well suited in combination with
-fast RNGs:</p>
-<blockquote>
-<ol style="list-style-type: decimal">
-<li>Select randomly one of the individuals (say, <span class="math inline">\(i\)</span>). The selection is done with uniform
-probability <span class="math inline">\(1/N\)</span>, which does not
-depend on the individual’s fitness <span class="math inline">\(w_i\)</span>.</li>
-<li>With probability <span class="math inline">\(w_i/w_\max\)</span>,
-where <span class="math inline">\(w_\max = \max\{w_i\}_{i=1}^N\)</span>
-is the maximal fitness in the population, the selection is accepted.
-Otherwise, the procedure is repeated from step 1 (i.e., in the case of
-rejection, another selection attempt is made).</li>
-</ol>
-</blockquote>
-<p>For sampling with replacement the above algorithm can be directly
-applied. For sampling without replacement, one might consider updating
-<span class="math inline">\(w_\max\)</span> whenever the element with
-the maximum weight has been selected. However, this is not necessary
-since one can stick to the original <span class="math inline">\(w_\max\)</span> at the cost of a slightly reduced
-acceptance rate.</p>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>
