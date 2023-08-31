@@ -9,7 +9,7 @@ dqrmvnorm(n, ...)
 \arguments{
 \item{n}{number of  observations}
 
-\item{...}{forwarded to \code{\link[mvtnorm]{rmvnorm}} or \code{\link[mvtnorm]{rmvt}}}
+\item{...}{forwarded to \code{\link[mvtnorm]{rmvnorm}}}
 }
 \value{
 numeric matrix of multivariate normal distributed variables
