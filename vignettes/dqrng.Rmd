@@ -118,7 +118,7 @@ Here only the first approach is shown.
 
 The functions available in R directly call corresponding C++ functions.
 These functions are also available at the C++ level if you include `dqrng.h`.
-The full ist of functions is available with `vignette("cpp-api", package = "dqrng")`.
+The full list of functions is available with `vignette("cpp-api", package = "dqrng")`.
 Revisiting the example of approximating $\pi$ we can use:
 
 ```{r, eval=FALSE, engine='Rcpp'}
@@ -330,3 +330,42 @@ multiple_distributions(5)
 ```
 
 <!-- STATIC_ARBITRARY_SEED -->
+
+
+```{Rcpp}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng, BH)]]
+#include <boost/random/binomial_distribution.hpp>
+#include <dqrng.h>
+#include <dqrng_distribution.h>
+#include <xoshiro.h>
+// [[Rcpp::plugins(cpp11)]]   
+
+// aliases for the used distributions
+using binomial = boost::random::binomial_distribution<int>;
+using normal = dqrng::normal_distribution;
+// [[Rcpp::export]]
+Rcpp::NumericMatrix multiple_distributions(int n) {
+  Rcpp::XPtr<dqrng::random_64bit_generator> rng = dqrng::get_rng();
+  // distributions with default parameters
+  binomial bernoulli;
+  normal normal;
+  Rcpp::NumericMatrix out(n, 3);
+  double p = 0.0;
+  for (int i = 0; i < n; ++i) {
+    p = double(i) / double(n);
+    out(i,0) = bernoulli(*rng, binomial::param_type(1, p));
+    out(i,1) = normal(*rng, normal::param_type(p, 1.0));
+    out(i,2) = normal(*rng, normal::param_type(4.0, 3.0 - p));
+  }
+  Rcpp::colnames(out) = Rcpp::CharacterVector::create("Bernoulli", "Normal1", "Normal2");
+  return out;
+}
+
+/*** R
+dqRNGkind("Xoshiro256+")
+dqset.seed(42)
+multiple_distributions(5)
+*/
+```
+
