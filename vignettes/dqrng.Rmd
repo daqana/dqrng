@@ -170,13 +170,13 @@ sampleCpp(1000)
 ### Using the header only library
 
 The RNG wrapper and distributions functions can be used from C++ by including `dqrng_generator.h` and `dqrng_distribution.h`.
-In order to use these header files, you have to use at least C++11 and link to the `BH` and `sitmo` packages as well.
+In order to use these header files, you have to use at least C++11 and link to the `BH` package as well.
 For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG.
 Here a minimal [SplitMix](https://xoroshiro.di.unimi.it/splitmix64.c) generator is used together with `dqrng::normal_distribution`:
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
 // [[Rcpp::plugins(cpp11)]]
 #include <cstdint>
@@ -244,7 +244,7 @@ For example, this function generates random numbers according to the normal dist
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <random>
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
 #include <xoshiro.h>
 // [[Rcpp::plugins(cpp11)]]
@@ -271,7 +271,7 @@ For example, the following function uses the 32 bit PCG variant together with Bo
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <pcg_random.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -297,13 +297,13 @@ The parameters of the distributions are adjusted for every draw using `<distribu
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <boost/random/binomial_distribution.hpp>
 #include <dqrng_distribution.h>
 #include <xoshiro.h>
 // [[Rcpp::plugins(cpp11)]]   
 
-// aliases for the used ditributions
+// aliases for the used distributions
 using binomial = boost::random::binomial_distribution<int>;
 using normal = dqrng::normal_distribution;
 // [[Rcpp::export]]

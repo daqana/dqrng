@@ -23,7 +23,7 @@
 #include <dqrng_sample.h>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
-#include <threefry.h>
+#include <dqrng_threefry.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
 

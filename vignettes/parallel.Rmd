@@ -80,7 +80,7 @@ Care has been taken to keep the global RNG `rng` usable outside of the parallel 
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <xoshiro.h>
 #include <dqrng_distribution.h>
 // [[Rcpp::plugins(cpp11)]]
@@ -138,7 +138,7 @@ The resulting correlation matrix should be close to the identity matrix if the d
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH, sitmo)]]
+// [[Rcpp::depends(dqrng, BH)]]
 #include <pcg_random.hpp>
 #include <dqrng_sample.h>
 // [[Rcpp::plugins(cpp11)]]

@@ -1,3 +1,7 @@
+# dqrng (unreleased)
+
+* Decoupled the 'sitmo' package. It is now possible to use, e.g., the distribution functions from the header-only library without having an explicit `LinkingTo: sitmo` 
+
 # dqrng 0.3.1
 
 * new method `dqrrademacher` for drawing Rademacher weights (Kyle Butts in [#50](https://github.com/daqana/dqrng/pull/50) fixing [#49](https://github.com/daqana/dqrng/pull/49))

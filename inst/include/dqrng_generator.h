@@ -25,7 +25,6 @@
 #include <stdexcept>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
-#include <threefry.h>
 
 namespace dqrng {
 using default_64bit_generator = ::dqrng::xoroshiro128plus;
@@ -169,13 +168,6 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::seed(result_type seed
 template<>
 inline void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stream) {
     gen.seed(seed, stream);
-    cache = false;
-}
-
-template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::seed(result_type seed, result_type stream) {
-    gen.seed(seed);
-    gen.set_counter(0, 0, 0, stream);
     cache = false;
 }
 

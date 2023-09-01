@@ -65,7 +65,7 @@ inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::rng64_t &rng, INT m, INT n,
 }
 
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset) {
+inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset = 0) {
   if (replace || n <= 1) {
     return dqrng::sample::replacement<RTYPE, INT>(rng, m, n, offset);
   } else {
