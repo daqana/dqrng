@@ -9,7 +9,6 @@ inst/doc
 *~
 vignettes/*.R
 vignettes/*.html
-^docs$
-revdep
-include
-external/tmp
+/revdep
+/include
+/external/tmp
