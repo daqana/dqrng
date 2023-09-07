@@ -2,6 +2,7 @@
 
 * Decoupled the 'sitmo' package. It is now possible to use, e.g., the distribution functions from the header-only library without having an explicit `LinkingTo: sitmo`.
 * Make the internal RNG accessible from the outside (Henrik Sloot fixing [#41](https://github.com/daqana/dqrng/issues/41) in [#58](https://github.com/daqana/dqrng/pull/58))
+* Add Xoroshiro128\*\*/++ and Xoshiro256\*\*/++ to `xoshiro.h`
 
 # dqrng 0.3.1
 
