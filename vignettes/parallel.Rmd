@@ -69,13 +69,13 @@ As expected the correlation matrix for the different columns is almost equal to 
 
 # Xo(ro)shiro: jump ahead with OpenMP
 
-The Xoshiro256+ generator has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws appart.
-The Xoroshiro128+ generator has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws appart. 
+The Xoshiro256+/++/** generators has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws apart.
+The Xoroshiro128+/++/** generators has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws apart. 
 You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence.
-When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$ and $2^{64}$ random draws appart for Xoshiro256+ and Xoroshiro128+, respectively.
+When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$ and $2^{64}$ random draws apart for Xoshiro256+/++/** and Xoroshiro128+/++/**, respectively.
 
 As an example using C++ we draw and sum a large number of uniformly distributed numbers.
-This is done several times using OpenMP for parallelisation.
+This is done several times sequentially as well as using OpenMP for parallelisation.
 Care has been taken to keep the global RNG `rng` usable outside of the parallel block.
 
 ```{r, eval=FALSE, engine='Rcpp'}
@@ -88,15 +88,30 @@ Care has been taken to keep the global RNG `rng` usable outside of the parallel 
 #include <omp.h>
 
 // [[Rcpp::export]]
-std::vector<double> parallel_random_sum(int n, int m, int ncores) {
+std::vector<double> random_sum(int n, int m) {
   dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
   dqrng::xoshiro256plus rng(42);              // properly seeded rng
+  std::vector<double> res(m);
+  for (int i = 0; i < m; ++i) {
+    double lres(0);
+    for (int j = 0; j < n; ++j) {
+      lres += dist(rng);
+    }
+    res[i] = lres / n;
+  }
+  return res;
+}
+
+// [[Rcpp::export]]
+std::vector<double> parallel_random_sum(int n, int m, int ncores) {
+  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
+  dqrng::xoshiro256plusplus rng(42);              // properly seeded rng
   std::vector<double> res(m);
   // ok to use rng here
   
   #pragma omp parallel num_threads(ncores)
   {
-    dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
+    dqrng::xoshiro256plusplus lrng(rng);      // make thread local copy of rng 
     lrng.long_jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
 
     #pragma omp for
@@ -113,14 +128,22 @@ std::vector<double> parallel_random_sum(int n, int m, int ncores) {
 }
 
 /*** R
-parallel_random_sum(1e7, 8, 4)
+bm <- bench::mark(
+  parallel_random_sum(1e7, 8, 4),
+  random_sum(1e7, 8),
+  check = FALSE
+)
+bm[,1:4]
 */
 ```
 
 
 Result:
 
-    [1] 0.5001591 0.5000428 0.4999855 0.4999706 0.5000061 0.4999447 0.4999188 0.5001192
+      expression                            min   median `itr/sec`
+      <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
+    1 parallel_random_sum(1e+07, 8, 4)   98.3ms     99ms     10.1 
+    2 random_sum(1e+07, 8)              270.2ms    271ms      3.68
 
 
 # PCG: multiple streams with RcppParallel
