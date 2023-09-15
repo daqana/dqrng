@@ -336,6 +336,11 @@ multiple_distributions(5)
 
 <!-- STATIC_ARBITRARY_SEED -->
 
+## Accessing the global RNG
+
+You may access the global pointer to the RNG engine using `dqrng::get_rng()`;
+however, be careful to **not** explicitly modify or delete the associated raw
+pointer (or wrap it in a smart pointer).
 
 ```{Rcpp}
 #include <Rcpp.h>
@@ -373,4 +378,3 @@ dqset.seed(42)
 multiple_distributions(5)
 */
 ```
-
