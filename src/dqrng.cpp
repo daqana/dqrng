@@ -147,8 +147,8 @@ double rexp(double rate = 1.0) {
 }
 
 // [[Rcpp::export(rng = false)]]
-Rcpp::XPtr<dqrng::random_64bit_generator> get_rng() {
-  return Rcpp::XPtr<dqrng::random_64bit_generator>(&(*rng), false);
+Rcpp::XPtr<dqrng::rng64_t::element_type> get_rng() {
+  return Rcpp::XPtr<dqrng::rng64_t::element_type>(rng.get(), false);
 }
 
 //' @rdname dqrng-functions
