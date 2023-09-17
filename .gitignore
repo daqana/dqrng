@@ -258,5 +258,4 @@ $RECYCLE.BIN/
 inst/doc
 vignettes/*.R
 /revdep
-/include
 /external/tmp
