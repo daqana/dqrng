@@ -342,7 +342,7 @@ You may access the global pointer to the RNG engine using `dqrng::get_rng()`;
 however, be careful to **not** explicitly modify or delete the associated raw
 pointer (or wrap it in a smart pointer).
 
-```{Rcpp}
+```{Rcpp, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <boost/random/binomial_distribution.hpp>
