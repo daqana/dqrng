@@ -33,8 +33,8 @@ using normal_distribution = boost::random::normal_distribution<double>;
 using exponential_distribution = boost::random::exponential_distribution<double>;
 
 inline double uniform01(uint64_t x) {
-  // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
-  return (x >> 11) * (1. / (uint64_t(1) << 53));
+  // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with the "+" scrambler
+  return (x >> 11) * 0x1.0p-53;
 }
 } // namespace dqrng
 
