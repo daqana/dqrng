@@ -26,7 +26,7 @@
 #include <dqrng_types.h>
 
 namespace dqrng {
-using default_64bit_generator = ::dqrng::xoroshiro128plus;
+using default_64bit_generator = ::dqrng::xoroshiro128plusplus;
 
 template<typename RNG>
 class random_64bit_wrapper : public random_64bit_generator {
