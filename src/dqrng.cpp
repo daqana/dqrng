@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2022 Ralf Stubner
+// Copyright 2022-2023 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -73,8 +73,12 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
     rng =  dqrng::generator(seed);
   } else if (kind == "xoroshiro128+") {
     rng =  dqrng::generator<dqrng::xoroshiro128plus>(seed);
+  } else if (kind == "xoroshiro128++") {
+    rng =  dqrng::generator<dqrng::xoroshiro128plusplus>(seed);
   } else if (kind == "xoshiro256+") {
     rng =  dqrng::generator<dqrng::xoshiro256plus>(seed);
+  } else if (kind == "xoshiro256++") {
+    rng =  dqrng::generator<dqrng::xoshiro256plusplus>(seed);
   } else if (kind == "pcg64") {
     rng =  dqrng::generator<pcg64>(seed);
   } else if (kind == "threefry") {
