@@ -32,6 +32,7 @@ Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
 RoxygenNote: 7.2.3
 Suggests:
+    BH,
     testthat,
     knitr,
     rmarkdown,
