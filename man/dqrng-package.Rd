@@ -28,6 +28,7 @@ Other contributors:
   \item Sebastiano Vigna \email{vigna@acm.org} [contributor]
   \item Aaron Lun [contributor]
   \item Kyle Butts \email{kyle.butts@colorado.edu} [contributor]
+  \item Henrik Sloot [contributor]
 }
 
 }
