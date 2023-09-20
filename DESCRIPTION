@@ -9,7 +9,8 @@ Authors@R: c(
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "ctb"),
     person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb"),
     person("Aaron", "Lun", role="ctb"), 
-    person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu")
+    person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu"),
+    person("Henrik", "Sloot", role = "ctb")
   )
 Description: Several fast random number generators are provided as C++
   header only libraries: The PCG family by O'Neill (2014
