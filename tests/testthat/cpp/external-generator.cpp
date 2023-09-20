@@ -4,6 +4,7 @@
 #include <dqrng.h>
 #include <Rcpp.h>
 #include <dqrng_distribution.h>
+#include <dqrng_extgenerator.h>
 
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) {
@@ -14,7 +15,7 @@ Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) 
   auto dist = dist_t{};;
   auto out = Rcpp::NumericVector(Rcpp::no_init(n));
 
-  auto& engine = *dqrng::get_rng();
+  auto engine = dqrng::random_64bit_accessor{};
   std::generate(out.begin(), out.end(), [&dist, &parm, &engine]() {
     return dist(engine, parm);
   });
