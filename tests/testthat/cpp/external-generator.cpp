@@ -6,7 +6,7 @@
 #include <dqrng_distribution.h>
 
 // [[Rcpp::export(rng = false)]]
-Rcpp::NumericVector test_dqrexp(const std::size_t n, const double rate = 1.0) {
+Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) {
   using dist_t = dqrng::exponential_distribution;
   using parm_t = typename dist_t::param_type;
 

@@ -10,12 +10,12 @@ test_that("external RNG (normal)", {
   dqset.seed(use_seed)
   expected <- dqrexp(n, rate)
   dqset.seed(use_seed)
-  actual <- test_dqrexp(n, rate)
+  actual <- dqrexp_extrng(n, rate)
   expect_equal(actual, expected)
 
   dqset.seed(use_seed)
   expected2 <- expected
-  actual2 <- sapply(1:n, function(x) test_dqrexp(1, rate))
+  actual2 <- sapply(1:n, function(x) dqrexp_extrng(1, rate))
   expect_equal(actual2, expected2)
 })
 
@@ -24,12 +24,12 @@ test_that("external RNG (normal, Xoshiro256+)", {
   dqset.seed(use_seed)
   expected <- dqrexp(n, rate)
   dqset.seed(use_seed)
-  actual <- test_dqrexp(n, rate)
+  actual <- dqrexp_extrng(n, rate)
   expect_equal(actual, expected)
 
   dqset.seed(use_seed)
   expected2 <- expected
-  actual2 <- sapply(1:n, function(x) test_dqrexp(1, rate))
+  actual2 <- sapply(1:n, function(x) dqrexp_extrng(1, rate))
   expect_equal(actual2, expected2)
 })
 
@@ -47,7 +47,7 @@ test_that("external RNG (parallel, Threefry)", {
     Rcpp::sourceCpp("cpp/external-generator.cpp") ## must be recompiled
     dqrng::dqRNGkind("Threefry")
     dqrng::dqset.seed(seed, stream)
-    test_dqrexp(N, rate)
+    dqrexp_extrng(N, rate)
   }, use_seed, 1e6L, rate)
   parallel::stopCluster(cl)
 
