@@ -15,9 +15,9 @@ Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) 
   auto dist = dist_t{};;
   auto out = Rcpp::NumericVector(Rcpp::no_init(n));
 
-  auto engine = dqrng::random_64bit_accessor{};
+  auto engine = std::unique_ptr<dqrng::random_64bit_generator>(new dqrng::random_64bit_accessor{});
   std::generate(out.begin(), out.end(), [&dist, &parm, &engine]() {
-    return dist(engine, parm);
+    return dist(*engine, parm);
   });
   return out;
 }
