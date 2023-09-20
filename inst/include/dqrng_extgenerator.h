@@ -4,6 +4,7 @@
 #include <Rcpp.h>
 #include <dqrng.h>
 #include <dqrng_generator.h>
+#include <dqrng_distribution.h>
 
 namespace dqrng {
 class random_64bit_accessor : public random_64bit_generator {
@@ -35,6 +36,28 @@ public:
 #endif 
 
 };
+
 }; // dqrng
+
+namespace boost {
+namespace random {
+namespace detail {
+
+template<>
+inline std::pair<double, int> generate_int_float_pair<double, 8, dqrng::random_64bit_accessor>(dqrng::random_64bit_accessor& eng)
+{
+  return generate_int_float_pair<double, 8, dqrng::random_64bit_generator>(eng);
+}
+
+template<>
+inline double generate_uniform_real<dqrng::random_64bit_accessor, double>(dqrng::random_64bit_accessor& eng, double min, double max)
+{
+  return generate_uniform_real<dqrng::random_64bit_generator, double>(eng, min, max);
+}
+
+
+}; // detail
+}; // random
+}; // boost
 
 #endif
