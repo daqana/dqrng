@@ -51,6 +51,10 @@ private:
     return random >> 32;
   }
 
+protected:
+  virtual void output(std::ostream& ost) const override {ost << gen;}
+  virtual void input(std::istream& ist) override {ist >> gen;}
+
 public:
   random_64bit_wrapper() : gen() {};
   random_64bit_wrapper(result_type seed) : gen(seed) {};
