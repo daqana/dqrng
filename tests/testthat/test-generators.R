@@ -57,7 +57,7 @@ test_that("PCG64: setting same seed but different stream produces different unif
 })
 
 test_that("Xoroshiro128: setting seed produces identical uniformly distributed numbers", {
-  dqRNGkind("Xoroshiro128+")
+  dqRNGkind("Xoroshiro128++")
   dqset.seed(seed)
   u1 <- dqrunif(10)
   dqset.seed(seed)
@@ -66,7 +66,7 @@ test_that("Xoroshiro128: setting seed produces identical uniformly distributed n
 })
 
 test_that("Xoroshiro128: setting seed and stream produces identical uniformly distributed numbers", {
-  dqRNGkind("Xoroshiro128+")
+  dqRNGkind("Xoroshiro128++")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
   dqset.seed(seed, 1)
@@ -75,7 +75,7 @@ test_that("Xoroshiro128: setting seed and stream produces identical uniformly di
 })
 
 test_that("Xoroshiro128: setting same seed but different stream produces different uniformly distributed numbers", {
-  dqRNGkind("Xoroshiro128+")
+  dqRNGkind("Xoroshiro128++")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
   dqset.seed(seed, 2)
@@ -84,7 +84,7 @@ test_that("Xoroshiro128: setting same seed but different stream produces differe
 })
 
 test_that("Xoshiro256: setting seed produces identical uniformly distributed numbers", {
-  dqRNGkind("Xoshiro256+")
+  dqRNGkind("Xoshiro256++")
   dqset.seed(seed)
   u1 <- dqrunif(10)
   dqset.seed(seed)
@@ -93,7 +93,7 @@ test_that("Xoshiro256: setting seed produces identical uniformly distributed num
 })
 
 test_that("Xoshiro256: setting seed and stream produces identical uniformly distributed numbers", {
-  dqRNGkind("Xoshiro256+")
+  dqRNGkind("Xoshiro256++")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
   dqset.seed(seed, 1)
@@ -102,7 +102,7 @@ test_that("Xoshiro256: setting seed and stream produces identical uniformly dist
 })
 
 test_that("Xoshiro256: setting same seed but different stream produces different uniformly distributed numbers", {
-  dqRNGkind("Xoshiro256+")
+  dqRNGkind("Xoshiro256++")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
   dqset.seed(seed, 2)
