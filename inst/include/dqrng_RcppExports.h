@@ -4,6 +4,7 @@
 #ifndef RCPP_dqrng_RCPPEXPORTS_H_GEN_
 #define RCPP_dqrng_RCPPEXPORTS_H_GEN_
 
+#include "dqrng_types.h"
 #include <Rcpp.h>
 
 namespace dqrng {

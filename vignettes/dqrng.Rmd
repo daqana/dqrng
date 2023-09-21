@@ -347,8 +347,6 @@ RNG engine of `dqrng`.
 #include <boost/random/binomial_distribution.hpp>
 #include <dqrng.h>
 #include <dqrng_distribution.h>
-#include <xoshiro.h>
-#include <dqrng_extgenerator.h>
 // [[Rcpp::plugins(cpp11)]]   
 
 // aliases for the used distributions

@@ -2,9 +2,7 @@
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng,BH)]]
 #include <dqrng.h>
-#include <Rcpp.h>
 #include <dqrng_distribution.h>
-#include <dqrng_extgenerator.h>
 
 // [[Rcpp::export(rng = false)]]
 Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) {

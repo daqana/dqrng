@@ -19,33 +19,14 @@
 #ifndef DQRNG_GENERATOR_H
 #define DQRNG_GENERATOR_H 1
 
-#include <mystdint.h>
-#include <memory>
 #include <type_traits>
 #include <stdexcept>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
+#include <dqrng_types.h>
 
 namespace dqrng {
 using default_64bit_generator = ::dqrng::xoroshiro128plus;
-
-class random_64bit_generator {
-public:
-  using result_type = uint64_t;
-
-  virtual ~random_64bit_generator() {};
-  virtual result_type operator() () = 0;
-  virtual void seed(result_type seed) = 0;
-  virtual void seed(result_type seed, result_type stream) = 0;
-  static constexpr result_type min() {return 0;};
-  static constexpr result_type max() {return UINT64_MAX;};
-  virtual uint32_t operator() (uint32_t range) = 0;
-#ifdef LONG_VECTOR_SUPPORT
-  virtual uint64_t operator() (uint64_t range) = 0;
-#endif
-};
-
-using rng64_t = std::shared_ptr<random_64bit_generator>;
 
 template<typename RNG>
 class random_64bit_wrapper : public random_64bit_generator {
