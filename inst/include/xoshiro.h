@@ -77,6 +77,24 @@ public:
   void long_jump(result_type n) {
     for( ; n > 0; --n) long_jump();
   }
+
+  template< class CharT, class Traits >
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& ost, const xoshiro<N>& e) {
+    for(unsigned int i = 0; i < N; ++i) {
+      ost << e.s[i] << ' ';
+    }
+    return ost;
+  }
+
+  template< class CharT, class Traits >
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& ist, xoshiro<N>& e) {
+    for(unsigned int i = 0; i < N; ++i) {
+      ist >> e.s[i] >> std::ws;
+    }
+    return ist;
+  }
 };
 
 /* This is xoroshiro128+ 1.0, our best and fastest small-state generator
