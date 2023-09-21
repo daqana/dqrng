@@ -63,15 +63,16 @@ Supported RNG kinds:
 \describe{
   \item{pcg64}{The default 64 bit variant from the PCG family developed by
    Melissa O'Neill. See \url{https://www.pcg-random.org/} for more details.}
-  \item{Xoroshiro128+ and Xoshiro256+}{RNGs developed by David Blackman and
-   Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
-    \url{https://xoshiro.di.unimi.it/} for more details.}
+  \item{Xoroshiro128++ and Xoshiro256++}{RNGs developed by David Blackman and
+   Sebastiano Vigna. See \url{https://xoshiro.di.unimi.it/} for more details.
+   The older generators Xoroshiro128+ and Xoshiro256+ should be used only for
+   backwards compatibility.}
   \item{Threefry}{The 64 bit version of the 20 rounds Threefry engine as
    provided by \code{\link[sitmo]{sitmo-package}}}
 }
 
-Xoroshiro128+ is the default since it is the fastest generator provided by
-this package.
+Xoroshiro128++ is the default since it is fast, small and has good statistical
+properties.
 
 The functions \code{dqrnorm} and \code{dqrexp} use the Ziggurat algorithm as
 provided by \code{boost.random}.
@@ -87,7 +88,7 @@ without state alteration.
 library(dqrng)
 
 # Set custom RNG.
-dqRNGkind("Xoshiro256+")
+dqRNGkind("Xoshiro256++")
 
 # Use an integer scalar to set a seed.
 dqset.seed(42)
