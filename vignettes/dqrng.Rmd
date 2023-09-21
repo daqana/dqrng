@@ -27,14 +27,14 @@ Support for the following 64bit RNGs are currently included:
 * **pcg64**
 The default 64 bit variant from the PCG family developed by Melissa O'Neill.
 See https://www.pcg-random.org/ for more details.
-* **Xoroshiro128+** and **Xoshiro256+**  
+* **Xoroshiro128++** and **Xoshiro256++**  
 RNGs developed by David Blackman and Sebastiano Vigna.
-They are used as default RNGs in Erlang and Lua.
 See https://xoroshiro.di.unimi.it/ for more details.
+The older generators Xoroshiro128+ and Xoshiro256+ should be used only for backwards compatibility.
 * **Threefry**  
 The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package 'sitmo'.
 
-Of these RNGs Xoroshiro128+ is fastest and therefore used in the examples and set as default RNG.
+Of these RNGs Xoroshiro128++ is used as default since it is fast, small and has good statistical properties.
 
 ## Usage from R
 
@@ -66,7 +66,6 @@ Using dqrng is about three times faster:
 
 ```{r}
 library(dqrng)
-dqRNGkind("Xoroshiro128+")
 dqset.seed(42)
 system.time(cat("pi ~= ", piR(N, rng = dqrng::dqrunif), "\n"))
 ```
@@ -134,7 +133,6 @@ using dqrng::dqrunif;
 
 // [[Rcpp::export]]
 double piCpp(const int n) {
-  dqrng::dqRNGkind("Xoroshiro128+");
   dqrng::dqset_seed(IntegerVector::create(42));
   NumericVector x = dqrunif(n);
   NumericVector y = dqrunif(n);
@@ -156,7 +154,6 @@ For sampling with and without replacement `dqrng::dqsample_int()` and `dqrng::dq
 
 // [[Rcpp::export]]
 void sampleCpp(const int n) {
-  dqrng::dqRNGkind("Xoroshiro128+");
   dqrng::dqset_seed(Rcpp::IntegerVector::create(42));
   Rcpp::IntegerVector sample = dqrng::dqsample_int(n, n/100, true);
   Rcpp::Rcout << sample << std::endl;
@@ -313,7 +310,7 @@ using binomial = boost::random::binomial_distribution<int>;
 using normal = dqrng::normal_distribution;
 // [[Rcpp::export]]
 Rcpp::NumericMatrix multiple_distributions(int n) {
-  dqrng::xoshiro256plus rng(42);
+  auto rng = dqrng::generator<dqrng::xoshiro256plusplus>(42);
   // distributions with default parameters
   binomial bernoulli;
   normal normal;
@@ -321,9 +318,9 @@ Rcpp::NumericMatrix multiple_distributions(int n) {
   double p = 0.0;
   for (int i = 0; i < n; ++i) {
     p = double(i) / double(n);
-    out(i,0) = bernoulli(rng, binomial::param_type(1, p));
-    out(i,1) = normal(rng, normal::param_type(p, 1.0));
-    out(i,2) = normal(rng, normal::param_type(4.0, 3.0 - p));
+    out(i,0) = bernoulli(*rng, binomial::param_type(1, p));
+    out(i,1) = normal(*rng, normal::param_type(p, 1.0));
+    out(i,2) = normal(*rng, normal::param_type(4.0, 3.0 - p));
   }
   Rcpp::colnames(out) = Rcpp::CharacterVector::create("Bernoulli", "Normal1", "Normal2");
   return out;
@@ -372,7 +369,7 @@ Rcpp::NumericMatrix multiple_distributions(int n) {
 }
 
 /*** R
-dqRNGkind("Xoshiro256+")
+dqRNGkind("Xoshiro256++")
 dqset.seed(42)
 multiple_distributions(5)
 */
