@@ -58,6 +58,18 @@ inline double generate_uniform_real<dqrng::random_64bit_generator, double>(dqrng
   return dqrng::uniform01(eng()) * (max - min) + min;
 }
 
+template<>
+inline std::pair<double, int> generate_int_float_pair<double, 8, dqrng::random_64bit_accessor>(dqrng::random_64bit_accessor& eng)
+{
+  return generate_int_float_pair<double, 8, dqrng::random_64bit_generator>(eng);
+}
+
+template<>
+inline double generate_uniform_real<dqrng::random_64bit_accessor, double>(dqrng::random_64bit_accessor& eng, double min, double max)
+{
+  return generate_uniform_real<dqrng::random_64bit_generator, double>(eng, min, max);
+}
+
 } // namespace detail
 } // namespace random
 } // namespace boost

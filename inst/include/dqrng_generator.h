@@ -19,33 +19,14 @@
 #ifndef DQRNG_GENERATOR_H
 #define DQRNG_GENERATOR_H 1
 
-#include <mystdint.h>
-#include <memory>
 #include <type_traits>
 #include <stdexcept>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
+#include <dqrng_types.h>
 
 namespace dqrng {
 using default_64bit_generator = ::dqrng::xoroshiro128plus;
-
-class random_64bit_generator {
-public:
-  using result_type = uint64_t;
-
-  virtual ~random_64bit_generator() {};
-  virtual result_type operator() () = 0;
-  virtual void seed(result_type seed) = 0;
-  virtual void seed(result_type seed, result_type stream) = 0;
-  static constexpr result_type min() {return 0;};
-  static constexpr result_type max() {return UINT64_MAX;};
-  virtual uint32_t operator() (uint32_t range) = 0;
-#ifdef LONG_VECTOR_SUPPORT
-  virtual uint64_t operator() (uint64_t range) = 0;
-#endif
-};
-
-using rng64_t = std::shared_ptr<random_64bit_generator>;
 
 template<typename RNG>
 class random_64bit_wrapper : public random_64bit_generator {
@@ -74,9 +55,9 @@ public:
   random_64bit_wrapper() : gen() {};
   random_64bit_wrapper(result_type seed) : gen(seed) {};
   random_64bit_wrapper(result_type seed, result_type stream) : gen(seed, stream) {};
-  virtual result_type operator() () {return this->bit64();}
-  virtual void seed(result_type seed) {cache = false; gen.seed(seed);}
-  virtual void seed(result_type seed, result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
+  virtual result_type operator() () override {return this->bit64();}
+  virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
+  virtual void seed(result_type seed, result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
 
   /*
    * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded32.cpp
@@ -107,7 +88,7 @@ public:
    * DEALINGS IN THE SOFTWARE.
    */
 
-  virtual uint32_t operator() (uint32_t range) {
+  virtual uint32_t operator() (uint32_t range) override {
     uint32_t x = this->bit32();
     uint64_t m = uint64_t(x) * uint64_t(range);
     uint32_t l = uint32_t(m);
@@ -128,7 +109,7 @@ public:
   }
 
 #ifdef LONG_VECTOR_SUPPORT
-  virtual uint64_t operator() (uint64_t range) {
+  virtual uint64_t operator() (uint64_t range) override {
     using pcg_extras::pcg128_t;
     uint64_t x = this->bit64();
     pcg128_t m = pcg128_t(x) * pcg128_t(range);

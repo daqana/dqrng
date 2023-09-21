@@ -41,6 +41,11 @@ rexp <- function(rate = 1.0) {
     .Call(`_dqrng_rexp`, rate)
 }
 
+#' @keywords internal
+get_rng <- function() {
+    .Call(`_dqrng_get_rng`)
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqrrademacher <- function(n) {

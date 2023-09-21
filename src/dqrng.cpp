@@ -146,6 +146,12 @@ double rexp(double rate = 1.0) {
   return rexp_impl();
 }
 
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
+Rcpp::XPtr<dqrng::rng64_t::element_type> get_rng() {
+  return Rcpp::XPtr<dqrng::rng64_t::element_type>(rng.get(), false);
+}
+
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]

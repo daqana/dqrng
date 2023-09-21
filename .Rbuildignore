@@ -15,3 +15,6 @@
 ^\.github$
 ^CRAN-SUBMISSION$
 ^include$
+^.vscode$
+^Meta$
+^doc$
