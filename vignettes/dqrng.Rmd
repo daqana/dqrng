@@ -339,7 +339,8 @@ multiple_distributions(5)
 ## Accessing the global RNG
 
 You may use the class `dqrng::random_64bit_accessor` to use the **seeded** 
-RNG engine of `dqrng`.
+RNG engine of `dqrng`. Please note that the included RNG will be invalidated if
+`dqRNGkind` is called. You therefore should use this calls only within functions:
 
 ```{Rcpp, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
