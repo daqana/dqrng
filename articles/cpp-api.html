@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.3</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@ RNG stream to use; length 1 or 2
 <dt><code>kind</code></dt>
 <dd>
 string specifying the RNG, One of “pcg64”, “Xoroshiro128+”,
-“Xoshiro256+” or “Threefry”
+“Xoroshiro128++”, “Xoshiro256+”, “Xoshiro256++” or “Threefry”
 </dd>
 <dt><code>normal-kind</code></dt>
 <dd>
@@ -199,18 +199,18 @@ rate of the exponential distribution
 <div class="section level2">
 <h2 id="random-sampling">Random sampling<a class="anchor" aria-label="anchor" href="#random-sampling"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqsample_int<span class="op">(</span><span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqsample_int<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqsample_num<span class="op">(</span><span class="dt">double</span> m<span class="op">,</span> <span class="dt">double</span> n<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqsample_num<span class="op">(</span><span class="dt">double</span> n<span class="op">,</span> <span class="dt">double</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span></code></pre></div>
 <dl>
-<dt><code>m</code></dt>
+<dt><code>n</code></dt>
 <dd>
 a positive number, the number of items to choose from
 </dd>
-<dt><code>n</code></dt>
+<dt><code>size</code></dt>
 <dd>
 a non-negative number giving the number of items to choose
 </dd>
