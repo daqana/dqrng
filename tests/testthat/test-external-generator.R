@@ -19,8 +19,8 @@ test_that("external RNG (normal)", {
   expect_equal(actual2, expected2)
 })
 
-test_that("external RNG (normal, Xoshiro256+)", {
-  dqrng::dqRNGkind("Xoshiro256+")
+test_that("external RNG (normal, Xoshiro256++)", {
+  dqrng::dqRNGkind("Xoshiro256++")
   dqset.seed(use_seed)
   expected <- dqrexp(n, rate)
   dqset.seed(use_seed)

@@ -26,7 +26,7 @@
 #include <dqrng_types.h>
 
 namespace dqrng {
-using default_64bit_generator = ::dqrng::xoroshiro128plus;
+using default_64bit_generator = ::dqrng::xoroshiro128plusplus;
 
 template<typename RNG>
 class random_64bit_wrapper : public random_64bit_generator {
@@ -50,6 +50,10 @@ private:
     has_cache = true;
     return random >> 32;
   }
+
+protected:
+  virtual void output(std::ostream& ost) const override {ost << gen;}
+  virtual void input(std::istream& ist) override {ist >> gen;}
 
 public:
   random_64bit_wrapper() : gen() {};
@@ -140,7 +144,35 @@ inline void random_64bit_wrapper<::dqrng::xoroshiro128plus>::seed(result_type se
 }
 
 template<>
+inline void random_64bit_wrapper<::dqrng::xoroshiro128plusplus>::seed(result_type seed, result_type stream) {
+  gen.seed(seed);
+  gen.jump(stream);
+  cache = false;
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoroshiro128starstar>::seed(result_type seed, result_type stream) {
+  gen.seed(seed);
+  gen.jump(stream);
+  cache = false;
+}
+
+template<>
 inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::seed(result_type seed, result_type stream) {
+  gen.seed(seed);
+  gen.long_jump(stream);
+  cache = false;
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::seed(result_type seed, result_type stream) {
+  gen.seed(seed);
+  gen.long_jump(stream);
+  cache = false;
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::seed(result_type seed, result_type stream) {
     gen.seed(seed);
     gen.long_jump(stream);
     cache = false;

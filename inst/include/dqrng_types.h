@@ -27,6 +27,9 @@
 namespace dqrng {
 
 class random_64bit_generator {
+protected:
+  virtual void output(std::ostream& ost) const = 0;
+  virtual void input(std::istream& ist) = 0;
 public:
   using result_type = uint64_t;
 
@@ -40,6 +43,14 @@ public:
 #ifdef LONG_VECTOR_SUPPORT
   virtual uint64_t operator() (uint64_t range) = 0;
 #endif
+  friend std::ostream& operator<<(std::ostream& ost, const random_64bit_generator& e) {
+    e.output(ost);
+    return ost;
+  }
+  friend std::istream& operator>>(std::istream& ist, random_64bit_generator& e) {
+    e.input(ist);
+    return ist;
+  }
 };
 
 using rng64_t = std::shared_ptr<random_64bit_generator>;
@@ -47,6 +58,15 @@ using rng64_t = std::shared_ptr<random_64bit_generator>;
 class random_64bit_accessor : public random_64bit_generator {
 private:
   dqrng::random_64bit_generator *gen;
+
+protected:
+  virtual void output(std::ostream& ost) const override {
+    ost << *gen;
+  }
+
+  virtual void input(std::istream& ist) override {
+    ist >> *gen;
+  }
 
 public:
   explicit random_64bit_accessor();
