@@ -203,3 +203,33 @@ Rcpp::NumericVector dqsample_num(double m,
     return dqrng::sample::sample<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, offset);
 #endif
 }
+
+// allow registering as user-supplied RNG
+double * user_unif_rand(void) {
+  static double res;
+  res = dqrng::uniform01((*rng)());
+  return &res;
+}
+
+void user_unif_init(Int32 seed_in) {
+  rng->seed(uint64_t(seed_in));
+}
+
+double * user_norm_rand(void) {
+  static double res;
+  using parm_t = decltype(normal)::param_type;
+  res = normal(*rng, parm_t(0.0, 1.0));
+  return &res;
+}
+
+static const R_CMethodDef cMethods[] = {
+  {"user_unif_rand", (DL_FUNC) &user_unif_rand, 0, NULL},
+  {"user_unif_init", (DL_FUNC) &user_unif_init, 0, NULL},
+  {"user_norm_rand", (DL_FUNC) &user_norm_rand, 0, NULL},
+  {NULL, NULL, 0, NULL}
+};
+
+// [[Rcpp::init]]
+void dqrng_init(DllInfo *dll) {
+  R_registerRoutines(dll, cMethods, NULL, NULL, NULL);
+}
