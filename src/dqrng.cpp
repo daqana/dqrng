@@ -212,8 +212,16 @@ double * user_unif_rand(void) {
   return &res;
 }
 
+// https://stackoverflow.com/a/47839021/8416610
+Int32 unscramble(Int32 u) {
+  for (int j=0; j<50; j++) {
+    u = ((u - 1) * 2783094533);
+  }
+  return u;
+}
+
 void user_unif_init(Int32 seed_in) {
-  rng->seed(uint64_t(seed_in));
+  rng->seed(uint64_t(unscramble(seed_in)));
 }
 
 double * user_norm_rand(void) {
