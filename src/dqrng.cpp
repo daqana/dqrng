@@ -28,12 +28,13 @@
 #include <R_randgen.h>
 
 namespace {
-dqrng::rng64_t init() {
+dqrng::rng64_t rng = dqrng::generator();
+
+void init() {
   Rcpp::RNGScope rngScope;
   Rcpp::IntegerVector seed(2, dqrng::R_random_int);
-  return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
+  rng->seed(dqrng::convert_seed<uint64_t>(seed));
 }
-dqrng::rng64_t rng = nullptr;
 
 using generator = double(*)();
 dqrng::uniform_distribution uniform{};
@@ -50,7 +51,7 @@ generator rexp_impl = [] () {return exponential(*rng);};
 void dqset_seed(Rcpp::Nullable<Rcpp::IntegerVector> seed,
                 Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
   if (seed.isNull()) {
-    rng = init();
+    init();
   } else {
     uint64_t _seed = dqrng::convert_seed<uint64_t>(seed.as());
     if (stream.isNotNull()) {

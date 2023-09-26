@@ -21,9 +21,9 @@
 
 #include <type_traits>
 #include <stdexcept>
+#include <dqrng_types.h>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
-#include <dqrng_types.h>
 
 namespace dqrng {
 using default_64bit_generator = ::dqrng::xoroshiro128plusplus;
@@ -184,6 +184,18 @@ inline void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stre
     cache = false;
 }
 
+
+template<typename RNG = default_64bit_generator>
+typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
+generator () {
+  return std::make_shared<random_64bit_wrapper<RNG>>();
+}
+
+template<typename RNG = default_64bit_generator>
+typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
+generator () {
+  return std::make_shared<RNG>();
+}
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
