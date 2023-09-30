@@ -47,9 +47,9 @@ build-in RNGs:
 library(dqrng)
 dqset.seed(42)
 dqrunif(5, min = 2, max = 10)
-#> [1] 9.211802 2.616041 6.236331 4.588535 5.764814
+#> [1] 9.266963 4.644899 9.607483 3.635770 4.742639
 dqrexp(5, rate = 4)
-#> [1] 0.35118613 0.17656197 0.06844976 0.16984095 0.10096744
+#> [1] 0.111103883 0.084289794 0.003414377 0.042012033 0.143914583
 ```
 
 They are quite a bit faster, though:
@@ -61,8 +61,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)      612µs  685.2µs     1397.
-#> 2 dqrnorm(N)     86µs   88.6µs    10388.
+#> 1 rnorm(N)      607µs  660.2µs     1451.
+#> 2 dqrnorm(N)   89.8µs   92.7µs     9896.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +79,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.63ms     114. 
-#> 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   9.55ms      96.1
-#> 3 dqsample.int(m, n, replace = TRUE)        482.21µs 810.29µs    1254. 
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 492.79µs 822.86µs    1275.
+#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.08ms      139.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   8.93ms      110.
+#> 3 dqsample.int(m, n, replace = TRUE)         410.9µs 434.24µs     2137.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 397.74µs 435.38µs     1930.
 ```
 
 And without replacement:
@@ -100,11 +100,11 @@ bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                   40.1ms  42.54ms      23.5
-#> 2 sample.int(1000 * m, n)           12.19ms  14.38ms      67.8
-#> 3 sample.int(m, n, useHash = TRUE)   9.43ms  11.17ms      81.9
-#> 4 dqsample.int(m, n)                 1.22ms   1.35ms     638. 
-#> 5 dqsample.int(1000 * m, n)          1.98ms   2.51ms     358.
+#> 1 sample.int(m, n)                  22.73ms  24.05ms      36.9
+#> 2 sample.int(1000 * m, n)           12.07ms  13.85ms      68.1
+#> 3 sample.int(m, n, useHash = TRUE)   9.57ms  12.63ms      74.4
+#> 4 dqsample.int(m, n)                 1.11ms    1.2ms     696. 
+#> 5 dqsample.int(1000 * m, n)          1.95ms   2.69ms     293.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
@@ -120,7 +120,34 @@ u1 <- dqrunif(N)
 dqset.seed(42, 2)
 u2 <- dqrunif(N)
 cor(u1, u2)
-#> [1] -0.0005787967
+#> [1] 0.0009574617
+```
+
+It is also possible to register the supplied generators as user-supplied
+RNGs. This way `set.seed()` and `dqset.seed()` influence both
+`(dq)runif` and `(dq)rnorm` in the same way. This is also true for other
+`r<dist>` functions, but note that `rexp` and `dqrexp` still give
+different results:
+
+``` r
+register_methods()
+set.seed(4711); runif(5)
+#> [1] 0.3143534 0.7835753 0.1443660 0.1109871 0.6433407
+set.seed(4711); dqrunif(5)
+#> [1] 0.3143534 0.7835753 0.1443660 0.1109871 0.6433407
+dqset.seed(4711); rnorm(5)
+#> [1] -0.3618122  0.8199887 -0.4075635  0.2073972 -0.8038326
+dqset.seed(4711); dqrnorm(5)
+#> [1] -0.3618122  0.8199887 -0.4075635  0.2073972 -0.8038326
+set.seed(4711); rt(5, 10)
+#> [1] -0.3196113 -0.4095873 -1.2928241  0.2399470 -0.1068945
+dqset.seed(4711); rt(5, 10)
+#> [1] -0.3196113 -0.4095873 -1.2928241  0.2399470 -0.1068945
+set.seed(4711); rexp(5, 10)
+#> [1] 0.0950560698 0.0567150561 0.1541222748 0.2512966671 0.0002175758
+set.seed(4711); dqrexp(5, 10)
+#> [1] 0.03254731 0.06855303 0.06977124 0.02579004 0.07629535
+restore_methods()
 ```
 
 ## Feedback

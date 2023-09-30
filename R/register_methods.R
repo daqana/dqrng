@@ -30,11 +30,21 @@ state$RNGkind <- rep.int("default", 3)
 #'   setting the option \code{dqrng.register_methods} to \code{TRUE}, e.g.
 #'   with \code{options(dqrng.register_methods=TRUE)}.
 #'
+#'   Notes on seeding:
+#'   \itemize{
+#'     \item When a user-supplied RNG is registered, it is also seeded from the
+#'       previously used RNG. You will therefore get reproducible (but different)
+#'       whether you call \code{set.seed()} before or after \code{register_methods()}.
+#'     \item When called with a single integer as argument, both \code{set.seed()}
+#'       and \code{dqset.seed()} have the same effect. However, \code{dqset.seed()}
+#'       allows you to call it with two integers thereby supplying 64 bits of
+#'       initial state instead of just 32 bits.
+#'   }
 #' @seealso \code{\link{RNGkind}} and \code{\link{Random.user}}
 #'
 #' @examples
 #' register_methods()
-#' # set.seed and dqset.seed influence both (dq)runif and dqrnorm
+#' # set.seed and dqset.seed influence both (dq)runif and (dq)rnorm
 #' set.seed(4711); runif(5)
 #' set.seed(4711); dqrunif(5)
 #' dqset.seed(4711); rnorm(5)

@@ -101,6 +101,21 @@ u2 <- dqrunif(N)
 cor(u1, u2)
 ```
 
+It is also possible to register the supplied generators as user-supplied RNGs. This way `set.seed()` and `dqset.seed()` influence both `(dq)runif` and `(dq)rnorm` in the same way. This is also true for other `r<dist>` functions, but note that `rexp` and `dqrexp` still give different results: 
+
+```{r register}
+register_methods()
+set.seed(4711); runif(5)
+set.seed(4711); dqrunif(5)
+dqset.seed(4711); rnorm(5)
+dqset.seed(4711); dqrnorm(5)
+set.seed(4711); rt(5, 10)
+dqset.seed(4711); rt(5, 10)
+set.seed(4711); rexp(5, 10)
+set.seed(4711); dqrexp(5, 10)
+restore_methods()
+```
+
 ## Feedback
 
 All feedback (bug reports, security issues, feature requests, ...) should be provided as [issues](https://github.com/daqana/dqrng/issues).
