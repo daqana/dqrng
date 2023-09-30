@@ -6,7 +6,7 @@
 \alias{dqrng-package}
 \title{dqrng: Fast Pseudo Random Number Generators}
 \description{
-Several fast random number generators are provided as C++ header only libraries: The PCG family by O'Neill (2014 \url{https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf}) as well as the Xoroshiro / Xoshiro family by Blackman and Vigna (2021 \doi{10.1145/3460772}). In addition fast functions for generating random numbers according to a uniform, normal and exponential distribution are included. The latter two use the Ziggurat algorithm originally proposed by Marsaglia and Tsang (2000, \doi{10.18637/jss.v005.i08}). The fast sampling methods support unweighted sampling both with and without replacement. These functions are exported to R and as a C++ interface and are enabled for use with the default 64 bit generator from the PCG family, Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011, \doi{10.1145/2063384.2063405}) as provided by the package 'sitmo'.
+Several fast random number generators are provided as C++ header only libraries: The PCG family by O'Neill (2014 \url{https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf}) as well as the Xoroshiro / Xoshiro family by Blackman and Vigna (2021 \doi{10.1145/3460772}). In addition fast functions for generating random numbers according to a uniform, normal and exponential distribution are included. The latter two use the Ziggurat algorithm originally proposed by Marsaglia and Tsang (2000, \doi{10.18637/jss.v005.i08}). The fast sampling methods support unweighted sampling both with and without replacement. These functions are exported to R and as a C++ interface and are enabled for use with the default 64 bit generator from the PCG family, Xoroshiro128+/++ and Xoshiro256+/++ as well as the 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011, \doi{10.1145/2063384.2063405}) as provided by the package 'sitmo'.
 }
 \seealso{
 Useful links:
@@ -23,9 +23,9 @@ Useful links:
 Other contributors:
 \itemize{
   \item daqana GmbH [copyright holder]
-  \item David Blackman [contributor]
-  \item Melissa O'Neill \email{oneill@pcg-random.org} [contributor]
-  \item Sebastiano Vigna \email{vigna@acm.org} [contributor]
+  \item David Blackman (Xoroshiro / Xoshiro family) [copyright holder]
+  \item Melissa O'Neill \email{oneill@pcg-random.org} (PCG family) [copyright holder]
+  \item Sebastiano Vigna \email{vigna@acm.org} (Xoroshiro / Xoshiro family) [copyright holder]
   \item Aaron Lun [contributor]
   \item Kyle Butts \email{kyle.butts@colorado.edu} [contributor]
   \item Henrik Sloot [contributor]

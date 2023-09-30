@@ -1,13 +1,13 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.3.1.3
+Version: 0.3.1.4
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre")),
     person("daqana GmbH", role = "cph"),
-    person("David Blackman", role = "ctb"),
-    person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "ctb"),
-    person("Sebastiano Vigna", email = "vigna@acm.org", role = "ctb"),
+    person("David Blackman", role = "cph", comment = "Xoroshiro / Xoshiro family"),
+    person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "cph", comment = "PCG family"),
+    person("Sebastiano Vigna", email = "vigna@acm.org", role = "cph", comment = "Xoroshiro / Xoshiro family"),
     person("Aaron", "Lun", role="ctb"), 
     person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu"),
     person("Henrik", "Sloot", role = "ctb")
@@ -23,10 +23,10 @@ Description: Several fast random number generators are provided as C++
   The fast sampling methods support unweighted sampling both with and without
   replacement. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
-  Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds
-  Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
+  Xoroshiro128+/++ and Xoshiro256+/++ as well as the 64 bit version of the 20
+  rounds Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
   provided by the package 'sitmo'.
-License: AGPL-3 | file LICENSE
+License: AGPL-3
 Depends: R (>= 3.5.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
