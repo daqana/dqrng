@@ -1,9 +1,6 @@
-state <- new.env(parent = emptyenv())
-state$RNGkind <- rep.int("default", 3)
-
 .onLoad <- function(libname, pkgname) {
   if (getOption("dqrng.register_methods", FALSE))
-    state$RNGkind <-  RNGkind("user", "user")
+    register_methods()
   else {
     if (!exists(".Random.seed", mode="numeric", envir=globalenv()))
       set.seed(NULL)
@@ -15,5 +12,5 @@ state$RNGkind <- rep.int("default", 3)
 
 .onUnload <- function(libpath) {
   if (getOption("dqrng.register_methods", FALSE))
-    RNGkind(state$RNGkind[1], state$RNGkind[2], state$RNGkind[3])
+    restore_methods()
 }

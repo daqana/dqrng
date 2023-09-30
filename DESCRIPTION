@@ -23,8 +23,8 @@ Description: Several fast random number generators are provided as C++
   The fast sampling methods support unweighted sampling both with and without
   replacement. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
-  Xoroshiro128+ and Xoshiro256+ as well as the 64 bit version of the 20 rounds
-  Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
+  Xoroshiro128+/++ and Xoshiro256+/++ as well as the 64 bit version of the 20
+  rounds Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>) as
   provided by the package 'sitmo'.
 License: AGPL-3 | file LICENSE
 Depends: R (>= 3.5.0)

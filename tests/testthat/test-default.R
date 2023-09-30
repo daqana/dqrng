@@ -18,13 +18,13 @@ test_that("setting seed produces identical uniformly distributed numbers", {
 })
 
 test_that("setting seed produces identical uniformly distributed numbers (user defined RNG)", {
-  orig <- RNGkind("user", "default")
+  register_methods()
   dqset.seed(seed)
   u1 <- dqrunif(10)
   set.seed(seed)
   u2 <- stats::runif(10)
   expect_equal(u1, u2)
-  RNGkind(orig[1], orig[2], orig[3])
+  restore_methods()
 })
 
 test_that("setting seed produces identical normaly distributed numbers", {
@@ -36,13 +36,13 @@ test_that("setting seed produces identical normaly distributed numbers", {
 })
 
 test_that("setting seed produces identical normaly distributed numbers (user defined RNG)", {
-  orig <- RNGkind("user", "user")
+  register_methods()
   dqset.seed(seed)
   n1 <- dqrnorm(10)
   set.seed(seed)
   n2 <- stats::rnorm(10)
   expect_equal(n1, n2)
-  RNGkind(orig[1], orig[2], orig[3])
+  restore_methods()
 })
 
 test_that("setting seed produces identical exponenetially distributed numbers", {
