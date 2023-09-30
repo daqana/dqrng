@@ -115,6 +115,9 @@ set.seed(4711); dqrexp(5, 10)
 restore_methods()
 ```
 
+You can automatically register these methods when loading this package by setting the option `dqrng.register_methods` to `TRUE`, e.g. with `options(dqrng.register_methods=TRUE)`.
+
+
 ## Usage from C++
 
 The RNGs and distributions functions can also be used from C++ at various levels of abstraction.
