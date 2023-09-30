@@ -24,6 +24,12 @@ state$RNGkind <- rep.int("default", 3)
 #'       for normal draws with  \code{register_method("both")}. The latter
 #'       approach is used by default. Using only the Ziggurat method will give
 #'       \emph{undefined} behavior and is not supported!
+#'     \item Calling \code{dqset.seed(NULL)} re-initializes the RNG from R's RNG.
+#'       This no longer makes sense when the RNG has been registered as user-supplied
+#'       RNG. In that case \code{set.seed{NULL}} needs to be used.
+#'     \item With R's in-build RNGs one can get access to the internal state using
+#'       \code{.Random.seed}. This is not possible here, since the internal state
+#'       is a private member of the used C++ classes.
 #'   }
 #'
 #'   You can automatically register these methods when loading this package by

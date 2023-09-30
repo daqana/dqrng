@@ -23,9 +23,9 @@ Useful links:
 Other contributors:
 \itemize{
   \item daqana GmbH [copyright holder]
-  \item David Blackman [contributor]
-  \item Melissa O'Neill \email{oneill@pcg-random.org} [contributor]
-  \item Sebastiano Vigna \email{vigna@acm.org} [contributor]
+  \item David Blackman (Xoroshiro / Xoshiro family) [copyright holder]
+  \item Melissa O'Neill \email{oneill@pcg-random.org} (PCG family) [copyright holder]
+  \item Sebastiano Vigna \email{vigna@acm.org} (Xoroshiro / Xoshiro family) [copyright holder]
   \item Aaron Lun [contributor]
   \item Kyle Butts \email{kyle.butts@colorado.edu} [contributor]
   \item Henrik Sloot [contributor]

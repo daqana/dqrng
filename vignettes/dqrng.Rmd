@@ -104,14 +104,14 @@ It is also possible to register the supplied generators as user-supplied RNGs. T
 
 ```{r register}
 register_methods()
-set.seed(4711); runif(5)
-set.seed(4711); dqrunif(5)
-dqset.seed(4711); rnorm(5)
-dqset.seed(4711); dqrnorm(5)
-set.seed(4711); rt(5, 10)
-dqset.seed(4711); rt(5, 10)
-set.seed(4711); rexp(5, 10)
-set.seed(4711); dqrexp(5, 10)
+set.seed(4711);   stats::runif(5)
+set.seed(4711);   dqrng::dqrunif(5)
+dqset.seed(4711); stats::rnorm(5)
+dqset.seed(4711); dqrng::dqrnorm(5)
+set.seed(4711);   stats::rt(5, 10)
+dqset.seed(4711); stats::rt(5, 10)
+set.seed(4711);   stats::rexp(5, 10)
+set.seed(4711);   dqrng::dqrexp(5, 10)
 restore_methods()
 ```
 
