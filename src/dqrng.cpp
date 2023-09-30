@@ -205,6 +205,7 @@ Rcpp::NumericVector dqsample_num(double m,
 #endif
 }
 
+extern "C" {
 // allow registering as user-supplied RNG
 double * user_unif_rand(void) {
   static double res;
@@ -230,6 +231,7 @@ double * user_norm_rand(void) {
   res = normal(*rng, parm_t(0.0, 1.0));
   return &res;
 }
+} // extern "C"
 
 static const R_CMethodDef cMethods[] = {
   {"user_unif_rand", (DL_FUNC) &user_unif_rand, 0, NULL},
