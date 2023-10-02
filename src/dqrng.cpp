@@ -28,12 +28,13 @@
 #include <R_randgen.h>
 
 namespace {
-dqrng::rng64_t init() {
+dqrng::rng64_t rng = dqrng::generator();
+
+void init() {
   Rcpp::RNGScope rngScope;
   Rcpp::IntegerVector seed(2, dqrng::R_random_int);
-  return dqrng::generator(dqrng::convert_seed<uint64_t>(seed));
+  rng->seed(dqrng::convert_seed<uint64_t>(seed));
 }
-dqrng::rng64_t rng = nullptr;
 
 using generator = double(*)();
 dqrng::uniform_distribution uniform{};
@@ -50,7 +51,7 @@ generator rexp_impl = [] () {return exponential(*rng);};
 void dqset_seed(Rcpp::Nullable<Rcpp::IntegerVector> seed,
                 Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
   if (seed.isNull()) {
-    rng = init();
+    init();
   } else {
     uint64_t _seed = dqrng::convert_seed<uint64_t>(seed.as());
     if (stream.isNotNull()) {
@@ -202,4 +203,44 @@ Rcpp::NumericVector dqsample_num(double m,
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
     return dqrng::sample::sample<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, offset);
 #endif
+}
+
+extern "C" {
+// allow registering as user-supplied RNG
+double * user_unif_rand(void) {
+  static double res;
+  res = dqrng::uniform01((*rng)());
+  return &res;
+}
+
+// https://stackoverflow.com/a/47839021/8416610
+Int32 unscramble(Int32 u) {
+  for (int j=0; j<50; j++) {
+    u = ((u - 1) * 2783094533);
+  }
+  return u;
+}
+
+void user_unif_init(Int32 seed_in) {
+  rng->seed(uint64_t(unscramble(seed_in)));
+}
+
+double * user_norm_rand(void) {
+  static double res;
+  using parm_t = decltype(normal)::param_type;
+  res = normal(*rng, parm_t(0.0, 1.0));
+  return &res;
+}
+} // extern "C"
+
+static const R_CMethodDef cMethods[] = {
+  {"user_unif_rand", (DL_FUNC) &user_unif_rand, 0, NULL},
+  {"user_unif_init", (DL_FUNC) &user_unif_init, 0, NULL},
+  {"user_norm_rand", (DL_FUNC) &user_norm_rand, 0, NULL},
+  {NULL, NULL, 0, NULL}
+};
+
+// [[Rcpp::init]]
+void dqrng_init(DllInfo *dll) {
+  R_registerRoutines(dll, cMethods, NULL, NULL, NULL);
 }

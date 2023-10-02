@@ -100,6 +100,22 @@ system.time(for (i in 1:100)   sample.int(N, N/100))
 system.time(for (i in 1:100) dqsample.int(N, N/100))
 ```
 
+It is also possible to register the supplied generators as user-supplied RNGs. This way `set.seed()` and `dqset.seed()` influence both `(dq)runif` and `(dq)rnorm` in the same way. This is also true for other `r<dist>` functions, but note that `rexp` and `dqrexp` still give different results: 
+
+```{r register}
+register_methods()
+set.seed(4711);   stats::runif(5)
+set.seed(4711);   dqrng::dqrunif(5)
+dqset.seed(4711); stats::rnorm(5)
+dqset.seed(4711); dqrng::dqrnorm(5)
+set.seed(4711);   stats::rt(5, 10)
+dqset.seed(4711); stats::rt(5, 10)
+set.seed(4711);   stats::rexp(5, 10)
+set.seed(4711);   dqrng::dqrexp(5, 10)
+restore_methods()
+```
+
+You can automatically register these methods when loading this package by setting the option `dqrng.register_methods` to `TRUE`, e.g. with `options(dqrng.register_methods=TRUE)`.
 
 
 ## Usage from C++
