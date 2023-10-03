@@ -44,9 +44,25 @@ test_that("setting seed produces identical exponenetially distributed scalar num
 Rcpp::sourceCpp("cpp/xoshiro-jump.cpp")
 
 test_that("jump() for xoroshiro128+ works", {
-  expect_true(xoroshiro_jump())
+  expect_true(xoroshiro_plus_jump())
 })
 
-test_that("jump() for xoshiro256+ works", {
-  expect_true(xoshiro_jump())
+test_that("jump() for xoroshiro128++ works", {
+  expect_true(xoroshiro_plus_plus_jump())
+})
+
+test_that("jump() for xoroshiro128** works", {
+  expect_true(xoroshiro_star_star_jump())
+})
+
+test_that("long_jump() for xoshiro256+ works", {
+  expect_true(xoshiro_plus_long_jump())
+})
+
+test_that("long_jump() for xoshiro256++ works", {
+  expect_true(xoshiro_plus_plus_long_jump())
+})
+
+test_that("long_jump() for xoshiro256** works", {
+  expect_true(xoshiro_star_star_long_jump())
 })
