@@ -153,8 +153,8 @@ double rexp(double rate = 1.0) {
 
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-Rcpp::XPtr<dqrng::rng64_t::element_type> get_rng() {
-  return Rcpp::XPtr<dqrng::rng64_t::element_type>(rng.get(), false);
+Rcpp::XPtr<dqrng::random_64bit_generator> get_rng() {
+  return Rcpp::XPtr<dqrng::random_64bit_generator>(rng);
 }
 
 //' @rdname dqrng-functions
@@ -187,7 +187,7 @@ Rcpp::IntegerVector dqsample_int(int m,
                                  int offset = 0) {
     if (!(m > 0 && n >= 0))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
-    return dqrng::sample::sample<INTSXP, uint32_t>(rng, uint32_t(m), uint32_t(n), replace, offset);
+    return dqrng::sample::sample<INTSXP, uint32_t>(*rng, uint32_t(m), uint32_t(n), replace, offset);
 }
 
 // [[Rcpp::export(rng = false)]]
@@ -201,7 +201,7 @@ Rcpp::NumericVector dqsample_num(double m,
 #else
     if (!(m > 0 && n >= 0))
         Rcpp::stop("Argument requirements not fulfilled: m > 0 && n >= 0");
-    return dqrng::sample::sample<REALSXP, uint64_t>(rng, uint64_t(m), uint64_t(n), replace, offset);
+    return dqrng::sample::sample<REALSXP, uint64_t>(*rng, uint64_t(m), uint64_t(n), replace, offset);
 #endif
 }
 

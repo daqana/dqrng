@@ -211,6 +211,14 @@ public:
 
 private:
   result_type state;
+
+public:  
+  friend std::ostream& operator<<(std::ostream& ost, const SplitMix& e) {
+    return ost << e.state;
+  }
+  friend std::istream& operator>>(std::istream& ist, SplitMix& e) {
+    return ist >> e.state;
+  }
 };
 
 // [[Rcpp::export]]
@@ -346,8 +354,6 @@ Rcpp::NumericMatrix multiple_distributions(int n) {
 multiple_distributions(5)
 */
 ```
-
-<!-- STATIC_ARBITRARY_SEED -->
 
 ## Accessing the global RNG
 

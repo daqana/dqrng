@@ -183,11 +183,11 @@ namespace dqrng {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline Rcpp::XPtr<dqrng::rng64_t::element_type> get_rng() {
+    inline Rcpp::XPtr<dqrng::random_64bit_generator> get_rng() {
         typedef SEXP(*Ptr_get_rng)();
         static Ptr_get_rng p_get_rng = NULL;
         if (p_get_rng == NULL) {
-            validateSignature("Rcpp::XPtr<dqrng::rng64_t::element_type>(*get_rng)()");
+            validateSignature("Rcpp::XPtr<dqrng::random_64bit_generator>(*get_rng)()");
             p_get_rng = (Ptr_get_rng)R_GetCCallable("dqrng", "_dqrng_get_rng");
         }
         RObject rcpp_result_gen;
@@ -200,7 +200,7 @@ namespace dqrng {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::XPtr<dqrng::rng64_t::element_type> >(rcpp_result_gen);
+        return Rcpp::as<Rcpp::XPtr<dqrng::random_64bit_generator> >(rcpp_result_gen);
     }
 
     inline Rcpp::IntegerVector dqrrademacher(size_t n) {

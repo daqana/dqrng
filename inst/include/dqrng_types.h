@@ -21,7 +21,6 @@
 #define DQRNG_TYPES_H 1
 
 #include <mystdint.h>
-#include <memory>
 #include <stdexcept>
 
 namespace dqrng {
@@ -52,8 +51,6 @@ public:
     return ist;
   }
 };
-
-using rng64_t = std::shared_ptr<random_64bit_generator>;
 
 class random_64bit_accessor : public random_64bit_generator {
 private:

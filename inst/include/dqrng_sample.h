@@ -27,21 +27,21 @@
 namespace dqrng {
 namespace sample {
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> replacement(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> replacement(dqrng::random_64bit_generator &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
   std::generate(result.begin(), result.end(),
-                [m, offset, rng] () {return static_cast<storage_t>(offset + (*rng)(m));});
+                [m, offset, &rng] () {return static_cast<storage_t>(offset + rng(m));});
   return result;
 }
 
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::random_64bit_generator &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
   std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
   for (INT i = 0; i < n; ++i) {
-    std::swap(tmp[i], tmp[i + (*rng)(m - i)]);
+    std::swap(tmp[i], tmp[i + rng(m - i)]);
   }
   if (m == n)
     return tmp;
@@ -50,22 +50,22 @@ inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::rng64_t &rng, INT m, IN
 }
 
 template<int RTYPE, typename INT, typename SET>
-inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::rng64_t &rng, INT m, INT n, int offset) {
+inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::random_64bit_generator &rng, INT m, INT n, int offset) {
   using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
   Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
   SET elems(m, n);
   for (INT i = 0; i < n; ++i) {
-    INT v = (*rng)(m);
-    while (!elems.insert(v)) {
-      v = (*rng)(m);
-    }
+    INT v;
+    do {
+      v = rng(m);
+    } while (!elems.insert(v));
     result(i) = static_cast<storage_t>(offset + v);
   }
   return result;
 }
 
 template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset = 0) {
+inline Rcpp::Vector<RTYPE> sample(dqrng::random_64bit_generator &rng, INT m, INT n, bool replace, int offset = 0) {
   if (replace || n <= 1) {
     return dqrng::sample::replacement<RTYPE, INT>(rng, m, n, offset);
   } else {

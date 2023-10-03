@@ -177,7 +177,7 @@ struct RandomFill : public RcppParallel::Worker {
   void operator()(std::size_t begin, std::size_t end) {
     auto rng = dqrng::generator<pcg64>(seed, end);
     for (std::size_t col = begin; col < end; ++col) {
-      auto sampled = dqrng::sample::sample<INTSXP, uint32_t>(rng, 100000, output.nrow(), true);
+      auto sampled = dqrng::sample::sample<INTSXP, uint32_t>(*rng, 100000, output.nrow(), true);
       RcppParallel::RMatrix<int>::Column column = output.column(col);
       std::copy(sampled.begin(), sampled.end(), column.begin());
     }

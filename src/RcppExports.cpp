@@ -286,7 +286,7 @@ RcppExport SEXP _dqrng_rexp(SEXP rateSEXP) {
     return rcpp_result_gen;
 }
 // get_rng
-Rcpp::XPtr<dqrng::rng64_t::element_type> get_rng();
+Rcpp::XPtr<dqrng::random_64bit_generator> get_rng();
 static SEXP _dqrng_get_rng_try() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -449,7 +449,7 @@ static int _dqrng_RcppExport_validate(const char* sig) {
         signatures.insert("double(*rnorm)(double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrexp)(size_t,double)");
         signatures.insert("double(*rexp)(double)");
-        signatures.insert("Rcpp::XPtr<dqrng::rng64_t::element_type>(*get_rng)()");
+        signatures.insert("Rcpp::XPtr<dqrng::random_64bit_generator>(*get_rng)()");
         signatures.insert("Rcpp::IntegerVector(*dqrrademacher)(size_t)");
         signatures.insert("Rcpp::IntegerVector(*dqsample_int)(int,int,bool,Rcpp::Nullable<Rcpp::NumericVector>,int)");
         signatures.insert("Rcpp::NumericVector(*dqsample_num)(double,double,bool,Rcpp::Nullable<Rcpp::NumericVector>,int)");
