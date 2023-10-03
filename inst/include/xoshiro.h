@@ -23,6 +23,10 @@ class xoshiro {
 public:
   using result_type = uint64_t;
 
+  virtual std::array<result_type, N> get_jump() = 0;
+  virtual std::array<result_type, N> get_long_jump() = 0;
+  void do_jump(std::array<result_type, N>);
+
 protected:
   std::array<result_type, N> s;
 
@@ -46,8 +50,6 @@ private:
   };
 
   virtual result_type next() = 0;
-  virtual void jump_impl() = 0;
-  virtual void long_jump_impl() = 0;
 
 public:
   inline static constexpr result_type min() {return 0.0;};
@@ -69,11 +71,15 @@ public:
     return next();
   }
 
-  void jump() {jump_impl();};
+  void jump() {
+    do_jump(get_jump());
+  };
   void jump(result_type n) {
     for( ; n > 0; --n) jump();
   }
-  void long_jump() {long_jump_impl();};
+  void long_jump() {
+    do_jump(get_long_jump());
+  };
   void long_jump(result_type n) {
     for( ; n > 0; --n) long_jump();
   }
@@ -96,6 +102,46 @@ public:
     return ist;
   }
 };
+
+template<>
+void xoshiro<2>::do_jump(std::array<result_type, 2> JUMP) {
+    uint64_t s0 = 0;
+    uint64_t s1 = 0;
+    for(unsigned int i = 0; i < sizeof JUMP / sizeof JUMP.begin(); i++)
+      for(int b = 0; b < 64; b++) {
+        if (JUMP[i] & UINT64_C(1) << b) {
+          s0 ^= s[0];
+          s1 ^= s[1];
+        }
+        next();
+      }
+
+    s[0] = s0;
+    s[1] = s1;
+}
+
+template<>
+void xoshiro<4>::do_jump(std::array<result_type, 4> JUMP) {
+    uint64_t s0 = 0;
+    uint64_t s1 = 0;
+    uint64_t s2 = 0;
+    uint64_t s3 = 0;
+    for(unsigned int i = 0; i < sizeof JUMP / sizeof JUMP.begin(); i++)
+      for(int b = 0; b < 64; b++) {
+        if (JUMP[i] & UINT64_C(1) << b) {
+          s0 ^= s[0];
+          s1 ^= s[1];
+          s2 ^= s[2];
+          s3 ^= s[3];
+        }
+        next();
+      }
+
+    s[0] = s0;
+    s[1] = s1;
+    s[2] = s2;
+    s[3] = s3;
+}
 
 /* This is xoroshiro128+ 1.0, our best and fastest small-state generator
    for floating-point numbers, but its state space is large enough only
@@ -127,7 +173,7 @@ public:
   xoroshiro128plus(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t s0 = s[0];
     uint64_t s1 = s[1];
     const uint64_t result = s0 + s1;
@@ -139,52 +185,20 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^64 calls to next(); it can be used to generate 2^64
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0xdf900294d8f554a5, 0x170865df4b3201fc };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
+  std::array<result_type, 2> get_jump() override {
+    return std::array<result_type, 2>{0xdf900294d8f554a5, 0x170865df4b3201fc};
   }
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^96 calls to next(); it can be used to generate 2^32 starting points,
    from each of which jump() will generate 2^32 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0xd2a98b26625eee7b, 0xdddf9b1090aa7ac1 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-  }
+   std::array<result_type, 2> get_long_jump() override {
+     return std::array<result_type, 2>{0xd2a98b26625eee7b, 0xdddf9b1090aa7ac1};
+   }
 };
 
 /* This is xoroshiro128** 1.0, one of our all-purpose, rock-solid,
@@ -206,7 +220,7 @@ public:
   xoroshiro128starstar(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t s0 = s[0];
     uint64_t s1 = s[1];
     const uint64_t result = rotl(s0 * 5, 7) * 9;
@@ -218,51 +232,19 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^64 calls to next(); it can be used to generate 2^64
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0xdf900294d8f554a5, 0x170865df4b3201fc };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
+  std::array<result_type, 2> get_jump() override {
+    return std::array<result_type, 2>{0xdf900294d8f554a5, 0x170865df4b3201fc};
   }
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^96 calls to next(); it can be used to generate 2^32 starting points,
    from each of which jump() will generate 2^32 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0xd2a98b26625eee7b, 0xdddf9b1090aa7ac1 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
+  std::array<result_type, 2> get_long_jump() override {
+    return std::array<result_type, 2>{0xd2a98b26625eee7b, 0xdddf9b1090aa7ac1};
   }
 };
 
@@ -285,7 +267,7 @@ public:
   xoroshiro128plusplus(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t s0 = s[0];
     uint64_t s1 = s[1];
     const uint64_t result = rotl(s0 + s1, 17) + s0;
@@ -297,51 +279,19 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^64 calls to next(); it can be used to generate 2^64
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0x2bd7a6a6e99c2ddc, 0x0992ccaf6a6fca05 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
+  std::array<result_type, 2> get_jump() override {
+    return std::array<result_type, 2>{0x2bd7a6a6e99c2ddc, 0x0992ccaf6a6fca05};
   }
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^96 calls to next(); it can be used to generate 2^32 starting points,
    from each of which jump() will generate 2^32 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0x360fd5f2cf8d5d99, 0x9c6e6877736c46e3 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
+  std::array<result_type, 2> get_long_jump() override {
+    return std::array<result_type, 2>{0x360fd5f2cf8d5d99, 0x9c6e6877736c46e3};
   }
 };
 
@@ -366,7 +316,7 @@ public:
   xoshiro256plus(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t result = s[0] + s[3];
 
     const uint64_t t = s[1] << 17;
@@ -383,63 +333,19 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^128 calls to next(); it can be used to generate 2^128
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_jump() override {
+    return std::array<result_type, 4>{0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c};
   }
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^192 calls to next(); it can be used to generate 2^64 starting points,
    from each of which jump() will generate 2^64 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_long_jump() override {
+    return std::array<result_type, 4>{0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635};
   }
 };
 
@@ -460,7 +366,7 @@ public:
   xoshiro256starstar(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t result = rotl(s[1] * 5, 7) * 9;
 
     const uint64_t t = s[1] << 17;
@@ -477,64 +383,19 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^128 calls to next(); it can be used to generate 2^128
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_jump() override {
+    return std::array<result_type, 4>{0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c};
   }
-
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^192 calls to next(); it can be used to generate 2^64 starting points,
    from each of which jump() will generate 2^64 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_long_jump() override {
+    return std::array<result_type, 4>{0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635};
   }
 };
 
@@ -557,7 +418,7 @@ public:
   xoshiro256plusplus(result_type _seed) : xoshiro(_seed) {};
 
 private:
-  uint64_t next(void) {
+  uint64_t next(void) override {
     const uint64_t result = rotl(s[0] + s[3], 23) + s[0];
 
     const uint64_t t = s[1] << 17;
@@ -574,64 +435,19 @@ private:
     return result;
   }
 
-
   /* This is the jump function for the generator. It is equivalent
    to 2^128 calls to next(); it can be used to generate 2^128
    non-overlapping subsequences for parallel computations. */
-
-  void jump_impl(void) {
-    static const uint64_t JUMP[] = { 0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof JUMP / sizeof *JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_jump() override {
+    return std::array<result_type, 4>{0x180ec6d33cfd0aba, 0xd5a61266f0c9392c, 0xa9582618e03fc9aa, 0x39abdc4529b1661c};
   }
-
-
 
   /* This is the long-jump function for the generator. It is equivalent to
    2^192 calls to next(); it can be used to generate 2^64 starting points,
    from each of which jump() will generate 2^64 non-overlapping
    subsequences for parallel distributed computations. */
-
-  void long_jump_impl(void) {
-    static const uint64_t LONG_JUMP[] = { 0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635 };
-
-    uint64_t s0 = 0;
-    uint64_t s1 = 0;
-    uint64_t s2 = 0;
-    uint64_t s3 = 0;
-    for(unsigned int i = 0; i < sizeof LONG_JUMP / sizeof *LONG_JUMP; i++)
-      for(int b = 0; b < 64; b++) {
-        if (LONG_JUMP[i] & UINT64_C(1) << b) {
-          s0 ^= s[0];
-          s1 ^= s[1];
-          s2 ^= s[2];
-          s3 ^= s[3];
-        }
-        next();
-      }
-
-    s[0] = s0;
-    s[1] = s1;
-    s[2] = s2;
-    s[3] = s3;
+  std::array<result_type, 4> get_long_jump() override {
+    return std::array<result_type, 4>{0x76e15d3efefdcbbf, 0xc5004e441c522fb3, 0x77710069854ee241, 0x39109bb02acbe635};
   }
 };
 
