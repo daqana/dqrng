@@ -22,6 +22,7 @@
 
 #include <mystdint.h>
 #include <stdexcept>
+#include <Rcpp/Lightest>
 
 namespace dqrng {
 
@@ -54,7 +55,7 @@ public:
 
 class random_64bit_accessor : public random_64bit_generator {
 private:
-  dqrng::random_64bit_generator *gen;
+  Rcpp::XPtr<dqrng::random_64bit_generator> gen;
 
 protected:
   virtual void output(std::ostream& ost) const override {
