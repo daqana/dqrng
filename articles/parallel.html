@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.5</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-10-03</h4>
+            <h4 data-toc-skip class="date">2023-10-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -277,7 +277,7 @@ are independent:</p>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">void</span> <span class="kw">operator</span><span class="op">()(</span><span class="bu">std::</span>size_t<span class="op"> </span>begin<span class="op">,</span> <span class="bu">std::</span>size_t<span class="op"> </span>end<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>pcg64<span class="op">&gt;(</span>seed<span class="op">,</span> end<span class="op">);</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>size_t<span class="op"> </span>col <span class="op">=</span> begin<span class="op">;</span> col <span class="op">&lt;</span> end<span class="op">;</span> <span class="op">++</span>col<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> sampled <span class="op">=</span> dqrng<span class="op">::</span>sample<span class="op">::</span>sample<span class="op">&lt;</span>INTSXP<span class="op">,</span> <span class="dt">uint32_t</span><span class="op">&gt;(</span>rng<span class="op">,</span> <span class="dv">100000</span><span class="op">,</span> output<span class="op">.</span>nrow<span class="op">(),</span> <span class="kw">true</span><span class="op">);</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> sampled <span class="op">=</span> dqrng<span class="op">::</span>sample<span class="op">::</span>sample<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;,</span> <span class="dt">uint32_t</span><span class="op">&gt;(*</span>rng<span class="op">,</span> <span class="dv">100000</span><span class="op">,</span> output<span class="op">.</span>nrow<span class="op">(),</span> <span class="kw">true</span><span class="op">);</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      RcppParallel<span class="op">::</span>RMatrix<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;::</span>Column column <span class="op">=</span> output<span class="op">.</span>column<span class="op">(</span>col<span class="op">);</span></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>copy<span class="op">(</span>sampled<span class="op">.</span>begin<span class="op">(),</span> sampled<span class="op">.</span>end<span class="op">(),</span> column<span class="op">.</span>begin<span class="op">());</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>

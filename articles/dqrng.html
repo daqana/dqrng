@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.5</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-10-03</h4>
+            <h4 data-toc-skip class="date">2023-10-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/dqrng.Rmd" class="external-link"><code>vignettes/dqrng.Rmd</code></a></small>
       <div class="hidden name"><code>dqrng.Rmd</code></div>
@@ -166,7 +166,7 @@ the RNG might look like this:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pi ~=  3.140899</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.837   0.084   0.922</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.862   0.071   0.934</span></span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
@@ -174,46 +174,46 @@ the RNG might look like this:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span>, rng <span class="op">=</span> <span class="fu">dqrng</span><span class="fu">::</span><span class="va"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pi ~=  3.141457</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.269   0.076   0.344</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.302   0.075   0.379</span></span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the
 RNGs alone has to be even greater:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.280   0.016   0.296</span></span>
+<span><span class="co">#&gt;   0.272   0.024   0.295</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.052   0.016   0.068</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.063   0.015   0.078</span></span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.425   0.036   0.461</span></span>
+<span><span class="co">#&gt;   0.438   0.015   0.454</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.072   0.016   0.088</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.084   0.020   0.104</span></span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.641   0.008   0.649</span></span>
+<span><span class="co">#&gt;   0.627   0.020   0.647</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.095   0.012   0.108</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.100   0.015   0.116</span></span></code></pre></div>
 <p>As well as for sampling with and without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.758   0.008   0.768</span></span>
+<span><span class="co">#&gt;   0.759   0.004   0.766</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.045   0.012   0.057</span></span>
+<span><span class="co">#&gt;   0.027   0.032   0.058</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.776   0.776   2.555</span></span>
+<span><span class="co">#&gt;   1.887   0.855   2.750</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.156   0.004   0.160</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.073   0.016   0.088</span></span></code></pre></div>
 <p>It is also possible to register the supplied generators as
 user-supplied RNGs. This way <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> and
 <code><a href="../reference/dqrng-functions.html">dqset.seed()</a></code> influence both <code>(dq)runif</code> and
@@ -343,20 +343,28 @@ is used together with <code>dqrng::normal_distribution</code>:</p>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="dt">result_type</span> state<span class="op">;</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector splitmix_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>SplitMix<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co">splitmix_rnorm(10)</span></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(splitmix_rnorm(1e7))</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span>  </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>ostream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&lt;&lt;(</span><span class="bu">std::</span>ostream<span class="op">&amp;</span> ost<span class="op">,</span> <span class="at">const</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ost <span class="op">&lt;&lt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>istream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&gt;&gt;(</span><span class="bu">std::</span>istream<span class="op">&amp;</span> ist<span class="op">,</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ist <span class="op">&gt;&gt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector splitmix_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>SplitMix<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co">splitmix_rnorm(10)</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(splitmix_rnorm(1e7))</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Since SplitMix is a very fast RNG, the speed of this function is
 comparable to <code>dqrnorm</code>. Generally speaking you can use any
 C++11 compliant RNG with 64 bit output size. For example, here the 64
@@ -472,7 +480,6 @@ parameters of the distributions are adjusted for every draw using
 <span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
 <span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co">multiple_distributions(5)</span></span>
 <span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
-<!-- STATIC_ARBITRARY_SEED -->
 </div>
 </div>
 <div class="section level2">
