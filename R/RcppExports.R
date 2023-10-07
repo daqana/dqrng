@@ -52,12 +52,12 @@ dqrrademacher <- function(n) {
     .Call(`_dqrng_dqrrademacher`, n)
 }
 
-dqsample_int <- function(m, n, replace = FALSE, probs = NULL, offset = 0L) {
-    .Call(`_dqrng_dqsample_int`, m, n, replace, probs, offset)
+dqsample_int <- function(n, size, replace = FALSE, probs = NULL, offset = 0L) {
+    .Call(`_dqrng_dqsample_int`, n, size, replace, probs, offset)
 }
 
-dqsample_num <- function(m, n, replace = FALSE, probs = NULL, offset = 0L) {
-    .Call(`_dqrng_dqsample_num`, m, n, replace, probs, offset)
+dqsample_num <- function(n, size, replace = FALSE, probs = NULL, offset = 0L) {
+    .Call(`_dqrng_dqsample_num`, n, size, replace, probs, offset)
 }
 
 #' Generate seed as a integer vector

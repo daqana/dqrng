@@ -351,23 +351,23 @@ RcppExport SEXP _dqrng_dqrrademacher(SEXP nSEXP) {
     return rcpp_result_gen;
 }
 // dqsample_int
-Rcpp::IntegerVector dqsample_int(int m, int n, bool replace, Rcpp::Nullable<Rcpp::NumericVector> probs, int offset);
-static SEXP _dqrng_dqsample_int_try(SEXP mSEXP, SEXP nSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
+Rcpp::IntegerVector dqsample_int(int n, int size, bool replace, Rcpp::Nullable<Rcpp::NumericVector> probs, int offset);
+static SEXP _dqrng_dqsample_int_try(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< bool >::type replace(replaceSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type probs(probsSEXP);
     Rcpp::traits::input_parameter< int >::type offset(offsetSEXP);
-    rcpp_result_gen = Rcpp::wrap(dqsample_int(m, n, replace, probs, offset));
+    rcpp_result_gen = Rcpp::wrap(dqsample_int(n, size, replace, probs, offset));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _dqrng_dqsample_int(SEXP mSEXP, SEXP nSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
+RcppExport SEXP _dqrng_dqsample_int(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
     SEXP rcpp_result_gen;
     {
-        rcpp_result_gen = PROTECT(_dqrng_dqsample_int_try(mSEXP, nSEXP, replaceSEXP, probsSEXP, offsetSEXP));
+        rcpp_result_gen = PROTECT(_dqrng_dqsample_int_try(nSEXP, sizeSEXP, replaceSEXP, probsSEXP, offsetSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -388,23 +388,23 @@ RcppExport SEXP _dqrng_dqsample_int(SEXP mSEXP, SEXP nSEXP, SEXP replaceSEXP, SE
     return rcpp_result_gen;
 }
 // dqsample_num
-Rcpp::NumericVector dqsample_num(double m, double n, bool replace, Rcpp::Nullable<Rcpp::NumericVector> probs, int offset);
-static SEXP _dqrng_dqsample_num_try(SEXP mSEXP, SEXP nSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
+Rcpp::NumericVector dqsample_num(double n, double size, bool replace, Rcpp::Nullable<Rcpp::NumericVector> probs, int offset);
+static SEXP _dqrng_dqsample_num_try(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type m(mSEXP);
     Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< bool >::type replace(replaceSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::NumericVector> >::type probs(probsSEXP);
     Rcpp::traits::input_parameter< int >::type offset(offsetSEXP);
-    rcpp_result_gen = Rcpp::wrap(dqsample_num(m, n, replace, probs, offset));
+    rcpp_result_gen = Rcpp::wrap(dqsample_num(n, size, replace, probs, offset));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _dqrng_dqsample_num(SEXP mSEXP, SEXP nSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
+RcppExport SEXP _dqrng_dqsample_num(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP, SEXP probsSEXP, SEXP offsetSEXP) {
     SEXP rcpp_result_gen;
     {
-        rcpp_result_gen = PROTECT(_dqrng_dqsample_num_try(mSEXP, nSEXP, replaceSEXP, probsSEXP, offsetSEXP));
+        rcpp_result_gen = PROTECT(_dqrng_dqsample_num_try(nSEXP, sizeSEXP, replaceSEXP, probsSEXP, offsetSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
