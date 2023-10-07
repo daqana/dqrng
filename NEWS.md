@@ -3,6 +3,7 @@
 ## Breaking changes
 
 * The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc.  ([#57](https://github.com/daqana/dqrng/pull/57) fixing [#56](https://github.com/daqana/dqrng/issues/56))
+* The `dqrng::rng64_t` type has been changed to use `Rcpp::XPtr` instead of `std::shared_ptr` and the functions from `dqrng_sample.h` now expect a reference to `dqrng::random_64bit_generator` instead of `dqrng::rng64_t` ([#70](https://github.com/daqana/dqrng/pull/70) fixing [#63](https://github.com/daqana/dqrng/issues/63))
 
 ## Other changes
 

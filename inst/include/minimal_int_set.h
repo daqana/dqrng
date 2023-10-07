@@ -26,7 +26,7 @@
 // Common interface:
 // * ctor (m, n)
 // * bool insert(entry, check = true)
-//   returns true if insert succesfull and check == true
+//   returns true if insert successful and check == true
 
 namespace dqrng {
 template<typename T = uint32_t>

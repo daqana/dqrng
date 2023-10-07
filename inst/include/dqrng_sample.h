@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2022 Ralf Stubner
+// Copyright 2022-2023 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -21,62 +21,59 @@
 
 #include <mystdint.h>
 #include <Rcpp.h>
-#include <dqrng_generator.h>
+#include <dqrng_types.h>
 #include <minimal_int_set.h>
 
 namespace dqrng {
 namespace sample {
-template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> replacement(dqrng::rng64_t &rng, INT m, INT n, int offset) {
-  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
-  Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
+template<typename VEC, typename INT>
+inline VEC replacement(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
+  VEC result(size);
   std::generate(result.begin(), result.end(),
-                [m, offset, rng] () {return static_cast<storage_t>(offset + (*rng)(m));});
+                [n, offset, &rng] () {return (offset + rng(n));});
   return result;
 }
 
-template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> no_replacement_shuffle(dqrng::rng64_t &rng, INT m, INT n, int offset) {
-  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
-  Rcpp::Vector<RTYPE> tmp(Rcpp::no_init(m));
-  std::iota(tmp.begin(), tmp.end(), static_cast<storage_t>(offset));
-  for (INT i = 0; i < n; ++i) {
-    std::swap(tmp[i], tmp[i + (*rng)(m - i)]);
+template<typename VEC, typename INT>
+inline VEC no_replacement_shuffle(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
+  VEC tmp(n);
+  std::iota(tmp.begin(), tmp.end(), (offset));
+  for (INT i = 0; i < size; ++i) {
+    std::swap(tmp[i], tmp[i + rng(n - i)]);
   }
-  if (m == n)
+  if (n == size)
     return tmp;
   else
-    return Rcpp::Vector<RTYPE>(tmp.begin(), tmp.begin() + n);
+    return VEC(tmp.begin(), tmp.begin() + size);
 }
 
-template<int RTYPE, typename INT, typename SET>
-inline Rcpp::Vector<RTYPE> no_replacement_set(dqrng::rng64_t &rng, INT m, INT n, int offset) {
-  using storage_t = typename Rcpp::traits::storage_type<RTYPE>::type;
-  Rcpp::Vector<RTYPE> result(Rcpp::no_init(n));
-  SET elems(m, n);
-  for (INT i = 0; i < n; ++i) {
-    INT v = (*rng)(m);
-    while (!elems.insert(v)) {
-      v = (*rng)(m);
-    }
-    result(i) = static_cast<storage_t>(offset + v);
+template<typename VEC, typename INT, typename SET>
+inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
+  VEC result(size);
+  SET elems(n, size);
+  for (INT i = 0; i < size; ++i) {
+    INT v;
+    do {
+      v = rng(n);
+    } while (!elems.insert(v));
+    result[i] = (offset + v);
   }
   return result;
 }
 
-template<int RTYPE, typename INT>
-inline Rcpp::Vector<RTYPE> sample(dqrng::rng64_t &rng, INT m, INT n, bool replace, int offset = 0) {
-  if (replace || n <= 1) {
-    return dqrng::sample::replacement<RTYPE, INT>(rng, m, n, offset);
+template<typename VEC, typename INT>
+inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
+  if (replace || size <= 1) {
+    return dqrng::sample::replacement<VEC, INT>(rng, n, size, offset);
   } else {
-    if (!(m >= n))
-      Rcpp::stop("Argument requirements not fulfilled: m >= n");
-    if (m < 2 * n) {
-      return dqrng::sample::no_replacement_shuffle<RTYPE, INT>(rng, m, n, offset);
-    } else if (m < 1000 * n) {
-      return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_bit_set>(rng, m, n, offset);
+    if (!(n >= size))
+      Rcpp::stop("Argument requirements not fulfilled: n >= size");
+    if (n < 2 * size) {
+      return dqrng::sample::no_replacement_shuffle<VEC, INT>(rng, n, size, offset);
+    } else if (n < 1000 * size) {
+      return dqrng::sample::no_replacement_set<VEC, INT, dqrng::minimal_bit_set>(rng, n, size, offset);
     } else {
-      return dqrng::sample::no_replacement_set<RTYPE, INT, dqrng::minimal_hash_set<INT>>(rng, m, n, offset);
+      return dqrng::sample::no_replacement_set<VEC, INT, dqrng::minimal_hash_set<INT>>(rng, n, size, offset);
     }
   }
 }

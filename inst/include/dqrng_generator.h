@@ -24,8 +24,11 @@
 #include <dqrng_types.h>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
+#include <Rcpp.h>
+
 
 namespace dqrng {
+using rng64_t = Rcpp::XPtr<random_64bit_generator>;
 using default_64bit_generator = ::dqrng::xoroshiro128plusplus;
 
 template<typename RNG>
@@ -188,37 +191,37 @@ inline void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stre
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator () {
-  return std::make_shared<random_64bit_wrapper<RNG>>();
+  return rng64_t(new random_64bit_wrapper<RNG>());
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator () {
-  return std::make_shared<RNG>();
+  return rng64_t(new RNG());
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed) {
-  return std::make_shared<random_64bit_wrapper<RNG>>(seed);
+  return rng64_t(new random_64bit_wrapper<RNG>(seed));
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed) {
-  return std::make_shared<RNG>(seed);
+  return rng64_t(new RNG(seed));
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed, uint64_t stream) {
-  return std::make_shared<random_64bit_wrapper<RNG>>(seed, stream);
+  return rng64_t(new random_64bit_wrapper<RNG>(seed, stream));
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator (uint64_t seed, uint64_t stream) {
-  return std::make_shared<RNG>(seed, stream);
+  return rng64_t(new RNG(seed, stream));
 }
 } // namespace dqrng
 
