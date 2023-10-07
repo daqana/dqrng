@@ -63,8 +63,6 @@ inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT siz
 
 template<typename VEC, typename INT>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
-  if (!(n > 0 && size >= 0))
-    Rcpp::stop("Argument requirements not fulfilled: n > 0 && size >= 0");
   if (replace || size <= 1) {
     return dqrng::sample::replacement<VEC, INT>(rng, n, size, offset);
   } else {

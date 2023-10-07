@@ -185,6 +185,8 @@ Rcpp::IntegerVector dqsample_int(int n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
                                  int offset = 0) {
+    if (!(n > 0 && size >= 0))
+      Rcpp::stop("Argument requirements not fulfilled: n > 0 && size >= 0");
     return dqrng::sample::sample<Rcpp::IntegerVector, uint32_t>(*rng, uint32_t(n), uint32_t(size), replace, offset);
 }
 
@@ -194,6 +196,8 @@ Rcpp::NumericVector dqsample_num(double n,
                                  bool replace = false,
                                  Rcpp::Nullable<Rcpp::NumericVector> probs = R_NilValue,
                                  int offset = 0) {
+    if (!(n > 0 && size >= 0))
+      Rcpp::stop("Argument requirements not fulfilled: n > 0 && size >= 0");
 #ifndef LONG_VECTOR_SUPPORT
     Rcpp::stop("Long vectors are not supported");
 #else
