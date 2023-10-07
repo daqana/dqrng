@@ -28,7 +28,7 @@ namespace dqrng {
 namespace sample {
 template<typename VEC, typename INT>
 inline VEC replacement(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
-  VEC result(n);
+  VEC result(size);
   std::generate(result.begin(), result.end(),
                 [n, offset, &rng] () {return (offset + rng(n));});
   return result;
