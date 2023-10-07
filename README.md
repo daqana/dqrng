@@ -61,8 +61,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)      607µs  660.2µs     1451.
-#> 2 dqrnorm(N)   89.8µs   92.7µs     9896.
+#> 1 rnorm(N)      609µs    682µs     1416.
+#> 2 dqrnorm(N)    103µs    109µs     8312.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +79,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.08ms      139.
-#> 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   8.93ms      110.
-#> 3 dqsample.int(m, n, replace = TRUE)         410.9µs 434.24µs     2137.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 397.74µs 435.38µs     1930.
+#> 1 sample.int(m, n, replace = TRUE)            6.91ms    7.3ms      131.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.68ms   9.17ms      105.
+#> 3 dqsample.int(m, n, replace = TRUE)        395.46µs 443.99µs     2014.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 465.94µs 520.09µs     1632.
 ```
 
 And without replacement:
@@ -100,15 +100,49 @@ bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  22.73ms  24.05ms      36.9
-#> 2 sample.int(1000 * m, n)           12.07ms  13.85ms      68.1
-#> 3 sample.int(m, n, useHash = TRUE)   9.57ms  12.63ms      74.4
-#> 4 dqsample.int(m, n)                 1.11ms    1.2ms     696. 
-#> 5 dqsample.int(1000 * m, n)          1.95ms   2.69ms     293.
+#> 1 sample.int(m, n)                  23.32ms  24.42ms      36.3
+#> 2 sample.int(1000 * m, n)           13.09ms  15.71ms      62.6
+#> 3 sample.int(m, n, useHash = TRUE)  10.07ms     12ms      81.3
+#> 4 dqsample.int(m, n)               730.61µs 861.28µs     955. 
+#> 5 dqsample.int(1000 * m, n)          1.53ms   2.05ms     443.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”
 in R.
+
+It is also possible to use weighted sampling both with replacement:
+
+``` r
+m <- 1e6
+n <- 1e4
+prob <- dqrunif(m)
+bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
+                  dqsample.int(m, n, replace = TRUE, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+#> # A tibble: 2 × 4
+#>   expression                                           min   median `itr/sec`
+#>   <bch:expr>                                      <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n, replace = TRUE, prob = prob)    22.78ms  23.96ms      40.2
+#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   8.01ms   8.25ms     119.
+```
+
+And without replacement:
+
+``` r
+bm <- bench::mark(sample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+#> # A tibble: 2 × 4
+#>   expression                           min   median `itr/sec`
+#>   <bch:expr>                      <bch:tm> <bch:tm>     <dbl>
+#> 1 sample.int(m, n, prob = prob)      14.8s    14.8s    0.0677
+#> 2 dqsample.int(m, n, prob = prob)   87.9ms   93.1ms   10.7
+```
+
+Especially for weighted sampling without replacement the performance
+advantage compared with R’s default methods is particularly large.
 
 In addition the RNGs provide support for multiple independent streams
 for parallel usage:

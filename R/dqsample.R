@@ -19,9 +19,8 @@ dqsample <- function(x, size, replace = FALSE, prob = NULL) {
 ##' @rdname dqsample
 ##' @export
 dqsample.int  <- function(n, size = n, replace = FALSE, prob = NULL) {
-    if (!is.null(prob)) {
-        warning("Using 'prob' is not supported yet. Using default 'sample.int'.")
-        sample.int(n, size, replace, prob)
+    if (!is.null(prob) && replace == FALSE) {
+        utils::head(order(dqrexp(n)/prob), size)
     } else if (n <= .Machine$integer.max)
         dqsample_int(n, size, replace, prob, 1L)
     else
