@@ -122,6 +122,28 @@ inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT siz
   return result;
 }
 
+template<typename INT>
+struct member {
+  INT index;
+  double weight;
+};
+
+template<typename VEC, typename INT, typename FVEC>
+inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
+  VEC index(n);
+  std::iota(index.begin(), index.end(), (offset));
+  FVEC weight(n);
+  dqrng::exponential_distribution exponential;
+  std::transform(prob.begin(), prob.end(), weight.begin(),
+                 [&rng, &exponential] (double x) {return exponential(rng) / x;});
+  std::partial_sort(index.begin(), index.begin() + size, index.end(),
+                    [&weight](size_t i1, size_t i2) {return weight[i1] < weight[i2];});
+  if (n == size)
+    return index;
+  else
+    return VEC(index.begin(), index.begin() + size);
+}
+
 template<typename VEC, typename INT>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
   if (replace || size <= 1) {
@@ -142,14 +164,17 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
 template<typename VEC, typename INT, typename FVEC>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, FVEC prob, int offset = 0) {
   if (replace || size <= 1) {
-    double *max_prob = std::max_element(prob.begin(), prob.end());
     double prob_sum = std::accumulate(prob.begin(), prob.end(), 0.0);
-    if (size < n && *max_prob * n / prob_sum < 3.)
+    if (size >= n)
+      return dqrng::sample::replacement_alias<VEC, INT>(rng, n, size, prob, prob_sum, offset);
+
+    double *max_prob = std::max_element(prob.begin(), prob.end());
+    if (*max_prob * n / prob_sum < 3.)
       return dqrng::sample::replacement_prob<VEC, INT>(rng, n, size, prob, *max_prob, offset);
     else
       return dqrng::sample::replacement_alias<VEC, INT>(rng, n, size, prob, prob_sum, offset);
   } else {
-    Rcpp::stop("Weighted sampling w/o replacement not supported");
+    return dqrng::sample::no_replacement_exp<VEC, INT>(rng, n, size, prob, offset);
   }
 }
 } // sample
