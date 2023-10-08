@@ -122,12 +122,6 @@ inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT siz
   return result;
 }
 
-template<typename INT>
-struct member {
-  INT index;
-  double weight;
-};
-
 template<typename VEC, typename INT, typename FVEC>
 inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
   VEC index(n);
