@@ -68,6 +68,7 @@ inline VEC biased_coin(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC
   return result;
 }
 
+// stochastic acceptance
 template<typename VEC, typename INT, typename FVEC>
 inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double max_prob, int offset) {
   VEC result(size);
@@ -82,6 +83,7 @@ inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size,
   return result;
 }
 
+// alias method (Walker/Voss)
 template<typename VEC, typename INT, typename FVEC>
 inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double prob_sum, int offset) {
   VEC result(size);
@@ -119,15 +121,14 @@ inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size
   std::generate(result.begin(), result.end(),
                 [&n, &p, &alias, &rng, &offset] () {
                   INT index = rng(n);
-                  if (dqrng::uniform01(rng()) < p[index])
-                    return index + offset;
-                  else
-                    return alias[index] + offset;
+                  return (dqrng::uniform01(rng()) < p[index]) ? index + offset :
+                                                                alias[index] + offset;
                 });
 
     return result;
 }
 
+// Fisher-Yates shuffle
 template<typename VEC, typename INT>
 inline VEC no_replacement_shuffle(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
   VEC tmp(n);
@@ -141,6 +142,7 @@ inline VEC no_replacement_shuffle(dqrng::random_64bit_generator &rng, INT n, INT
     return VEC(tmp.begin(), tmp.begin() + size);
 }
 
+// set-based rejection sampling
 template<typename VEC, typename INT, typename SET>
 inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT size, int offset) {
   VEC result(size);
@@ -155,6 +157,7 @@ inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT siz
   return result;
 }
 
+// exponential rank (Efraimidis/Spirakis)
 template<typename VEC, typename INT, typename FVEC>
 inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
   VEC index(n);
