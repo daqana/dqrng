@@ -50,6 +50,17 @@ test_that("dqsample_int w/ replacement works", {
     expect_true(all(result >= 1) && all(result <= n))
 })
 
+test_that("dqsample_int w/ replacement works for n = 2", {
+    dqset.seed(seed)
+    n <- 2
+    k <- 1e3
+    result <- dqsample(n, k, replace = TRUE)
+    expect_equal(length(result), k)
+    expect_lte(length(unique(result)), k)
+    expect_true(all(result >= 1) && all(result <= n))
+})
+
+
 test_that("dqsample_int w/o replacement works with medium rate", {
     dqset.seed(seed)
     n <- 1e5
@@ -131,6 +142,16 @@ test_that("dqsample_int w/ replacement and w/ weights works with few sampled ele
 test_that("dqsample_int w/ replacement and w/ weights works with many sampled elements", {
   dqset.seed(seed)
   n <- 1e3
+  k <- 1e5
+  result <- dqsample(n, k, replace = TRUE, prob = dqrunif(n))
+  expect_equal(length(result), k)
+  expect_lte(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+})
+
+test_that("dqsample_int w/ replacement and w/ weights works with many sampled elements for n = 2", {
+  dqset.seed(seed)
+  n <- 2
   k <- 1e5
   result <- dqsample(n, k, replace = TRUE, prob = dqrunif(n))
   expect_equal(length(result), k)

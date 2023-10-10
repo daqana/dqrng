@@ -35,6 +35,39 @@ inline VEC replacement(dqrng::random_64bit_generator &rng, INT n, INT size, int 
   return result;
 }
 
+template<typename VEC, typename INT>
+inline VEC fair_coin(dqrng::random_64bit_generator &rng, INT n, INT size, int head, int tail) {
+  VEC result(size);
+  INT k = 0;
+  while (k < size) {
+    uint64_t bits = rng();
+
+    for (INT j = 0; j < 64 && k < size; ++k, ++j)
+      result[k] = (bits >> j) & 1 ?  head : tail;
+  }
+  return result;
+}
+
+
+template<typename VEC, typename INT, typename FVEC>
+inline VEC biased_coin(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int head, int tail) {
+  VEC result(size);
+
+  // smaller probability scaled by 2^64 in order to compare directly with RNG output
+  uint64_t p;
+  if (prob[0] < 0.5)
+    p = 0x1p64 * prob[0] / (prob[0] + prob[1]);
+  else {
+    p = 0x1p64 * prob[1] / (prob[0] + prob[1]);
+    std::swap(head, tail);
+  }
+  std::generate(result.begin(), result.end(),
+                [&p, &rng, &head, &tail] () {
+                  return rng() < p ? head : tail;
+                });
+  return result;
+}
+
 template<typename VEC, typename INT, typename FVEC>
 inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double max_prob, int offset) {
   VEC result(size);
@@ -145,6 +178,9 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
                 std::is_integral<typename VEC::value_type>::value ||
                 std::is_reference<typename VEC::value_type>::value);
   if (replace || size <= 1) {
+    if (n == 2)
+      return dqrng::sample::fair_coin<VEC, INT>(rng, n, size, offset, 1 + offset);
+
     return dqrng::sample::replacement<VEC, INT>(rng, n, size, offset);
   } else {
     if (!(n >= size))
@@ -170,6 +206,9 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
   if (n != prob.size())
     Rcpp::stop("Argument requirements not fulfilled: n == prob.size()");
   if (replace || size <= 1) {
+    if (n == 2)
+      return dqrng::sample::biased_coin<VEC, INT>(rng, n, size, prob, offset, 1 + offset);
+
     double prob_sum = std::accumulate(prob.begin(), prob.end(), 0.0);
     if (size >= n)
       return dqrng::sample::replacement_alias<VEC, INT>(rng, n, size, prob, prob_sum, offset);
