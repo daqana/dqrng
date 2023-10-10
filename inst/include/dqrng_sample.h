@@ -41,7 +41,7 @@ inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size,
   std::generate(result.begin(), result.end(),
                 [&n, &prob, &max_prob, &rng, &offset] () {
                   while (true) {
-                    int index = rng(n);
+                    INT index = rng(n);
                     if (dqrng::uniform01(rng()) < prob[index] / max_prob)
                       return index + offset;
                   }
@@ -65,9 +65,9 @@ inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size
       high.push(i);
   }
   while(!low.empty() && !high.empty()) {
-    int l = low.front();
+    INT l = low.front();
     low.pop();
-    int h = high.front();
+    INT h = high.front();
     alias[l] = h;
     p[h] = (p[h] + p[l]) - 1.0;
     if (p[h] < 1.0) {
