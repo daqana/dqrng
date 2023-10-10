@@ -183,6 +183,8 @@ test_that("dqsample_num w/ replacement and w/ weights works", {
 test_that("error cases", {
     dqset.seed(seed)
     expect_error(dqsample(10, 20), "Argument requirements not fulfilled: n >= size")
+    expect_error(dqsample(10, 20, prob = 1:10), "Argument requirements not fulfilled: n >= size")
+    expect_error(dqsample(10, 20, prob = 1:20), "n == length(prob) is not TRUE", fixed = TRUE)
     expect_silent(dqsample(10, 20, replace = TRUE))
     expect_error(dqsample(10, -20), "Argument requirements not fulfilled: n > 0 && size >= 0")
     expect_error(dqsample(-10, -20), "Argument requirements not fulfilled: n > 0 && size >= 0")

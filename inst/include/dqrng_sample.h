@@ -140,6 +140,10 @@ inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT siz
 
 template<typename VEC, typename INT>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
+  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value);
+  static_assert(std::is_floating_point<typename VEC::value_type>::value ||
+                std::is_integral<typename VEC::value_type>::value ||
+                std::is_reference<typename VEC::value_type>::value);
   if (replace || size <= 1) {
     return dqrng::sample::replacement<VEC, INT>(rng, n, size, offset);
   } else {
@@ -157,6 +161,14 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
 
 template<typename VEC, typename INT, typename FVEC>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, FVEC prob, int offset = 0) {
+  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value);
+  static_assert(std::is_floating_point<typename VEC::value_type>::value ||
+                std::is_integral<typename VEC::value_type>::value ||
+                std::is_reference<typename VEC::value_type>::value);
+  static_assert(std::is_floating_point<typename FVEC::value_type>::value ||
+                std::is_reference<typename FVEC::value_type>::value);
+  if (n != prob.size())
+    Rcpp::stop("Argument requirements not fulfilled: n == prob.size()");
   if (replace || size <= 1) {
     double prob_sum = std::accumulate(prob.begin(), prob.end(), 0.0);
     if (size >= n)
@@ -168,6 +180,8 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
     else
       return dqrng::sample::replacement_alias<VEC, INT>(rng, n, size, prob, prob_sum, offset);
   } else {
+    if (!(n >= size))
+      Rcpp::stop("Argument requirements not fulfilled: n >= size");
     return dqrng::sample::no_replacement_exp<VEC, INT>(rng, n, size, prob, offset);
   }
 }
