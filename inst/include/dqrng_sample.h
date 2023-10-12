@@ -179,6 +179,44 @@ inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT siz
     return VEC(index.begin(), index.begin() + size);
 }
 
+// set-based rejection sampling with stochastic acceptance
+template<typename VEC, typename INT, typename SET, typename FVEC>
+inline VEC no_replacement_prob_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
+  VEC result(size);
+  SET elems(n, size);
+  double *max_prob = std::max_element(prob.begin(), prob.end());
+
+  for (INT i = 0; i < size; ++i) {
+    INT v;
+    do {
+      do {
+        v = rng(n);
+      } while (dqrng::uniform01(rng()) >= prob[v] / *max_prob);
+    } while (!elems.insert(v));
+    result[i] = (offset + v);
+  }
+  return result;
+}
+
+// set-based rejection sampling with alias selection
+template<typename VEC, typename INT, typename SET, typename FVEC>
+inline VEC no_replacement_alias_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
+  VEC result(size);
+  double prob_sum = std::accumulate(prob.begin(), prob.end(), 0);
+  std::vector<std::pair<double,INT>> prob_alias = create_alias_table(n, prob, prob_sum);
+  SET elems(n, size);
+  for (INT i = 0; i < size; ++i) {
+    INT v;
+    do {
+      INT index = rng(n);
+      v = (dqrng::uniform01(rng()) < prob_alias[index].first) ?
+                            index : prob_alias[index].second;
+    } while (!elems.insert(v));
+    result[i] = (offset + v);
+  }
+  return result;
+}
+
 template<typename VEC, typename INT>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
   static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value);
