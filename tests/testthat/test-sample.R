@@ -153,7 +153,12 @@ test_that("dqsample_int w/ replacement and w/ weights works with many sampled el
   dqset.seed(seed)
   n <- 2
   k <- 1e5
-  result <- dqsample(n, k, replace = TRUE, prob = dqrunif(n))
+  result <- dqsample(n, k, replace = TRUE, prob = c(0.3, 0.7))
+  expect_equal(length(result), k)
+  expect_lte(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+
+  result <- dqsample(n, k, replace = TRUE, prob = c(1.3, 0.7))
   expect_equal(length(result), k)
   expect_lte(length(unique(result)), k)
   expect_true(all(result >= 1) && all(result <= n))
