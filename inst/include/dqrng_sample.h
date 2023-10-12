@@ -181,17 +181,16 @@ inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT siz
 
 // set-based rejection sampling with stochastic acceptance
 template<typename VEC, typename INT, typename SET, typename FVEC>
-inline VEC no_replacement_prob_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
+inline VEC no_replacement_prob_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double max_prob, int offset) {
   VEC result(size);
   SET elems(n, size);
-  double *max_prob = std::max_element(prob.begin(), prob.end());
 
   for (INT i = 0; i < size; ++i) {
     INT v;
     do {
       do {
         v = rng(n);
-      } while (dqrng::uniform01(rng()) >= prob[v] / *max_prob);
+      } while (dqrng::uniform01(rng()) >= prob[v] / max_prob);
     } while (!elems.insert(v));
     result[i] = (offset + v);
   }
@@ -200,9 +199,8 @@ inline VEC no_replacement_prob_set(dqrng::random_64bit_generator &rng, INT n, IN
 
 // set-based rejection sampling with alias selection
 template<typename VEC, typename INT, typename SET, typename FVEC>
-inline VEC no_replacement_alias_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
+inline VEC no_replacement_alias_set(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double prob_sum, int offset) {
   VEC result(size);
-  double prob_sum = std::accumulate(prob.begin(), prob.end(), 0);
   std::vector<std::pair<double,INT>> prob_alias = create_alias_table(n, prob, prob_sum);
   SET elems(n, size);
   for (INT i = 0; i < size; ++i) {
@@ -272,7 +270,24 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
   } else {
     if (!(n >= size))
       Rcpp::stop("Argument requirements not fulfilled: n >= size");
-    return dqrng::sample::no_replacement_exp<VEC, INT>(rng, n, size, prob, offset);
+    if (n < 2 * size)
+      return dqrng::sample::no_replacement_exp<VEC, INT>(rng, n, size, prob, offset);
+
+    double prob_sum = std::accumulate(prob.begin(), prob.end(), 0.0);
+    double *max_prob = std::max_element(prob.begin(), prob.end());
+    if (n < 1000 * size) {// check this factor
+      using set_t = dqrng::minimal_bit_set;
+      if (*max_prob * n / prob_sum < 3.)
+        return dqrng::sample::no_replacement_prob_set<VEC, INT, set_t>(rng, n, size, prob, *max_prob, offset);
+      else
+        return dqrng::sample::no_replacement_alias_set<VEC, INT, set_t>(rng, n, size, prob, prob_sum, offset);
+    } else {
+      using set_t = dqrng::minimal_hash_set<INT>;
+      if (*max_prob * n / prob_sum < 3.)
+        return dqrng::sample::no_replacement_prob_set<VEC, INT, set_t>(rng, n, size, prob, *max_prob, offset);
+      else
+        return dqrng::sample::no_replacement_alias_set<VEC, INT, set_t>(rng, n, size, prob, prob_sum, offset);
+    }
   }
 }
 } // sample

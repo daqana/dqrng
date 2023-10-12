@@ -123,8 +123,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression                                           min   median `itr/sec`
 #>   <bch:expr>                                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE, prob = prob)    25.64ms  26.28ms      37.9
-#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.02ms   5.21ms     188.
+#> 1 sample.int(m, n, replace = TRUE, prob = prob)    22.94ms  24.33ms      39.8
+#> 2 dqsample.int(m, n, replace = TRUE, prob = prob)   5.76ms   5.96ms     166.
 ```
 
 And without replacement:
@@ -133,14 +133,12 @@ And without replacement:
 bm <- bench::mark(sample.int(m, n, prob = prob),
                   dqsample.int(m, n, prob = prob),
                   check = FALSE)
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
 bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression                           min   median `itr/sec`
 #>   <bch:expr>                      <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, prob = prob)      15.6s    15.6s    0.0642
-#> 2 dqsample.int(m, n, prob = prob)   18.7ms   20.4ms   43.7
+#> 1 sample.int(m, n, prob = prob)     14.34s   14.34s    0.0697
+#> 2 dqsample.int(m, n, prob = prob)   5.09ms   5.34ms  184.
 ```
 
 Especially for weighted sampling without replacement the performance
