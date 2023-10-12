@@ -219,10 +219,12 @@ inline VEC no_replacement_alias_set(dqrng::random_64bit_generator &rng, INT n, I
 
 template<typename VEC, typename INT>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, int offset = 0) {
-  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value);
+  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value,
+                "Provided INT has the wrong type.");
   static_assert(std::is_floating_point<typename VEC::value_type>::value ||
                 std::is_integral<typename VEC::value_type>::value ||
-                std::is_reference<typename VEC::value_type>::value);
+                std::is_reference<typename VEC::value_type>::value,
+                "Provided VEC has the wrong type.");
   if (replace || size <= 1) {
     if (n == 2)
       return dqrng::sample::fair_coin<VEC, INT>(rng, n, size, offset, 1 + offset);
@@ -243,12 +245,15 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
 
 template<typename VEC, typename INT, typename FVEC>
 inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool replace, FVEC prob, int offset = 0) {
-  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value);
+  static_assert(std::is_integral<INT>::value && std::is_unsigned<INT>::value,
+                "Provided INT has the wrong type.");
   static_assert(std::is_floating_point<typename VEC::value_type>::value ||
                 std::is_integral<typename VEC::value_type>::value ||
-                std::is_reference<typename VEC::value_type>::value);
+                std::is_reference<typename VEC::value_type>::value,
+                "Provided VEC has the wrong type.");
   static_assert(std::is_floating_point<typename FVEC::value_type>::value ||
-                std::is_reference<typename FVEC::value_type>::value);
+                std::is_reference<typename FVEC::value_type>::value,
+                "Provided FVEC has the wrong type.");
   if (n != INT(prob.size()))
     Rcpp::stop("Argument requirements not fulfilled: n == prob.size()");
   if (replace || size <= 1) {
