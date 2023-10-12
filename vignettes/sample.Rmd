@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-evaluate <- FALSE
+evaluate <- TRUE
 require(bench)
 ```
 
@@ -44,9 +44,6 @@ if (evaluate) {
 }
 knitr::kable(bm[, 1:5])
 ```
-
-
-
 
 Note that sampling from `10^10` integers triggers "[long-vector support](https://stat.ethz.ch/R-manual/R-devel/library/base/html/LongVectors.html)" in R.
 
@@ -128,6 +125,46 @@ if (evaluate) {
 knitr::kable(bm[, 1:5])
 ```
 
+The case of of weighted sampling is more complicated.
+In addition to with or without replacement, one also has to consider the distribution of weights:
+Is it fairly even as produced by `dqrunif()`?
+Or is the weight concentrated in one or only a few possibilities?
+Here only a few examples for weighted sampling both with replacement:
+
+```{r weighted-replacement, eval=evaluate}
+m <- 1e6
+n <- 1e4
+prob <- dqrunif(m)
+bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
+                  dqsample.int(m, n, replace = TRUE, prob = prob),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/weighted-replacement.RDS")
+} else {
+  bm <- readRDS("data/weighted-replacement.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+And without replacement:
+
+```{r weighted-no-replacement, eval=evaluate}
+bm <- bench::mark(sample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/weighted-no-replacement.RDS")
+} else {
+  bm <- readRDS("data/weighted-no-replacement.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+Especially for weighted sampling without replacement the performance advantage compared with R's default methods can be particularly large.
 
 ## Technicalities
 
@@ -161,3 +198,21 @@ no_replace_set <- function(m, n) {
 ```
 
 Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `m` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `n`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `n` and not with `m`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
+
+So far only un-weighted sampling was considered.
+However, the some of the algorithms can be used for weighted sampling, when `random_int(m)`, which uniformly selects one of `m` elements, is replaced with a function that selects one of `m` elements based on their weights.
+One such algorithm is [stochastic acceptance](https://doi.org/10.1016/j.physa.2011.12.004), which is particularly well suited in combination with fast RNGs:
+
+> 1. Select randomly one of the individuals (say, $i$). The selection is done with uniform probability $1/N$, which does not depend on the individual’s fitness $w_i$.
+> 2. With probability $w_i/w_\max$, where $w_\max = \max\{w_i\}_{i=1}^N$ is the maximal fitness in the population, the selection is accepted. Otherwise, the procedure is repeated from step 1 (i.e., in the case of rejection, another selection attempt is made).
+
+For sampling with replacement the above algorithm can be directly applied.
+For sampling without replacement together with the set based rejection sampling, one might consider updating $w_\max$ whenever the element with the maximum weight has been selected.
+However, this is not necessary since one can stick to the original $w_\max$ at the cost of a slightly reduced acceptance rate.
+
+The stochastic acceptance method works well when the weights are more or less uniform.
+However, the performance degrades quickly when the weight is concentrated on one or only a few items.
+In this case, the alias method [...] is being used.
+
+The final case would be high sampling rates without replacement.
+For this Algorithm A from [...] in the exponential formulation from [...] has been implemented.
