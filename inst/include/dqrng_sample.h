@@ -83,18 +83,15 @@ inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size,
   return result;
 }
 
-// alias method (Walker/Voss)
-template<typename VEC, typename INT, typename FVEC>
-inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double prob_sum, int offset) {
-  VEC result(size);
-  std::vector<INT> alias(n);
-  FVEC p(n);
-  std::transform(prob.begin(), prob.end(), p.begin(),
-                 [&n, &prob_sum] (double x) {return x * n / prob_sum;});
+// create table for alias method (Walker/Voss)
+template<typename INT, typename FVEC>
+inline std::vector<std::pair<double,INT>> create_alias_table(INT n, FVEC prob, double prob_sum) {
+  std::vector<std::pair<double,INT>> prob_alias(n);
   std::queue<INT> high;
   std::queue<INT> low;
   for(INT i = 0; i < n; ++i) {
-    if (p[i] < 1.0)
+    prob_alias[i].first = prob[i] * n / prob_sum;
+    if (prob_alias[i].first < 1.0)
       low.push(i);
     else
       high.push(i);
@@ -103,26 +100,34 @@ inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size
     INT l = low.front();
     low.pop();
     INT h = high.front();
-    alias[l] = h;
-    p[h] = (p[h] + p[l]) - 1.0;
-    if (p[h] < 1.0) {
+    prob_alias[l].second = h;
+    prob_alias[h].first = (prob_alias[h].first + prob_alias[l].first) - 1.0;
+    if (prob_alias[h].first < 1.0) {
       low.push(h);
       high.pop();
     }
   }
   while (!low.empty()) {
-    p[low.front()] = 1.0;
+    prob_alias[low.front()].first = 1.0;
     low.pop();
   }
   while (!high.empty()) {
-    p[high.front()] = 1.0;
+    prob_alias[high.front()].first = 1.0;
     high.pop();
   }
+  return prob_alias;
+}
+
+// alias method (Walker/Voss)
+template<typename VEC, typename INT, typename FVEC>
+inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, double prob_sum, int offset) {
+  VEC result(size);
+  std::vector<std::pair<double,INT>> prob_alias = create_alias_table(n, prob, prob_sum);
   std::generate(result.begin(), result.end(),
-                [&n, &p, &alias, &rng, &offset] () {
+                [&n, &prob_alias, &rng, &offset] () {
                   INT index = rng(n);
-                  return (dqrng::uniform01(rng()) < p[index]) ? index + offset :
-                                                                alias[index] + offset;
+                  return (dqrng::uniform01(rng()) < prob_alias[index].first) ?
+                          index + offset : prob_alias[index].second + offset;
                 });
 
     return result;
