@@ -211,7 +211,7 @@ inline VEC sample(dqrng::random_64bit_generator &rng, INT n, INT size, bool repl
                 std::is_reference<typename VEC::value_type>::value);
   static_assert(std::is_floating_point<typename FVEC::value_type>::value ||
                 std::is_reference<typename FVEC::value_type>::value);
-  if (n != prob.size())
+  if (n != INT(prob.size()))
     Rcpp::stop("Argument requirements not fulfilled: n == prob.size()");
   if (replace || size <= 1) {
     if (n == 2)
