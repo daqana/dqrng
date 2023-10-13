@@ -11,6 +11,7 @@
 * Make the internal RNG accessible from the outside (Henrik Sloot fixing [#41](https://github.com/daqana/dqrng/issues/41) in [#58](https://github.com/daqana/dqrng/pull/58))
 * Add Xoroshiro128\*\*/++ and Xoshiro256\*\*/++ to `xoshiro.h`
 * Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option `dqrng.register_methods` is set to `TRUE`.
+* Implement weighted sampling with and without replacement. ([#72](https://github.com/daqana/dqrng/pull/72) fixing [#18](https://github.com/daqana/dqrng/issues/18),  [#45](https://github.com/daqana/dqrng/issues/45) and [#52](https://github.com/daqana/dqrng/issues/52))
 
 # dqrng 0.3.1
 
