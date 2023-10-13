@@ -3,6 +3,7 @@ title: "Fast sampling methods"
 author: "Ralf Stubner"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Fast sampling methods}
   %\VignetteEngine{knitr::rmarkdown}
@@ -14,13 +15,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-evaluate <- TRUE
+evaluate <- FALSE
 require(bench)
+#knitr::write_bib("wrswoR", file = "packages.bib")
 ```
 
 Random sampling from a fixed set is used in many areas of statistical computing.
 The performance of this operation can be critical, especially when the sampled set is large.
-The fast RNGs provided in this package make very fast sampling possible when combined with suitably fast algorithms.  
+The fast RNGs provided in this package make very fast sampling possible when combined with suitably fast algorithms.
 
 ## Benchmarks
 
@@ -106,7 +108,7 @@ if (evaluate) {
 knitr::kable(bm[, 1:5])
 ```
 
-For larger sampling ranges R uses the hashset by default, though `dqsample.int`  is still faster:
+For larger sampling ranges R uses the hashset by default, though `dqsample.int` is still faster:
 
 ```{r no-replacement-long, eval=evaluate}
 library(dqrng)
@@ -179,7 +181,7 @@ no_replace_shuffle <- function(m, n) {
 }
 ```
 
-where `random_int(m-i)`  returns a random integer in `[0, m-i]`. Since the full population is kept in memory, this method is only suitable for high selection rates. One could expect that [reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling) should work well for lower selection rates. However, in my tests set based algorithms were faster:
+where `random_int(m-i)` returns a random integer in `[0, m-i]`. Since the full population is kept in memory, this method is only suitable for high selection rates. One could expect that [reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling) should work well for lower selection rates. However, in my tests set based algorithms were faster:
 
 ```{r, eval=FALSE}
 no_replace_set <- function(m, n) {
@@ -197,7 +199,7 @@ no_replace_set <- function(m, n) {
 }
 ```
 
-Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `m` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `n`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `n` and not with `m`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
+Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `m` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `n`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `n` and not with `m`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) [@bentley1987a] would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
 
 So far only un-weighted sampling was considered.
 However, the some of the algorithms can be used for weighted sampling, when `random_int(m)`, which uniformly selects one of `m` elements, is replaced with a function that selects one of `m` elements based on their weights.
@@ -212,7 +214,10 @@ However, this is not necessary since one can stick to the original $w_\max$ at t
 
 The stochastic acceptance method works well when the weights are more or less uniform.
 However, the performance degrades quickly when the weight is concentrated on one or only a few items.
-In this case, the alias method [...] is being used.
+In this case, the alias method [@walker1977; @vose1991] is being used.
 
 The final case would be high sampling rates without replacement.
-For this Algorithm A from [...] in the exponential formulation from [...] has been implemented.
+For this Algorithm A from @efraimidis2006 in the exponential formulation from @R-wrswoR has been implemented.
+
+
+## Refernces
