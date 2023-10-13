@@ -168,28 +168,49 @@ knitr::kable(bm[, 1:5])
 
 Especially for weighted sampling without replacement the performance advantage compared with R's default methods can be particularly large.
 
+There are also specialized functions for the case `n = 2` with both weighted and un-weighted sampling:
+
+```{r n-2, eval=evaluate}
+n <- 2
+prob <- dqrunif(n)
+bm <- bench::mark(sample.int(n, size, replace = TRUE),
+                  dqsample.int(n, size, replace = TRUE),
+                  sample.int(n, size, replace = TRUE, prob = prob),
+                  dqsample.int(n, size, replace = TRUE, prob = prob),
+                  check = FALSE)
+```
+```{r, echo=FALSE}
+if (evaluate) {
+  saveRDS(bm, "data/n-2.RDS")
+} else {
+  bm <- readRDS("data/n-2.RDS")
+}
+knitr::kable(bm[, 1:5])
+```
+
+
 ## Technicalities
 
 The following methods are used for sampling without replacement. The algorithms are presented in R-like pseudo code, even though the real implementation is in C++. For sampling rates above 50%, a partial [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) is used:
 
 ```{r, eval=FALSE}
-no_replace_shuffle <- function(m, size) {
-  tmp <- seq_len(m)
+no_replace_shuffle <- function(n, size) {
+  tmp <- seq_len(n)
   for (i in seq_len(size))
-    swap(tmp[i], tmp[i + random_int(m-i)])
+    swap(tmp[i], tmp[i + random_int(n-i)])
   tmp[1:size]
 }
 ```
 
-where `random_int(m-i)` returns a random integer in `[0, m-i]`. Since the full population is kept in memory, this method is only suitable for high selection rates. One could expect that [reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling) should work well for lower selection rates. However, in my tests set based algorithms were faster:
+where `random_int(n-i)` returns a random integer in `[0, n-i]`. Since the full population is kept in memory, this method is only suitable for high selection rates. One could expect that [reservoir sampling](https://en.wikipedia.org/wiki/Reservoir_sampling) should work well for lower selection rates. However, in my tests set based algorithms were faster:
 
 ```{r, eval=FALSE}
-no_replace_set <- function(m, size) {
+no_replace_set <- function(n, size) {
   result <- vector(mode = "...", length = size) # integer or numeric
-  elems <- new(set, m, size) # set object for storing n objects out of m possible values
+  elems <- new(set, n, size) # set object for storing n objects out of m possible values
   for (i in seq_len(size))
     while (TRUE) {
-      v = random_int(m)
+      v = random_int(n)
       if (elems.insert(v)) {
         result[i] = v
         break
@@ -199,7 +220,7 @@ no_replace_set <- function(m, size) {
 }
 ```
 
-Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `n` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `size`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `size` and not with `n`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) [@bentley1987] would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
+Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `n` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `size`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `size` and not with `n`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) [@bentley1987] would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.^[That is true for algorithm F2. There is also algorithm P, which would produce a random permutation, but that requires some specialized data structure.]
 
 So far only un-weighted sampling was considered.
 However, the some of the algorithms can be used for weighted sampling, when `random_int(n)`, which uniformly selects one of `n` elements, is replaced with a function that selects one of `n` elements based on their weights.
