@@ -199,11 +199,11 @@ no_replace_set <- function(m, size) {
 }
 ```
 
-Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `n` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `size`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `size` and not with `n`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) [@bentley1987a] would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
+Here `elems.insert(v)` returns `TRUE` if the insert was successful, i.e. `v` was not in `elems` before, and `FALSE` otherwise. There are different strategies for implementing such a set. For intermediate sampling rates (currently between 0.1% and 50%) dqrng uses a bitset, i.e. a vector of `n` bits each representing one of the possible values. For lower sampling rates the memory usage of this algorithm is to expensive, which is why a hashset^[For the specialists: Open addressing with a power-of-two size between 1.5 and 3 times `size`, identity hash function for the stored integers and quadratic probing.] is used, since there the used memory scales with `size` and not with `n`. One could expect that [Robert Floyd's sampling algorithm](https://stackoverflow.com/a/2394292/8416610) [@bentley1987] would be superior, but this was not the case in my tests, probably because it requires a final shuffling of the result to get a random _permutation_ instead of a random _combination_.
 
 So far only un-weighted sampling was considered.
 However, the some of the algorithms can be used for weighted sampling, when `random_int(n)`, which uniformly selects one of `n` elements, is replaced with a function that selects one of `n` elements based on their weights.
-One such algorithm is [stochastic acceptance](https://doi.org/10.1016/j.physa.2011.12.004), which is particularly well suited in combination with fast RNGs:
+One such algorithm is stochastic acceptance [@lipowski2012], which is particularly well suited in combination with fast RNGs:
 
 > 1. Select randomly one of the individuals (say, $i$). The selection is done with uniform probability $1/N$, which does not depend on the individual’s fitness $w_i$.
 > 2. With probability $w_i/w_\max$, where $w_\max = \max\{w_i\}_{i=1}^N$ is the maximal fitness in the population, the selection is accepted. Otherwise, the procedure is repeated from step 1 (i.e., in the case of rejection, another selection attempt is made).
@@ -214,10 +214,10 @@ However, this is not necessary since one can stick to the original $w_\max$ at t
 
 The stochastic acceptance method works well when the weights are more or less uniform.
 However, the performance degrades quickly when the weight is concentrated on one or only a few items.
-In this case, the alias method [@walker1977; @vose1991] is being used.
+In this case, the alias method is used, which has been originally suggested by Walker [-@walker1974; -@walker1977] in the efficient formulation of @vose1991, which is also used by R in certain cases.
+@keithschwarz2011 gives a detailed introduction into this method.
 
 The final case would be high sampling rates without replacement.
-For this Algorithm A from @efraimidis2006 in the exponential formulation from @R-wrswoR has been implemented.
-
+For this Algorithm A from @efraimidis2006 in the exponential formulation of Müller [-@R-wrswoR; -@muller2016] has been implemented.
 
 ## Refernces
