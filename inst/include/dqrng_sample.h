@@ -166,17 +166,18 @@ inline VEC no_replacement_set(dqrng::random_64bit_generator &rng, INT n, INT siz
 template<typename VEC, typename INT, typename FVEC>
 inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC prob, int offset) {
   VEC index(n);
-  std::iota(index.begin(), index.end(), (offset));
+  std::iota(index.begin(), index.end(), 0);
   FVEC weight(n);
   dqrng::exponential_distribution exponential;
   std::transform(prob.begin(), prob.end(), weight.begin(),
                  [&rng, &exponential] (double x) {return exponential(rng) / x;});
   std::partial_sort(index.begin(), index.begin() + size, index.end(),
                     [&weight](size_t i1, size_t i2) {return weight[i1] < weight[i2];});
-  if (n == size)
-    return index;
-  else
-    return VEC(index.begin(), index.begin() + size);
+
+  VEC result(size);
+  std::transform(index.begin(), index.begin() + size, result.begin(),
+                 [&offset] (auto x) {return x + offset;});
+  return result;
 }
 
 // set-based rejection sampling with stochastic acceptance
