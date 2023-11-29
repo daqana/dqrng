@@ -12,6 +12,10 @@
 * Add Xoroshiro128\*\*/++ and Xoshiro256\*\*/++ to `xoshiro.h`
 * Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option `dqrng.register_methods` is set to `TRUE`.
 
+# dgrng 0.3.2
+
+* Recreate RcppExports.cpp with current development version of Rcpp to fix WARN on CRAN
+
 # dqrng 0.3.1
 
 * new method `dqrrademacher` for drawing Rademacher weights (Kyle Butts in [#50](https://github.com/daqana/dqrng/pull/50) fixing [#49](https://github.com/daqana/dqrng/pull/49))

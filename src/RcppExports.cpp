@@ -42,7 +42,7 @@ RcppExport SEXP _dqrng_dqset_seed(SEXP seedSEXP, SEXP streamSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -75,7 +75,7 @@ RcppExport SEXP _dqrng_dqRNGkind(SEXP kindSEXP, SEXP normal_kindSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -110,7 +110,7 @@ RcppExport SEXP _dqrng_dqrunif(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -144,7 +144,7 @@ RcppExport SEXP _dqrng_runif(SEXP minSEXP, SEXP maxSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -179,7 +179,7 @@ RcppExport SEXP _dqrng_dqrnorm(SEXP nSEXP, SEXP meanSEXP, SEXP sdSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -213,7 +213,7 @@ RcppExport SEXP _dqrng_rnorm(SEXP meanSEXP, SEXP sdSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -247,7 +247,7 @@ RcppExport SEXP _dqrng_dqrexp(SEXP nSEXP, SEXP rateSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -280,7 +280,7 @@ RcppExport SEXP _dqrng_rexp(SEXP rateSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -312,7 +312,7 @@ RcppExport SEXP _dqrng_get_rng() {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -345,7 +345,7 @@ RcppExport SEXP _dqrng_dqrrademacher(SEXP nSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -382,7 +382,7 @@ RcppExport SEXP _dqrng_dqsample_int(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP,
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -419,7 +419,7 @@ RcppExport SEXP _dqrng_dqsample_num(SEXP nSEXP, SEXP sizeSEXP, SEXP replaceSEXP,
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
