@@ -26,7 +26,7 @@ dqrrademacher uses a fast algorithm to generate random
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.1</span>
       </span>
     </div>
 
@@ -157,18 +157,19 @@ dqrrademacher uses a fast algorithm to generate random
 <dd><p>The default 64 bit variant from the PCG family developed by
    Melissa O'Neill. See <a href="https://www.pcg-random.org/" class="external-link">https://www.pcg-random.org/</a> for more details.</p></dd>
 
-  <dt>Xoroshiro128+ and Xoshiro256+</dt>
+  <dt>Xoroshiro128++ and Xoshiro256++</dt>
 <dd><p>RNGs developed by David Blackman and
-   Sebastiano Vigna. They are used as default RNGs in Erlang and Lua. See
-    <a href="https://xoshiro.di.unimi.it/" class="external-link">https://xoshiro.di.unimi.it/</a> for more details.</p></dd>
+   Sebastiano Vigna. See <a href="https://xoshiro.di.unimi.it/" class="external-link">https://xoshiro.di.unimi.it/</a> for more details.
+   The older generators Xoroshiro128+ and Xoshiro256+ should be used only for
+   backwards compatibility.</p></dd>
 
   <dt>Threefry</dt>
 <dd><p>The 64 bit version of the 20 rounds Threefry engine as
    provided by <code><a href="https://rdrr.io/pkg/sitmo/man/sitmo-package.html" class="external-link">sitmo-package</a></code></p></dd>
 
 
-</dl><p>Xoroshiro128+ is the default since it is the fastest generator provided by
-this package.</p>
+</dl><p>Xoroshiro128++ is the default since it is fast, small and has good statistical
+properties.</p>
 <p>The functions <code>dqrnorm</code> and <code>dqrexp</code> use the Ziggurat algorithm as
 provided by <code>boost.random</code>.</p>
 <p>See <code><a href="generateSeedVectors.html">generateSeedVectors</a></code> for rapid generation of integer-vector
@@ -188,7 +189,7 @@ without state alteration.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Set custom RNG.</span></span></span>
-<span class="r-in"><span><span class="fu">dqRNGkind</span><span class="op">(</span><span class="st">"Xoshiro256+"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dqRNGkind</span><span class="op">(</span><span class="st">"Xoshiro256++"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use an integer scalar to set a seed.</span></span></span>
 <span class="r-in"><span><span class="fu">dqset.seed</span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
@@ -204,11 +205,11 @@ without state alteration.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Random sampling from distributions.</span></span></span>
 <span class="r-in"><span><span class="fu">dqrunif</span><span class="op">(</span><span class="fl">5</span>, min <span class="op">=</span> <span class="fl">2</span>, max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.254756 2.169924 3.232695 8.859045 4.940842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.671009 6.819399 5.809120 7.420207 9.432123</span>
 <span class="r-in"><span><span class="fu">dqrexp</span><span class="op">(</span><span class="fl">5</span>, rate <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.003025477 0.213876337 0.008051277 0.399246137 0.066848602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3195102 0.1255143 0.3573952 0.7278543 0.1367707</span>
 <span class="r-in"><span><span class="fu">dqrnorm</span><span class="op">(</span><span class="fl">5</span>, mean <span class="op">=</span> <span class="fl">5</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.399092 7.411358 7.145729 2.308440 6.766659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.479324 2.667785 4.365715 7.538162 4.144456</span>
 </code></pre></div>
     </div>
   </div>
