@@ -4,6 +4,9 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
     <loc>/articles/cpp-api.html</loc>
   </url>
   <url>
@@ -44,8 +47,5 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/user-supplied-rng.html</loc>
   </url>
 </urlset>

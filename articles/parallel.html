@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2023-11-28</h4>
+            <h4 data-toc-skip class="date">2023-11-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -163,23 +163,23 @@ almost equal to the identity matrix.</p>
 <div class="section level2">
 <h2 id="xoroshiro-jump-ahead-with-openmp">Xo(ro)shiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoroshiro-jump-ahead-with-openmp"></a>
 </h2>
-<p>The Xoshiro256+/++/** generators has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as
-<span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws apart. The
-Xoroshiro128+/++/** generators has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as
-<span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws apart. You can go
+<p>The Xoshiro256+ generator has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as
+<span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws appart. The
+Xoroshiro128+ generator has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as
+<span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws appart. You can go
 from one sub-sequence to the next using the <code>jump()</code> or
 <code>long_jump()</code> method and the convenience wrapper
 <code>jump(int n)</code> or <code>long_jump(int n)</code>, which
 advances to the <code>n</code>th sub-sequence. When used from R or C++
 with the two argument <code>dqset.seed</code> and
-<code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws apart for
-Xoshiro256+/++/** and Xoroshiro128+/++/**, respectively.</p>
+<code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws appart for
+Xoshiro256+ and Xoroshiro128+, respectively.</p>
 <p>As an example using C++ we draw and sum a large number of uniformly
-distributed numbers. This is done several times sequentially as well as
-using OpenMP for parallelisation. Care has been taken to keep the global
-RNG <code>rng</code> usable outside of the parallel block.</p>
+distributed numbers. This is done several times using OpenMP for
+parallelisation. Care has been taken to keep the global RNG
+<code>rng</code> usable outside of the parallel block.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
@@ -187,58 +187,35 @@ RNG <code>rng</code> usable outside of the parallel block.</p>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> random_sum<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> m<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> parallel_random_sum<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> ncores<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>uniform_distribution dist<span class="op">(</span><span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span> <span class="co">// Uniform distribution [0,1)</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>xoshiro256plus rng<span class="op">(</span><span class="dv">42</span><span class="op">);</span>              <span class="co">// properly seeded rng</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> res<span class="op">(</span>m<span class="op">);</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lres<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      lres <span class="op">+=</span> dist<span class="op">(</span>rng<span class="op">);</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    res<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> lres <span class="op">/</span> n<span class="op">;</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> parallel_random_sum<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> ncores<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>uniform_distribution dist<span class="op">(</span><span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span> <span class="co">// Uniform distribution [0,1)</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>xoshiro256plusplus rng<span class="op">(</span><span class="dv">42</span><span class="op">);</span>              <span class="co">// properly seeded rng</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> res<span class="op">(</span>m<span class="op">);</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="pp">#pragma omp parallel num_threads(ncores)</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    dqrng<span class="op">::</span>xoshiro256plusplus lrng<span class="op">(</span>rng<span class="op">);</span>      <span class="co">// make thread local copy of rng </span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    lrng<span class="op">.</span>long_jump<span class="op">(</span>omp_get_thread_num<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">// advance rng by 1 ... ncores jumps</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>      <span class="dt">double</span> lres<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        lres <span class="op">+=</span> dist<span class="op">(</span>lrng<span class="op">);</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>      res<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> lres <span class="op">/</span> n<span class="op">;</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">bm &lt;- bench::mark(</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">  parallel_random_sum(1e7, 8, 4),</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">  random_sum(1e7, 8),</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">  check = FALSE</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">)</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">bm[,1:4]</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="pp">#pragma omp parallel num_threads(ncores)</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    dqrng<span class="op">::</span>xoshiro256plus lrng<span class="op">(</span>rng<span class="op">);</span>      <span class="co">// make thread local copy of rng </span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    lrng<span class="op">.</span>long_jump<span class="op">(</span>omp_get_thread_num<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">// advance rng by 1 ... ncores jumps</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="dt">double</span> lres<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        lres <span class="op">+=</span> dist<span class="op">(</span>lrng<span class="op">);</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      res<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> lres <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">parallel_random_sum(1e7, 8, 4)</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Result:</p>
-<pre><code>  expression                            min   median `itr/sec`
-  &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;
-1 parallel_random_sum(1e+07, 8, 4)   98.3ms     99ms     10.1 
-2 random_sum(1e+07, 8)              270.2ms    271ms      3.68</code></pre>
+<pre><code>[1] 0.5001591 0.5000428 0.4999855 0.4999706 0.5000061 0.4999447 0.4999188 0.5001192</code></pre>
 </div>
 <div class="section level2">
 <h2 id="pcg-multiple-streams-with-rcppparallel">PCG: multiple streams with RcppParallel<a class="anchor" aria-label="anchor" href="#pcg-multiple-streams-with-rcppparallel"></a>
@@ -261,7 +238,7 @@ wrap it as <code>dqrng::generator</code>. The resulting correlation
 matrix should be close to the identity matrix if the different streams
 are independent:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_sample.h&gt;</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
@@ -277,7 +254,7 @@ are independent:</p>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">void</span> <span class="kw">operator</span><span class="op">()(</span><span class="bu">std::</span>size_t<span class="op"> </span>begin<span class="op">,</span> <span class="bu">std::</span>size_t<span class="op"> </span>end<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>pcg64<span class="op">&gt;(</span>seed<span class="op">,</span> end<span class="op">);</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>size_t<span class="op"> </span>col <span class="op">=</span> begin<span class="op">;</span> col <span class="op">&lt;</span> end<span class="op">;</span> <span class="op">++</span>col<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> sampled <span class="op">=</span> dqrng<span class="op">::</span>sample<span class="op">::</span>sample<span class="op">&lt;</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;,</span> <span class="dt">uint32_t</span><span class="op">&gt;(*</span>rng<span class="op">,</span> <span class="dv">100000</span><span class="op">,</span> output<span class="op">.</span>nrow<span class="op">(),</span> <span class="kw">true</span><span class="op">);</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">auto</span> sampled <span class="op">=</span> dqrng<span class="op">::</span>sample<span class="op">::</span>sample<span class="op">&lt;</span>INTSXP<span class="op">,</span> <span class="dt">uint32_t</span><span class="op">&gt;(</span>rng<span class="op">,</span> <span class="dv">100000</span><span class="op">,</span> output<span class="op">.</span>nrow<span class="op">(),</span> <span class="kw">true</span><span class="op">);</span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      RcppParallel<span class="op">::</span>RMatrix<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;::</span>Column column <span class="op">=</span> output<span class="op">.</span>column<span class="op">(</span>col<span class="op">);</span></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      <span class="bu">std::</span>copy<span class="op">(</span>sampled<span class="op">.</span>begin<span class="op">(),</span> sampled<span class="op">.</span>end<span class="op">(),</span> column<span class="op">.</span>begin<span class="op">());</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
