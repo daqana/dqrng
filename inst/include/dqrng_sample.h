@@ -176,7 +176,7 @@ inline VEC no_replacement_exp(dqrng::random_64bit_generator &rng, INT n, INT siz
 
   VEC result(size);
   std::transform(index.begin(), index.begin() + size, result.begin(),
-                 [&offset] (auto x) {return x + offset;});
+                 [&offset] (INT x) {return x + offset;});
   return result;
 }
 
