@@ -22,7 +22,7 @@
 
 #include <mystdint.h>
 #include <stdexcept>
-#include <Rcpp/Lightest>
+#include <Rcpp/XPtr.h>
 
 namespace dqrng {
 
