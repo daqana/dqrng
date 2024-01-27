@@ -17,10 +17,7 @@
 #' plot(x)
 dqrmvnorm <- function(n, ...) {
   if (!requireNamespace("mvtnorm", quietly = TRUE)) {
-    stop(
-      "Package \"mvtnorm\" must be installed to use this function.",
-      call. = FALSE
-    )
+    stop("Package \"mvtnorm\" must be installed to use this function.", call. = FALSE)
   }
   mvtnorm::rmvnorm(n, ..., rnorm = dqrnorm)
 }
