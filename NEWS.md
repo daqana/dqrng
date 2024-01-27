@@ -4,7 +4,6 @@
 
 * The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc.  ([#57](https://github.com/daqana/dqrng/pull/57) fixing [#56](https://github.com/daqana/dqrng/issues/56))
 * The `dqrng::rng64_t` type has been changed to use `Rcpp::XPtr` instead of `std::shared_ptr` and the functions from `dqrng_sample.h` now expect a reference to `dqrng::random_64bit_generator` instead of `dqrng::rng64_t` ([#70](https://github.com/daqana/dqrng/pull/70) fixing [#63](https://github.com/daqana/dqrng/issues/63))
-* Add missing inline attributes and limit the included Rcpp headers in `dqrng_types.h` ([#75](https://github.com/daqana/dqrng/pull/75) together with Paul Liétar)
 
 ## Other changes
 
@@ -12,6 +11,7 @@
 * Make the internal RNG accessible from the outside (Henrik Sloot fixing [#41](https://github.com/daqana/dqrng/issues/41) in [#58](https://github.com/daqana/dqrng/pull/58))
 * Add Xoroshiro128\*\*/++ and Xoshiro256\*\*/++ to `xoshiro.h`
 * Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option `dqrng.register_methods` is set to `TRUE`.
+* Add missing inline attributes and limit the included Rcpp headers in `dqrng_types.h` ([#75](https://github.com/daqana/dqrng/pull/75) together with Paul Liétar)
 
 # dgrng 0.3.2
 
