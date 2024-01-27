@@ -104,7 +104,7 @@ public:
 };
 
 template<>
-void xoshiro<2>::do_jump(std::array<result_type, 2> JUMP) {
+inline void xoshiro<2>::do_jump(std::array<result_type, 2> JUMP) {
     uint64_t s0 = 0;
     uint64_t s1 = 0;
     for(unsigned int i = 0; i < sizeof JUMP / sizeof JUMP.begin(); i++)
@@ -121,7 +121,7 @@ void xoshiro<2>::do_jump(std::array<result_type, 2> JUMP) {
 }
 
 template<>
-void xoshiro<4>::do_jump(std::array<result_type, 4> JUMP) {
+inline void xoshiro<4>::do_jump(std::array<result_type, 4> JUMP) {
     uint64_t s0 = 0;
     uint64_t s1 = 0;
     uint64_t s2 = 0;
