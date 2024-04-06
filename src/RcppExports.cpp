@@ -80,6 +80,70 @@ RcppExport SEXP _dqrng_dqRNGkind(SEXP kindSEXP, SEXP normal_kindSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// dqrng_get_state
+std::vector<std::string> dqrng_get_state();
+static SEXP _dqrng_dqrng_get_state_try() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    rcpp_result_gen = Rcpp::wrap(dqrng_get_state());
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _dqrng_dqrng_get_state() {
+    SEXP rcpp_result_gen;
+    {
+        rcpp_result_gen = PROTECT(_dqrng_dqrng_get_state_try());
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// dqrng_set_state
+void dqrng_set_state(std::vector<std::string> state);
+static SEXP _dqrng_dqrng_set_state_try(SEXP stateSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type state(stateSEXP);
+    dqrng_set_state(state);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _dqrng_dqrng_set_state(SEXP stateSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        rcpp_result_gen = PROTECT(_dqrng_dqrng_set_state_try(stateSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // dqrunif
 Rcpp::NumericVector dqrunif(size_t n, double min, double max);
 static SEXP _dqrng_dqrunif_try(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP) {
@@ -443,6 +507,8 @@ static int _dqrng_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("void(*dqset_seed)(Rcpp::Nullable<Rcpp::IntegerVector>,Rcpp::Nullable<Rcpp::IntegerVector>)");
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
+        signatures.insert("std::vector<std::string>(*dqrng_get_state)()");
+        signatures.insert("void(*dqrng_set_state)(std::vector<std::string>)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("double(*runif)(double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrnorm)(size_t,double,double)");
@@ -461,6 +527,8 @@ static int _dqrng_RcppExport_validate(const char* sig) {
 RcppExport SEXP _dqrng_RcppExport_registerCCallable() { 
     R_RegisterCCallable("dqrng", "_dqrng_dqset_seed", (DL_FUNC)_dqrng_dqset_seed_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqRNGkind", (DL_FUNC)_dqrng_dqRNGkind_try);
+    R_RegisterCCallable("dqrng", "_dqrng_dqrng_get_state", (DL_FUNC)_dqrng_dqrng_get_state_try);
+    R_RegisterCCallable("dqrng", "_dqrng_dqrng_set_state", (DL_FUNC)_dqrng_dqrng_set_state_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrunif", (DL_FUNC)_dqrng_dqrunif_try);
     R_RegisterCCallable("dqrng", "_dqrng_runif", (DL_FUNC)_dqrng_runif_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrnorm", (DL_FUNC)_dqrng_dqrnorm_try);
@@ -478,6 +546,8 @@ RcppExport SEXP _dqrng_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_dqrng_dqset_seed", (DL_FUNC) &_dqrng_dqset_seed, 2},
     {"_dqrng_dqRNGkind", (DL_FUNC) &_dqrng_dqRNGkind, 2},
+    {"_dqrng_dqrng_get_state", (DL_FUNC) &_dqrng_dqrng_get_state, 0},
+    {"_dqrng_dqrng_set_state", (DL_FUNC) &_dqrng_dqrng_set_state, 1},
     {"_dqrng_dqrunif", (DL_FUNC) &_dqrng_dqrunif, 3},
     {"_dqrng_runif", (DL_FUNC) &_dqrng_runif, 2},
     {"_dqrng_dqrnorm", (DL_FUNC) &_dqrng_dqrnorm, 3},

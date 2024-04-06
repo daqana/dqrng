@@ -29,6 +29,7 @@
 
 namespace {
 dqrng::rng64_t rng = dqrng::generator();
+std::string rng_kind = "default";
 
 void init() {
   Rcpp::RNGScope rngScope;
@@ -70,6 +71,7 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   for (auto & c: kind)
     c = std::tolower(c);
   uint64_t seed = rng->operator()();
+  rng_kind = kind;
   if (kind == "default") {
     rng =  dqrng::generator(seed);
   } else if (kind == "xoroshiro128+") {
@@ -87,6 +89,29 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   } else {
     Rcpp::stop("Unknown random generator kind: %s", kind);
   }
+}
+
+//' @rdname dqrng-functions
+//' @export
+// [[Rcpp::export(rng = false)]]
+std::vector<std::string> dqrng_get_state() {
+  std::stringstream buffer;
+  buffer << rng_kind << " " << *rng;
+  std::vector<std::string> state{std::istream_iterator<std::string>{buffer},
+                                 std::istream_iterator<std::string>{}};
+  return state;
+}
+
+//' @rdname dqrng-functions
+//' @export
+// [[Rcpp::export(rng = false)]]
+void dqrng_set_state(std::vector<std::string> state) {
+  std::stringstream buffer;
+  std::copy(state.begin() + 1,
+            state.end(),
+            std::ostream_iterator<std::string>(buffer, " "));
+  dqRNGkind(state[0]);
+  buffer >> *rng;
 }
 
 //' @rdname dqrng-functions
