@@ -22,6 +22,7 @@
 
 #include <mystdint.h>
 #include <stdexcept>
+#include <memory>
 #include <Rcpp/XPtr.h>
 
 namespace dqrng {
@@ -37,6 +38,7 @@ public:
   virtual result_type operator() () = 0;
   virtual void seed(result_type seed) = 0;
   virtual void seed(result_type seed, result_type stream) = 0;
+  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) = 0;
   static constexpr result_type min() {return 0;};
   static constexpr result_type max() {return UINT64_MAX;};
   virtual uint32_t operator() (uint32_t range) = 0;
@@ -68,6 +70,8 @@ protected:
 
 public:
   explicit random_64bit_accessor();
+  // defined in dqrng.h:
+  // random_64bit_accessor() : gen(dqrng::get_rng()) {}
 
   virtual result_type operator() () override {
     return (*gen)();
@@ -79,6 +83,10 @@ public:
 
   virtual void seed(result_type seed, result_type stream) override {
     throw std::runtime_error("Seed handling not supported for this class!");
+  };
+
+  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
+    return gen->clone(stream);
   };
 
   virtual uint32_t operator() (uint32_t range) override {

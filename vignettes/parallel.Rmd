@@ -105,7 +105,7 @@ std::vector<double> random_sum(int n, int m) {
 // [[Rcpp::export]]
 std::vector<double> parallel_random_sum(int n, int m, int ncores) {
   dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
-  dqrng::xoshiro256plusplus rng(42);              // properly seeded rng
+  dqrng::xoshiro256plusplus rng(42);          // properly seeded rng
   std::vector<double> res(m);
   // ok to use rng here
   
@@ -145,6 +145,71 @@ Result:
     1 parallel_random_sum(1e+07, 8, 4)   98.3ms     99ms     10.1 
     2 random_sum(1e+07, 8)              270.2ms    271ms      3.68
 
+In the previous example it was necessary to create our own RNG object. It would be nice if it were possible to use dqrng's global RNG instead. To showcase this, we implement the same procedure as before, but this time make use of `dqrng::random_64bit_accessor` to access the global RNG and its `clone(stream)` method that creates a cloned version with a different stream:
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng, BH)]]
+#include <dqrng.h>
+#include <dqrng_distribution.h>
+// [[Rcpp::plugins(cpp14)]]
+// [[Rcpp::plugins(openmp)]]
+#include <omp.h>
+
+// [[Rcpp::export]]
+std::vector<double> random_sum(int n, int m) {
+  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
+  auto rng = dqrng::random_64bit_accessor{};  // properly seeded rng
+  std::vector<double> res(m);
+  for (int i = 0; i < m; ++i) {
+    double lres(0);
+    for (int j = 0; j < n; ++j) {
+      lres += dist(rng);
+    }
+    res[i] = lres / n;
+  }
+  return res;
+}
+
+// [[Rcpp::export]]
+std::vector<double> parallel_random_sum(int n, int m, int ncores) {
+  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
+  auto rng = dqrng::random_64bit_accessor{};  // properly seeded rng
+  std::vector<double> res(m);
+  // ok to use rng here
+
+#pragma omp parallel num_threads(ncores)
+{
+  // make thread local copy of rng and advance it by 1 ... ncores jumps
+  auto lrng = rng.clone(omp_get_thread_num() + 1);      
+
+#pragma omp for
+  for (int i = 0; i < m; ++i) {
+    double lres(0);
+    for (int j = 0; j < n; ++j) {
+      lres += dist(*lrng);
+    }
+    res[i] = lres / n;
+  }
+}
+// ok to use rng here
+return res;
+}
+
+/*** R
+bm <- bench::mark(
+  parallel_random_sum(1e7, 8, 4),
+  random_sum(1e7, 8),
+  check = FALSE
+)
+bm[,1:4]
+*/
+```
+
+Notes:
+
+* The thread local RNG does not make use of `Rcpp::Xptr` since it is used in parallel code. Instead a `std::unique_ptr` is used that is created using `std::make_unique`. Therefore, using this feature requires at least C++14. 
+* At the moment this kind of stream handling is not supported for the Threefry engine.
 
 # PCG: multiple streams with RcppParallel
 
