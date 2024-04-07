@@ -61,13 +61,13 @@ jobs:
       # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-            # Optional glob pattern of files which should be added to the commit
-            # Defaults to all (.)
-            # See the `pathspec`-documentation for git
-            # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
-            # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
-            file_pattern: 'revdep'
+          # Optional glob pattern of files which should be added to the commit
+          # Defaults to all (.)
+          # See the `pathspec`-documentation for git
+          # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
+          # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
+          file_pattern: 'revdep'
 
-            # Optional. Options used by `git-add`.
-            # See https://git-scm.com/docs/git-add#_options
-            add_options: '--all'
+          # Optional. Options used by `git-add`.
+          # See https://git-scm.com/docs/git-add#_options
+          add_options: '--all'
