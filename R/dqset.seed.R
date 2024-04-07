@@ -81,6 +81,13 @@
 #' dqrunif(5, min = 2, max = 10)
 #' dqrexp(5, rate = 4)
 #' dqrnorm(5, mean = 5, sd = 3)
+#'
+#' # get and restore the state
+#' (state <- dqrng_get_state())
+#' dqrunif(5)
+#' dqrng_set_state(state)
+#' dqrunif(5)
+#'
 #' @rdname dqrng-functions
 #' @export
 dqset.seed <- function(seed, stream = NULL) {

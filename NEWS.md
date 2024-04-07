@@ -12,6 +12,8 @@
 * Add Xoroshiro128\*\*/++ and Xoshiro256\*\*/++ to `xoshiro.h`
 * Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option `dqrng.register_methods` is set to `TRUE`.
 * Add missing inline attributes and limit the included Rcpp headers in `dqrng_types.h` ([#75](https://github.com/daqana/dqrng/pull/75) together with Paul Liétar)
+* Add I/O methods for the RNG's internal state (fixing [#66](https://github.com/daqana/dqrng/issues/66) in [#78](https://github.com/daqana/dqrng/pull/78))
+
 
 # dgrng 0.3.2
 
