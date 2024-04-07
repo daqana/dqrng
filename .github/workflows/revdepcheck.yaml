@@ -61,13 +61,18 @@ jobs:
       # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
+          # Optional. Local and remote branch name where commit is going to be pushed
+          #  to. Defaults to the current branch.
+          #  You might need to set `create_branch: true` if the branch does not exist.
+          branch: revdep
+          # Optional. Create given branch name in local and remote repository.
+          create_branch: true
           # Optional glob pattern of files which should be added to the commit
           # Defaults to all (.)
           # See the `pathspec`-documentation for git
           # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
           # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
           file_pattern: 'revdep'
-
           # Optional. Options used by `git-add`.
           # See https://git-scm.com/docs/git-add#_options
           add_options: '--all'
