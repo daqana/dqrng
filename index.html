@@ -137,8 +137,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 rnorm(N)      607µs  660.2µs     1451.</span></span>
-<span><span class="co">#&gt; 2 dqrnorm(N)   89.8µs   92.7µs     9896.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 rnorm(N)      610µs    709µs     1322.</span></span>
+<span><span class="co">#&gt; 2 dqrnorm(N)    197µs    222µs     4411.</span></span></code></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e7</span></span>
@@ -152,10 +152,10 @@
 <span><span class="co">#&gt; # A tibble: 4 × 4</span></span>
 <span><span class="co">#&gt;   expression                                     min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;                                &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            6.88ms   7.08ms      139.</span></span>
-<span><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     8.72ms   8.93ms      110.</span></span>
-<span><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)         410.9µs 434.24µs     2137.</span></span>
-<span><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 397.74µs 435.38µs     1930.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)             7.2ms    7.7ms      120.</span></span>
+<span><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)      8.8ms   9.84ms      100.</span></span>
+<span><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)         435.2µs 497.26µs     1896.</span></span>
+<span><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE)    446µs 496.73µs     1780.</span></span></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
@@ -170,11 +170,11 @@
 <span><span class="co">#&gt; # A tibble: 5 × 4</span></span>
 <span><span class="co">#&gt;   expression                            min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n)                  22.73ms  24.05ms      36.9</span></span>
-<span><span class="co">#&gt; 2 sample.int(1000 * m, n)           12.07ms  13.85ms      68.1</span></span>
-<span><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   9.57ms  12.63ms      74.4</span></span>
-<span><span class="co">#&gt; 4 dqsample.int(m, n)                 1.11ms    1.2ms     696. </span></span>
-<span><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.95ms   2.69ms     293.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 sample.int(m, n)                  42.52ms  43.95ms      16.3</span></span>
+<span><span class="co">#&gt; 2 sample.int(1000 * m, n)           13.35ms   14.8ms      65.8</span></span>
+<span><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   9.72ms  11.34ms      85.8</span></span>
+<span><span class="co">#&gt; 4 dqsample.int(m, n)               717.13µs 915.69µs     846. </span></span>
+<span><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.47ms   2.13ms     384.</span></span></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -253,7 +253,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/daqana/dqrng/actions" class="external-link"><img src="https://github.com/daqana/dqrng/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://cran.r-project.org/package=dqrng" class="external-link"><img src="https://www.r-pkg.org/badges/version/dqrng" alt="CRAN status"></a></li>
-<li><a href="https://app.codecov.io/github/daqana/dqrng?branch=master" class="external-link"><img src="https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="https://app.codecov.io/github/daqana/dqrng?branch=main" class="external-link"><img src="https://codecov.io/gh/daqana/dqrng/branch/main/graph/badge.svg" alt="Coverage status"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/dqrng" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen" alt="Downloads"></a></li>
 <li><a href="https://bestpractices.coreinfrastructure.org/projects/2157" class="external-link"><img src="https://bestpractices.coreinfrastructure.org/projects/2157/badge" alt="CII Best Practices"></a></li>
 <li><a href="https://cran.r-project.org/package=dqrng" class="external-link"><img src="https://tinyverse.netlify.com/badge/dqrng" alt="Dependencies"></a></li>
