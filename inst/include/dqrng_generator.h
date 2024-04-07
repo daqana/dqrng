@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023 Ralf Stubner
+// Copyright 2023-2024 Ralf Stubner
 //
 // This file is part of dqrng.
 //
