@@ -117,6 +117,17 @@ restore_methods()
 
 You can automatically register these methods when loading this package by setting the option `dqrng.register_methods` to `TRUE`, e.g. with `options(dqrng.register_methods=TRUE)`.
 
+For some workflows it is helpful to save and restore the RNG's type and state, similar to how `.Randome.seed` can be saved and restored. The function pair `dqrng_get_state()` and `dqrng_set_state()` can be used for this task:
+
+```{r state}
+(state <- dqrng_get_state())
+dqrunif(5)
+# many other operations, that could even change the used RNG type
+dqrng_set_state(state)
+dqrunif(5)
+```
+
+Note that the state is represented by a character vector, since the unsigned 64 and 128 bit integers used by the supported RNGs cannot be represented in R otherwise. Generally this state should be treated as an implementation detail and not manipulated directly.
 
 ## Usage from C++
 

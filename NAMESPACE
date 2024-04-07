@@ -3,6 +3,8 @@
 export(dqRNGkind)
 export(dqrexp)
 export(dqrmvnorm)
+export(dqrng_get_state)
+export(dqrng_set_state)
 export(dqrnorm)
 export(dqrrademacher)
 export(dqrunif)
