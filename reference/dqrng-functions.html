@@ -8,7 +8,9 @@
 dqrrademacher uses a fast algorithm to generate random
   Rademacher variables (-1 and 1 with equal probability). To do so, it
   generates a random 64 bit integer and then uses each bit to generate
-  a 0/1 variable. This generates 64 integers per random number generation."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+  a 0/1 variable. This generates 64 integers per random number generation.
+dqrng_get_state and dqrng_set_state can be used to get and set
+  the RNG's internal state. The character vector should not be manipulated directly."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -26,7 +28,7 @@ dqrrademacher uses a fast algorithm to generate random
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.2</span>
       </span>
     </div>
 
@@ -87,10 +89,16 @@ dqrrademacher uses a fast algorithm to generate random
   Rademacher variables (-1 and 1 with equal probability). To do so, it
   generates a random 64 bit integer and then uses each bit to generate
   a 0/1 variable. This generates 64 integers per random number generation.</p>
+<p><code>dqrng_get_state</code> and <code>dqrng_set_state</code> can be used to get and set
+  the RNG's internal state. The character vector should not be manipulated directly.</p>
     </div>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dqRNGkind</span><span class="op">(</span><span class="va">kind</span>, normal_kind <span class="op">=</span> <span class="st">"ignored"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dqrng_get_state</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">dqrng_set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">dqrunif</span><span class="op">(</span><span class="va">n</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -111,6 +119,10 @@ dqrrademacher uses a fast algorithm to generate random
 
 <dt>normal_kind</dt>
 <dd><p>ignored; included for compatibility with <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></code></p></dd>
+
+
+<dt>state</dt>
+<dd><p>character vector representation of the RNG's internal state</p></dd>
 
 
 <dt>n</dt>
@@ -149,7 +161,10 @@ dqrrademacher uses a fast algorithm to generate random
     <h2>Value</h2>
     
 
-<p><code>dqrunif</code>, <code>dqrnorm</code>, and <code>dqrexp</code> return a numeric vector of length <code>n</code>. <code>dqrrademacher</code> returns an integer vector of length <code>n</code>.</p>
+<p><code>dqrunif</code>, <code>dqrnorm</code>, and <code>dqrexp</code> return a numeric vector
+ of length <code>n</code>. <code>dqrrademacher</code> returns an integer vector of length <code>n</code>.</p>
+<p></p>
+<p><code>dqrng_get_state</code> returns a character vector representation of the RNG's internal state.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -210,6 +225,17 @@ without state alteration.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3195102 0.1255143 0.3573952 0.7278543 0.1367707</span>
 <span class="r-in"><span><span class="fu">dqrnorm</span><span class="op">(</span><span class="fl">5</span>, mean <span class="op">=</span> <span class="fl">5</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.479324 2.667785 4.365715 7.538162 4.144456</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get and restore the state</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">state</span> <span class="op">&lt;-</span> <span class="fu">dqrng_get_state</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xoshiro256++"         "9418222475388072763"  "14697922287555972744"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "17803728035708903246" "3873340903374287490" </span>
+<span class="r-in"><span><span class="fu">dqrunif</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7461946 0.3834459 0.5778508 0.3488599 0.4695689</span>
+<span class="r-in"><span><span class="fu">dqrng_set_state</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">dqrunif</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7461946 0.3834459 0.5778508 0.3488599 0.4695689</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

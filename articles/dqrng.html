@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.2</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-01-27</h4>
+            <h4 data-toc-skip class="date">2024-04-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/dqrng.Rmd" class="external-link"><code>vignettes/dqrng.Rmd</code></a></small>
       <div class="hidden name"><code>dqrng.Rmd</code></div>
@@ -166,7 +166,7 @@ the RNG might look like this:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pi ~=  3.140899</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.363   0.035   0.399</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.374   0.032   0.405</span></span></code></pre></div>
 <p>Using dqrng is about three times faster:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
@@ -174,46 +174,46 @@ the RNG might look like this:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"pi ~= "</span>, <span class="fu">piR</span><span class="op">(</span><span class="va">N</span>, rng <span class="op">=</span> <span class="fu">dqrng</span><span class="fu">::</span><span class="va"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; pi ~=  3.141457</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.223   0.027   0.250</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.222   0.035   0.258</span></span></code></pre></div>
 <p>Since the calculations add a constant off-set, the speed-up for the
 RNGs alone has to be even greater:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.086   0.004   0.089</span></span>
+<span><span class="co">#&gt;   0.086   0.005   0.091</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.046   0.008   0.053</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.052   0.004   0.056</span></span></code></pre></div>
 <p>Similar for the exponential distribution:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.322   0.016   0.339</span></span>
+<span><span class="co">#&gt;   0.338   0.004   0.342</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrexp</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.071   0.004   0.074</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.071   0.000   0.071</span></span></code></pre></div>
 <p>And for the normal distribution:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.347   0.020   0.367</span></span>
+<span><span class="co">#&gt;   0.367   0.004   0.372</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.085   0.008   0.093</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.086   0.008   0.093</span></span></code></pre></div>
 <p>As well as for sampling with and without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.581   0.008   0.590</span></span>
+<span><span class="co">#&gt;   0.562   0.016   0.578</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.031   0.012   0.042</span></span>
+<span><span class="co">#&gt;   0.042   0.004   0.046</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>   <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.491   0.320   1.811</span></span>
+<span><span class="co">#&gt;   1.418   0.300   1.718</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="fu"><a href="../reference/dqsample.html">dqsample.int</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">N</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.058   0.008   0.066</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.060   0.008   0.068</span></span></code></pre></div>
 <p>It is also possible to register the supplied generators as
 user-supplied RNGs. This way <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> and
 <code><a href="../reference/dqrng-functions.html">dqset.seed()</a></code> influence both <code>(dq)runif</code> and
@@ -243,6 +243,23 @@ and <code>dqrexp</code> still give different results:</p>
 package by setting the option <code>dqrng.register_methods</code> to
 <code>TRUE</code>, e.g. with
 <code>options(dqrng.register_methods=TRUE)</code>.</p>
+<p>For some workflows it is helpful to save and restore the RNG’s type
+and state, similar to how <code>.Randome.seed</code> can be saved and
+restored. The function pair <code><a href="../reference/dqrng-functions.html">dqrng_get_state()</a></code> and
+<code><a href="../reference/dqrng-functions.html">dqrng_set_state()</a></code> can be used for this task:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">state</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dqrng-functions.html">dqrng_get_state</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "default"             "7442421893577288217" "2933090096537006399"</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.850198175 0.184318214 0.003138956 0.071103977 0.430195275</span></span>
+<span><span class="co"># many other operations, that could even change the used RNG type</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqrng_set_state</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.850198175 0.184318214 0.003138956 0.071103977 0.430195275</span></span></code></pre></div>
+<p>Note that the state is represented by a character vector, since the
+unsigned 64 and 128 bit integers used by the supported RNGs cannot be
+represented in R otherwise. Generally this state should be treated as an
+implementation detail and not manipulated directly.</p>
 </div>
 <div class="section level2">
 <h2 id="usage-from-c">Usage from C++<a class="anchor" aria-label="anchor" href="#usage-from-c"></a>
@@ -269,46 +286,46 @@ include <code>dqrng.h</code>. The full list of functions is available
 with <code><a href="../articles/cpp-api.html">vignette("cpp-api", package = "dqrng")</a></code>. Revisiting the
 example of approximating <span class="math inline">\(\pi\)</span> we can
 use:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>IntegerVector<span class="op">;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>NumericVector<span class="op">;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>sqrt<span class="op">;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>sum<span class="op">;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> dqrng<span class="op">::</span>dqrunif<span class="op">;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> piCpp<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>dqset_seed<span class="op">(</span>IntegerVector<span class="op">::</span>create<span class="op">(</span><span class="dv">42</span><span class="op">));</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  NumericVector x <span class="op">=</span> dqrunif<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  NumericVector y <span class="op">=</span> dqrunif<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  NumericVector d <span class="op">=</span> sqrt<span class="op">(</span>x<span class="op">*</span>x <span class="op">+</span> y<span class="op">*</span>y<span class="op">);</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">4.0</span> <span class="op">*</span> sum<span class="op">(</span>d <span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">/</span> n<span class="op">;</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(cat("pi ~= ", piCpp(1e7), "\n"))</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>IntegerVector<span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>NumericVector<span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>sqrt<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="kw">using</span> Rcpp<span class="op">::</span>sum<span class="op">;</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="kw">using</span> dqrng<span class="op">::</span>dqrunif<span class="op">;</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="dt">double</span> piCpp<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  dqrng<span class="op">::</span>dqset_seed<span class="op">(</span>IntegerVector<span class="op">::</span>create<span class="op">(</span><span class="dv">42</span><span class="op">));</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  NumericVector x <span class="op">=</span> dqrunif<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  NumericVector y <span class="op">=</span> dqrunif<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  NumericVector d <span class="op">=</span> sqrt<span class="op">(</span>x<span class="op">*</span>x <span class="op">+</span> y<span class="op">*</span>y<span class="op">);</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  <span class="cf">return</span> <span class="fl">4.0</span> <span class="op">*</span> sum<span class="op">(</span>d <span class="op">&lt;</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">system.time(cat("pi ~= ", piCpp(1e7), "\n"))</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Note that in C++ you have to use <code>dqrng::dqset_seed()</code>,
 whereas the analogue function in the R interface is called
 <code><a href="../reference/dqrng-functions.html">dqrng::dqset.seed()</a></code>. For sampling with and without
 replacement <code>dqrng::dqsample_int()</code> and
 <code>dqrng::dqsample_num()</code> are the analogue of
 <code><a href="../reference/dqsample.html">dqrng::dqsample.int()</a></code> in the R interface:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> sampleCpp<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>dqset_seed<span class="op">(</span>Rcpp<span class="op">::</span>IntegerVector<span class="op">::</span>create<span class="op">(</span><span class="dv">42</span><span class="op">));</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>IntegerVector sample <span class="op">=</span> dqrng<span class="op">::</span>dqsample_int<span class="op">(</span>n<span class="op">,</span> n<span class="op">/</span><span class="dv">100</span><span class="op">,</span> <span class="kw">true</span><span class="op">);</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>Rcout <span class="op">&lt;&lt;</span> sample <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">sampleCpp(1000)</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="dt">void</span> sampleCpp<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  dqrng<span class="op">::</span>dqset_seed<span class="op">(</span>Rcpp<span class="op">::</span>IntegerVector<span class="op">::</span>create<span class="op">(</span><span class="dv">42</span><span class="op">));</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  Rcpp<span class="op">::</span>IntegerVector sample <span class="op">=</span> dqrng<span class="op">::</span>dqsample_int<span class="op">(</span>n<span class="op">,</span> n<span class="op">/</span><span class="dv">100</span><span class="op">,</span> <span class="kw">true</span><span class="op">);</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  Rcpp<span class="op">::</span>Rcout <span class="op">&lt;&lt;</span> sample <span class="op">&lt;&lt;</span> <span class="bu">std::</span>endl<span class="op">;</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">sampleCpp(1000)</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-the-header-only-library">Using the header only library<a class="anchor" aria-label="anchor" href="#using-the-header-only-library"></a>
@@ -321,73 +338,73 @@ package as well to use dqrng’s distribution functions. For example, you
 can use the distribution functions from dqrng together with some foreign
 64bit RNG. Here a minimal <a href="https://xoroshiro.di.unimi.it/splitmix64.c" class="external-link">SplitMix</a> generator
 is used together with <code>dqrng::normal_distribution</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cstdint&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SplitMix <span class="op">{</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="dt">uint64_t</span> <span class="dt">result_type</span><span class="op">;</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  SplitMix <span class="op">(</span><span class="dt">result_type</span> seed<span class="op">)</span> <span class="op">:</span> state<span class="op">(</span>seed<span class="op">)</span> <span class="op">{};</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">result_type</span> <span class="kw">operator</span><span class="op">()</span> <span class="op">()</span> <span class="op">{</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">result_type</span> z <span class="op">=</span> <span class="op">(</span>state <span class="op">+=</span> <span class="bn">0x9e3779b97f4a7c15</span><span class="bu">ULL</span><span class="op">);</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="op">(</span>z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">30</span><span class="op">))</span> <span class="op">*</span> <span class="bn">0xbf58476d1ce4e5b9</span><span class="bu">ULL</span><span class="op">;</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="op">(</span>z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">27</span><span class="op">))</span> <span class="op">*</span> <span class="bn">0x94d049bb133111eb</span><span class="bu">ULL</span><span class="op">;</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">31</span><span class="op">);</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">void</span> seed<span class="op">(</span><span class="dt">result_type</span> seed<span class="op">)</span> <span class="op">{</span>state <span class="op">=</span> seed<span class="op">;}</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">static</span> <span class="kw">constexpr</span> <span class="dt">result_type</span> min<span class="op">()</span> <span class="op">{</span><span class="cf">return</span> <span class="dv">0</span><span class="op">;};</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">static</span> <span class="kw">constexpr</span> <span class="dt">result_type</span> max<span class="op">()</span> <span class="op">{</span><span class="cf">return</span> UINT64_MAX<span class="op">;};</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="dt">result_type</span> state<span class="op">;</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span>  </span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>ostream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&lt;&lt;(</span><span class="bu">std::</span>ostream<span class="op">&amp;</span> ost<span class="op">,</span> <span class="at">const</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ost <span class="op">&lt;&lt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>istream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&gt;&gt;(</span><span class="bu">std::</span>istream<span class="op">&amp;</span> ist<span class="op">,</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ist <span class="op">&gt;&gt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector splitmix_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>SplitMix<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co">splitmix_rnorm(10)</span></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(splitmix_rnorm(1e7))</span></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cstdint&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="kw">class</span> SplitMix <span class="op">{</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="dt">uint64_t</span> <span class="dt">result_type</span><span class="op">;</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  SplitMix <span class="op">(</span><span class="dt">result_type</span> seed<span class="op">)</span> <span class="op">:</span> state<span class="op">(</span>seed<span class="op">)</span> <span class="op">{};</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  <span class="dt">result_type</span> <span class="kw">operator</span><span class="op">()</span> <span class="op">()</span> <span class="op">{</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>    <span class="dt">result_type</span> z <span class="op">=</span> <span class="op">(</span>state <span class="op">+=</span> <span class="bn">0x9e3779b97f4a7c15</span><span class="bu">ULL</span><span class="op">);</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>    z <span class="op">=</span> <span class="op">(</span>z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">30</span><span class="op">))</span> <span class="op">*</span> <span class="bn">0xbf58476d1ce4e5b9</span><span class="bu">ULL</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>    z <span class="op">=</span> <span class="op">(</span>z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">27</span><span class="op">))</span> <span class="op">*</span> <span class="bn">0x94d049bb133111eb</span><span class="bu">ULL</span><span class="op">;</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    <span class="cf">return</span> z <span class="op">^</span> <span class="op">(</span>z <span class="op">&gt;&gt;</span> <span class="dv">31</span><span class="op">);</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>  <span class="dt">void</span> seed<span class="op">(</span><span class="dt">result_type</span> seed<span class="op">)</span> <span class="op">{</span>state <span class="op">=</span> seed<span class="op">;}</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>  <span class="at">static</span> <span class="kw">constexpr</span> <span class="dt">result_type</span> min<span class="op">()</span> <span class="op">{</span><span class="cf">return</span> <span class="dv">0</span><span class="op">;};</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>  <span class="at">static</span> <span class="kw">constexpr</span> <span class="dt">result_type</span> max<span class="op">()</span> <span class="op">{</span><span class="cf">return</span> UINT64_MAX<span class="op">;};</span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="kw">private</span><span class="op">:</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>  <span class="dt">result_type</span> state<span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="kw">public</span><span class="op">:</span>  </span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>ostream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&lt;&lt;(</span><span class="bu">std::</span>ostream<span class="op">&amp;</span> ost<span class="op">,</span> <span class="at">const</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a>    <span class="cf">return</span> ost <span class="op">&lt;&lt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>  <span class="kw">friend</span> <span class="bu">std::</span>istream<span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&gt;&gt;(</span><span class="bu">std::</span>istream<span class="op">&amp;</span> ist<span class="op">,</span> SplitMix<span class="op">&amp;</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>    <span class="cf">return</span> ist <span class="op">&gt;&gt;</span> e<span class="op">.</span>state<span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector splitmix_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>SplitMix<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
+<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a><span class="co">splitmix_rnorm(10)</span></span>
+<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="co">system.time(splitmix_rnorm(1e7))</span></span>
+<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Since SplitMix is a very fast RNG, the speed of this function is
 comparable to <code>dqrnorm</code>. Generally speaking you can use any
 C++11 compliant RNG with 64 bit output size. For example, here the 64
 bit Threefry engine with 13 rounds from package sitmo is used:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;threefry.h&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector threefry_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>sitmo<span class="op">::</span>threefry_13_64<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">threefry_rnorm(10)</span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(threefry_rnorm(1e7))</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH, sitmo)]]</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;threefry.h&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector threefry_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>sitmo<span class="op">::</span>threefry_13_64<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  dqrng<span class="op">::</span>normal_distribution dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">threefry_rnorm(10)</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">system.time(threefry_rnorm(1e7))</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Note that for the (recommended) Threefry engine with 20 rounds some
 additional integration is provided in the <code>dqrng_threefry.h</code>
 header file.</p>
@@ -395,26 +412,26 @@ header file.</p>
 dqrng’s tooling and some other distribution function. For example, this
 function generates random numbers according to the normal distribution
 using the standard library from C++11:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_generator.h&gt;</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector std_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>dqrng<span class="op">::</span>xoroshiro128plus<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>normal_distribution<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">std_rnorm(10)</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(std_rnorm(1e7))</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng)]]</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_generator.h&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector std_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>dqrng<span class="op">::</span>xoroshiro128plus<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>  <span class="bu">std::</span>normal_distribution<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(*</span>rng<span class="op">);});</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">std_rnorm(10)</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">system.time(std_rnorm(1e7))</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Typically this is not as fast as <code>dqrnorm</code>, but the
 technique is useful to support distributions not (yet) included in
 dqrng. Note however, that the algorithms used for the distributions from
@@ -423,24 +440,24 @@ C++11 are <em>implementation defined</em>.</p>
 provided as header-only libraries, without dqrng’s tooling. For example,
 the following function uses the 32 bit PCG variant together with Boost’s
 normal distribution function:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/normal_distribution.hpp&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector boost_pcg_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  pcg32 rng<span class="op">(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">boost::</span>random<span class="ex">::</span>normal_distribution<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(</span>rng<span class="op">);});</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">boost_pcg_rnorm(10)</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">system.time(boost_pcg_rnorm(1e7))</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;pcg_random.hpp&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/normal_distribution.hpp&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector boost_pcg_rnorm<span class="op">(</span><span class="at">const</span> <span class="dt">int</span> n<span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="at">const</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  pcg32 rng<span class="op">(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="ex">boost::</span>random::normal_distribution<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> dist<span class="op">(</span>mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericVector result<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  <span class="bu">std::</span>generate<span class="op">(</span>result<span class="op">.</span>begin<span class="op">(),</span> result<span class="op">.</span>end<span class="op">(),</span> <span class="op">[&amp;</span>dist<span class="op">,</span> <span class="op">&amp;</span>rng<span class="op">](){</span><span class="cf">return</span> dist<span class="op">(</span>rng<span class="op">);});</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">boost_pcg_rnorm(10)</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">system.time(boost_pcg_rnorm(1e7))</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>This is quite fast since
 <code>boost::random::normal_distribution</code> uses the fast Ziggurat
 algorithm. For some applications it is necessary to draw random numbers
@@ -449,37 +466,37 @@ function uses a binomial distribution (from <code>boost.random</code>)
 as well as the normal distribution from <code>dqrng</code>. The
 parameters of the distributions are adjusted for every draw using
 <code>&lt;distribution&gt;::param_type</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/binomial_distribution.hpp&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">// aliases for the used distributions</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> binomial <span class="op">=</span> <span class="ex">boost::</span>random<span class="ex">::</span>binomial_distribution<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;;</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> normal <span class="op">=</span> dqrng<span class="op">::</span>normal_distribution<span class="op">;</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericMatrix multiple_distributions<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>dqrng<span class="op">::</span>xoshiro256plusplus<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// distributions with default parameters</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  binomial bernoulli<span class="op">;</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  normal normal<span class="op">;</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericMatrix out<span class="op">(</span>n<span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> p <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="dt">double</span><span class="op">(</span>i<span class="op">)</span> <span class="op">/</span> <span class="dt">double</span><span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">0</span><span class="op">)</span> <span class="op">=</span> bernoulli<span class="op">(*</span>rng<span class="op">,</span> binomial<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> p<span class="op">));</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">1</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(*</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span>p<span class="op">,</span> <span class="fl">1.0</span><span class="op">));</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">2</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(*</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="fl">4.0</span><span class="op">,</span> <span class="fl">3.0</span> <span class="op">-</span> p<span class="op">));</span></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>colnames<span class="op">(</span>out<span class="op">)</span> <span class="op">=</span> Rcpp<span class="op">::</span>CharacterVector<span class="op">::</span>create<span class="op">(</span><span class="st">"Bernoulli"</span><span class="op">,</span> <span class="st">"Normal1"</span><span class="op">,</span> <span class="st">"Normal2"</span><span class="op">);</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co">multiple_distributions(5)</span></span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/binomial_distribution.hpp&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">// aliases for the used distributions</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="kw">using</span> binomial <span class="op">=</span> <span class="ex">boost::</span>random::binomial_distribution<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;;</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="kw">using</span> normal <span class="op">=</span> dqrng<span class="op">::</span>normal_distribution<span class="op">;</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericMatrix multiple_distributions<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>generator<span class="op">&lt;</span>dqrng<span class="op">::</span>xoshiro256plusplus<span class="op">&gt;(</span><span class="dv">42</span><span class="op">);</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>  <span class="co">// distributions with default parameters</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>  binomial bernoulli<span class="op">;</span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>  normal normal<span class="op">;</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericMatrix out<span class="op">(</span>n<span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>  <span class="dt">double</span> p <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>    p <span class="op">=</span> <span class="dt">double</span><span class="op">(</span>i<span class="op">)</span> <span class="op">/</span> <span class="dt">double</span><span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">0</span><span class="op">)</span> <span class="op">=</span> bernoulli<span class="op">(*</span>rng<span class="op">,</span> binomial<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> p<span class="op">));</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">1</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(*</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span>p<span class="op">,</span> <span class="fl">1.0</span><span class="op">));</span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">2</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(*</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="fl">4.0</span><span class="op">,</span> <span class="fl">3.0</span> <span class="op">-</span> p<span class="op">));</span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>  Rcpp<span class="op">::</span>colnames<span class="op">(</span>out<span class="op">)</span> <span class="op">=</span> Rcpp<span class="op">::</span>CharacterVector<span class="op">::</span>create<span class="op">(</span><span class="st">"Bernoulli"</span><span class="op">,</span> <span class="st">"Normal1"</span><span class="op">,</span> <span class="st">"Normal2"</span><span class="op">);</span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">multiple_distributions(5)</span></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -490,39 +507,39 @@ use the <strong>seeded</strong> RNG engine of <code>dqrng</code>. Please
 note that the included RNG will be invalidated if <code>dqRNGkind</code>
 is called. You therefore should use this calls only within
 functions:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/binomial_distribution.hpp&gt;</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">// aliases for the used distributions</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> binomial <span class="op">=</span> <span class="ex">boost::</span>random<span class="ex">::</span>binomial_distribution<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;;</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> normal <span class="op">=</span> dqrng<span class="op">::</span>normal_distribution<span class="op">;</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericMatrix multiple_distributions<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>random_64bit_accessor<span class="op">{};</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// distributions with default parameters</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  binomial bernoulli<span class="op">;</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  normal normal<span class="op">;</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericMatrix out<span class="op">(</span>n<span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> p <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="dt">double</span><span class="op">(</span>i<span class="op">)</span> <span class="op">/</span> <span class="dt">double</span><span class="op">(</span>n<span class="op">);</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">0</span><span class="op">)</span> <span class="op">=</span> bernoulli<span class="op">(</span>rng<span class="op">,</span> binomial<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> p<span class="op">));</span></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">1</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span>p<span class="op">,</span> <span class="fl">1.0</span><span class="op">));</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">2</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="fl">4.0</span><span class="op">,</span> <span class="fl">3.0</span> <span class="op">-</span> p<span class="op">));</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  Rcpp<span class="op">::</span>colnames<span class="op">(</span>out<span class="op">)</span> <span class="op">=</span> Rcpp<span class="op">::</span>CharacterVector<span class="op">::</span>create<span class="op">(</span><span class="st">"Bernoulli"</span><span class="op">,</span> <span class="st">"Normal1"</span><span class="op">,</span> <span class="st">"Normal2"</span><span class="op">);</span></span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="co">dqRNGkind("Xoshiro256++")</span></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co">dqset.seed(42)</span></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co">multiple_distributions(5)</span></span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">// [[Rcpp::depends(dqrng, BH)]]</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;boost/random/binomial_distribution.hpp&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng_distribution.h&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">// [[Rcpp::plugins(cpp11)]]   </span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">// aliases for the used distributions</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="kw">using</span> binomial <span class="op">=</span> <span class="ex">boost::</span>random::binomial_distribution<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;;</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="kw">using</span> normal <span class="op">=</span> dqrng<span class="op">::</span>normal_distribution<span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericMatrix multiple_distributions<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="kw">auto</span> rng <span class="op">=</span> dqrng<span class="op">::</span>random_64bit_accessor<span class="op">{};</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="co">// distributions with default parameters</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  binomial bernoulli<span class="op">;</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  normal normal<span class="op">;</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  Rcpp<span class="op">::</span>NumericMatrix out<span class="op">(</span>n<span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  <span class="dt">double</span> p <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>    p <span class="op">=</span> <span class="dt">double</span><span class="op">(</span>i<span class="op">)</span> <span class="op">/</span> <span class="dt">double</span><span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">0</span><span class="op">)</span> <span class="op">=</span> bernoulli<span class="op">(</span>rng<span class="op">,</span> binomial<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> p<span class="op">));</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">1</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span>p<span class="op">,</span> <span class="fl">1.0</span><span class="op">));</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>    out<span class="op">(</span>i<span class="op">,</span><span class="dv">2</span><span class="op">)</span> <span class="op">=</span> normal<span class="op">(</span>rng<span class="op">,</span> normal<span class="op">::</span><span class="dt">param_type</span><span class="op">(</span><span class="fl">4.0</span><span class="op">,</span> <span class="fl">3.0</span> <span class="op">-</span> p<span class="op">));</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a>  Rcpp<span class="op">::</span>colnames<span class="op">(</span>out<span class="op">)</span> <span class="op">=</span> Rcpp<span class="op">::</span>CharacterVector<span class="op">::</span>create<span class="op">(</span><span class="st">"Bernoulli"</span><span class="op">,</span> <span class="st">"Normal1"</span><span class="op">,</span> <span class="st">"Normal2"</span><span class="op">);</span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a><span class="co">dqRNGkind("Xoshiro256++")</span></span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a><span class="co">dqset.seed(42)</span></span>
+<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a><span class="co">multiple_distributions(5)</span></span>
+<span id="cb16-33"><a href="#cb16-33" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 </div>
   </div>
 
