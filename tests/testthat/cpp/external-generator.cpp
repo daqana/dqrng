@@ -1,4 +1,4 @@
-// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(cpp14)]]
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng,BH)]]
 #include <dqrng.h>
