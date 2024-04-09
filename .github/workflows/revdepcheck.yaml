@@ -65,6 +65,7 @@ jobs:
           #  to. Defaults to the current branch.
           #  You might need to set `create_branch: true` if the branch does not exist.
           branch: revdep
+          push_options: --force
           # Optional. Create given branch name in local and remote repository.
           create_branch: true
           # Optional glob pattern of files which should be added to the commit
