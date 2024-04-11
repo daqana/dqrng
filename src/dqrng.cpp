@@ -234,7 +234,7 @@ extern "C" {
 // allow registering as user-supplied RNG
 double * user_unif_rand(void) {
   static double res;
-  res = dqrng::uniform01((*rng)());
+  res = rng->uniform01();
   return &res;
 }
 

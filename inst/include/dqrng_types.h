@@ -41,6 +41,10 @@ private:
     has_cache = true;
     return random >> 32;
   }
+  double uniform01(uint64_t x) {
+    // prefer high bits due to weakness of lowest bits for xoshiro/xoroshiro with the "+" scrambler
+    return (x >> 11) * 0x1.0p-53;
+  }
 
 protected:
   bool has_cache{false};
@@ -59,6 +63,17 @@ public:
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) = 0;
   static constexpr result_type min() {return 0;};
   static constexpr result_type max() {return UINT64_MAX;};
+
+  double uniform01() {
+    return uniform01(this->operator()());
+  }
+  std::pair<double, int> generate_double_8bit_pair() {
+    result_type x = this->operator()();
+    double r = uniform01(x);
+    // shift x due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
+    int bucket = (x >> 3) & 0xFF;
+    return std::make_pair(r, bucket);
+  }
   /*
    * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded32.cpp
    * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded64.cpp

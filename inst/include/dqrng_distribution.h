@@ -45,17 +45,13 @@ namespace detail {
 template<>
 inline std::pair<double, int> generate_int_float_pair<double, 8, dqrng::random_64bit_generator>(dqrng::random_64bit_generator& eng)
 {
-  dqrng::random_64bit_generator::result_type x = eng();
-  double r = dqrng::uniform01(x);
-  // shift x due to weakness of lowest bits for xoshiro/xoroshiro with used "+" scrambler
-  int bucket = (x >> 3) & 0xFF;
-  return std::make_pair(r, bucket);
+  return eng.generate_double_8bit_pair();
 }
 
 template<>
 inline double generate_uniform_real<dqrng::random_64bit_generator, double>(dqrng::random_64bit_generator& eng, double min, double max)
 {
-  return dqrng::uniform01(eng()) * (max - min) + min;
+  return eng.uniform01() * (max - min) + min;
 }
 
 template<>
