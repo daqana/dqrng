@@ -18,3 +18,5 @@
 ^.vscode$
 ^Meta$
 ^doc$
+^\.cache$
+^compile_commands\.json$
