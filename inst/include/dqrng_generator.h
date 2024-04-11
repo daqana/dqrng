@@ -26,6 +26,12 @@
 #include <pcg_random.hpp>
 #include <Rcpp.h>
 
+#if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304)
+using std::make_unique;
+#else
+#include <boost/smart_ptr/make_unique.hpp>
+using boost::make_unique;
+#endif
 
 namespace dqrng {
 using rng64_t = Rcpp::XPtr<random_64bit_generator>;
@@ -54,7 +60,7 @@ public:
   virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
   virtual void seed(result_type seed, result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
-    auto rng = std::make_unique<random_64bit_wrapper<RNG>>(gen);
+    auto rng = make_unique<random_64bit_wrapper<RNG>>(gen);
     rng->set_stream(stream);
     return rng;
   }
