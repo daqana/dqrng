@@ -147,7 +147,7 @@ public:
 #endif
 
 /*
- * inspired by: https://gist.github.com/imneme/540829265469e673d045
+ * https://gist.github.com/imneme/540829265469e673d045
  * Random-Number Utilities (randutil)
  *     Addresses common issues with C++11 random number generation.
  *     Makes good seeding easier, and makes using RNGs easy while retaining
@@ -176,29 +176,63 @@ public:
  * SOFTWARE.
  */
 
-  template <typename DistTmpl,
-            typename ResultType = typename DistTmpl::result_type,
+  template <typename ResultType,
+            template <typename> class DistTmpl,
             typename... Params>
-    ResultType variate(Params&&... params) {
-    DistTmpl dist(std::forward<Params>(params)...);
+  ResultType variate(Params&&... params)
+  {
+    DistTmpl<ResultType> dist(std::forward<Params>(params)...);
+
     return dist(*this);
   }
 
-  template <typename DistTmpl,
+  template <template <typename> class DistTmpl,
             typename Iter,
             typename... Params>
-  void generate(Iter first, Iter last, Params&&... params) {
-    DistTmpl dist(std::forward<Params>(params)...);
+  void generate(Iter first, Iter last, Params&&... params)
+  {
+    using result_type =
+      typename std::remove_reference<decltype(*(first))>::type;
+
+    DistTmpl<result_type> dist(std::forward<Params>(params)...);
 
     std::generate(first, last, [&]{ return dist(*this); });
   }
 
-  template <typename DistTmpl,
+  template <template <typename> class DistTmpl,
+            typename Range,
+            typename... Params>
+  void generate(Range&& range, Params&&... params)
+  {
+    generate<DistTmpl>(std::begin(range), std::end(range),
+                       std::forward<Params>(params)...);
+  }
+
+  // special versions of variate<>() and generate<>() where the distribution
+  // is not a template; this can be used for the dqrng::... distributions
+  template <typename Dist,
+            typename ResultType = typename Dist::result_type,
+            typename... Params>
+    ResultType variate(Params&&... params) {
+    Dist dist(std::forward<Params>(params)...);
+    return dist(*this);
+  }
+
+  template <typename Dist,
+            typename Iter,
+            typename... Params>
+  void generate(Iter first, Iter last, Params&&... params) {
+    Dist dist(std::forward<Params>(params)...);
+
+    std::generate(first, last, [&]{ return dist(*this); });
+  }
+
+  template <typename Dist,
             typename Range,
             typename... Params>
   void generate(Range&& range, Params&&... params) {
-    generate<DistTmpl>(std::begin(range), std::end(range),
-                       std::forward<Params>(params)...);
+    generate<Dist>(std::begin(range), std::end(range),
+                   std::forward<Params>(params)...);
   }
 
   friend std::ostream& operator<<(std::ostream& ost, const random_64bit_generator& e) {
