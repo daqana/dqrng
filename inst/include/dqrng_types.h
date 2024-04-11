@@ -145,6 +145,62 @@ public:
     return m >> 64;
   }
 #endif
+
+/*
+ * inspired by: https://gist.github.com/imneme/540829265469e673d045
+ * Random-Number Utilities (randutil)
+ *     Addresses common issues with C++11 random number generation.
+ *     Makes good seeding easier, and makes using RNGs easy while retaining
+ *     all the power.
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015-2022 Melissa E. O'Neill
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+  template <typename DistTmpl,
+            typename ResultType = typename DistTmpl::result_type,
+            typename... Params>
+    ResultType variate(Params&&... params) {
+    DistTmpl dist(std::forward<Params>(params)...);
+    return dist(*this);
+  }
+
+  template <typename DistTmpl,
+            typename Iter,
+            typename... Params>
+  void generate(Iter first, Iter last, Params&&... params) {
+    DistTmpl dist(std::forward<Params>(params)...);
+
+    std::generate(first, last, [&]{ return dist(*this); });
+  }
+
+  template <typename DistTmpl,
+            typename Range,
+            typename... Params>
+  void generate(Range&& range, Params&&... params) {
+    generate<DistTmpl>(std::begin(range), std::end(range),
+                       std::forward<Params>(params)...);
+  }
+
   friend std::ostream& operator<<(std::ostream& ost, const random_64bit_generator& e) {
     e.output(ost);
     return ost;
