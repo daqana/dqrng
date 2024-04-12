@@ -152,7 +152,7 @@ In the previous example it was necessary to create our own RNG object. It would 
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng.h>
 #include <dqrng_distribution.h>
-// [[Rcpp::plugins(cpp14)]]
+// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::plugins(openmp)]]
 #include <omp.h>
 
