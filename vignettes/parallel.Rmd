@@ -206,10 +206,7 @@ bm[,1:4]
 */
 ```
 
-Notes:
-
-* The thread local RNG does not make use of `Rcpp::Xptr` since it is used in parallel code. Instead a `std::unique_ptr` is used that is created using `std::make_unique`. Therefore, using this feature requires at least C++14. 
-* At the moment this kind of stream handling is not supported for the Threefry engine.
+Notes that the thread local RNG uses `std::unique_ptr` instead of `Rcpp::Xptr` since it is used in parallel code. 
 
 # PCG: multiple streams with RcppParallel
 
@@ -227,7 +224,7 @@ The resulting correlation matrix should be close to the identity matrix if the d
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
-#include <pcg_random.hpp>
+#include <dqrng_generator.h>
 #include <dqrng_sample.h>
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppParallel)]]
@@ -269,24 +266,70 @@ symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
 Head of the random matrix:
 
           [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]
-    [1,] 67984 16279 69262  7126 21441 37720 51107 51045
-    [2,] 69310 21713 82885 81157 54051  5261 91165 17833
-    [3,] 76742 31232 78953  4626 94939 29416 85652 78296
-    [4,] 76349 47427  1770 37957 33888 59134 94591 65793
-    [5,] 85008 89224 43493  7925 60866  2464 14080 10763
-    [6,] 38017 88509 51195 73086  1883 68193 75259 62216
+    [1,] 16144 89512 16144 53103 16144 41760 16144 99788
+    [2,] 21200 86552 21199 38327 21198 90293 21198 45713
+    [3,]   124 60045 97553 79574 99977 84423 87126 35715
+    [4,]  6590 93044 18536 98945 66969 53338 38426 53560
+    [5,] 80618 42051 15815 79380 71590 98006 87220 63036
+    [6,] 49954 90168 12614 32488 54145 68029 34733 48989
 
 Correlation matrix:
 
     [1,] 1              
     [2,]   1            
-    [3,]   ? 1          
-    [4,]     ? 1        
-    [5,]         1      
-    [6,] ? ?     ? 1    
-    [7,]     ?       1  
-    [8,]     ?         1
+    [3,] ?   1          
+    [4,]   ?   1        
+    [5,]     ? ? 1      
+    [6,]   ?       1    
+    [7,] ?           1  
+    [8,]       ?     ? 1
     attr(,"legend")
     [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
 
 So as expected the correlation matrix is almost equal to the identity matrix.
+
+As in the previous section, we can again switch from seeding our own RNG to starting from the global RNG and selecting separate substreams from there. RNG selection and seeding can then be handled from R: 
+
+```{r, eval=FALSE, engine='Rcpp'}
+#include <Rcpp.h>
+// [[Rcpp::depends(dqrng, BH)]]
+#include <dqrng.h>
+#include <dqrng_sample.h>
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppParallel)]]
+#include <RcppParallel.h>
+
+struct RandomFill : public RcppParallel::Worker {
+  RcppParallel::RMatrix<int> output;
+  dqrng::random_64bit_accessor rng{};
+
+  RandomFill(Rcpp::IntegerMatrix output) : output(output) {};
+
+  void operator()(std::size_t begin, std::size_t end) {
+    auto lrng = rng.clone(end);
+    for (std::size_t col = begin; col < end; ++col) {
+      auto sampled = dqrng::sample::sample<std::vector<int>, uint32_t>(*lrng, 100000, output.nrow(), true);
+      RcppParallel::RMatrix<int>::Column column = output.column(col);
+      std::copy(sampled.begin(), sampled.end(), column.begin());
+    }
+  }
+};
+
+// [[Rcpp::export]]
+Rcpp::IntegerMatrix parallel_random_matrix(const int n, const int m, const int ncores) {
+  Rcpp::IntegerMatrix res(n, m);
+  RandomFill randomFill(res);
+  RcppParallel::parallelFor(0, m, randomFill, m/ncores + 1);
+  return res;
+}
+
+/*** R
+dqRNGkind("pcg64")
+dqset.seed(42)
+res <- parallel_random_matrix(1e6, 8, 4)
+head(res)
+symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
+       symbols = c(" ", "?", "!", "1"),
+       abbr.colnames = FALSE, corr = TRUE)
+*/
+```
