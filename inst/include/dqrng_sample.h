@@ -55,7 +55,7 @@ inline VEC biased_coin(dqrng::random_64bit_generator &rng, INT n, INT size, FVEC
 
   // smaller probability scaled by 2^64 in order to compare directly with RNG output
   uint64_t p;
-  if (prob[0] < 0.5)
+  if (prob[0] <= prob[1])
     p = 0x1p64 * prob[0] / (prob[0] + prob[1]);
   else {
     p = 0x1p64 * prob[1] / (prob[0] + prob[1]);
