@@ -257,7 +257,6 @@ $RECYCLE.BIN/
 
 inst/doc
 vignettes/*.R
-/revdep
 /external/tmp
 .cache
 compile_commands.json
