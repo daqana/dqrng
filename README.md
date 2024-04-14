@@ -61,8 +61,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)      610µs    709µs     1322.
-#> 2 dqrnorm(N)    197µs    222µs     4411.
+#> 1 rnorm(N)    608.9µs  692.8µs     1342.
+#> 2 dqrnorm(N)   82.7µs   86.2µs    10227.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +79,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)             7.2ms    7.7ms      120.
-#> 2 sample.int(1000 * m, n, replace = TRUE)      8.8ms   9.84ms      100.
-#> 3 dqsample.int(m, n, replace = TRUE)         435.2µs 497.26µs     1896.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE)    446µs 496.73µs     1780.
+#> 1 sample.int(m, n, replace = TRUE)            7.03ms   7.46ms      133.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.87ms    9.4ms      104.
+#> 3 dqsample.int(m, n, replace = TRUE)        292.69µs 316.75µs     2821.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 408.94µs 446.19µs     1987.
 ```
 
 And without replacement:
@@ -100,11 +100,11 @@ bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  42.52ms  43.95ms      16.3
-#> 2 sample.int(1000 * m, n)           13.35ms   14.8ms      65.8
-#> 3 sample.int(m, n, useHash = TRUE)   9.72ms  11.34ms      85.8
-#> 4 dqsample.int(m, n)               717.13µs 915.69µs     846. 
-#> 5 dqsample.int(1000 * m, n)          1.47ms   2.13ms     384.
+#> 1 sample.int(m, n)                  25.43ms   27.8ms      31.8
+#> 2 sample.int(1000 * m, n)           12.99ms   17.4ms      57.0
+#> 3 sample.int(m, n, useHash = TRUE)  10.44ms   12.8ms      77.2
+#> 4 dqsample.int(m, n)               617.83µs  762.9µs     882. 
+#> 5 dqsample.int(1000 * m, n)          1.51ms    2.5ms     334.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”

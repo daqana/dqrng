@@ -4,7 +4,7 @@
 
 * The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc.  ([#57](https://github.com/daqana/dqrng/pull/57) fixing [#56](https://github.com/daqana/dqrng/issues/56))
 * The `dqrng::rng64_t` type has been changed to use `Rcpp::XPtr` instead of `std::shared_ptr` and the functions from `dqrng_sample.h` now expect a reference to `dqrng::random_64bit_generator` instead of `dqrng::rng64_t` ([#70](https://github.com/daqana/dqrng/pull/70) fixing [#63](https://github.com/daqana/dqrng/issues/63))
-* The two argument constructor and `seed`  function from PCG has [surprising properties](https://github.com/imneme/pcg-cpp/issues/91): it is not identical to the one argument version followed by `set_stream(stream)`. For consistency with the new `clone(stream)` method, the two argument versions are no longer used. This influences code the uses multiple stream with PCG together with the tooling from this pckage, e.g. the example code in the vignette on parallel RNG usage. 
+* The two argument constructor and `seed`  function from PCG has [surprising properties](https://github.com/imneme/pcg-cpp/issues/91): it is not identical to the one argument version followed by `set_stream(stream)`. For consistency with the new `clone(stream)` method, the two argument versions are no longer used. This influences code the uses multiple stream with PCG together with the tooling from this package, e.g. the example code in the vignette on parallel RNG usage. 
 
 ## Other changes
 
