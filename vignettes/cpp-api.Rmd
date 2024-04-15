@@ -82,6 +82,15 @@ double dqrng::rexp(double rate = 1.0)
 `rate`
 :   rate of the exponential distribution
 
+## Random variates with Rademacher distribution
+
+```cpp
+Rcpp::IntegerVector dqrng::dqrrademacher(size_t n)
+```
+
+`n`	
+:   number of observations
+
 ## Random sampling
 
 ```cpp
@@ -109,3 +118,64 @@ Rcpp::NumericVector dqrng::dqsample_num(double n, double size, bool replace = fa
 :    sample from range `[offset, offset + m)`
 
 The two functions are used for "normal" and "long-vector" support in R.
+
+## Getting and setting the RNG state
+
+```cpp
+std::vector<std::string> dqrng::dqrng_get_state()
+void dqrng::dqrng_set_state(std::vector<std::string> state)
+```
+
+`state`
+:    a `std::vector<std::string>` as produced by `dqrng_get_state()`
+
+## Accessing the global RNG
+
+```cpp
+Rcpp::XPtr<dqrng::random_64bit_generator> dqrng::get_rng()
+```
+
+Direct usage of this method is **discouraged**. The prefered way of accesing the global RNG is to instantiate `dqrng::random_64bit_accessor` within your function. Note that you MUST NOT delete the global RNG. Using `dqrng::random_64bit_accessor` makes this impossible. In addition, you SHOULD NOT store a reference to the RNG permanently, because it can be invalidated by calls to `dqRNGkind`. Therefore, instances of `dqrng::random_64bit_accessor` SHOULD be stored as (non-static) variables in functions.
+
+Note that `dqrng::random_64bit_accessor` supports [UniformRandomBitGenerator](https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator) and can therefore be used together with any C++11 distribtion function. In addition, the follwing functions are supported, since they are inherited from the abstract parent class `random_64bit_generator`: 
+
+```cpp
+// clone RNG and seelct a different stream
+std::unique_ptr<random_64bit_generator> clone(uint64_t stream)
+// uniform doubles in [0,1) and double-int-pairs
+double uniform01()
+std::pair<double, int> generate_double_8bit_pair()
+// uniform integers in a range 
+uint32_t operator() (uint32_t range)
+uint64_t operator() (uint64_t range)
+ResultType variate<ResultType, DistTmpl>(param1, ... paramN)
+generate<DistTmpl>(container, param1, ... paramN)
+generate<DistTmpl>(start, end, param1, ... paramN)
+Dist::result_type variate<Dist>(param1, ... paramN)
+generate<Dist>(container, param1, ... paramN)
+generate<Dist>(start, end, param1, ... paramN)
+```
+
+`stream`
+:    RNG stream to use for the cloned RNG
+
+`range`
+:    Integers are generated in closed interval `[0, range]`
+
+`ResultType`
+:    Expected result from the distribution template `DistTmpl`
+
+`DistTmpl`
+:    Distribution template like `std::uniform_distribution`. `DistTmpl<ResultType>` defines the full distribution.
+
+`Dist`
+:    Full distribution like `std::uniform_distribution<double>` or `dqrng::normal_distriubtion`.
+
+`param1, ... paramN`
+:    Necessary parameters to initialize the distribution.
+
+`container`
+:    A container that is to be filled with variates from the distribution function. Needs to support `std::begin` and `std::end`.
+
+`start, end`
+:   Forward iterators pointing to start and end of a range to be filled with variates from the distribution function.

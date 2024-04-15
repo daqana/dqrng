@@ -4,6 +4,7 @@
 
 * The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc.  ([#57](https://github.com/daqana/dqrng/pull/57) fixing [#56](https://github.com/daqana/dqrng/issues/56))
 * The `dqrng::rng64_t` type has been changed to use `Rcpp::XPtr` instead of `std::shared_ptr` and the functions from `dqrng_sample.h` now expect a reference to `dqrng::random_64bit_generator` instead of `dqrng::rng64_t` ([#70](https://github.com/daqana/dqrng/pull/70) fixing [#63](https://github.com/daqana/dqrng/issues/63))
+* The two argument constructor and `seed`  function from PCG has [surprising properties](https://github.com/imneme/pcg-cpp/issues/91): it is not identical to the one argument version followed by `set_stream(stream)`. For consistency with the new `clone(stream)` method, the two argument versions are no longer used. This influences code the uses multiple stream with PCG together with the tooling from this package, e.g. the example code in the vignette on parallel RNG usage. 
 
 ## Other changes
 
@@ -13,6 +14,9 @@
 * Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option `dqrng.register_methods` is set to `TRUE`.
 * Add missing inline attributes and limit the included Rcpp headers in `dqrng_types.h` ([#75](https://github.com/daqana/dqrng/pull/75) together with Paul Liétar)
 * Add I/O methods for the RNG's internal state (fixing [#66](https://github.com/daqana/dqrng/issues/66) in [#78](https://github.com/daqana/dqrng/pull/78))
+* Extend `random_64bit_generator` with additional convenience methods (fixing [#64](https://github.com/daqana/dqrng/issues/64) in [#79](https://github.com/daqana/dqrng/pull/79))
+    * A `clone(stream)` method to allow using the global RNG state for parallel computation
+    * New methods `variate<dist>(param)`, `generate<dist>(container, param)` etc. using and inspired by [`randutils`](https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html).
 
 
 # dgrng 0.3.2

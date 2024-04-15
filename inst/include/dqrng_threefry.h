@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023 Ralf Stubner
+// Copyright 2023-2024 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -19,16 +19,23 @@
 #ifndef DQRNG_THREEFRY_H
 #define DQRNG_THREEFRY_H 1
 
+#include <sstream>
+#include <vector>
 #include <threefry.h>
 #include <dqrng_generator.h>
 
 namespace dqrng {
 
 template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::seed(result_type seed, result_type stream) {
-  gen.seed(seed);
-  gen.set_counter(0, 0, 0, stream);
-  cache = false;
+inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_stream(result_type stream) {
+  uint64_t number;
+  std::vector<uint64_t> state;
+  std::stringstream iss;
+  iss << gen;
+  while (iss >> number)
+    state.push_back(number);
+  // state[4:7] is the current counter, the highest part is incremented by stream
+  gen.set_counter(state[4], state[5], state[6], state[7] + stream);
 }
 } // namespace dqrng
 

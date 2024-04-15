@@ -258,3 +258,5 @@ $RECYCLE.BIN/
 inst/doc
 vignettes/*.R
 /external/tmp
+.cache
+compile_commands.json

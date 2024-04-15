@@ -22,6 +22,6 @@
 #include "dqrng_RcppExports.h"
 
 namespace dqrng {
-random_64bit_accessor::random_64bit_accessor() : gen(dqrng::get_rng()) {}
+inline random_64bit_accessor::random_64bit_accessor() : gen(dqrng::get_rng()) {}
 } // namespace dqrng
 #endif // dqrng_H

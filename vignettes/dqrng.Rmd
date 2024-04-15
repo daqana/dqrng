@@ -235,9 +235,8 @@ public:
 // [[Rcpp::export]]
 Rcpp::NumericVector splitmix_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
   auto rng = dqrng::generator<SplitMix>(42);
-  dqrng::normal_distribution dist(mean, sd);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<dqrng::normal_distribution>(result, mean, sd);
   return result;
 }
 /*** R
@@ -260,9 +259,8 @@ For example, here the 64 bit Threefry engine with 13 rounds from package sitmo i
 // [[Rcpp::export]]
 Rcpp::NumericVector threefry_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
   auto rng = dqrng::generator<sitmo::threefry_13_64>(42);
-  dqrng::normal_distribution dist(mean, sd);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<dqrng::normal_distribution>(result, mean, sd);
   return result;
 }
 
@@ -288,9 +286,8 @@ For example, this function generates random numbers according to the normal dist
 // [[Rcpp::export]]
 Rcpp::NumericVector std_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
   auto rng = dqrng::generator<dqrng::xoroshiro128plus>(42);
-  std::normal_distribution<double> dist(mean, sd);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<std::normal_distribution>(result, mean, sd);
   return result;
 }
 

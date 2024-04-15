@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023 Ralf Stubner
+// Copyright 2023-2024 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -26,6 +26,12 @@
 #include <pcg_random.hpp>
 #include <Rcpp.h>
 
+#if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304)
+using std::make_unique;
+#else
+#include <boost/smart_ptr/make_unique.hpp>
+using boost::make_unique;
+#endif
 
 namespace dqrng {
 using rng64_t = Rcpp::XPtr<random_64bit_generator>;
@@ -39,154 +45,61 @@ class random_64bit_wrapper : public random_64bit_generator {
   static_assert(RNG::min() == 0, "Provided RNG has wrong minimum.");
 private:
   RNG gen;
-  bool has_cache{false};
-  uint32_t cache;
-
-  uint64_t bit64() {return gen();}
-  uint32_t bit32() {
-    if (has_cache) {
-      has_cache = false;
-      return cache;
-    }
-    uint64_t random = this->bit64();
-    cache = uint32_t(random);
-    has_cache = true;
-    return random >> 32;
-  }
 
 protected:
   virtual void output(std::ostream& ost) const override {ost << gen;}
   virtual void input(std::istream& ist) override {ist >> gen;}
+  void set_stream(result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
 
 public:
   random_64bit_wrapper() : gen() {};
+  random_64bit_wrapper(RNG _gen) : gen(_gen) {};
   random_64bit_wrapper(result_type seed) : gen(seed) {};
-  random_64bit_wrapper(result_type seed, result_type stream) : gen(seed, stream) {};
-  virtual result_type operator() () override {return this->bit64();}
+  random_64bit_wrapper(result_type seed, result_type stream) : gen(seed) {this->set_stream(stream);};
+  virtual result_type operator() () override {return gen();}
   virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
-  virtual void seed(result_type seed, result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
-
-  /*
-   * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded32.cpp
-   * https://raw.githubusercontent.com/imneme/bounded-rands/3d71f53c975b1e5b29f2f3b05a74e26dab9c3d84/bounded64.cpp
-   * A C++ implementation methods and benchmarks for random numbers in a range
-   * (64 and 32-bit version)
-   *
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2018 Melissa E. O'Neill
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a
-   * copy of this software and associated documentation files (the "Software"),
-   * to deal in the Software without restriction, including without limitation
-   * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-   * and/or sell copies of the Software, and to permit persons to whom the
-   * Software is furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-   * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-   * DEALINGS IN THE SOFTWARE.
-   */
-
-  virtual uint32_t operator() (uint32_t range) override {
-    uint32_t x = this->bit32();
-    uint64_t m = uint64_t(x) * uint64_t(range);
-    uint32_t l = uint32_t(m);
-    if (l < range) {
-      uint32_t t = -range;
-      if (t >= range) {
-        t -= range;
-        if (t >= range)
-          t %= range;
-      }
-      while (l < t) {
-        x = this->bit32();
-        m = uint64_t(x) * uint64_t(range);
-        l = uint32_t(m);
-      }
-    }
-    return m >> 32;
+  virtual void seed(result_type seed, result_type stream) override {cache = false; gen.seed(seed); this->set_stream(stream);}
+  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
+    auto rng = make_unique<random_64bit_wrapper<RNG>>(gen);
+    rng->set_stream(stream);
+    return rng;
   }
-
-#ifdef LONG_VECTOR_SUPPORT
-  virtual uint64_t operator() (uint64_t range) override {
-    using pcg_extras::pcg128_t;
-    uint64_t x = this->bit64();
-    pcg128_t m = pcg128_t(x) * pcg128_t(range);
-    uint64_t l = uint64_t(m);
-    if (l < range) { // # nocov start
-      uint64_t t = -range;
-      if (t >= range) {
-        t -= range;
-        if (t >= range)
-          t %= range;
-      }
-      while (l < t) {
-        x = this->bit64();
-        m = pcg128_t(x) * pcg128_t(range);
-        l = uint64_t(m);
-      }
-    } // # nocov end
-    return m >> 64;
-  }
-#endif
 };
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128plus>::seed(result_type seed, result_type stream) {
-    gen.seed(seed);
-    gen.jump(stream);
-    cache = false;
-}
-
-template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128plusplus>::seed(result_type seed, result_type stream) {
-  gen.seed(seed);
+inline void random_64bit_wrapper<::dqrng::xoroshiro128plus>::set_stream(result_type stream) {
   gen.jump(stream);
-  cache = false;
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128starstar>::seed(result_type seed, result_type stream) {
-  gen.seed(seed);
+inline void random_64bit_wrapper<::dqrng::xoroshiro128plusplus>::set_stream(result_type stream) {
   gen.jump(stream);
-  cache = false;
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::seed(result_type seed, result_type stream) {
-  gen.seed(seed);
+inline void random_64bit_wrapper<::dqrng::xoroshiro128starstar>::set_stream(result_type stream) {
+  gen.jump(stream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::set_stream(result_type stream) {
   gen.long_jump(stream);
-  cache = false;
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::seed(result_type seed, result_type stream) {
-  gen.seed(seed);
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_stream(result_type stream) {
   gen.long_jump(stream);
-  cache = false;
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::seed(result_type seed, result_type stream) {
-    gen.seed(seed);
-    gen.long_jump(stream);
-    cache = false;
+inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result_type stream) {
+  gen.long_jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stream) {
-    gen.seed(seed, stream);
-    cache = false;
+inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
+  gen.set_stream(stream);
 }
-
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
