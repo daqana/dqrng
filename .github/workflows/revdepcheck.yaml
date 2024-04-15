@@ -37,43 +37,27 @@ jobs:
             any::BiocVersion
             any::devtools
             any::remotes
-            r-lib/revdepcheck
           needs: check
 
       - name: revdepcheck
         run: |
 
-          revdepcheck::revdep_reset()
-          revdepcheck::revdep_check(num_workers = 4)
-
+          dir.create("revdep/Library", recursive = TRUE)
+          remotes::install_local(lib = "revdep/Library", force = TRUE)
+          utils::download.packages(devtools::revdep(),
+                                   "revdep",
+                                   repos = "https://cloud.r-project.org/")
+          tools::check_packages_in_dir("revdep", Ncpus = 4)
+          tools::summarize_check_packages_in_dir_results("revdep")
 
           revdepig <- c(
             "checks", "library", "checks.noindex", "library.noindex",
             "data.sqlite", "*.html" )
 
-          usethis::use_git_ignore(revdepig, directory = file.path(".", "revdep"))
-
-          # Ignore this also on build
-          usethis::use_build_ignore("revdep")
-
         shell: Rscript {0}
 
       # Commit all changed files back to the repository
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: actions/upload-artifact@v4
         with:
-          # Optional. Local and remote branch name where commit is going to be pushed
-          #  to. Defaults to the current branch.
-          #  You might need to set `create_branch: true` if the branch does not exist.
-          branch: revdep
-          push_options: --force
-          # Optional. Create given branch name in local and remote repository.
-          create_branch: true
-          # Optional glob pattern of files which should be added to the commit
-          # Defaults to all (.)
-          # See the `pathspec`-documentation for git
-          # - https://git-scm.com/docs/git-add#Documentation/git-add.txt-ltpathspecgt82308203
-          # - https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
-          file_pattern: 'revdep'
-          # Optional. Options used by `git-add`.
-          # See https://git-scm.com/docs/git-add#_options
-          add_options: '--all'
+          name: revdep-outputs
+          path: revdep/Outputs
