@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C++ API • dqrng</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.4</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-04-09</h4>
+            <h4 data-toc-skip class="date">2024-04-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/cpp-api.Rmd" class="external-link"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -197,14 +197,25 @@ rate of the exponential distribution
 </dl>
 </div>
 <div class="section level2">
+<h2 id="random-variates-with-rademacher-distribution">Random variates with Rademacher distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-rademacher-distribution"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqrrademacher<span class="op">(</span><span class="dt">size_t</span> n<span class="op">)</span></span></code></pre></div>
+<dl>
+<dt><code>n</code></dt>
+<dd>
+number of observations
+</dd>
+</dl>
+</div>
+<div class="section level2">
 <h2 id="random-sampling">Random sampling<a class="anchor" aria-label="anchor" href="#random-sampling"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqsample_int<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqsample_num<span class="op">(</span><span class="dt">double</span> n<span class="op">,</span> <span class="dt">double</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>Rcpp<span class="op">::</span>IntegerVector dqrng<span class="op">::</span>dqsample_int<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqsample_num<span class="op">(</span><span class="dt">double</span> n<span class="op">,</span> <span class="dt">double</span> size<span class="op">,</span> <span class="dt">bool</span> replace <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                                        Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> probs <span class="op">=</span> R_NilValue<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                                        <span class="dt">int</span> offset <span class="op">=</span> <span class="dv">0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>
@@ -231,6 +242,92 @@ sample from range <code>[offset, offset + m)</code>
 <p>The two functions are used for “normal” and “long-vector” support in
 R.</p>
 </div>
+<div class="section level2">
+<h2 id="getting-and-setting-the-rng-state">Getting and setting the RNG state<a class="anchor" aria-label="anchor" href="#getting-and-setting-the-rng-state"></a>
+</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> dqrng<span class="op">::</span>dqrng_get_state<span class="op">()</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="dt">void</span> dqrng<span class="op">::</span>dqrng_set_state<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;</span> state<span class="op">)</span></span></code></pre></div>
+<dl>
+<dt><code>state</code></dt>
+<dd>
+a <code>std::vector&lt;std::string&gt;</code> as produced by
+<code><a href="../reference/dqrng-functions.html">dqrng_get_state()</a></code>
+</dd>
+</dl>
+</div>
+<div class="section level2">
+<h2 id="accessing-the-global-rng">Accessing the global RNG<a class="anchor" aria-label="anchor" href="#accessing-the-global-rng"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>dqrng<span class="op">::</span>random_64bit_generator<span class="op">&gt;</span> dqrng<span class="op">::</span>get_rng<span class="op">()</span></span></code></pre></div>
+<p>Direct usage of this method is <strong>discouraged</strong>. The
+prefered way of accesing the global RNG is to instantiate
+<code>dqrng::random_64bit_accessor</code> within your function. Note
+that you MUST NOT delete the global RNG. Using
+<code>dqrng::random_64bit_accessor</code> makes this impossible. In
+addition, you SHOULD NOT store a reference to the RNG permanently,
+because it can be invalidated by calls to <code>dqRNGkind</code>.
+Therefore, instances of <code>dqrng::random_64bit_accessor</code> SHOULD
+be stored as (non-static) variables in functions.</p>
+<p>Note that <code>dqrng::random_64bit_accessor</code> supports <a href="https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator" class="external-link">UniformRandomBitGenerator</a>
+and can therefore be used together with any C++11 distribtion function.
+In addition, the follwing functions are supported, since they are
+inherited from the abstract parent class
+<code>random_64bit_generator</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">// clone RNG and seelct a different stream</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="bu">std::</span>unique_ptr<span class="op">&lt;</span>random_64bit_generator<span class="op">&gt;</span> clone<span class="op">(</span><span class="dt">uint64_t</span> stream<span class="op">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">// uniform doubles in [0,1) and double-int-pairs</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="dt">double</span> uniform01<span class="op">()</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="bu">std::</span>pair<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;</span> generate_double_8bit_pair<span class="op">()</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">// uniform integers in a range </span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="dt">uint32_t</span> <span class="kw">operator</span><span class="op">()</span> <span class="op">(</span><span class="dt">uint32_t</span> range<span class="op">)</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="dt">uint64_t</span> <span class="kw">operator</span><span class="op">()</span> <span class="op">(</span><span class="dt">uint64_t</span> range<span class="op">)</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>ResultType variate<span class="op">&lt;</span>ResultType<span class="op">,</span> DistTmpl<span class="op">&gt;(</span>param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>generate<span class="op">&lt;</span>DistTmpl<span class="op">&gt;(</span>container<span class="op">,</span> param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>generate<span class="op">&lt;</span>DistTmpl<span class="op">&gt;(</span>start<span class="op">,</span> end<span class="op">,</span> param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>Dist<span class="op">::</span><span class="dt">result_type</span> variate<span class="op">&lt;</span>Dist<span class="op">&gt;(</span>param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>generate<span class="op">&lt;</span>Dist<span class="op">&gt;(</span>container<span class="op">,</span> param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>generate<span class="op">&lt;</span>Dist<span class="op">&gt;(</span>start<span class="op">,</span> end<span class="op">,</span> param1<span class="op">,</span> <span class="op">...</span> paramN<span class="op">)</span></span></code></pre></div>
+<dl>
+<dt><code>stream</code></dt>
+<dd>
+RNG stream to use for the cloned RNG
+</dd>
+<dt><code>range</code></dt>
+<dd>
+Integers are generated in closed interval <code>[0, range]</code>
+</dd>
+<dt><code>ResultType</code></dt>
+<dd>
+Expected result from the distribution template <code>DistTmpl</code>
+</dd>
+<dt><code>DistTmpl</code></dt>
+<dd>
+Distribution template like <code>std::uniform_distribution</code>.
+<code>DistTmpl&lt;ResultType&gt;</code> defines the full distribution.
+</dd>
+<dt><code>Dist</code></dt>
+<dd>
+Full distribution like
+<code>std::uniform_distribution&lt;double&gt;</code> or
+<code>dqrng::normal_distriubtion</code>.
+</dd>
+<dt><code>param1, ... paramN</code></dt>
+<dd>
+Necessary parameters to initialize the distribution.
+</dd>
+<dt><code>container</code></dt>
+<dd>
+A container that is to be filled with variates from the distribution
+function. Needs to support <code>std::begin</code> and
+<code>std::end</code>.
+</dd>
+<dt><code>start, end</code></dt>
+<dd>
+Forward iterators pointing to start and end of a range to be filled with
+variates from the distribution function.
+</dd>
+</dl>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -250,7 +347,7 @@ R.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>
