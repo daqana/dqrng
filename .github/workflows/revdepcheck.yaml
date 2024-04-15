@@ -47,12 +47,11 @@ jobs:
           utils::download.packages(devtools::revdep(),
                                    "revdep",
                                    repos = "https://cloud.r-project.org/")
-          tools::check_packages_in_dir("revdep", Ncpus = 4)
+          tools::check_packages_in_dir("revdep",
+                                       check_args = "--as-cran --no-manual",
+                                       Ncpus = 4)
           tools::summarize_check_packages_in_dir_results("revdep")
 
-          revdepig <- c(
-            "checks", "library", "checks.noindex", "library.noindex",
-            "data.sqlite", "*.html" )
 
         shell: Rscript {0}
 
