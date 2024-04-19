@@ -26,7 +26,20 @@
 #include <Rcpp/XPtr.h>
 #include <pcg_extras.hpp>
 
+#if defined(__GNUC__) || defined(__clang__)
+#  define DEPRECATED(func) func __attribute__ ((deprecated))
+#elif defined(_MSC_VER)
+#  define DEPRECATED(func) __declspec(deprecated) func
+#else
+#  define DEPRECATED(func) func
+#endif
+
 namespace dqrng {
+
+DEPRECATED(double runif(double min, double max));
+DEPRECATED(double rnorm(double mean, double sd));
+DEPRECATED(double rexp(double rate));
+DEPRECATED(double uniform01(uint64_t x));
 
 class random_64bit_generator {
 private:
