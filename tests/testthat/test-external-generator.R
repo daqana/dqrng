@@ -72,8 +72,7 @@ test_that("cloned external Xoshiro256++ gives different result only when a diffe
 test_that("cloned external PCG64 gives different result", {
   dqrng::dqRNGkind("PCG64")
   dqset.seed(use_seed)
-  # PCG64 gives a different result as long as you are not selecting the default stream
-  expect_false(cloned_calls(stream = 0))
+  expect_true(cloned_calls(stream = 0))
   expect_false(cloned_calls(stream = 1))
   dqrng::dqRNGkind("default")
 })
