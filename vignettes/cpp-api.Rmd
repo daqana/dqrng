@@ -16,7 +16,7 @@ Technically there are three ways to make use of dqrng at the C++ level:
 * use `Rcpp::cppFunction(depends = "dqrng", ...)`
 * use an R package with `LinkingTo: dqrng`
 
-The following functions are also available if you include `dqrng.h`.
+The following functions are also available if you include `dqrng.h`. Note that the scalar function `dqrng::runif`, `dqrng::rnorm`, and `dqrng::rexp` have been deprected and will be removed in a future release. Please use the more flexible and faster `dqrng::random_64bit_accessor` together with `variate<Dist>()` instead.
 
 ## Setting seed and RNG type
 
@@ -42,7 +42,7 @@ void dqrng::dqRNGkind(std::string kind, const std::string& normal_kind = "ignore
 
 ```cpp
 Rcpp::NumericVector dqrng::dqrunif(size_t n, double min = 0.0, double max = 1.0)
-double dqrng::runif(double min = 0.0, double max = 1.0)
+DEPRECATED double dqrng::runif(double min = 0.0, double max = 1.0)
 ```
 `n`	
 :   number of observations
@@ -57,7 +57,7 @@ double dqrng::runif(double min = 0.0, double max = 1.0)
 
 ```cpp
 Rcpp::NumericVector dqrng::dqrnorm(size_t n, double mean = 0.0, double sd = 1.0)
-double dqrng::rnorm(double mean = 0.0, double sd = 1.0)
+DEPRECATED double dqrng::rnorm(double mean = 0.0, double sd = 1.0)
 ```
 
 `n`	
@@ -73,7 +73,7 @@ double dqrng::rnorm(double mean = 0.0, double sd = 1.0)
 
 ```cpp
 Rcpp::NumericVector dqrng::dqrexp(size_t n, double rate = 1.0)
-double dqrng::rexp(double rate = 1.0)
+DEPRECATED double dqrng::rexp(double rate = 1.0)
 ```
 
 `n`	
@@ -140,7 +140,7 @@ Direct usage of this method is **discouraged**. The prefered way of accesing the
 Note that `dqrng::random_64bit_accessor` supports [UniformRandomBitGenerator](https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator) and can therefore be used together with any C++11 distribtion function. In addition, the follwing functions are supported, since they are inherited from the abstract parent class `random_64bit_generator`: 
 
 ```cpp
-// clone RNG and seelct a different stream
+// clone RNG and select a different stream
 std::unique_ptr<random_64bit_generator> clone(uint64_t stream)
 // uniform doubles in [0,1) and double-int-pairs
 double uniform01()
