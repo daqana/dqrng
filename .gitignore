@@ -260,3 +260,4 @@ vignettes/*.R
 /external/tmp
 .cache
 compile_commands.json
+revdep
