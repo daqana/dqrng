@@ -38,10 +38,9 @@ Intermediate releases can also be obtained via
 [r-universe](https://rstub.r-universe.dev/dqrng):
 
 ```r
-options(repos = c(
+install.packages('dqrng', repos = c(
   rstub = 'https://rstub.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
-install.packages('dqrng')
 ```
 
 ## Example
