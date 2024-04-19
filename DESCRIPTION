@@ -3,14 +3,15 @@ Type: Package
 Title: Fast Pseudo Random Number Generators
 Version: 0.3.2.4
 Authors@R: c(
-    person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre")),
+    person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0009-1908-106X")),
     person("daqana GmbH", role = "cph"),
     person("David Blackman", role = "cph", comment = "Xoroshiro / Xoshiro family"),
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "cph", comment = "PCG family"),
     person("Sebastiano Vigna", email = "vigna@acm.org", role = "cph", comment = "Xoroshiro / Xoshiro family"),
     person("Aaron", "Lun", role="ctb"), 
     person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu"),
-    person("Henrik", "Sloot", role = "ctb")
+    person("Henrik", "Sloot", role = "ctb"),
+    person("Philippe", "Grosjean", role = c("ctb"), comment = c(ORCID = "0000-0002-2694-9471"))
   )
 Description: Several fast random number generators are provided as C++
   header only libraries: The PCG family by O'Neill (2014
