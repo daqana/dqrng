@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.5</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-04-15</h4>
+            <h4 data-toc-skip class="date">2024-04-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/cpp-api.Rmd" class="external-link"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -113,7 +113,12 @@ use of dqrng at the C++ level:</p>
 </li>
 </ul>
 <p>The following functions are also available if you include
-<code>dqrng.h</code>.</p>
+<code>dqrng.h</code>. Note that the scalar function
+<code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">dqrng::runif</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dqrng::rnorm</a></code>, and
+<code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">dqrng::rexp</a></code> have been deprected and will be removed in a
+future release. Please use the more flexible and faster
+<code>dqrng::random_64bit_accessor</code> together with
+<code>variate&lt;Dist&gt;()</code> instead.</p>
 <div class="section level2">
 <h2 id="setting-seed-and-rng-type">Setting seed and RNG type<a class="anchor" aria-label="anchor" href="#setting-seed-and-rng-type"></a>
 </h2>
@@ -144,7 +149,7 @@ ignored; included for compatibility with <code>RNGkind</code>
 <h2 id="random-variates-with-uniform-distribution">Random variates with uniform distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-uniform-distribution"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrunif<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> min <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>runif<span class="op">(</span><span class="dt">double</span> min <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>DEPRECATED <span class="dt">double</span> dqrng<span class="op">::</span>runif<span class="op">(</span><span class="dt">double</span> min <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>
@@ -164,7 +169,7 @@ upper limit of the uniform distribution
 <h2 id="random-variates-with-normal-distribution">Random variates with normal distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-normal-distribution"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrnorm<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>rnorm<span class="op">(</span><span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>DEPRECATED <span class="dt">double</span> dqrng<span class="op">::</span>rnorm<span class="op">(</span><span class="dt">double</span> mean <span class="op">=</span> <span class="fl">0.0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>
@@ -184,7 +189,7 @@ standard deviation of the normal distribution
 <h2 id="random-variates-with-exponential-distribution">Random variates with exponential distribution<a class="anchor" aria-label="anchor" href="#random-variates-with-exponential-distribution"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector dqrng<span class="op">::</span>dqrexp<span class="op">(</span><span class="dt">size_t</span> n<span class="op">,</span> <span class="dt">double</span> rate <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="dt">double</span> dqrng<span class="op">::</span>rexp<span class="op">(</span><span class="dt">double</span> rate <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>DEPRECATED <span class="dt">double</span> dqrng<span class="op">::</span>rexp<span class="op">(</span><span class="dt">double</span> rate <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span></span></code></pre></div>
 <dl>
 <dt><code>n</code></dt>
 <dd>
@@ -273,7 +278,7 @@ and can therefore be used together with any C++11 distribtion function.
 In addition, the follwing functions are supported, since they are
 inherited from the abstract parent class
 <code>random_64bit_generator</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">// clone RNG and seelct a different stream</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">// clone RNG and select a different stream</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="bu">std::</span>unique_ptr<span class="op">&lt;</span>random_64bit_generator<span class="op">&gt;</span> clone<span class="op">(</span><span class="dt">uint64_t</span> stream<span class="op">)</span></span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">// uniform doubles in [0,1) and double-int-pairs</span></span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="dt">double</span> uniform01<span class="op">()</span></span>
@@ -347,7 +352,7 @@ variates from the distribution function.
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
