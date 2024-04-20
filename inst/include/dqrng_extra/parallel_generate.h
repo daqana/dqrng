@@ -21,12 +21,19 @@
 #include <RcppParallel/RVector.h>
 #include <omp.h>
 
+namespace dqrng {
+namespace extra {
 template<typename Dist, typename... Params>
-Rcpp::NumericVector parallel_generate(int n, int threads, int streams, Params&&... params) {
+Rcpp::NumericVector parallel_generate(std::size_t n,
+                                      std::size_t threads,
+                                      std::size_t streams,
+                                      Params&&... params) {
   if (n < streams)
     streams = n;
-  int stream_size = n/streams;
-  int remainder = n % streams;
+  std::size_t stream_size = n / streams;
+  std::size_t remainder = n % streams;
+
+  // use RcppParallel::RVector as thread safe accessor
   Rcpp::NumericVector res(Rcpp::no_init(n));
   RcppParallel::RVector<double> work(res);
 
@@ -35,7 +42,7 @@ Rcpp::NumericVector parallel_generate(int n, int threads, int streams, Params&&.
   std::stringstream buffer;
 
 #ifdef _OPENMP
-  int maxthreads = omp_get_num_procs();
+  std::size_t maxthreads = omp_get_num_procs();
   if (threads > maxthreads)
     threads = maxthreads;
   // No need for more threads than there are streams
@@ -45,10 +52,10 @@ Rcpp::NumericVector parallel_generate(int n, int threads, int streams, Params&&.
 
 #pragma omp parallel num_threads(threads)
 {
-  int start,end;
+  std::size_t start,end;
 
 #pragma omp for schedule(static,1)
-  for (int i = 0; i < streams; ++i) {
+  for (std::size_t i = 0; i < streams; ++i) {
     if (i < remainder) {
       start = i * stream_size + i;
       end = start + stream_size + 1;
@@ -56,7 +63,7 @@ Rcpp::NumericVector parallel_generate(int n, int threads, int streams, Params&&.
       start = i * stream_size + remainder;
       end = start + stream_size;
     }
-    // Our private RNG in each stream; RNG with i == 0 is identical to global RNG
+    // private RNG in each stream; RNG with i == 0 is identical to global RNG
     auto prng = rng.clone(i);
     prng->generate<Dist>(std::begin(work) + start, std::begin(work) + end,
                          std::forward<Params>(params)...);
@@ -65,7 +72,10 @@ Rcpp::NumericVector parallel_generate(int n, int threads, int streams, Params&&.
     }
   }
 }
-  // Make sure that the global RNG advances as well by applying the state of the global RNG's clone to the global RNG
+  // Make sure that the global RNG advances as well by applying the state
+  // of the global RNG's clone to the global RNG
   buffer >> rng;
   return res;
 }
+} // namespace extra
+} // namespace dqrng
