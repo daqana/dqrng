@@ -26,6 +26,8 @@
 #include <pcg_random.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <Rcpp.h>
+#include <convert_seed.h>
+#include <R_randgen.h>
 
 #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304)
 using std::make_unique;
@@ -111,16 +113,23 @@ inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   gen.set_stream(pcg_extras::pcg128_t(state[1]/2) + stream);
 }
 
+uint64_t get_seed_from_r() {
+  Rcpp::RNGScope rngScope;
+  Rcpp::IntegerVector seed(2, dqrng::R_random_int);
+  return dqrng::convert_seed<uint64_t>(seed);
+}
+
+
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<!std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator () {
-  return rng64_t(new random_64bit_wrapper<RNG>());
+  return rng64_t(new random_64bit_wrapper<RNG>(get_seed_from_r()));
 }
 
 template<typename RNG = default_64bit_generator>
 typename std::enable_if<std::is_base_of<random_64bit_generator, RNG>::value, rng64_t>::type
 generator () {
-  return rng64_t(new RNG());
+  return rng64_t(new RNG(get_seed_from_r()));
 }
 
 template<typename RNG = default_64bit_generator>
