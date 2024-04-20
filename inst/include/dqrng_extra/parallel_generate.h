@@ -18,7 +18,6 @@
 
 #include <sstream>
 #include <dqrng.h>
-#include <dqrng_distribution.h>
 #include <RcppParallel/RVector.h>
 #include <omp.h>
 
