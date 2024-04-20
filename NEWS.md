@@ -18,6 +18,7 @@
     * A `clone(stream)` method to allow using the global RNG state for parallel computation
     * New methods `variate<dist>(param)`, `generate<dist>(container, param)` etc. using and inspired by [`randutils`](https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html).
 * The scalar functions `dqrng::runif`, `dqrng::rnorm` and `dqrng::rexp` available from `dqrng.h` have been deprecated and will be removed in a future release. Please use the more flexible and faster `dqrng::random_64bit_accessor` together with `variate<Dist>()` instead. The same applies to `dqrng::uniform01` from `dqrng_distribution.h`, which can be replaced by the member function `dqrng::random_64bit_generator::uniform01`. 
+* New template function `dqrng::extra::parallel_generate` in `dqrng_extra/parallel_generate.h` as an example for using the global RNG in a parallel context (fixing [#77](https://github.com/daqana/dqrng/issues/77) in [#82](https://github.com/daqana/dqrng/issues/82) together with Philippe Grosjean)
 
 
 # dgrng 0.3.2
