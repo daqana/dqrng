@@ -81,21 +81,19 @@ Care has been taken to keep the global RNG `rng` usable outside of the parallel 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
-#include <xoshiro.h>
 #include <dqrng_distribution.h>
-// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::plugins(openmp)]]
 #include <omp.h>
 
 // [[Rcpp::export]]
 std::vector<double> random_sum(int n, int m) {
-  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
-  dqrng::xoshiro256plus rng(42);              // properly seeded rng
+  dqrng::uniform_distribution dist(0.0, 1.0);               // Uniform distribution [0,1)
+  auto rng = dqrng::generator<dqrng::xoshiro256plusplus>(); // seeded from R's RNG
   std::vector<double> res(m);
   for (int i = 0; i < m; ++i) {
     double lres(0);
     for (int j = 0; j < n; ++j) {
-      lres += dist(rng);
+      lres += dist(*rng);
     }
     res[i] = lres / n;
   }
@@ -104,21 +102,21 @@ std::vector<double> random_sum(int n, int m) {
 
 // [[Rcpp::export]]
 std::vector<double> parallel_random_sum(int n, int m, int ncores) {
-  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
-  dqrng::xoshiro256plusplus rng(42);          // properly seeded rng
+  dqrng::uniform_distribution dist(0.0, 1.0);               // Uniform distribution [0,1)
+  auto rng = dqrng::generator<dqrng::xoshiro256plusplus>(); // seeded from R's RNG
   std::vector<double> res(m);
   // ok to use rng here
   
   #pragma omp parallel num_threads(ncores)
   {
-    dqrng::xoshiro256plusplus lrng(rng);      // make thread local copy of rng 
-    lrng.long_jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
+    // make thread local copy of rng and advance it by 1 ... ncores jumps
+    auto lrng = rng->clone(omp_get_thread_num() + 1);
 
     #pragma omp for
     for (int i = 0; i < m; ++i) {
       double lres(0);
       for (int j = 0; j < n; ++j) {
-        lres += dist(lrng);
+        lres += dist(*lrng);
       }
       res[i] = lres / n;
     }
@@ -145,68 +143,8 @@ Result:
     1 parallel_random_sum(1e+07, 8, 4)   98.3ms     99ms     10.1 
     2 random_sum(1e+07, 8)              270.2ms    271ms      3.68
 
-In the previous example it was necessary to create our own RNG object. It would be nice if it were possible to use dqrng's global RNG instead. To showcase this, we implement the same procedure as before, but this time make use of `dqrng::random_64bit_accessor` to access the global RNG and its `clone(stream)` method that creates a cloned version with a different stream:
 
-```{r, eval=FALSE, engine='Rcpp'}
-#include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH)]]
-#include <dqrng.h>
-#include <dqrng_distribution.h>
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::plugins(openmp)]]
-#include <omp.h>
-
-// [[Rcpp::export]]
-std::vector<double> random_sum(int n, int m) {
-  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
-  auto rng = dqrng::random_64bit_accessor{};  // properly seeded rng
-  std::vector<double> res(m);
-  for (int i = 0; i < m; ++i) {
-    double lres(0);
-    for (int j = 0; j < n; ++j) {
-      lres += dist(rng);
-    }
-    res[i] = lres / n;
-  }
-  return res;
-}
-
-// [[Rcpp::export]]
-std::vector<double> parallel_random_sum(int n, int m, int ncores) {
-  dqrng::uniform_distribution dist(0.0, 1.0); // Uniform distribution [0,1)
-  auto rng = dqrng::random_64bit_accessor{};  // properly seeded rng
-  std::vector<double> res(m);
-  // ok to use rng here
-
-#pragma omp parallel num_threads(ncores)
-{
-  // make thread local copy of rng and advance it by 1 ... ncores jumps
-  auto lrng = rng.clone(omp_get_thread_num() + 1);      
-
-#pragma omp for
-  for (int i = 0; i < m; ++i) {
-    double lres(0);
-    for (int j = 0; j < n; ++j) {
-      lres += dist(*lrng);
-    }
-    res[i] = lres / n;
-  }
-}
-// ok to use rng here
-return res;
-}
-
-/*** R
-bm <- bench::mark(
-  parallel_random_sum(1e7, 8, 4),
-  random_sum(1e7, 8),
-  check = FALSE
-)
-bm[,1:4]
-*/
-```
-
-Notes that the thread local RNG uses `std::unique_ptr` instead of `Rcpp::Xptr` since it is used in parallel code. 
+Note that the thread local RNG uses `std::unique_ptr` instead of `Rcpp::Xptr` since it is used in parallel code. 
 
 # PCG: multiple streams with RcppParallel
 
@@ -214,10 +152,11 @@ From the PCG family we will look at pcg64, a 64-bit generator with a period of $
 It offers the function [`advance(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
 In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
 When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams out of the possible $2^{127}$ separate streams.
+Note that **here** in contrast to the default PCG implementation, streams are counted from the default stream, i.e. setting `stream` to `0` or not at all will give the same RNG.
+This brings PCG in line with the other RNGs.
 
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.
 Instead of using the more traditional approach of generating the random numbers from a certain distribution, we are using the fast sampling methods from `dqrng_sample.h`.
-As a consequence, we cannot use `pcg64` directly but have to wrap it as `dqrng::generator`.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
 
@@ -226,7 +165,6 @@ The resulting correlation matrix should be close to the identity matrix if the d
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_generator.h>
 #include <dqrng_sample.h>
-// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppParallel)]]
 #include <RcppParallel.h>
 
@@ -266,70 +204,106 @@ symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
 Head of the random matrix:
 
           [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]
-    [1,] 16144 89512 16144 53103 16144 41760 16144 99788
-    [2,] 21200 86552 21199 38327 21198 90293 21198 45713
-    [3,]   124 60045 97553 79574 99977 84423 87126 35715
-    [4,]  6590 93044 18536 98945 66969 53338 38426 53560
-    [5,] 80618 42051 15815 79380 71590 98006 87220 63036
-    [6,] 49954 90168 12614 32488 54145 68029 34733 48989
+    [1,] 16583 94445 14240 53296 15021 72402 12677 47777
+    [2,] 49983 29144 49983 80361 49983 60477 49983  6255
+    [3,] 56598 19559 87036 76208  8804 67365 60990 22777
+    [4,] 64117 18406 69814 56954 14447 27027 50950 10545
+    [5,] 48709 62087 66064  2944 11887 75422  5823 48069
+    [6,] 81061 71093 52958  6324 82242 68439 68331 41016
 
 Correlation matrix:
 
     [1,] 1              
     [2,]   1            
-    [3,] ?   1          
-    [4,]   ?   1        
-    [5,]     ? ? 1      
-    [6,]   ?       1    
-    [7,] ?           1  
-    [8,]       ?     ? 1
+    [3,]   ? 1          
+    [4,] ?     1        
+    [5,]         1      
+    [6,]     ?     1    
+    [7,] ? ? ? ?   ? 1  
+    [8,]   ?           1
     attr(,"legend")
     [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
 
 So as expected the correlation matrix is almost equal to the identity matrix.
 
-As in the previous section, we can again switch from seeding our own RNG to starting from the global RNG and selecting separate substreams from there. RNG selection and seeding can then be handled from R: 
+
+# Using the global RNG
+
+So far we have used our own RNG and either seeded it from R's RNG or with an explicit seed.
+As an alternative, we can also make use of dqrng's global RNG.
+This is exemplified in the template function `parallel_generate<>()` defined in the header file `dqrng_extra/parallel_generate.h`.
+A simple way to use this template would be the following functions which generate random variates according to the uniform, normal, or exponential distribution:
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
-// [[Rcpp::depends(dqrng, BH)]]
-#include <dqrng.h>
-#include <dqrng_sample.h>
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::depends(RcppParallel)]]
-#include <RcppParallel.h>
-
-struct RandomFill : public RcppParallel::Worker {
-  RcppParallel::RMatrix<int> output;
-  dqrng::random_64bit_accessor rng{};
-
-  RandomFill(Rcpp::IntegerMatrix output) : output(output) {};
-
-  void operator()(std::size_t begin, std::size_t end) {
-    auto lrng = rng.clone(end);
-    for (std::size_t col = begin; col < end; ++col) {
-      auto sampled = dqrng::sample::sample<std::vector<int>, uint32_t>(*lrng, 100000, output.nrow(), true);
-      RcppParallel::RMatrix<int>::Column column = output.column(col);
-      std::copy(sampled.begin(), sampled.end(), column.begin());
-    }
-  }
-};
+// [[Rcpp::depends(dqrng, BH, RcppParallel)]]
+// [[Rcpp::plugins(openmp)]]
+#include <dqrng_extra/parallel_generate.h>
+#include <dqrng_distribution.h>
+using dqrng::extra::parallel_generate;
 
 // [[Rcpp::export]]
-Rcpp::IntegerMatrix parallel_random_matrix(const int n, const int m, const int ncores) {
-  Rcpp::IntegerMatrix res(n, m);
-  RandomFill randomFill(res);
-  RcppParallel::parallelFor(0, m, randomFill, m/ncores + 1);
-  return res;
+Rcpp::NumericVector runif_para(std::size_t n, double min = 0, double max = 1,
+                               std::size_t threads = 2, std::size_t streams = 24) {
+  return parallel_generate<dqrng::uniform_distribution>(n, threads, streams, min, max);
 }
 
-/*** R
-dqRNGkind("pcg64")
-dqset.seed(42)
-res <- parallel_random_matrix(1e6, 8, 4)
-head(res)
-symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
-       symbols = c(" ", "?", "!", "1"),
-       abbr.colnames = FALSE, corr = TRUE)
-*/
+// [[Rcpp::export]]
+Rcpp::NumericVector rnorm_para(std::size_t n, double mean = 0, double sd = 1,
+                               std::size_t threads = 2, std::size_t streams = 24) {
+  return parallel_generate<dqrng::normal_distribution>(n, threads, streams, mean, sd);
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector rexp_para(std::size_t n, double rate = 1,
+                              std::size_t threads = 2, std::size_t streams = 24) {
+  return parallel_generate<dqrng::exponential_distribution>(n, threads, streams, rate);
+}
 ```
+
+Generating `n` numbers is split into (about) equal `streams` streams that are processed by `threads` threads.
+For an efficient distribution of the workload it is important that `streams` is a multiple of `threads`, since then every thread gets to process the same number of streams.
+The default `streams = 24` can be used together with 1, 2, 3, 4, 6, 8, 12, and 24 threads.
+The result for a *given number of streams* is *independent of the number of threads*:
+
+```{r, eval=FALSE}
+dqset.seed(42); norm1 <- rnorm_para(22, threads = 1)
+dqset.seed(42); norm2 <- rnorm_para(22, threads = 4)
+identical(norm1, norm2)
+#> [1] TRUE
+```
+
+At the same time, the serial version is almost as fast as using the normal `dqrng::dqr<dist>` function and therefore much faster than the `stats::r<dist>` function.
+Using multiple threads gives a clear speed up.
+
+```{r, eval=FALSE}
+n <- 1e6
+bench::mark(stats::runif(n),
+            dqrng::dqrunif(n),
+            runif_para(n, threads = 2L),
+            runif_para(n, threads = 1L),
+            check = FALSE)[, 1:6]
+bench::mark(stats::rnorm(n),
+            dqrng::dqrnorm(n),
+            rnorm_para(n, threads = 2L),
+            rnorm_para(n, threads = 1L),
+            check = FALSE)[, 1:6]
+bench::mark(stats::rexp(n),
+            dqrng::dqrexp(n),
+            rexp_para(n, threads = 2L),
+            rexp_para(n, threads = 1L),
+            check = FALSE)[, 1:6]
+```
+
+Here the actual implementation of the template function:
+
+```{r, eval=FALSE, engine='Rcpp', file="../inst/include/dqrng_extra/parallel_generate.h"}
+```
+
+Besides the distribution of the work into (about) equal streams, the pattern for RNG access is similar to the OpenMP example above with the important difference that the local RNGs are not *thread-* but *stream-specific*.
+This way, the result becomes independent of the used amount of parallelism. 
+However, one has to consider one important aspect:
+After the parallel for loop, the global RNG has not advanced at all.
+Calling the function repeatedly would lead to identical results.
+To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state. 
+This way, the global RNG's state advances as if it had processed one of the streams.
