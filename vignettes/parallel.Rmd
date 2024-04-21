@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(dqrng)
+evaluate <- FALSE
 ```
 
 When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
@@ -34,7 +36,7 @@ This is equivalent to $2^{64}$ streams with a period of $2^{194}$ each.
 In the following example a matrix with random numbers is generated in parallel using the parallel package.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
-```{r, eval=FALSE}
+```{r, eval=evaluate}
 library(parallel)
 cl <- parallel::makeCluster(2)
 res <- clusterApply(cl, 1:8, function(stream, seed, N) {
@@ -78,7 +80,7 @@ As an example using C++ we draw and sum a large number of uniformly distributed 
 This is done several times sequentially as well as using OpenMP for parallelisation.
 Care has been taken to keep the global RNG `rng` usable outside of the parallel block.
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{r, eval=evaluate, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
@@ -160,7 +162,7 @@ Instead of using the more traditional approach of generating the random numbers 
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{r, eval=evaluate, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_generator.h>
@@ -234,7 +236,7 @@ As an alternative, we can also make use of dqrng's global RNG.
 This is exemplified in the template function `parallel_generate<>()` defined in the header file `dqrng_extra/parallel_generate.h`.
 A simple way to use this template would be the following functions which generate random variates according to the uniform, normal, or exponential distribution:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{r, eval=evaluate, engine='Rcpp'}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH, RcppParallel)]]
 // [[Rcpp::plugins(openmp)]]
@@ -266,7 +268,7 @@ For an efficient distribution of the workload it is important that `streams` is 
 The default `streams = 24` can be used together with 1, 2, 3, 4, 6, 8, 12, and 24 threads.
 The result for a *given number of streams* is *independent of the number of threads*:
 
-```{r, eval=FALSE}
+```{r, eval=evaluate}
 dqset.seed(42); norm1 <- rnorm_para(22, threads = 1)
 dqset.seed(42); norm2 <- rnorm_para(22, threads = 4)
 identical(norm1, norm2)
@@ -276,7 +278,7 @@ identical(norm1, norm2)
 At the same time, the serial version is almost as fast as using the normal `dqrng::dqr<dist>` function and therefore much faster than the `stats::r<dist>` function.
 Using multiple threads gives a clear speed up.
 
-```{r, eval=FALSE}
+```{r, eval=evaluate}
 n <- 1e6
 bench::mark(stats::runif(n),
             dqrng::dqrunif(n),
@@ -306,4 +308,46 @@ However, one has to consider one important aspect:
 After the parallel for loop, the global RNG has not advanced at all.
 Calling the function repeatedly would lead to identical results.
 To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state. 
-This way, the global RNG's state advances as if it had processed one of the streams.
+This way, the global RNG's state advances as if it had processed one of the streams and successive calls to `parallel_generate()` produce different random numbers as expected.
+
+```{r, eval=evaluate}
+dqset.seed(153)
+runif_para(30)
+#>   [1] 0.87693642 0.14323366 0.33129746 0.07856319 0.80991119 0.37524485
+#>  [7] 0.90387542 0.38746776 0.30473153 0.01102334 0.21272306 0.11975609
+#> [13] 0.98440547 0.13373340 0.82823735 0.87196225 0.14920422 0.27723804
+#> [19] 0.59308120 0.07853078 0.63040483 0.21707435 0.25876379 0.81296194
+#> [25] 0.53645030 0.29976254 0.37159454 0.38683266 0.03737063 0.03359113
+runif_para(30) # Different values, as expected
+#>  [1] 0.90407135 0.73543499 0.09026296 0.90321975 0.66162669 0.51716146
+#>  [7] 0.74186366 0.41125413 0.17581202 0.68547734 0.11766549 0.82316789
+#> [13] 0.40565668 0.44854610 0.95477820 0.64388593 0.31991691 0.02239872
+#> [19] 0.13687388 0.32476719 0.67093851 0.05564081 0.76817620 0.49502455
+#> [25] 0.07459706 0.25493312 0.14019729 0.89704659 0.40548199 0.53800443
+```
+
+Pitfall: should you use `parallel_generate()` in concurrent threads or streams, make sure to seed each of them with enough separate streams to avoid overlap. For instance, with `parallel_generate(..., stream = 4)`, you could seed first thread with something like `dqset.seed(546, 1)`, but you must seed second thread at least on stream 5 (previous stream plus the number of streams you reserve for `parallel_generate()`). If you use `dqset.seed(546, 2)` on the second thread, there will be an overlap like this:
+
+```{r, eval=evaluate}
+# Seed used in the first thread
+dqset.seed(546, 1); (v1 <- rnorm_para(8, streams = 4))
+#> [1]  0.01904358  0.57750157  0.39156879 -1.72594164  1.24949453 -0.87535133
+#> [7] -0.49878776  0.26077249
+# Seed used in the second thread
+dqset.seed(546, 2); (v2 <- rnorm_para(8, streams = 4))
+#> [1]  0.3915688 -1.7259416  1.2494945 -0.8753513 -0.4987878  0.2607725
+#> [7]  1.2018189 -0.1060487
+```
+
+Note how values 1-6 of v2 are identical to values 3-8 of v1 because of an overlap of the streams consumed in each call to `parallel_generate()`. You will get the same result if the two lines of code were run in separate threads or even, separate R processes. Here, if second `dqset.seed()` is shifted by 4 streams or more from first one, then there is no overlap any more:
+
+```{r, eval=evaluate}
+# Seed used in the first thread
+dqset.seed(546, 1); (v1 <- rnorm_para(8, streams = 4))
+#> [1]  0.01904358  0.57750157  0.39156879 -1.72594164  1.24949453 -0.87535133
+#> [7] -0.49878776  0.26077249
+# Seed used in the second thread
+dqset.seed(546, 5); (v2 <- rnorm_para(8, streams = 4))
+#> [1]  1.2018189 -0.1060487 -0.8532641  0.6531933 -0.8304053 -0.4745548
+#> [7] -0.4211618 -0.5871540
+```
