@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.6</span>
       </span>
     </div>
 
@@ -100,10 +100,9 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"dqrng"</span><span class="op">)</span></span></code></pre></div>
 <p>Intermediate releases can also be obtained via <a href="https://rstub.r-universe.dev/dqrng" class="external-link">r-universe</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'dqrng'</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  rstub <span class="op">=</span> <span class="st">'https://rstub.r-universe.dev'</span>,</span>
-<span>  CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'dqrng'</span><span class="op">)</span></span></code></pre></div>
+<span>  CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -124,8 +123,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 rnorm(N)    608.9µs  692.8µs     1342.</span></span>
-<span><span class="co">#&gt; 2 dqrnorm(N)   82.7µs   86.2µs    10227.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 rnorm(N)    606.2µs  654.7µs     1456.</span></span>
+<span><span class="co">#&gt; 2 dqrnorm(N)   82.8µs   85.9µs    10984.</span></span></code></pre></div>
 <p>This is also true for the provided sampling functions with replacement:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">1e7</span></span>
@@ -139,10 +138,10 @@
 <span><span class="co">#&gt; # A tibble: 4 × 4</span></span>
 <span><span class="co">#&gt;   expression                                     min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;                                &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            7.03ms   7.46ms      133.</span></span>
-<span><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     8.87ms    9.4ms      104.</span></span>
-<span><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        292.69µs 316.75µs     2821.</span></span>
-<span><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 408.94µs 446.19µs     1987.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 sample.int(m, n, replace = TRUE)            6.88ms   7.07ms      140.</span></span>
+<span><span class="co">#&gt; 2 sample.int(1000 * m, n, replace = TRUE)     8.57ms   8.81ms      112.</span></span>
+<span><span class="co">#&gt; 3 dqsample.int(m, n, replace = TRUE)        289.69µs 296.86µs     2834.</span></span>
+<span><span class="co">#&gt; 4 dqsample.int(1000 * m, n, replace = TRUE) 407.45µs 489.33µs     1645.</span></span></code></pre></div>
 <p>And without replacement:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span>,</span>
@@ -157,11 +156,11 @@
 <span><span class="co">#&gt; # A tibble: 5 × 4</span></span>
 <span><span class="co">#&gt;   expression                            min   median `itr/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 sample.int(m, n)                  25.43ms   27.8ms      31.8</span></span>
-<span><span class="co">#&gt; 2 sample.int(1000 * m, n)           12.99ms   17.4ms      57.0</span></span>
-<span><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)  10.44ms   12.8ms      77.2</span></span>
-<span><span class="co">#&gt; 4 dqsample.int(m, n)               617.83µs  762.9µs     882. </span></span>
-<span><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.51ms    2.5ms     334.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 sample.int(m, n)                  40.98ms   42.8ms      23.1</span></span>
+<span><span class="co">#&gt; 2 sample.int(1000 * m, n)           12.01ms   13.3ms      66.9</span></span>
+<span><span class="co">#&gt; 3 sample.int(m, n, useHash = TRUE)   9.35ms   10.4ms      92.4</span></span>
+<span><span class="co">#&gt; 4 dqsample.int(m, n)               616.34µs  679.1µs    1265. </span></span>
+<span><span class="co">#&gt; 5 dqsample.int(1000 * m, n)          1.42ms    1.7ms     501.</span></span></code></pre></div>
 <p>Note that sampling from <code>10^10</code> elements triggers “long-vector support” in R.</p>
 <p>In addition the RNGs provide support for multiple independent streams for parallel usage:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -230,7 +229,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Ralf Stubner <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Ralf Stubner <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0009-1908-106X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
