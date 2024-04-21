@@ -24,18 +24,10 @@
 #include <xoshiro.h>
 #include <pcg_random.hpp>
 #include <dqrng_threefry.h>
-#include <convert_seed.h>
-#include <R_randgen.h>
 
 namespace {
-dqrng::rng64_t rng = dqrng::generator();
+dqrng::rng64_t rng = dqrng::generator(56478348);
 std::string rng_kind = "default";
-
-void init() {
-  Rcpp::RNGScope rngScope;
-  Rcpp::IntegerVector seed(2, dqrng::R_random_int);
-  rng->seed(dqrng::convert_seed<uint64_t>(seed));
-}
 }
 
 // [[Rcpp::interfaces(r, cpp)]]
@@ -44,7 +36,7 @@ void init() {
 void dqset_seed(Rcpp::Nullable<Rcpp::IntegerVector> seed,
                 Rcpp::Nullable<Rcpp::IntegerVector> stream = R_NilValue) {
   if (seed.isNull()) {
-    init();
+    rng = dqrng::generator();
   } else {
     uint64_t _seed = dqrng::convert_seed<uint64_t>(seed.as());
     if (stream.isNotNull()) {

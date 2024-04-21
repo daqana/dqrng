@@ -32,10 +32,9 @@ Intermediate releases can also be obtained via
 [r-universe](https://rstub.r-universe.dev/dqrng):
 
 ``` r
-options(repos = c(
+install.packages('dqrng', repos = c(
   rstub = 'https://rstub.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
-install.packages('dqrng')
 ```
 
 ## Example
@@ -61,8 +60,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)    608.9µs  692.8µs     1342.
-#> 2 dqrnorm(N)   82.7µs   86.2µs    10227.
+#> 1 rnorm(N)    606.2µs  654.7µs     1456.
+#> 2 dqrnorm(N)   82.8µs   85.9µs    10984.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +78,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            7.03ms   7.46ms      133.
-#> 2 sample.int(1000 * m, n, replace = TRUE)     8.87ms    9.4ms      104.
-#> 3 dqsample.int(m, n, replace = TRUE)        292.69µs 316.75µs     2821.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 408.94µs 446.19µs     1987.
+#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.07ms      140.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.57ms   8.81ms      112.
+#> 3 dqsample.int(m, n, replace = TRUE)        289.69µs 296.86µs     2834.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 407.45µs 489.33µs     1645.
 ```
 
 And without replacement:
@@ -100,11 +99,11 @@ bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                  25.43ms   27.8ms      31.8
-#> 2 sample.int(1000 * m, n)           12.99ms   17.4ms      57.0
-#> 3 sample.int(m, n, useHash = TRUE)  10.44ms   12.8ms      77.2
-#> 4 dqsample.int(m, n)               617.83µs  762.9µs     882. 
-#> 5 dqsample.int(1000 * m, n)          1.51ms    2.5ms     334.
+#> 1 sample.int(m, n)                  40.98ms   42.8ms      23.1
+#> 2 sample.int(1000 * m, n)           12.01ms   13.3ms      66.9
+#> 3 sample.int(m, n, useHash = TRUE)   9.35ms   10.4ms      92.4
+#> 4 dqsample.int(m, n)               616.34µs  679.1µs    1265. 
+#> 5 dqsample.int(1000 * m, n)          1.42ms    1.7ms     501.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”

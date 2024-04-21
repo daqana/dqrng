@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ralf Stubner \email{ralf.stubner@gmail.com}
+\strong{Maintainer}: Ralf Stubner \email{ralf.stubner@gmail.com} (\href{https://orcid.org/0009-0009-1908-106X}{ORCID})
 
 Other contributors:
 \itemize{
@@ -29,6 +29,7 @@ Other contributors:
   \item Aaron Lun [contributor]
   \item Kyle Butts \email{kyle.butts@colorado.edu} [contributor]
   \item Henrik Sloot [contributor]
+  \item Philippe Grosjean (\href{https://orcid.org/0000-0002-2694-9471}{ORCID}) [contributor]
 }
 
 }
