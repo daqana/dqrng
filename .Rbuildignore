@@ -20,3 +20,4 @@
 ^doc$
 ^\.cache$
 ^compile_commands\.json$
+^touchstone$
