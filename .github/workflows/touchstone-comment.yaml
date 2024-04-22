@@ -14,8 +14,9 @@ jobs:
   upload:
     runs-on: ubuntu-latest
     if: >
-      ${{ github.event.workflow_run.event == 'pull_request' }}
+      ${{ github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: lorenzwalthert/touchstone/actions/comment@v1
-        with: 
+      - uses: lorenzwalthert/touchstone/actions/comment@main
+        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
