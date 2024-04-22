@@ -76,7 +76,7 @@ inline VEC replacement_prob(dqrng::random_64bit_generator &rng, INT n, INT size,
                 [&n, &prob, &max_prob, &rng, &offset] () {
                   while (true) {
                     INT index = rng(n);
-                    if (dqrng::uniform01(rng()) < prob[index] / max_prob)
+                    if (rng.uniform01() < prob[index] / max_prob)
                       return index + offset;
                   }
                 });
@@ -126,7 +126,7 @@ inline VEC replacement_alias(dqrng::random_64bit_generator &rng, INT n, INT size
   std::generate(result.begin(), result.end(),
                 [&n, &prob_alias, &rng, &offset] () {
                   INT index = rng(n);
-                  return (dqrng::uniform01(rng()) < prob_alias[index].first) ?
+                  return (rng.uniform01() < prob_alias[index].first) ?
                           index + offset : prob_alias[index].second + offset;
                 });
 
@@ -191,7 +191,7 @@ inline VEC no_replacement_prob_set(dqrng::random_64bit_generator &rng, INT n, IN
     do {
       do {
         v = rng(n);
-      } while (dqrng::uniform01(rng()) >= prob[v] / max_prob);
+      } while (rng.uniform01() >= prob[v] / max_prob);
     } while (!elems.insert(v));
     result[i] = (offset + v);
   }
@@ -208,7 +208,7 @@ inline VEC no_replacement_alias_set(dqrng::random_64bit_generator &rng, INT n, I
     INT v;
     do {
       INT index = rng(n);
-      v = (dqrng::uniform01(rng()) < prob_alias[index].first) ?
+      v = (rng.uniform01() < prob_alias[index].first) ?
                             index : prob_alias[index].second;
     } while (!elems.insert(v));
     result[i] = (offset + v);
