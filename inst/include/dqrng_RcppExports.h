@@ -63,6 +63,45 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
+    inline std::vector<std::string> dqrng_get_state() {
+        typedef SEXP(*Ptr_dqrng_get_state)();
+        static Ptr_dqrng_get_state p_dqrng_get_state = NULL;
+        if (p_dqrng_get_state == NULL) {
+            validateSignature("std::vector<std::string>(*dqrng_get_state)()");
+            p_dqrng_get_state = (Ptr_dqrng_get_state)R_GetCCallable("dqrng", "_dqrng_dqrng_get_state");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrng_get_state();
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<std::string> >(rcpp_result_gen);
+    }
+
+    inline void dqrng_set_state(std::vector<std::string> state) {
+        typedef SEXP(*Ptr_dqrng_set_state)(SEXP);
+        static Ptr_dqrng_set_state p_dqrng_set_state = NULL;
+        if (p_dqrng_set_state == NULL) {
+            validateSignature("void(*dqrng_set_state)(std::vector<std::string>)");
+            p_dqrng_set_state = (Ptr_dqrng_set_state)R_GetCCallable("dqrng", "_dqrng_dqrng_set_state");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrng_set_state(Shield<SEXP>(Rcpp::wrap(state)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
         typedef SEXP(*Ptr_dqrunif)(SEXP,SEXP,SEXP);
         static Ptr_dqrunif p_dqrunif = NULL;

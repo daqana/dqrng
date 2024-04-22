@@ -6,7 +6,7 @@ status](https://github.com/daqana/dqrng/workflows/R-CMD-check/badge.svg)](https:
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng)
 [![Coverage
-status](https://codecov.io/gh/daqana/dqrng/branch/master/graph/badge.svg)](https://app.codecov.io/github/daqana/dqrng?branch=master)
+status](https://codecov.io/gh/daqana/dqrng/branch/main/graph/badge.svg)](https://app.codecov.io/github/daqana/dqrng?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](https://www.r-pkg.org/pkg/dqrng)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
@@ -32,10 +32,9 @@ Intermediate releases can also be obtained via
 [r-universe](https://rstub.r-universe.dev/dqrng):
 
 ``` r
-options(repos = c(
+install.packages('dqrng', repos = c(
   rstub = 'https://rstub.r-universe.dev',
   CRAN = 'https://cloud.r-project.org'))
-install.packages('dqrng')
 ```
 
 ## Example
@@ -61,8 +60,8 @@ bm[, 1:4]
 #> # A tibble: 2 × 4
 #>   expression      min   median `itr/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl>
-#> 1 rnorm(N)      607µs    673µs     1421.
-#> 2 dqrnorm(N)    104µs    106µs     8608.
+#> 1 rnorm(N)    606.2µs  654.7µs     1456.
+#> 2 dqrnorm(N)   82.8µs   85.9µs    10984.
 ```
 
 This is also true for the provided sampling functions with replacement:
@@ -79,10 +78,10 @@ bm[, 1:4]
 #> # A tibble: 4 × 4
 #>   expression                                     min   median `itr/sec`
 #>   <bch:expr>                                <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n, replace = TRUE)            6.92ms    7.2ms      130.
-#> 2 sample.int(1000 * m, n, replace = TRUE)     8.59ms   9.08ms      108.
-#> 3 dqsample.int(m, n, replace = TRUE)        346.46µs 379.47µs     2434.
-#> 4 dqsample.int(1000 * m, n, replace = TRUE) 455.38µs 762.84µs     1306.
+#> 1 sample.int(m, n, replace = TRUE)            6.88ms   7.07ms      140.
+#> 2 sample.int(1000 * m, n, replace = TRUE)     8.57ms   8.81ms      112.
+#> 3 dqsample.int(m, n, replace = TRUE)        289.69µs 296.86µs     2834.
+#> 4 dqsample.int(1000 * m, n, replace = TRUE) 407.45µs 489.33µs     1645.
 ```
 
 And without replacement:
@@ -100,11 +99,11 @@ bm[, 1:4]
 #> # A tibble: 5 × 4
 #>   expression                            min   median `itr/sec`
 #>   <bch:expr>                       <bch:tm> <bch:tm>     <dbl>
-#> 1 sample.int(m, n)                   41.8ms  43.96ms      22.8
-#> 2 sample.int(1000 * m, n)           12.11ms  14.64ms      67.4
-#> 3 sample.int(m, n, useHash = TRUE)   9.53ms  10.48ms      89.1
-#> 4 dqsample.int(m, n)               730.74µs 847.78µs     990. 
-#> 5 dqsample.int(1000 * m, n)          1.55ms   1.97ms     450.
+#> 1 sample.int(m, n)                  40.98ms   42.8ms      23.1
+#> 2 sample.int(1000 * m, n)           12.01ms   13.3ms      66.9
+#> 3 sample.int(m, n, useHash = TRUE)   9.35ms   10.4ms      92.4
+#> 4 dqsample.int(m, n)               616.34µs  679.1µs    1265. 
+#> 5 dqsample.int(1000 * m, n)          1.42ms    1.7ms     501.
 ```
 
 Note that sampling from `10^10` elements triggers “long-vector support”

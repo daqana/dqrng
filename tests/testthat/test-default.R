@@ -17,6 +17,15 @@ test_that("setting seed produces identical uniformly distributed numbers", {
   expect_equal(u1, u2)
 })
 
+test_that("saving state produces identical uniformly distributed numbers", {
+  dqset.seed(seed)
+  state <- dqrng_get_state()
+  u1 <- dqrunif(10)
+  dqrng_set_state(state)
+  u2 <- dqrunif(10)
+  expect_identical(u1, u2)
+})
+
 test_that("setting seed produces identical uniformly distributed numbers (user defined RNG)", {
   register_methods()
   dqset.seed(seed)

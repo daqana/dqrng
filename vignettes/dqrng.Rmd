@@ -118,6 +118,17 @@ restore_methods()
 
 You can automatically register these methods when loading this package by setting the option `dqrng.register_methods` to `TRUE`, e.g. with `options(dqrng.register_methods=TRUE)`.
 
+For some workflows it is helpful to save and restore the RNG's type and state, similar to how `.Randome.seed` can be saved and restored. The function pair `dqrng_get_state()` and `dqrng_set_state()` can be used for this task:
+
+```{r state}
+(state <- dqrng_get_state())
+dqrunif(5)
+# many other operations, that could even change the used RNG type
+dqrng_set_state(state)
+dqrunif(5)
+```
+
+Note that the state is represented by a character vector, since the unsigned 64 and 128 bit integers used by the supported RNGs cannot be represented in R otherwise. Generally this state should be treated as an implementation detail and not manipulated directly.
 
 ## Usage from C++
 
@@ -193,8 +204,6 @@ Here a minimal [SplitMix](https://xoroshiro.di.unimi.it/splitmix64.c) generator 
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
-// [[Rcpp::plugins(cpp11)]]
-#include <cstdint>
 
 class SplitMix {
 public:
@@ -225,9 +234,8 @@ public:
 // [[Rcpp::export]]
 Rcpp::NumericVector splitmix_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
   auto rng = dqrng::generator<SplitMix>(42);
-  dqrng::normal_distribution dist(mean, sd);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<dqrng::normal_distribution>(result, mean, sd);
   return result;
 }
 /*** R
@@ -245,14 +253,12 @@ For example, here the 64 bit Threefry engine with 13 rounds from package sitmo i
 // [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <dqrng_distribution.h>
 #include <threefry.h>
-// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 Rcpp::NumericVector threefry_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
   auto rng = dqrng::generator<sitmo::threefry_13_64>(42);
-  dqrng::normal_distribution dist(mean, sd);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<dqrng::normal_distribution>(result, mean, sd);
   return result;
 }
 
@@ -273,14 +279,12 @@ For example, this function generates random numbers according to the normal dist
 // [[Rcpp::depends(dqrng)]]
 #include <dqrng_generator.h>
 #include <xoshiro.h>
-// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 Rcpp::NumericVector std_rnorm(const int n, const double mean = 0.0, const double sd = 1.0) {
-  auto rng = dqrng::generator<dqrng::xoroshiro128plus>(42);
-  std::normal_distribution<double> dist(mean, sd);
+  auto rng = dqrng::generator<dqrng::xoroshiro128plusplus>(42);
   Rcpp::NumericVector result(n);
-  std::generate(result.begin(), result.end(), [&dist, &rng](){return dist(*rng);});
+  rng->generate<std::normal_distribution>(result, mean, sd);
   return result;
 }
 
@@ -327,25 +331,17 @@ The parameters of the distributions are adjusted for every draw using `<distribu
 // [[Rcpp::depends(dqrng, BH)]]
 #include <boost/random/binomial_distribution.hpp>
 #include <dqrng_distribution.h>
-#include <xoshiro.h>
-// [[Rcpp::plugins(cpp11)]]   
 
-// aliases for the used distributions
-using binomial = boost::random::binomial_distribution<int>;
-using normal = dqrng::normal_distribution;
 // [[Rcpp::export]]
 Rcpp::NumericMatrix multiple_distributions(int n) {
   auto rng = dqrng::generator<dqrng::xoshiro256plusplus>(42);
-  // distributions with default parameters
-  binomial bernoulli;
-  normal normal;
   Rcpp::NumericMatrix out(n, 3);
   double p = 0.0;
   for (int i = 0; i < n; ++i) {
     p = double(i) / double(n);
-    out(i,0) = bernoulli(*rng, binomial::param_type(1, p));
-    out(i,1) = normal(*rng, normal::param_type(p, 1.0));
-    out(i,2) = normal(*rng, normal::param_type(4.0, 3.0 - p));
+    out(i,0) = rng->variate<boost::random::binomial_distribution<int>>(1, p);
+    out(i,1) = rng->variate<dqrng::normal_distribution>(p, 1.0);
+    out(i,2) = rng->variate<dqrng::normal_distribution>(4.0, 3.0 - p);
   }
   Rcpp::colnames(out) = Rcpp::CharacterVector::create("Bernoulli", "Normal1", "Normal2");
   return out;
@@ -368,24 +364,17 @@ RNG engine of `dqrng`. Please note that the included RNG will be invalidated if
 #include <boost/random/binomial_distribution.hpp>
 #include <dqrng.h>
 #include <dqrng_distribution.h>
-// [[Rcpp::plugins(cpp11)]]   
 
-// aliases for the used distributions
-using binomial = boost::random::binomial_distribution<int>;
-using normal = dqrng::normal_distribution;
 // [[Rcpp::export]]
 Rcpp::NumericMatrix multiple_distributions(int n) {
   auto rng = dqrng::random_64bit_accessor{};
-  // distributions with default parameters
-  binomial bernoulli;
-  normal normal;
   Rcpp::NumericMatrix out(n, 3);
   double p = 0.0;
   for (int i = 0; i < n; ++i) {
     p = double(i) / double(n);
-    out(i,0) = bernoulli(rng, binomial::param_type(1, p));
-    out(i,1) = normal(rng, normal::param_type(p, 1.0));
-    out(i,2) = normal(rng, normal::param_type(4.0, 3.0 - p));
+    out(i,0) = rng.variate<boost::random::binomial_distribution<int>>(1, p);
+    out(i,1) = rng.variate<dqrng::normal_distribution>(p, 1.0);
+    out(i,2) = rng.variate<dqrng::normal_distribution>(4.0, 3.0 - p);
   }
   Rcpp::colnames(out) = Rcpp::CharacterVector::create("Bernoulli", "Normal1", "Normal2");
   return out;

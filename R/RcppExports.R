@@ -13,6 +13,18 @@ dqRNGkind <- function(kind, normal_kind = "ignored") {
 
 #' @rdname dqrng-functions
 #' @export
+dqrng_get_state <- function() {
+    .Call(`_dqrng_dqrng_get_state`)
+}
+
+#' @rdname dqrng-functions
+#' @export
+dqrng_set_state <- function(state) {
+    invisible(.Call(`_dqrng_dqrng_set_state`, state))
+}
+
+#' @rdname dqrng-functions
+#' @export
 dqrunif <- function(n, min = 0.0, max = 1.0) {
     .Call(`_dqrng_dqrunif`, n, min, max)
 }

@@ -12,6 +12,9 @@
 #'   generates a random 64 bit integer and then uses each bit to generate
 #'   a 0/1 variable. This generates 64 integers per random number generation.
 #'
+#'   \code{dqrng_get_state} and \code{dqrng_set_state} can be used to get and set
+#'   the RNG's internal state. The character vector should not be manipulated directly.
+#'
 #' @param seed  integer scalar to seed the random number generator, or an integer vector of length 2 representing a 64-bit seed. Maybe \code{NULL}, see details.
 #' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param kind  string specifying the RNG (see details)
@@ -22,8 +25,11 @@
 #' @param mean  mean value of the normal distribution
 #' @param sd  standard deviation of the normal distribution
 #' @param rate  rate of the exponential distribution
+#' @param state  character vector representation of the RNG's internal state
 #'
-#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector of length \code{n}. \code{dqrrademacher} returns an integer vector of length \code{n}.
+#' @return \code{dqrunif}, \code{dqrnorm}, and \code{dqrexp} return a numeric vector
+#'  of length \code{n}. \code{dqrrademacher} returns an integer vector of length \code{n}.
+#'  \code{dqrng_get_state} returns a character vector representation of the RNG's internal state.
 #'
 #' @details Supported RNG kinds:
 #' \describe{
@@ -75,6 +81,13 @@
 #' dqrunif(5, min = 2, max = 10)
 #' dqrexp(5, rate = 4)
 #' dqrnorm(5, mean = 5, sd = 3)
+#'
+#' # get and restore the state
+#' (state <- dqrng_get_state())
+#' dqrunif(5)
+#' dqrng_set_state(state)
+#' dqrunif(5)
+#'
 #' @rdname dqrng-functions
 #' @export
 dqset.seed <- function(seed, stream = NULL) {

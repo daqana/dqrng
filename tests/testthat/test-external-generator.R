@@ -53,3 +53,35 @@ test_that("external RNG (parallel, Threefry)", {
 
   expect_equal(actual3, expected3)
 })
+
+test_that("cloned external default RNG gives different result only when a different stream is selected", {
+  dqrng::dqRNGkind("default")
+  dqset.seed(use_seed)
+  expect_true(cloned_calls(stream = 0))
+  expect_false(cloned_calls(stream = 1))
+})
+
+test_that("cloned external Xoshiro256++ gives different result only when a different stream is selected", {
+  dqrng::dqRNGkind("Xoshiro256++")
+  dqset.seed(use_seed)
+  expect_true(cloned_calls(stream = 0))
+  expect_false(cloned_calls(stream = 1))
+  dqrng::dqRNGkind("default")
+})
+
+test_that("cloned external PCG64 gives different result", {
+  dqrng::dqRNGkind("PCG64")
+  dqset.seed(use_seed)
+  expect_true(cloned_calls(stream = 0))
+  expect_false(cloned_calls(stream = 1))
+  dqrng::dqRNGkind("default")
+})
+
+test_that("cloned external Threefry gives different result only when a different stream is selected", {
+  dqrng::dqRNGkind("Threefry")
+  dqset.seed(use_seed)
+  expect_true(cloned_calls(stream = 0))
+  expect_false(cloned_calls(stream = 1))
+  dqrng::dqRNGkind("default")
+})
+

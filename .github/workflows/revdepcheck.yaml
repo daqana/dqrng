@@ -1,0 +1,62 @@
+# https://github.com/dieghernan/tidyterra/blob/main/.github/workflows/revdepcheck.yaml
+on:
+  workflow_dispatch:
+
+name: revdepcheck
+
+jobs:
+  revdepcheck:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-latest, r: 'release'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache-version: revdep
+          extra-packages: |
+            local::.
+            any::usethis
+            any::BiocManager
+            any::BiocVersion
+            any::devtools
+            any::remotes
+          needs: check
+
+      - name: revdepcheck
+        run: |
+
+          dir.create("revdep/Library", recursive = TRUE)
+          remotes::install_local(lib = "revdep/Library", force = TRUE)
+          utils::download.packages(devtools::revdep(),
+                                   "revdep",
+                                   repos = "https://cloud.r-project.org/")
+          tools::check_packages_in_dir("revdep",
+                                       check_args = "--as-cran --no-manual",
+                                       Ncpus = 4)
+          tools::summarize_check_packages_in_dir_results("revdep")
+
+
+        shell: Rscript {0}
+
+      # Commit all changed files back to the repository
+      - uses: actions/upload-artifact@v4
+        with:
+          name: revdep-outputs
+          path: revdep/Outputs
