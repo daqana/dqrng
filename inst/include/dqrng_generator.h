@@ -113,7 +113,7 @@ inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   gen.set_stream(pcg_extras::pcg128_t(state[1]/2) + stream);
 }
 
-uint64_t get_seed_from_r() {
+inline uint64_t get_seed_from_r() {
   Rcpp::RNGScope rngScope;
   Rcpp::IntegerVector seed(2, dqrng::R_random_int);
   return dqrng::convert_seed<uint64_t>(seed);
