@@ -172,6 +172,10 @@ test_that("dqsample_int w/o replacement and w/ weights works with high rate", {
   expect_equal(length(result), k)
   expect_equal(length(unique(result)), k)
   expect_true(all(result >= 1) && all(result <= n))
+  result <- dqsample(n, k, replace = FALSE, prob = c(dqrunif(n-1), 2))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
 })
 
 test_that("dqsample_int w/o replacement and w/ weights works with medium rate", {
@@ -179,6 +183,10 @@ test_that("dqsample_int w/o replacement and w/ weights works with medium rate", 
   n <- 1e5
   k <- 1e3
   result <- dqsample(n, k, replace = FALSE, prob = dqrunif(n))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+  result <- dqsample(n, k, replace = FALSE, prob = c(dqrunif(n-1), 2))
   expect_equal(length(result), k)
   expect_equal(length(unique(result)), k)
   expect_true(all(result >= 1) && all(result <= n))
@@ -192,6 +200,10 @@ test_that("dqsample_int w/o replacement and w/ weights works with low rate", {
   expect_equal(length(result), k)
   expect_equal(length(unique(result)), k)
   expect_true(all(result >= 1) && all(result <= n))
+  result <- dqsample(n, k, replace = FALSE, prob = c(dqrunif(n-1), 2))
+  expect_equal(length(result), k)
+  expect_equal(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
 })
 
 test_that("dqsample_num w/ replacement and w/ weights works", {
@@ -201,6 +213,10 @@ test_that("dqsample_num w/ replacement and w/ weights works", {
   n <- 1e5
   k <- 1e2
   result <- dqrng:::dqsample_num(n, k, replace = TRUE, prob = dqrunif(n), offset = 1L)
+  expect_equal(length(result), k)
+  expect_lte(length(unique(result)), k)
+  expect_true(all(result >= 1) && all(result <= n))
+  result <- dqrng:::dqsample_num(n, k, replace = TRUE, prob = c(dqrunif(n-1), 2), offset = 1L)
   expect_equal(length(result), k)
   expect_lte(length(unique(result)), k)
   expect_true(all(result >= 1) && all(result <= n))
