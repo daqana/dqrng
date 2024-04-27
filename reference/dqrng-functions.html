@@ -4,7 +4,10 @@
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the base functions
   set.seed, RNGkind, runif,
-  rnorm, and rexp.
+  rnorm, and rexp. However, note that the functions
+  provided here do not accept vector arguments for the number of observations
+  as well as the parameters describing the distribution functions. Please see
+  register_methods if you need this functionality.
 dqrrademacher uses a fast algorithm to generate random
   Rademacher variables (-1 and 1 with equal probability). To do so, it
   generates a random 64 bit integer and then uses each bit to generate
@@ -84,7 +87,10 @@ dqrng_get_state and dqrng_set_state can be used to get and set
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the <code>base</code> functions
   <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code>, <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">RNGkind</a></code>, <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></code>,
-  <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></code>, and <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></code>.</p>
+  <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></code>, and <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></code>. However, note that the functions
+  provided here do not accept vector arguments for the number of observations
+  as well as the parameters describing the distribution functions. Please see
+  <code><a href="user-supplied-rng.html">register_methods</a></code> if you need this functionality.</p>
 <p><code>dqrrademacher</code> uses a fast algorithm to generate random
   Rademacher variables (-1 and 1 with equal probability). To do so, it
   generates a random 64 bit integer and then uses each bit to generate
@@ -174,7 +180,7 @@ dqrng_get_state and dqrng_set_state can be used to get and set
 
   <dt>Xoroshiro128++ and Xoshiro256++</dt>
 <dd><p>RNGs developed by David Blackman and
-   Sebastiano Vigna. See <a href="https://xoshiro.di.unimi.it/" class="external-link">https://xoshiro.di.unimi.it/</a> for more details.
+   Sebastiano Vigna. See <a href="https://prng.di.unimi.it/" class="external-link">https://prng.di.unimi.it/</a> for more details.
    The older generators Xoroshiro128+ and Xoshiro256+ should be used only for
    backwards compatibility.</p></dd>
 
