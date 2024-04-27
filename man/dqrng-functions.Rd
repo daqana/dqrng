@@ -61,7 +61,10 @@ The \code{dqrng} package provides several fast random number
   according to a uniform, normal and exponential distribution. These
   functions are modeled after the \code{base} functions
   \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
-  \code{\link{rnorm}}, and \code{\link{rexp}}.
+  \code{\link{rnorm}}, and \code{\link{rexp}}. However, note that the functions
+  provided here do not accept vector arguments for the number of observations
+  as well as the parameters describing the distribution functions. Please see
+  \code{\link{register_methods}} if you need this functionality.
 
   \code{dqrrademacher} uses a fast algorithm to generate random
   Rademacher variables (-1 and 1 with equal probability). To do so, it
@@ -77,7 +80,7 @@ Supported RNG kinds:
   \item{pcg64}{The default 64 bit variant from the PCG family developed by
    Melissa O'Neill. See \url{https://www.pcg-random.org/} for more details.}
   \item{Xoroshiro128++ and Xoshiro256++}{RNGs developed by David Blackman and
-   Sebastiano Vigna. See \url{https://xoshiro.di.unimi.it/} for more details.
+   Sebastiano Vigna. See \url{https://prng.di.unimi.it/} for more details.
    The older generators Xoroshiro128+ and Xoshiro256+ should be used only for
    backwards compatibility.}
   \item{Threefry}{The 64 bit version of the 20 rounds Threefry engine as
