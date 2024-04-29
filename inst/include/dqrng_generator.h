@@ -24,7 +24,6 @@
 #include <dqrng_types.h>
 #include <xoshiro.h>
 #include <pcg_random.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
 #include <Rcpp.h>
 #include <convert_seed.h>
 #include <R_randgen.h>
@@ -104,10 +103,11 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result
 template<>
 inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   // set the stream relative to the current stream, i.e. stream = 0 does not change the RNG
-  boost::multiprecision::uint128_t number;
-  std::vector<boost::multiprecision::uint128_t> state;
+  pcg_extras::pcg128_t number;
+  std::vector<pcg_extras::pcg128_t> state;
   std::stringstream iss;
   iss << gen;
+  using pcg_extras::operator>>;
   while (iss >> number)
     state.push_back(number);
   // state[1] is the current stream
