@@ -112,7 +112,7 @@ inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
     state.push_back(number);
   // state[1] is the current stream
   // PCG will do 2*stream + 1 to make sure stream is odd; need to revert that here
-  gen.set_stream(pcg_extras::pcg128_t(state[1]/2) + stream);
+  gen.set_stream(state[1]/2 + stream);
 }
 
 inline uint64_t get_seed_from_r() {
