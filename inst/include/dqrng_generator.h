@@ -31,8 +31,10 @@
 #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique >= 201304)
 using std::make_unique;
 #else
-#include <boost/smart_ptr/make_unique.hpp>
-using boost::make_unique;
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 #endif
 
 namespace dqrng {
