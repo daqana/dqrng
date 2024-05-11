@@ -154,8 +154,6 @@ From the PCG family we will look at pcg64, a 64-bit generator with a period of $
 It offers the function [`advance(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
 In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
 When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams out of the possible $2^{127}$ separate streams.
-Note that **here** in contrast to the default PCG implementation, streams are counted from the default stream, i.e. setting `stream` to `0` or not at all will give the same RNG.
-This brings PCG in line with the other RNGs.
 
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.
 Instead of using the more traditional approach of generating the random numbers from a certain distribution, we are using the fast sampling methods from `dqrng_sample.h`.
@@ -206,23 +204,23 @@ symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
 Head of the random matrix:
 
           [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]
-    [1,] 16583 94445 14240 53296 15021 72402 12677 47777
-    [2,] 49983 29144 49983 80361 49983 60477 49983  6255
-    [3,] 56598 19559 87036 76208  8804 67365 60990 22777
-    [4,] 64117 18406 69814 56954 14447 27027 50950 10545
-    [5,] 48709 62087 66064  2944 11887 75422  5823 48069
-    [6,] 81061 71093 52958  6324 82242 68439 68331 41016
+    [1,] 67984 16279 69262  7126 21441 37720 51107 51045
+    [2,] 69310 21713 82885 81157 54051  5261 91165 17833
+    [3,] 76742 31232 78953  4626 94939 29416 85652 78296
+    [4,] 76349 47427  1770 37957 33888 59134 94591 65793
+    [5,] 85008 89224 43493  7925 60866  2464 14080 10763
+    [6,] 38017 88509 51195 73086  1883 68193 75259 62216
 
 Correlation matrix:
 
     [1,] 1              
     [2,]   1            
     [3,]   ? 1          
-    [4,] ?     1        
+    [4,]     ? 1        
     [5,]         1      
-    [6,]     ?     1    
-    [7,] ? ? ? ?   ? 1  
-    [8,]   ?           1
+    [6,] ? ?     ? 1    
+    [7,]     ?       1  
+    [8,]     ?         1
     attr(,"legend")
     [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
 
@@ -307,7 +305,7 @@ This way, the result becomes independent of the used amount of parallelism.
 However, one has to consider one important aspect:
 After the parallel for loop, the global RNG has not advanced at all.
 Calling the function repeatedly would lead to identical results.
-To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state. 
+To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state.^[Note that **here** in contrast to the default PCG implementation, streams are counted from the current stream, i.e. setting `stream` to `0` will give the same RNG. This brings PCG in line with the other RNGs.]
 This way, the global RNG's state advances as if it had processed one of the streams and successive calls to `parallel_generate()` produce different random numbers as expected.
 
 ```{r, eval=evaluate}
