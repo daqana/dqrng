@@ -1,11 +1,9 @@
-This release brings two new functions, dqrmvnorm and dqrrademacher.
-It also fixes two NOTEs
-* C++11 is no longer requested explicitly
-* "sitmo" is added to Suggests in addition to LinkingTo to satisfy xref requirements
+This release contains several breaking changes. Especially due to the new default
+RNG several reverse dependencies had to upload new versions beforehand.
 
 ## Test environments
 
-* local:  Ubuntu with R 4.3
+* local:  Ubuntu with R 4.4
 * Github Actions:
     * Ubuntu, R-release and R-devel
     * MacOS, R-release
@@ -18,7 +16,7 @@ It also fixes two NOTEs
 
 ## Reverse dependencies
 
-We checked 13 reverse dependencies (9 from CRAN + 3 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+We checked 10 reverse dependencies from CRAN, comparing R CMD check results
+across CRAN and dev versions of this package.
 
  * We saw 0 new problems
- * We failed to check 2 packages

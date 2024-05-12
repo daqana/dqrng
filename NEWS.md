@@ -1,4 +1,4 @@
-# dqrng (unreleased)
+# dqrng 0.4.0
 
 ## Breaking changes
 
@@ -20,7 +20,7 @@
 * New template function `dqrng::extra::parallel_generate` in `dqrng_extra/parallel_generate.h` as an example for using the global RNG in a parallel context (fixing [#77](https://github.com/daqana/dqrng/issues/77) in [#82](https://github.com/daqana/dqrng/issues/82) together with Philippe Grosjean)
 
 
-# dgrng 0.3.2
+# dqrng 0.3.2
 
 * Recreate RcppExports.cpp with current development version of Rcpp to fix WARN on CRAN
 
@@ -48,7 +48,7 @@
 # dqrng 0.2.1
 
 * Make template specialisations `inline` and include required standard headers (Aaron Lun in [#29](https://github.com/daqana/dqrng/pull/29) fixing [#28](https://github.com/daqana/dqrng/issues/28))
-* Add workaraound for new C++ compiler with old libc ([#30](https://github.com/daqana/dqrng/pull/30) fixing [#27](https://github.com/daqana/dqrng/issues/27))
+* Add workaround for new C++ compiler with old libc ([#30](https://github.com/daqana/dqrng/pull/30) fixing [#27](https://github.com/daqana/dqrng/issues/27))
 * update maintainer's email address
 
 # dqrng 0.2.0
@@ -95,7 +95,7 @@
 * Fix critical bug w.r.t. setting seeds
 * Use time in addition to `std::random_device` as source of the default seed, since
   `std::random_device` is deterministic with MinGW (c.f. #2)
-* Add jump() method to Xoshiro256+ and Xorohiro128+
+* Add jump() method to Xoshiro256+ and Xoroshiro128+
 * New vignette on parallel usage
 
 # dqrng 0.0.3
