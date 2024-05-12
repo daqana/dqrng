@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -67,6 +67,34 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.0" id="dqrng-040">dqrng 0.4.0<a class="anchor" aria-label="anchor" href="#dqrng-040"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
+<ul><li>The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc. (<a href="https://github.com/daqana/dqrng/pull/57" class="external-link">#57</a> fixing <a href="https://github.com/daqana/dqrng/issues/56" class="external-link">#56</a>)</li>
+<li>The <code>dqrng::rng64_t</code> type has been changed to use <code>Rcpp::XPtr</code> instead of <code>std::shared_ptr</code> and the functions from <code>dqrng_sample.h</code> now expect a reference to <code>dqrng::random_64bit_generator</code> instead of <code>dqrng::rng64_t</code> (<a href="https://github.com/daqana/dqrng/pull/70" class="external-link">#70</a> fixing <a href="https://github.com/daqana/dqrng/issues/63" class="external-link">#63</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-0-4-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-4-0"></a></h3>
+<ul><li>Decoupled the ‘sitmo’ package. It is now possible to use, e.g., the distribution functions from the header-only library without having an explicit <code>LinkingTo: sitmo</code>.</li>
+<li>Make the internal RNG accessible from the outside (Henrik Sloot fixing <a href="https://github.com/daqana/dqrng/issues/41" class="external-link">#41</a> in <a href="https://github.com/daqana/dqrng/pull/58" class="external-link">#58</a>)</li>
+<li>Add Xoroshiro128**/++ and Xoshiro256**/++ to <code>xoshiro.h</code>
+</li>
+<li>Allow uniform and normal distributions to be registered as user-supplied RNG within R. This happens automatically if the option <code>dqrng.register_methods</code> is set to <code>TRUE</code>.</li>
+<li>Add missing inline attributes and limit the included Rcpp headers in <code>dqrng_types.h</code> (<a href="https://github.com/daqana/dqrng/pull/75" class="external-link">#75</a> together with Paul Liétar)</li>
+<li>Add I/O methods for the RNG’s internal state (fixing <a href="https://github.com/daqana/dqrng/issues/66" class="external-link">#66</a> in <a href="https://github.com/daqana/dqrng/pull/78" class="external-link">#78</a>)</li>
+<li>Extend <code>random_64bit_generator</code> with additional convenience methods (fixing <a href="https://github.com/daqana/dqrng/issues/64" class="external-link">#64</a> in <a href="https://github.com/daqana/dqrng/pull/79" class="external-link">#79</a>)
+<ul><li>A <code>clone(stream)</code> method to allow using the global RNG state for parallel computation. Note that for consistency with the other provided RNGs, <code>stream</code> is counted relative to the current stream for PCG64.</li>
+<li>New methods <code>variate&lt;dist&gt;(param)</code>, <code>generate&lt;dist&gt;(container, param)</code> etc. using and inspired by <a href="https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html" class="external-link"><code>randutils</code></a>.</li>
+</ul></li>
+<li>The scalar functions <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">dqrng::runif</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dqrng::rnorm</a></code> and <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">dqrng::rexp</a></code> available from <code>dqrng.h</code> have been deprecated and will be removed in a future release. Please use the more flexible and faster <code>dqrng::random_64bit_accessor</code> together with <code>variate&lt;Dist&gt;()</code> instead. The same applies to <code>dqrng::uniform01</code> from <code>dqrng_distribution.h</code>, which can be replaced by the member function <code>dqrng::random_64bit_generator::uniform01</code>.</li>
+<li>New template function <code>dqrng::extra::parallel_generate</code> in <code>dqrng_extra/parallel_generate.h</code> as an example for using the global RNG in a parallel context (fixing <a href="https://github.com/daqana/dqrng/issues/77" class="external-link">#77</a> in <a href="https://github.com/daqana/dqrng/issues/82" class="external-link">#82</a> together with Philippe Grosjean)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.2" id="dqrng-032">dqrng 0.3.2<small>2023-11-29</small><a class="anchor" aria-label="anchor" href="#dqrng-032"></a></h2>
+<ul><li>Recreate RcppExports.cpp with current development version of Rcpp to fix WARN on CRAN</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.1" id="dqrng-031">dqrng 0.3.1<small>2023-08-30</small><a class="anchor" aria-label="anchor" href="#dqrng-031"></a></h2>
 <ul><li>new method <code>dqrrademacher</code> for drawing Rademacher weights (Kyle Butts in <a href="https://github.com/daqana/dqrng/pull/50" class="external-link">#50</a> fixing <a href="https://github.com/daqana/dqrng/pull/49" class="external-link">#49</a>)</li>
 <li>Move sampling methods to separate header file, allowing for parallel usage.</li>
@@ -86,7 +114,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="dqrng-021">dqrng 0.2.1<small>2019-05-17</small><a class="anchor" aria-label="anchor" href="#dqrng-021"></a></h2>
 <ul><li>Make template specialisations <code>inline</code> and include required standard headers (Aaron Lun in <a href="https://github.com/daqana/dqrng/pull/29" class="external-link">#29</a> fixing <a href="https://github.com/daqana/dqrng/issues/28" class="external-link">#28</a>)</li>
-<li>Add workaraound for new C++ compiler with old libc (<a href="https://github.com/daqana/dqrng/pull/30" class="external-link">#30</a> fixing <a href="https://github.com/daqana/dqrng/issues/27" class="external-link">#27</a>)</li>
+<li>Add workaround for new C++ compiler with old libc (<a href="https://github.com/daqana/dqrng/pull/30" class="external-link">#30</a> fixing <a href="https://github.com/daqana/dqrng/issues/27" class="external-link">#27</a>)</li>
 <li>update maintainer’s email address</li>
 </ul></div>
     <div class="section level2">
@@ -132,7 +160,7 @@
 <h2 class="page-header" data-toc-text="0.0.4" id="dqrng-004">dqrng 0.0.4<small>2018-06-08</small><a class="anchor" aria-label="anchor" href="#dqrng-004"></a></h2>
 <ul><li>Fix critical bug w.r.t. setting seeds</li>
 <li>Use time in addition to <code>std::random_device</code> as source of the default seed, since <code>std::random_device</code> is deterministic with MinGW (c.f. <a href="https://github.com/daqana/dqrng/issues/2" class="external-link">#2</a>)</li>
-<li>Add jump() method to Xoshiro256+ and Xorohiro128+</li>
+<li>Add jump() method to Xoshiro256+ and Xoroshiro128+</li>
 <li>New vignette on parallel usage</li>
 </ul></div>
     <div class="section level2">
