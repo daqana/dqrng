@@ -59,7 +59,7 @@ public:
   random_64bit_wrapper() : gen() {};
   random_64bit_wrapper(RNG _gen) : gen(_gen) {};
   random_64bit_wrapper(result_type seed) : gen(seed) {};
-  random_64bit_wrapper(result_type seed, result_type stream) : gen(seed) {this->set_stream(stream);};
+  random_64bit_wrapper(result_type seed, result_type stream) : gen() {this->seed(seed, stream);};
   virtual result_type operator() () override {return gen();}
   virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
   virtual void seed(result_type seed, result_type stream) override {cache = false; gen.seed(seed); this->set_stream(stream);}
@@ -113,6 +113,13 @@ inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   // state[1] is the current stream
   // PCG will do 2*stream + 1 to make sure stream is odd; need to revert that here
   gen.set_stream(state[1]/2 + stream);
+}
+
+// keep using the two argument ctor for PCG for backwards compatibility
+template<>
+inline void random_64bit_wrapper<pcg64>::seed(result_type seed, result_type stream) {
+  gen.seed(seed, stream);
+  cache = false;
 }
 
 inline uint64_t get_seed_from_r() {

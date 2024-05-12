@@ -4,7 +4,6 @@
 
 * The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc.  ([#57](https://github.com/daqana/dqrng/pull/57) fixing [#56](https://github.com/daqana/dqrng/issues/56))
 * The `dqrng::rng64_t` type has been changed to use `Rcpp::XPtr` instead of `std::shared_ptr` and the functions from `dqrng_sample.h` now expect a reference to `dqrng::random_64bit_generator` instead of `dqrng::rng64_t` ([#70](https://github.com/daqana/dqrng/pull/70) fixing [#63](https://github.com/daqana/dqrng/issues/63))
-* The two argument constructor and `seed`  function from PCG has [surprising properties](https://github.com/imneme/pcg-cpp/issues/91): it is not identical to the one argument version followed by `set_stream(stream)`. For consistency with the new `clone(stream)` method, the two argument versions are no longer used. This influences code that uses multiple streams with PCG together with the tooling from this package, e.g. the example code in the vignette on parallel RNG usage. In addition, setting the stream on PCG64 via `dqset.seed(seed, stream)` or at the C++ level using the interface provided by dqrng will be relative to the current stream, i.e. setting `stream=0` will not change the RNG. This is for consistency with the other provided RNGs. You still get the standard behaviour if you are using the C++ classes for PCG directly.
 
 ## Other changes
 
@@ -15,7 +14,7 @@
 * Add missing inline attributes and limit the included Rcpp headers in `dqrng_types.h` ([#75](https://github.com/daqana/dqrng/pull/75) together with Paul Liétar)
 * Add I/O methods for the RNG's internal state (fixing [#66](https://github.com/daqana/dqrng/issues/66) in [#78](https://github.com/daqana/dqrng/pull/78))
 * Extend `random_64bit_generator` with additional convenience methods (fixing [#64](https://github.com/daqana/dqrng/issues/64) in [#79](https://github.com/daqana/dqrng/pull/79))
-    * A `clone(stream)` method to allow using the global RNG state for parallel computation
+    * A `clone(stream)` method to allow using the global RNG state for parallel computation. Note that for consistency with the other provided RNGs, `stream` is counted relative to the current stream for PCG64.
     * New methods `variate<dist>(param)`, `generate<dist>(container, param)` etc. using and inspired by [`randutils`](https://www.pcg-random.org/posts/ease-of-use-without-loss-of-power.html).
 * The scalar functions `dqrng::runif`, `dqrng::rnorm` and `dqrng::rexp` available from `dqrng.h` have been deprecated and will be removed in a future release. Please use the more flexible and faster `dqrng::random_64bit_accessor` together with `variate<Dist>()` instead. The same applies to `dqrng::uniform01` from `dqrng_distribution.h`, which can be replaced by the member function `dqrng::random_64bit_generator::uniform01`. 
 * New template function `dqrng::extra::parallel_generate` in `dqrng_extra/parallel_generate.h` as an example for using the global RNG in a parallel context (fixing [#77](https://github.com/daqana/dqrng/issues/77) in [#82](https://github.com/daqana/dqrng/issues/82) together with Philippe Grosjean)
