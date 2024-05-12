@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2.7</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-04-29</h4>
+            <h4 data-toc-skip class="date">2024-05-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/cpp-api.Rmd" class="external-link"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -265,7 +265,7 @@ a <code>std::vector&lt;std::string&gt;</code> as produced by
 </h2>
 <div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>dqrng<span class="op">::</span>random_64bit_generator<span class="op">&gt;</span> dqrng<span class="op">::</span>get_rng<span class="op">()</span></span></code></pre></div>
 <p>Direct usage of this method is <strong>discouraged</strong>. The
-prefered way of accesing the global RNG is to instantiate
+preferred way of accessing the global RNG is to instantiate
 <code>dqrng::random_64bit_accessor</code> within your function. Note
 that you MUST NOT delete the global RNG. Using
 <code>dqrng::random_64bit_accessor</code> makes this impossible. In
@@ -274,7 +274,7 @@ because it can be invalidated by calls to <code>dqRNGkind</code>.
 Therefore, instances of <code>dqrng::random_64bit_accessor</code> SHOULD
 be stored as (non-static) variables in functions.</p>
 <p>Note that <code>dqrng::random_64bit_accessor</code> supports <a href="https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator" class="external-link">UniformRandomBitGenerator</a>
-and can therefore be used together with any C++11 distribtion function.
+and can therefore be used together with any C++11 distribution function.
 In addition, the following functions are supported, since they are
 inherited from the abstract parent class
 <code>random_64bit_generator</code>:</p>
