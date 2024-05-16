@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @rdname dqrmv
-#' @examples
+#' @examplesIf requireNamespace("mvtnorm", quietly = TRUE)
 #' sigma <- matrix(c(4,2,2,3), ncol=2)
 #' x <- dqrmvnorm(n=500, mean=c(1,2), sigma=sigma)
 #' colMeans(x)

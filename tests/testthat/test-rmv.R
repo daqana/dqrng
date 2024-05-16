@@ -13,6 +13,7 @@ test_that("consecutive calls yield different random numbers (normal)", {
 })
 
 test_that("setting seed produces identical normaly distributed numbers", {
+  skip_if_not_installed("mvtnorm")
   dqset.seed(seed)
   n1 <- dqrmvnorm(10, mean = mean, sigma=sigma)
   dqset.seed(seed)
@@ -21,6 +22,7 @@ test_that("setting seed produces identical normaly distributed numbers", {
 })
 
 test_that("Means and variance as expected",{
+  skip_if_not_installed("mvtnorm")
   dqset.seed(seed)
   n1 <- dqrmvnorm(1e5, mean = mean, sigma=sigma)
   expect_equal(mean, colMeans(n1), tolerance = 0.01)
