@@ -218,8 +218,8 @@ double * user_unif_rand(void) {
 
 // https://stackoverflow.com/a/47839021/8416610
 Int32 unscramble(Int32 u) {
-  for (int j=0; j<50; j++) {
-    u = ((u - 1) * 2783094533);
+  for (int j = 0; j < 50; ++j) {
+    u = ((u - 1) * 2783094533UL);
   }
   return u;
 }
