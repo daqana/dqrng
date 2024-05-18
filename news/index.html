@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.1</span>
       </span>
     </div>
 
@@ -67,7 +67,12 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.4.0" id="dqrng-040">dqrng 0.4.0<a class="anchor" aria-label="anchor" href="#dqrng-040"></a></h2>
+<h2 class="page-header" data-toc-text="0.4.1" id="dqrng-041-unreleased">dqrng 0.4.1 (unreleased)<a class="anchor" aria-label="anchor" href="#dqrng-041-unreleased"></a></h2>
+<ul><li>Fix an UBSAN error found by CRAN (<a href="https://github.com/daqana/dqrng/pull/90" class="external-link">#90</a> fixing <a href="https://github.com/daqana/dqrng/issues/89" class="external-link">#89</a>)</li>
+<li>Fix a compilation error when the compiler does not provide a 128bit integer type (<a href="https://github.com/daqana/dqrng/pull/90" class="external-link">#90</a> fixing <a href="https://github.com/daqana/dqrng/issues/88" class="external-link">#88</a>)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.0" id="dqrng-040">dqrng 0.4.0<small>2024-05-15</small><a class="anchor" aria-label="anchor" href="#dqrng-040"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
 <ul><li>The default RNG has changed from Xoroshiro128+ to Xoroshiro128++. The older generators Xoroshiro128+ and Xoshiro256+ are still available but should only be used for backward compatibility or for generating floating point numbers, i.e. not sampling etc. (<a href="https://github.com/daqana/dqrng/pull/57" class="external-link">#57</a> fixing <a href="https://github.com/daqana/dqrng/issues/56" class="external-link">#56</a>)</li>
