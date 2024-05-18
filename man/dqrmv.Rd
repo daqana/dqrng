@@ -18,11 +18,13 @@ numeric matrix of multivariate normal distributed variables
 Multivariate Distributions
 }
 \examples{
+\dontshow{if (requireNamespace("mvtnorm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 sigma <- matrix(c(4,2,2,3), ncol=2)
 x <- dqrmvnorm(n=500, mean=c(1,2), sigma=sigma)
 colMeans(x)
 var(x)
 plot(x)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[mvtnorm]{rmvnorm}}

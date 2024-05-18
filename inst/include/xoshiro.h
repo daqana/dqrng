@@ -52,7 +52,7 @@ private:
   virtual result_type next() = 0;
 
 public:
-  inline static constexpr result_type min() {return 0.0;};
+  inline static constexpr result_type min() {return 0;};
   inline static constexpr result_type max() {return UINT64_MAX;};
 
   xoshiro(result_type _seed = 0x85c6ea9eb065ebeeULL) {

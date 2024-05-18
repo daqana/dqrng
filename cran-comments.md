@@ -1,5 +1,5 @@
-This release contains several breaking changes. Especially due to the new default
-RNG several reverse dependencies had to upload new versions beforehand.
+This release fixes an UBSAN error found by CRAN and a compilation error when the
+compiler does not provide a 128bit integer type.
 
 ## Test environments
 

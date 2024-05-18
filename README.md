@@ -11,6 +11,8 @@ status](https://codecov.io/gh/daqana/dqrng/branch/main/graph/badge.svg)](https:/
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
 [![Dependencies](https://tinyverse.netlify.com/badge/dqrng)](https://cran.r-project.org/package=dqrng)
+[![dqrng status
+badge](https://rstub.r-universe.dev/badges/dqrng)](https://rstub.r-universe.dev/dqrng)
 
 # dqrng
 
