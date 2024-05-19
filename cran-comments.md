@@ -16,7 +16,7 @@ compiler does not provide a 128bit integer type.
 
 ## Reverse dependencies
 
-We checked 10 reverse dependencies from CRAN, comparing R CMD check results
+We checked 12 reverse dependencies from CRAN, comparing R CMD check results
 across CRAN and dev versions of this package.
 
  * We saw 0 new problems

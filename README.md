@@ -5,14 +5,14 @@
 status](https://github.com/daqana/dqrng/workflows/R-CMD-check/badge.svg)](https://github.com/daqana/dqrng/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dqrng)](https://cran.r-project.org/package=dqrng)
+[![dqrng status
+badge](https://rstub.r-universe.dev/badges/dqrng)](https://rstub.r-universe.dev/dqrng)
 [![Coverage
 status](https://codecov.io/gh/daqana/dqrng/branch/main/graph/badge.svg)](https://app.codecov.io/github/daqana/dqrng?branch=main)
 [![Downloads](https://cranlogs.r-pkg.org/badges/dqrng?color=brightgreen)](https://www.r-pkg.org/pkg/dqrng)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2157/badge)](https://bestpractices.coreinfrastructure.org/projects/2157)
-[![Dependencies](https://tinyverse.netlify.com/badge/dqrng)](https://cran.r-project.org/package=dqrng)
-[![dqrng status
-badge](https://rstub.r-universe.dev/badges/dqrng)](https://rstub.r-universe.dev/dqrng)
+[![Dependencies](https://tinyverse.netlify.app/badge/dqrng)](https://cran.r-project.org/package=dqrng)
 
 # dqrng
 
