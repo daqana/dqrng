@@ -66,8 +66,10 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
     rng =  dqrng::generator<dqrng::xoshiro256plus>(seed);
   } else if (kind == "xoshiro256++") {
     rng =  dqrng::generator<dqrng::xoshiro256plusplus>(seed);
+#if !(defined(__APPLE__) && defined(__POWERPC__))
   } else if (kind == "pcg64") {
     rng =  dqrng::generator<pcg64>(seed);
+#endif
   } else if (kind == "threefry") {
     rng =  dqrng::generator<sitmo::threefry_20_64>(seed);
   } else {
