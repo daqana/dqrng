@@ -16,6 +16,7 @@
 #include <mystdint.h>
 #include <functional>
 #include <algorithm>
+#include <iostream>
 
 namespace dqrng {
 template<size_t N>
