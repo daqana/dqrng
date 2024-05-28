@@ -2,6 +2,7 @@
 
 * Fix an UBSAN error found by CRAN ([#90](https://github.com/daqana/dqrng/pull/90) fixing [#89](https://github.com/daqana/dqrng/issues/89))
 * Fix a compilation error when the compiler does not provide a 128bit integer type ([#90](https://github.com/daqana/dqrng/pull/90) fixing [#88](https://github.com/daqana/dqrng/issues/88))
+* Disable PCG64 on MacOS PowerPC ([#91](https://github.com/daqana/dqrng/pull/91) fixing [#88](https://github.com/daqana/dqrng/issues/88))
 
 # dqrng 0.4.0
 
