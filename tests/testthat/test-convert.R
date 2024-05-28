@@ -1,14 +1,5 @@
 context("conversion")
 
-safe_expect_error <- function(..., msg) {
-  os.type <- Sys.info()["sysname"]
-  if (os.type == "Darwin") {
-    expect_error(...)
-  } else {
-    expect_error(..., msg)
-  }
-}
-
 Rcpp::sourceCpp("cpp/convert.cpp") # Warnings about shifts can be ignored.
 
 test_that("conversion to 16-bit integers works correctly", {

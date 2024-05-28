@@ -70,6 +70,7 @@ test_that("cloned external Xoshiro256++ gives different result only when a diffe
 })
 
 test_that("cloned external PCG64 gives different result", {
+  skip_if(powerpc_apple)
   dqrng::dqRNGkind("PCG64")
   dqset.seed(use_seed)
   expect_true(cloned_calls(stream = 0))

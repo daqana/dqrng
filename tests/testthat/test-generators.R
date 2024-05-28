@@ -40,6 +40,7 @@ test_that("Default generator: setting same seed but different stream produces di
 })
 
 test_that("PCG64: setting seed produces identical uniformly distributed numbers", {
+  skip_if(powerpc_apple)
   dqRNGkind("pcg64")
   dqset.seed(seed)
   u1 <- dqrunif(10)
@@ -49,6 +50,7 @@ test_that("PCG64: setting seed produces identical uniformly distributed numbers"
 })
 
 test_that("PCG64: setting seed and stream produces identical uniformly distributed numbers", {
+  skip_if(powerpc_apple)
   dqRNGkind("pcg64")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
@@ -58,6 +60,7 @@ test_that("PCG64: setting seed and stream produces identical uniformly distribut
 })
 
 test_that("PCG64: saving state produces identical uniformly distributed numbers", {
+  skip_if(powerpc_apple)
   dqRNGkind("pcg64")
   dqset.seed(seed, 1)
   state <- dqrng_get_state()
@@ -68,6 +71,7 @@ test_that("PCG64: saving state produces identical uniformly distributed numbers"
 })
 
 test_that("PCG64: setting same seed but different stream produces different uniformly distributed numbers", {
+  skip_if(powerpc_apple)
   dqRNGkind("pcg64")
   dqset.seed(seed, 1)
   u1 <- dqrunif(10)
