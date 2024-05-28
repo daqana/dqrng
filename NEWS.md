@@ -1,4 +1,4 @@
-# dqrng 0.4.1 (unreleased)
+# dqrng 0.4.1
 
 * Fix an UBSAN error found by CRAN ([#90](https://github.com/daqana/dqrng/pull/90) fixing [#89](https://github.com/daqana/dqrng/issues/89))
 * Fix a compilation error when the compiler does not provide a 128bit integer type ([#90](https://github.com/daqana/dqrng/pull/90) fixing [#88](https://github.com/daqana/dqrng/issues/88))
