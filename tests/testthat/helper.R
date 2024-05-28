@@ -1,4 +1,4 @@
-powerpc_apple <- grepl("powerpc-apple-", R.version$platform)
+powerpc_apple <- grepl("powerpc-apple-darwin", R.version$platform)
 
 safe_expect_error <- function(..., msg) {
   os.type <- Sys.info()["sysname"]
