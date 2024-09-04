@@ -1,7 +1,7 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.4.1
+Version: 0.4.1.1
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0009-1908-106X")),
     person("daqana GmbH", role = "cph"),
@@ -44,3 +44,4 @@ VignetteBuilder: knitr
 URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
 Encoding: UTF-8
+Config/build/compilation-database: true
