@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Parallel RNG usage">
-<meta property="og:description" content="dqrng">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.1</span>
       </span>
     </div>
 
@@ -48,7 +47,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -71,7 +70,7 @@
 <li>
   <a href="https://github.com/daqana/dqrng/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -82,7 +81,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -91,9 +90,9 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-05-28</h4>
+            <h4 data-toc-skip class="date">2024-09-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/HEAD/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/main/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
 
     </div>
@@ -119,13 +118,18 @@ independent streams can be accessed using the two argument
 <div class="section level2">
 <h2 id="threefry-usage-from-r">Threefry: usage from R<a class="anchor" aria-label="anchor" href="#threefry-usage-from-r"></a>
 </h2>
-<p>The Threefry engine uses internally a counter with <span class="math inline">\(2^{256}\)</span> possible states, which can be
-split into different substreams. When used from R or C++ with the two
-argument <code>dqset.seed</code> or <code>dqset_seed</code> this counter
-space is split into <span class="math inline">\(2^{64}\)</span> streams
-with <span class="math inline">\(2^{192}\)</span> possible states each.
-This is equivalent to <span class="math inline">\(2^{64}\)</span>
-streams with a period of <span class="math inline">\(2^{194}\)</span>
+<p>The Threefry engine uses internally a counter with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>256</mn></msup><annotation encoding="application/x-tex">2^{256}</annotation></semantics></math>
+possible states, which can be split into different substreams. When used
+from R or C++ with the two argument <code>dqset.seed</code> or
+<code>dqset_seed</code> this counter space is split into
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
+possible states each. This is equivalent to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams with a period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>194</mn></msup><annotation encoding="application/x-tex">2^{194}</annotation></semantics></math>
 each.</p>
 <p>In the following example a matrix with random numbers is generated in
 parallel using the parallel package. The resulting correlation matrix
@@ -163,17 +167,39 @@ almost equal to the identity matrix.</p>
 <div class="section level2">
 <h2 id="xoroshiro-jump-ahead-with-openmp">Xo(ro)shiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoroshiro-jump-ahead-with-openmp"></a>
 </h2>
-<p>The Xoshiro256+/++/** generators has a period of <span class="math inline">\(2^{256} -1\)</span> and offers <span class="math inline">\(2^{128}\)</span> sub-sequences that are <span class="math inline">\(2^{128}\)</span> random draws apart as well as
-<span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> random draws apart. The
-Xoroshiro128+/++/** generators has a period of <span class="math inline">\(2^{128} -1\)</span> and offers <span class="math inline">\(2^{64}\)</span> sub-sequences that are <span class="math inline">\(2^{64}\)</span> random draws apart as well as
-<span class="math inline">\(2^{32}\)</span> streams that are <span class="math inline">\(2^{98}\)</span> random draws apart. You can go
-from one sub-sequence to the next using the <code>jump()</code> or
-<code>long_jump()</code> method and the convenience wrapper
-<code>jump(int n)</code> or <code>long_jump(int n)</code>, which
-advances to the <code>n</code>th sub-sequence. When used from R or C++
-with the two argument <code>dqset.seed</code> and
-<code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams that are <span class="math inline">\(2^{192}\)</span> and <span class="math inline">\(2^{64}\)</span> random draws apart for
-Xoshiro256+/++/** and Xoroshiro128+/++/**, respectively.</p>
+<p>The Xoshiro256+/++/** generators has a period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>256</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{256} -1</annotation></semantics></math>
+and offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+random draws apart as well as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
+random draws apart. The Xoroshiro128+/++/** generators has a period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>128</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{128} -1</annotation></semantics></math>
+and offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+random draws apart as well as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>32</mn></msup><annotation encoding="application/x-tex">2^{32}</annotation></semantics></math>
+streams that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>98</mn></msup><annotation encoding="application/x-tex">2^{98}</annotation></semantics></math>
+random draws apart. You can go from one sub-sequence to the next using
+the <code>jump()</code> or <code>long_jump()</code> method and the
+convenience wrapper <code>jump(int n)</code> or
+<code>long_jump(int n)</code>, which advances to the <code>n</code>th
+sub-sequence. When used from R or C++ with the two argument
+<code>dqset.seed</code> and <code>dqset_seed</code> you get
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+random draws apart for Xoshiro256+/++/** and Xoroshiro128+/++/**,
+respectively.</p>
 <p>As an example using C++ we draw and sum a large number of uniformly
 distributed numbers. This is done several times sequentially as well as
 using OpenMP for parallelisation. Care has been taken to keep the global
@@ -245,14 +271,24 @@ code.</p>
 <h2 id="pcg-multiple-streams-with-rcppparallel">PCG: multiple streams with RcppParallel<a class="anchor" aria-label="anchor" href="#pcg-multiple-streams-with-rcppparallel"></a>
 </h2>
 <p>From the PCG family we will look at pcg64, a 64-bit generator with a
-period of <span class="math inline">\(2^{128}\)</span>. It offers the
-function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>,
-which is equivalent to <code>n</code> random draws but scales as <span class="math inline">\(O(ln(n))\)</span> instead of <span class="math inline">\(O(n)\)</span>. In addition, it offers <span class="math inline">\(2^{127}\)</span> separate streams that can be
-enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a>
+period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>.
+It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>,
+which is equivalent to <code>n</code> random draws but scales as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>l</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(ln(n))</annotation></semantics></math>
+instead of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math>.
+In addition, it offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
+separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a>
 or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two
 argument constructor</a> with <code>seed</code> and <code>stream</code>.
 When used from R or C++ with the two argument <code>dqset.seed</code>
-and <code>dqset_seed</code> you get <span class="math inline">\(2^{64}\)</span> streams out of the possible <span class="math inline">\(2^{127}\)</span> separate streams.</p>
+and <code>dqset_seed</code> you get
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams out of the possible
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
+separate streams.</p>
 <p>In the following example a matrix with random numbers is generated in
 parallel using RcppParallel. Instead of using the more traditional
 approach of generating the random numbers from a certain distribution,
@@ -545,9 +581,7 @@ RNG. This brings PCG in line with the other RNGs.<a href="#fnref2" class="footno
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -560,16 +594,16 @@ RNG. This brings PCG in line with the other RNGs.<a href="#fnref2" class="footno
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
