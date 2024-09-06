@@ -21,3 +21,5 @@
 ^\.cache$
 ^compile_commands\.json$
 ^touchstone$
+^\.vscode$
+^debug$
