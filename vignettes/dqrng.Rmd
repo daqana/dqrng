@@ -3,6 +3,7 @@ title: "Fast Pseudo Random Number Generators for R"
 author: "Ralf Stubner"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Fast Pseudo Random Number Generators for R}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,13 +27,13 @@ Support for the following 64bit RNGs are currently included:
 
 * **pcg64**
 The default 64 bit variant from the PCG family developed by Melissa O'Neill.
-See https://www.pcg-random.org/ for more details.
+See @oneill2014 and https://www.pcg-random.org/ for more details.
 * **Xoroshiro128++** and **Xoshiro256++**  
 RNGs developed by David Blackman and Sebastiano Vigna.
-See https://xoroshiro.di.unimi.it/ for more details.
+See @blackman2021 and https://xoroshiro.di.unimi.it/ for more details.
 The older generators Xoroshiro128+ and Xoshiro256+ should be used only for backwards compatibility.
 * **Threefry**  
-The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package 'sitmo'.
+The 64 bit version of the 20 rounds Threefry engine [@salmon2011] as provided by the package 'sitmo'.
 
 Of these RNGs Xoroshiro128++ is used as default since it is fast, small and has good statistical properties.
 
@@ -320,7 +321,7 @@ system.time(boost_pcg_rnorm(1e7))
 */
 ```
 
-This is quite fast since `boost::random::normal_distribution` uses the fast Ziggurat algorithm. 
+This is quite fast since `boost::random::normal_distribution` uses the fast Ziggurat algorithm [@marsaglia2000]. 
 For some applications it is necessary to draw random numbers from multiple distributions with varying parameters.
 The following function uses a binomial distribution (from `boost.random`) as well as the normal distribution from `dqrng`.
 The parameters of the distributions are adjusted for every draw using `<distribution>::param_type`: 
@@ -385,3 +386,5 @@ dqset.seed(42)
 multiple_distributions(5)
 */
 ```
+
+## References
