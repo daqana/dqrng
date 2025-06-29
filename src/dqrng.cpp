@@ -100,6 +100,20 @@ void dqrng_set_state(std::vector<std::string> state) {
   buffer >> *rng;
 }
 
+// [[Rcpp::export(rng = false)]]
+std::vector<std::string> next_stream(std::vector<std::string> state) {
+  dqrng_set_state(state);
+  rng->next_stream();
+  return dqrng_get_state();
+}
+
+// [[Rcpp::export(rng = false)]]
+std::vector<std::string> next_substream(std::vector<std::string> state) {
+  dqrng_set_state(state);
+  rng->next_stream();
+  return dqrng_get_state();
+}
+
 //' @rdname dqrng-functions
 //' @export
 // [[Rcpp::export(rng = false)]]
