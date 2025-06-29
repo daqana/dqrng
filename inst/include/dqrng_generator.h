@@ -68,6 +68,8 @@ public:
     rng->set_stream(stream);
     return rng;
   }
+  virtual void next_stream() override {throw std::runtime_error("Stream handling not supported for this RNG!");}
+  virtual void next_substream() override {throw std::runtime_error("Stream handling not supported for this RNG!");}
 };
 
 template<>
@@ -98,6 +100,16 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_stream(result
 template<>
 inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result_type stream) {
   gen.long_jump(stream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::next_stream() {
+  gen.jump();
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::next_substream() {
+  gen.long_jump();
 }
 
 #if !(defined(__APPLE__) && defined(__POWERPC__))
