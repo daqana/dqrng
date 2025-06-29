@@ -304,6 +304,14 @@ public:
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
     return gen->clone(stream);
   };
+
+  virtual void next_stream() override {
+    gen->next_stream();
+  };
+
+  virtual void next_substream() override {
+    gen->next_substream();
+  };
 };
 
 } // namespace dqrng
