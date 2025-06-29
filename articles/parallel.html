@@ -90,7 +90,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2024-09-06</h4>
+            <h4 data-toc-skip class="date">2025-06-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/main/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -408,17 +408,17 @@ faster than the <code>stats::r&lt;dist&gt;</code> function. Using
 multiple threads gives a clear speed up.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span>
-<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrunif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">runif_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>,</span>
 <span>            <span class="fu">runif_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>,</span>
 <span>            check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
-<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">rnorm_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>,</span>
 <span>            <span class="fu">rnorm_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>,</span>
 <span>            check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
-<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">dqrng</span><span class="fu">::</span><span class="fu"><a href="../reference/dqrng-functions.html">dqrexp</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>            <span class="fu">rexp_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>,</span>
 <span>            <span class="fu">rexp_para</span><span class="op">(</span><span class="va">n</span>, threads <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>,</span>
@@ -594,7 +594,7 @@ RNG. This brings PCG in line with the other RNGs.<a href="#fnref2" class="footno
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
