@@ -104,12 +104,12 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result
 
 template<>
 inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::next_stream() {
-  gen.jump();
+  gen.long_jump();
 }
 
 template<>
 inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::next_substream() {
-  gen.long_jump();
+  gen.jump();
 }
 
 #if !(defined(__APPLE__) && defined(__POWERPC__))
