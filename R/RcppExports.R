@@ -23,6 +23,14 @@ dqrng_set_state <- function(state) {
     invisible(.Call(`_dqrng_dqrng_set_state`, state))
 }
 
+next_stream <- function(state) {
+    .Call(`_dqrng_next_stream`, state)
+}
+
+next_substream <- function(state) {
+    .Call(`_dqrng_next_substream`, state)
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqrunif <- function(n, min = 0.0, max = 1.0) {

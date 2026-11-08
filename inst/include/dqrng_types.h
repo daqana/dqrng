@@ -74,6 +74,9 @@ public:
   virtual void seed(result_type seed) = 0;
   virtual void seed(result_type seed, result_type stream) = 0;
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) = 0;
+  virtual void next_stream() = 0;
+  virtual void next_substream() = 0;
+
   static constexpr result_type min() {return 0;};
   static constexpr result_type max() {return UINT64_MAX;};
 
@@ -300,6 +303,14 @@ public:
 
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
     return gen->clone(stream);
+  };
+
+  virtual void next_stream() override {
+    gen->next_stream();
+  };
+
+  virtual void next_substream() override {
+    gen->next_substream();
   };
 };
 
