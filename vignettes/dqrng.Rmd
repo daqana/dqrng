@@ -31,6 +31,9 @@ See https://www.pcg-random.org/ for more details.
 RNGs developed by David Blackman and Sebastiano Vigna.
 See https://xoroshiro.di.unimi.it/ for more details.
 The older generators Xoroshiro128+ and Xoshiro256+ should be used only for backwards compatibility.
+* **MWC192X**  
+A scrambled multiply-with-carry generator developed by Sebastiano Vigna (2026).
+See https://prng.di.unimi.it/ for more details.
 * **Threefry**  
 The 64 bit version of the 20 rounds Threefry engine (Salmon et al., 2011) as provided by the package 'sitmo'.
 

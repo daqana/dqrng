@@ -73,8 +73,9 @@ As expected the correlation matrix for the different columns is almost equal to 
 
 The Xoshiro256+/++/** generators has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws apart.
 The Xoroshiro128+/++/** generators has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws apart. 
-You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence.
-When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$ and $2^{64}$ random draws apart for Xoshiro256+/++/** and Xoroshiro128+/++/**, respectively.
+The MWC192X generator has a period of about $2^{191}$ and offers $2^{95}$ sub-sequences that are $2^{96}$ random draws apart as well as $2^{47}$ streams that are $2^{144}$ random draws apart.
+You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence; for MWC192X, they take time logarithmic in `n`.
+When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$, $2^{64}$ and $2^{96}$ random draws apart for Xoshiro256+/++/**, Xoroshiro128+/++/** and MWC192X, respectively.
 
 As an example using C++ we draw and sum a large number of uniformly distributed numbers.
 This is done several times sequentially as well as using OpenMP for parallelisation.

@@ -66,3 +66,17 @@ test_that("long_jump() for xoshiro256++ works", {
 test_that("long_jump() for xoshiro256** works", {
   expect_true(xoshiro_star_star_long_jump())
 })
+
+Rcpp::sourceCpp("cpp/mwc192x-jump.cpp")
+
+test_that("jump() for MWC192X works", {
+  expect_true(mwc192x_jump())
+})
+
+test_that("long_jump() for MWC192X works", {
+  expect_true(mwc192x_long_jump())
+})
+
+test_that("jump(n) and long_jump(n) for MWC192X work", {
+  expect_true(mwc192x_jump_n())
+})

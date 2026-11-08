@@ -22,6 +22,7 @@
 #include <dqrng_distribution.h>
 #include <dqrng_sample.h>
 #include <xoshiro.h>
+#include <mwc192x.h>
 #include <pcg_random.hpp>
 #include <dqrng_threefry.h>
 
@@ -66,6 +67,8 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
     rng =  dqrng::generator<dqrng::xoshiro256plus>(seed);
   } else if (kind == "xoshiro256++") {
     rng =  dqrng::generator<dqrng::xoshiro256plusplus>(seed);
+  } else if (kind == "mwc192x") {
+    rng =  dqrng::generator<dqrng::mwc192x>(seed);
 #if !(defined(__APPLE__) && defined(__POWERPC__))
   } else if (kind == "pcg64") {
     rng =  dqrng::generator<pcg64>(seed);

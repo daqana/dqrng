@@ -228,6 +228,43 @@ test_that("Xoshiro256++: setting same seed but different stream produces differe
   expect_false(identical(u1, u2))
 })
 
+test_that("MWC192X: setting seed produces identical uniformly distributed numbers", {
+  dqRNGkind("MWC192X")
+  dqset.seed(seed)
+  u1 <- dqrunif(10)
+  dqset.seed(seed)
+  u2 <- dqrunif(10)
+  expect_equal(u1, u2)
+})
+
+test_that("MWC192X: setting seed and stream produces identical uniformly distributed numbers", {
+  dqRNGkind("MWC192X")
+  dqset.seed(seed, 1)
+  u1 <- dqrunif(10)
+  dqset.seed(seed, 1)
+  u2 <- dqrunif(10)
+  expect_equal(u1, u2)
+})
+
+test_that("MWC192X: saving state produces identical uniformly distributed numbers", {
+  dqRNGkind("MWC192X")
+  dqset.seed(seed, 1)
+  state <- dqrng_get_state()
+  u1 <- dqrunif(10)
+  dqrng_set_state(state)
+  u2 <- dqrunif(10)
+  expect_equal(u1, u2)
+})
+
+test_that("MWC192X: setting same seed but different stream produces different uniformly distributed numbers", {
+  dqRNGkind("MWC192X")
+  dqset.seed(seed, 1)
+  u1 <- dqrunif(10)
+  dqset.seed(seed, 2)
+  u2 <- dqrunif(10)
+  expect_false(identical(u1, u2))
+})
+
 test_that("Threefry: setting seed produces identical uniformly distributed numbers", {
   dqRNGkind("Threefry")
   dqset.seed(seed)

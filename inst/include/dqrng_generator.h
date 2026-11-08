@@ -23,6 +23,7 @@
 #include <stdexcept>
 #include <dqrng_types.h>
 #include <xoshiro.h>
+#include <mwc192x.h>
 #include <pcg_random.hpp>
 #include <Rcpp.h>
 #include <convert_seed.h>
@@ -98,6 +99,11 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_stream(result
 template<>
 inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result_type stream) {
   gen.long_jump(stream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::mwc192x>::set_stream(result_type stream) {
+  gen.jump(stream);
 }
 
 #if !(defined(__APPLE__) && defined(__POWERPC__))
