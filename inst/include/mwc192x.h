@@ -42,7 +42,29 @@ private:
   static constexpr uint64_t MWC_A2 = 0xff4e24dd418f5433ULL;
   using words = std::array<uint64_t, 3>;
 
+#if defined(__SIZEOF_INT128__)
+  __extension__ typedef unsigned __int128 uint128_t;
+  // y and c are kept in a single 128-bit integer, y + c * 2^64: with three
+  // 64-bit members, GCC merges two of the stores of operator() into a vector
+  // store, which is much slower when the state lives in memory.
+  uint64_t x;
+  uint128_t yc;
+  uint64_t get_y() const { return static_cast<uint64_t>(yc); }
+  uint64_t get_c() const { return static_cast<uint64_t>(yc >> 64); }
+  void set(const uint64_t _x, const uint64_t _y, const uint64_t _c) {
+    x = _x;
+    yc = static_cast<uint128_t>(_c) << 64 | _y;
+  }
+#else
   uint64_t x, y, c;
+  uint64_t get_y() const { return y; }
+  uint64_t get_c() const { return c; }
+  void set(const uint64_t _x, const uint64_t _y, const uint64_t _c) {
+    x = _x;
+    y = _y;
+    c = _c;
+  }
+#endif
 
   struct SplitMix {
     SplitMix(const uint64_t& k) : state(k) {}
@@ -61,7 +83,6 @@ private:
   // Returns the lower 64 bits of a * x + c and stores the upper 64 bits in hi.
   static uint64_t mul_add(const uint64_t a, const uint64_t x, const uint64_t c, uint64_t& hi) {
 #if defined(__SIZEOF_INT128__)
-    __extension__ typedef unsigned __int128 uint128_t;
     const uint128_t t = static_cast<uint128_t>(a) * x + c;
     hi = static_cast<uint64_t>(t >> 64);
     return static_cast<uint64_t>(t);
@@ -140,10 +161,8 @@ private:
 
   // Multiplies the state by r modulo m.
   void do_jump(const words& r) {
-    const words s = mul_mod(words{{x, y, c}}, r);
-    x = s[0];
-    y = s[1];
-    c = s[2];
+    const words s = mul_mod(words{{x, get_y(), get_c()}}, r);
+    set(s[0], s[1], s[2]);
   }
 
   /* 2^-(64 * 2^96) mod m: equivalent to 2^96 calls to next(). */
@@ -165,14 +184,14 @@ public:
   }
 
   void seed(std::function<result_type(void)> rng) {
-    x = rng();
-    y = rng();
+    const uint64_t _x = rng();
+    const uint64_t _y = rng();
     // The value r used for c is read as a fixed-point fraction r / 2^64 in
     // [0..1) and multiplied by MWC_A2 - 2, the size of the range of valid
     // carries: c = 1 + (r * (MWC_A2 - 2) >> 64).
     uint64_t hi;
     mul_add(rng(), MWC_A2 - 2, 0, hi);
-    c = 1 + hi;
+    set(_x, _y, 1 + hi);
   }
 
   void seed(result_type _seed) {
@@ -180,6 +199,12 @@ public:
   }
 
   result_type operator() () {
+#if defined(__SIZEOF_INT128__)
+    const uint64_t y = get_y(), c = get_c();
+    yc = static_cast<uint128_t>(MWC_A2) * x + c;
+    x = y;
+    return y ^ c;
+#else
     const uint64_t result = y ^ c;
     uint64_t hi;
     const uint64_t lo = mul_add(MWC_A2, x, c, hi);
@@ -187,6 +212,7 @@ public:
     y = lo;
     c = hi;
     return result;
+#endif
   }
 
   /* This is the jump function for the generator. It is equivalent
@@ -216,14 +242,16 @@ public:
   template< class CharT, class Traits >
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& ost, const mwc192x& e) {
-    ost << e.x << ' ' << e.y << ' ' << e.c << ' ';
+    ost << e.x << ' ' << e.get_y() << ' ' << e.get_c() << ' ';
     return ost;
   }
 
   template< class CharT, class Traits >
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& ist, mwc192x& e) {
-    ist >> e.x >> std::ws >> e.y >> std::ws >> e.c >> std::ws;
+    uint64_t _x, _y, _c;
+    ist >> _x >> std::ws >> _y >> std::ws >> _c >> std::ws;
+    e.set(_x, _y, _c);
     return ist;
   }
 };
