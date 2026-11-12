@@ -20,12 +20,17 @@ Useful links:
 \author{
 \strong{Maintainer}: Ralf Stubner \email{ralf.stubner@gmail.com} (\href{https://orcid.org/0009-0009-1908-106X}{ORCID})
 
+Authors:
+\itemize{
+  \item Ralf Stubner \email{ralf.stubner@gmail.com} (\href{https://orcid.org/0009-0009-1908-106X}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item daqana GmbH [copyright holder]
   \item David Blackman (Xoroshiro / Xoshiro family) [copyright holder]
   \item Melissa O'Neill \email{oneill@pcg-random.org} (PCG family) [copyright holder]
-  \item Sebastiano Vigna \email{vigna@acm.org} (Xoroshiro / Xoshiro family, MWC192X) [copyright holder]
+  \item Sebastiano Vigna \email{vigna@acm.org} (Xoroshiro / Xoshiro family, MWC192X) [contributor, copyright holder]
   \item Aaron Lun [contributor]
   \item Kyle Butts \email{kyle.butts@colorado.edu} [contributor]
   \item Henrik Sloot [contributor]

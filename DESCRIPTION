@@ -1,13 +1,13 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.4.1.1
+Version: 0.4.1.2
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0009-1908-106X")),
     person("daqana GmbH", role = "cph"),
     person("David Blackman", role = "cph", comment = "Xoroshiro / Xoshiro family"),
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "cph", comment = "PCG family"),
-    person("Sebastiano Vigna", email = "vigna@acm.org", role = "cph", comment = "Xoroshiro / Xoshiro family, MWC192X"),
+    person("Sebastiano Vigna", email = "vigna@acm.org", role = c("ctb", "cph"), comment = "Xoroshiro / Xoshiro family, MWC192X"),
     person("Aaron", "Lun", role="ctb"), 
     person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu"),
     person("Henrik", "Sloot", role = "ctb"),
@@ -32,7 +32,6 @@ License: AGPL-3
 Depends: R (>= 3.5.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
-RoxygenNote: 7.3.2
 Suggests:
     BH,
     testthat,
@@ -46,3 +45,4 @@ URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
 Encoding: UTF-8
 Config/build/compilation-database: true
+Config/roxygen2/version: 8.1.1
