@@ -1,13 +1,13 @@
 Package: dqrng
 Type: Package
 Title: Fast Pseudo Random Number Generators
-Version: 0.4.1.1
+Version: 0.4.1.2
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0009-1908-106X")),
     person("daqana GmbH", role = "cph"),
     person("David Blackman", role = "cph", comment = "Xoroshiro / Xoshiro family"),
     person("Melissa O'Neill", email = "oneill@pcg-random.org", role = "cph", comment = "PCG family"),
-    person("Sebastiano Vigna", email = "vigna@acm.org", role = "cph", comment = "Xoroshiro / Xoshiro family"),
+    person("Sebastiano Vigna", email = "vigna@acm.org", role = c("ctb", "cph"), comment = "Xoroshiro / Xoshiro family, MWC192X"),
     person("Aaron", "Lun", role="ctb"), 
     person("Kyle", "Butts", role = "ctb", email = "kyle.butts@colorado.edu"),
     person("Henrik", "Sloot", role = "ctb"),
@@ -17,21 +17,21 @@ Description: Several fast random number generators are provided as C++
   header only libraries: The PCG family by O'Neill (2014
   <https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf>) as well as
   the Xoroshiro / Xoshiro family by Blackman and Vigna (2021
-  <doi:10.1145/3460772>). In addition fast functions for generating random
+  <doi:10.1145/3460772>) and the scrambled multiply-with-carry generator
+  MWC192X by Vigna (2026 <arXiv:2610.27313>). In addition fast functions for generating random
   numbers according to a uniform, normal and exponential distribution
   are included. The latter two use the Ziggurat algorithm originally
   proposed by Marsaglia and Tsang (2000, <doi:10.18637/jss.v005.i08>).
   The fast sampling methods support unweighted sampling both with and without
   replacement. These functions are exported to R and as a C++ interface and are
   enabled for use with the default 64 bit generator from the PCG family,
-  Xoroshiro128+/++/** and Xoshiro256+/++/** as well as the 64 bit version of the
+  Xoroshiro128+/++/**, Xoshiro256+/++/** and MWC192X as well as the 64 bit version of the
   20 rounds Threefry engine (Salmon et al., 2011, <doi:10.1145/2063384.2063405>)
   as provided by the package 'sitmo'.
 License: AGPL-3
 Depends: R (>= 3.5.0)
 Imports: Rcpp (>= 0.12.16)
 LinkingTo: Rcpp, BH (>= 1.64.0-1), sitmo (>= 2.0.0)
-RoxygenNote: 7.3.2
 Suggests:
     BH,
     testthat,
@@ -45,3 +45,4 @@ URL: https://daqana.github.io/dqrng/, https://github.com/daqana/dqrng
 BugReports: https://github.com/daqana/dqrng/issues
 Encoding: UTF-8
 Config/build/compilation-database: true
+Config/roxygen2/version: 8.1.1

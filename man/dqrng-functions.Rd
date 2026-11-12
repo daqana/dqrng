@@ -83,6 +83,9 @@ Supported RNG kinds:
    Sebastiano Vigna. See \url{https://prng.di.unimi.it/} for more details.
    The older generators Xoroshiro128+ and Xoshiro256+ should be used only for
    backwards compatibility.}
+  \item{MWC192X}{A scrambled multiply-with-carry generator developed by
+   Sebastiano Vigna. Jumping ahead takes time logarithmic in the distance.
+   See \url{https://prng.di.unimi.it/} for more details.}
   \item{Threefry}{The 64 bit version of the 20 rounds Threefry engine as
    provided by \code{\link[sitmo]{sitmo-package}}}
 }

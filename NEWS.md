@@ -1,3 +1,7 @@
+# dqrng (development version)
+
+* New RNG: MWC192X, a scrambled multiply-with-carry generator by Sebastiano Vigna, in `mwc192x.h`. Its `jump(n)` and `long_jump(n)` methods take time logarithmic in `n` (Sebastiano Vigna in [#109](https://github.com/daqana/dqrng/issues/109) fixing [#108](https://github.com/daqana/dqrng/issues/108))
+
 # dqrng 0.4.1
 
 * Fix an UBSAN error found by CRAN ([#90](https://github.com/daqana/dqrng/pull/90) fixing [#89](https://github.com/daqana/dqrng/issues/89))
