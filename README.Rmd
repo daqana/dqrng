@@ -90,6 +90,29 @@ bm[, 1:4]
 
 Note that sampling from `10^10` elements triggers "long-vector support" in R.
 
+It is also possible to use weighted sampling both with replacement:
+
+```{r sampling3}
+m <- 1e6
+n <- 1e4
+prob <- dqrunif(m)
+bm <- bench::mark(sample.int(m, n, replace = TRUE, prob = prob),
+                  dqsample.int(m, n, replace = TRUE, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+```
+
+And without replacement:
+
+```{r sampling4}
+bm <- bench::mark(sample.int(m, n, prob = prob),
+                  dqsample.int(m, n, prob = prob),
+                  check = FALSE)
+bm[, 1:4]
+```
+
+Especially for weighted sampling without replacement the performance advantage compared with R's default methods is particularly large. 
+
 In addition the RNGs provide support for multiple independent streams for parallel usage:
 
 ```{r parallel}

@@ -1,0 +1,190 @@
+@article{bentley1987,
+  title = {Programming Pearls: A Sample of Brilliance},
+  shorttitle = {Programming Pearls},
+  author = {Bentley, Jon and Floyd, Bob},
+  year = {1987},
+  month = sep,
+  journal = {Communications of the ACM},
+  volume = {30},
+  number = {9},
+  pages = {754--757},
+  issn = {0001-0782, 1557-7317},
+  doi = {10.1145/30401.315746},
+  url = {https://dl.acm.org/doi/10.1145/30401.315746},
+  urldate = {2023-09-26},
+  langid = {english}
+}
+
+@article{blackman2021,
+  title = {Scrambled {{Linear Pseudorandom Number Generators}}},
+  author = {Blackman, David and Vigna, Sebastiano},
+  year = {2021},
+  month = dec,
+  journal = {ACM Transactions on Mathematical Software},
+  volume = {47},
+  number = {4},
+  eprint = {1805.01407},
+  pages = {1--32},
+  issn = {0098-3500, 1557-7295},
+  doi = {10.1145/3460772},
+  url = {https://dl.acm.org/doi/10.1145/3460772},
+  urldate = {2023-09-06},
+  abstract = {F\_2-linear pseudorandom number generators are very popular due to their high speed, to the ease with which generators with a sizable state space can be created, and to their provable theoretical properties. However, they suffer from linear artifacts that show as failures in linearity-related statistical tests such as the binary-rank and the linear-complexity test. In this article, we give two new contributions. First, we introduce two new F\_2-linear transformations that have been handcrafted to have good statistical properties and at the same time to be programmable very efficiently on superscalar processors, or even directly in hardware. Then, we describe some scramblers, that is, nonlinear functions applied to the state array that reduce or delete the linear artifacts, and propose combinations of linear transformations and scramblers that give extremely fast pseudorandom number generators of high quality. A novelty in our approach is that we use ideas from the theory of filtered linear-feedback shift registers to prove some properties of our scramblers, rather than relying purely on heuristics. In the end, we provide simple, extremely fast generators that use a few hundred bits of memory, have provable properties, and pass strong statistical tests.},
+  archiveprefix = {arxiv},
+  langid = {english},
+  keywords = {Computer Science - Cryptography and Security,Computer Science - Data Structures and Algorithms,Computer Science - Mathematical Software,random number generation}
+}
+
+@article{efraimidis2006,
+  title = {Weighted Random Sampling with a Reservoir},
+  author = {Efraimidis, Pavlos S. and Spirakis, Paul G.},
+  year = {2006},
+  month = mar,
+  journal = {Information Processing Letters},
+  volume = {97},
+  number = {5},
+  pages = {181--185},
+  issn = {00200190},
+  doi = {10.1016/j.ipl.2005.11.003},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/S002001900500298X},
+  urldate = {2023-09-01},
+  langid = {english}
+}
+
+@misc{keithschwarz2011,
+  title = {Darts, {{Dice}}, and {{Coins}}},
+  author = {{Keith Schwarz}},
+  year = {2011},
+  month = dec,
+  url = {https://www.keithschwarz.com/darts-dice-coins/},
+  urldate = {2023-09-07}
+}
+
+@article{lipowski2012,
+  title = {Roulette-Wheel Selection via Stochastic Acceptance},
+  author = {Lipowski, Adam and Lipowska, Dorota},
+  year = {2012},
+  month = mar,
+  journal = {Physica A: Statistical Mechanics and its Applications},
+  volume = {391},
+  number = {6},
+  eprint = {1109.3627},
+  primaryclass = {cond-mat, physics:physics},
+  pages = {2193--2196},
+  issn = {03784371},
+  doi = {10.1016/j.physa.2011.12.004},
+  url = {http://arxiv.org/abs/1109.3627},
+  urldate = {2022-12-29},
+  abstract = {Roulette-wheel selection is a frequently used method in genetic and evolutionary algorithms or in modeling of complex networks. Existing routines select one of N individuals using search algorithms of O(N) or O(log(N)) complexity. We present a simple roulette-wheel selection algorithm, which typically has O(1) complexity and is based on stochastic acceptance instead of searching. We also discuss a hybrid version, which might be suitable for highly heterogeneous weight distributions, found, for example, in some models of complex networks. With minor modifications, the algorithm might also be used for sampling with fitness cut-off at a certain value or for sampling without replacement.},
+  archiveprefix = {arxiv},
+  keywords = {Computer Science - Computational Complexity,Computer Science - Neural and Evolutionary Computing,Condensed Matter - Statistical Mechanics,Physics - Computational Physics},
+  note = {Comment: 4 pages, Physica A, accepted}
+}
+
+@article{marsaglia2000,
+  title = {The {{Ziggurat Method}} for {{Generating Random Variables}}},
+  author = {Marsaglia, George and Tsang, Wai Wan},
+  year = {2000},
+  journal = {Journal of Statistical Software},
+  volume = {5},
+  number = {8},
+  issn = {1548-7660},
+  doi = {10.18637/jss.v005.i08},
+  url = {http://www.jstatsoft.org/v05/i08/},
+  urldate = {2018-06-14},
+  langid = {english}
+}
+
+@misc{muller2016,
+  title = {Accelerating Weighted Random Sampling without Replacement},
+  author = {Müller, Kirill},
+  year = {2016},
+  url = {https://ethz.ch/content/dam/ethz/special-interest/baug/ivt/ivt-dam/vpl/reports/1101-1200/ab1141.pdf},
+  abstract = {Random sampling from discrete populations is one of the basic primitives in statistical computing. This article briefly introduces weighted and unweighted sampling with and without replacement. The case of weighted sampling without replacement appears to be most difficult to implement efficiently, which might be one reason why the R implementation performs slowly for large problem sizes. This paper presents four alternative implementations for the case of weighted sampling without replacement, with an analysis of their run time and correctness.},
+  langid = {english}
+}
+
+@misc{oneill2014,
+  title = {{{PCG}}: {{A Family}} of {{Simple Fast Space-Efficient Statistically Good Algorithms}} for {{Random Number Generation}}},
+  author = {O'Neill, Melissa},
+  year = {2014},
+  number = {HMC-CS-2014-0905},
+  url = {https://www.cs.hmc.edu/tr/hmc-cs-2014-0905.pdf},
+  abstract = {This paper presents a new uniform pseudorandom number generation scheme that is both extremely practical and statistically good (easily passing L’Ecuyer’s TestU suite [ ]). It has a number of important properties, including solid mathematical foundations, good time and space performance, small code size, multiple random streams, and better cryptographic properties than are typical for a general-purpose generator. The key idea is to pass the output of a fast well-understood “medium quality” random number generator to an efficient permutation function (a.k.a. hash function), built from composable primitives, that enhances the quality of the output. The algorithm can be applied at variety of bit sizes, including and bits (which provide - and -bit outputs, with periods of 264 and 2128). Optionally, we can provide each b-bit generator with a b−1 bit stream-selection constant, thereby providing 2b−1 random streams, which are full period and entirely distinct. An extension adds up to 2b -dimensional equidistribution for a total period of 2b2b . The construction of the permutation function and the periodextension technique are both founded on the idea of permutation functions on tuples. In its standard variants, b-bit generators use a 2b/2-to- function to produce b/2 bits of output. These functions can be designed to make it difficult for an adversary to discover the generator’s internal state by examining its output, and thus make it challenging to predict. This property, coupled with the ability to easily switch between random streams, provides many of the benefits provided by cryptographically secure generators without the overheads usually associated with those generators.},
+  langid = {english}
+}
+
+@manual{R-wrswoR,
+  type = {Manual},
+  title = {{{wrswoR}}: {{Weighted}} Random Sampling without Replacement},
+  author = {Müller, Kirill},
+  year = {2020},
+  url = {http://krlmlr.github.io/wrswoR},
+  note = {R package version 1.1.1}
+}
+
+@inproceedings{salmon2011,
+  title = {Parallel {{Random Numbers}}: {{As Easy As}} 1, 2, 3},
+  shorttitle = {Parallel {{Random Numbers}}},
+  booktitle = {Proceedings of 2011 {{International Conference}} for {{High Performance Computing}}, {{Networking}}, {{Storage}} and {{Analysis}}},
+  author = {Salmon, John K. and Moraes, Mark A. and Dror, Ron O. and Shaw, David E.},
+  year = {2011},
+  month = nov,
+  series = {{{SC}} '11},
+  pages = {16:1--16:12},
+  publisher = {{ACM}},
+  address = {{New York, NY, USA}},
+  doi = {10.1145/2063384.2063405},
+  url = {http://doi.acm.org/10.1145/2063384.2063405},
+  urldate = {2018-06-14},
+  abstract = {Most pseudorandom number generators (PRNGs) scale poorly to massively parallel high-performance computation because they are designed as sequentially dependent state transformations. We demonstrate that independent, keyed transformations of counters produce a large alternative class of PRNGs with excellent statistical properties (long period, no discernable structure or correlation). These counter-based PRNGs are ideally suited to modern multi-core CPUs, GPUs, clusters, and special-purpose hardware because they vectorize and parallelize well, and require little or no memory for state. We introduce several counter-based PRNGs: some based on cryptographic standards (AES, Threefish) and some completely new (Philox). All our PRNGs pass rigorous statistical tests (including TestU01's BigCrush) and produce at least 264 unique parallel streams of random numbers, each with period 2128 or more. In addition to essentially unlimited parallel scalability, our PRNGs offer excellent single-chip performance: Philox is faster than the CURAND library on a single NVIDIA GPU.},
+  isbn = {978-1-4503-0771-0},
+  langid = {english},
+  keywords = {parallel computation,random number generation}
+}
+
+@article{vose1991,
+  title = {A Linear Algorithm for Generating Random Numbers with a given Distribution},
+  author = {Vose, M.D.},
+  year = {1991},
+  month = sep,
+  journal = {IEEE Transactions on Software Engineering},
+  volume = {17},
+  number = {9},
+  pages = {972--975},
+  issn = {00985589},
+  doi = {10.1109/32.92917},
+  url = {http://ieeexplore.ieee.org/document/92917/},
+  urldate = {2023-08-31}
+}
+
+@article{walker1974,
+  title = {New Fast Method for Generating Discrete Random Numbers with Arbitrary Frequency Distributions},
+  author = {Walker, Alastair J.},
+  year = {1974},
+  journal = {Electronics Letters},
+  volume = {10},
+  number = {8},
+  pages = {127},
+  issn = {00135194},
+  doi = {10.1049/el:19740097},
+  url = {https://digital-library.theiet.org/content/journals/10.1049/el_19740097},
+  urldate = {2023-09-07},
+  langid = {english}
+}
+
+@article{walker1977,
+  title = {An {{Efficient Method}} for {{Generating Discrete Random Variables}} with {{General Distributions}}},
+  author = {Walker, Alastair J.},
+  year = {1977},
+  month = sep,
+  journal = {ACM Transactions on Mathematical Software},
+  volume = {3},
+  number = {3},
+  pages = {253--256},
+  issn = {0098-3500, 1557-7295},
+  doi = {10.1145/355744.355749},
+  url = {https://dl.acm.org/doi/10.1145/355744.355749},
+  urldate = {2023-09-07},
+  langid = {english}
+}
