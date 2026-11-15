@@ -68,8 +68,8 @@ state$RNGkind <- rep.int("default", 3)
 register_methods <- function(kind = c("both", "rng")) {
   kind <- match.arg(kind)
   switch(kind,
-         both = state$RNGkind <-  RNGkind("user", "user"),
-         rng =     state$RNGkind <-  RNGkind("user"))
+         both = state$RNGkind <- RNGkind("user-supplied", "user-supplied"),
+         rng  = state$RNGkind <- RNGkind("user-supplied"))
 }
 
 #' @rdname user-supplied-rng
