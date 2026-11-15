@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023-2024 Ralf Stubner
+// Copyright 2023-2026 Ralf Stubner
 // Copyright 2023 Henrik Sloot
 //
 // This file is part of dqrng.
@@ -73,6 +73,8 @@ public:
   virtual result_type operator() () = 0;
   virtual void seed(result_type seed) = 0;
   virtual void seed(result_type seed, result_type stream) = 0;
+  virtual void set_stream(result_type stream) = 0;
+  virtual void set_substream(result_type substream) = 0;
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) = 0;
   static constexpr result_type min() {return 0;};
   static constexpr result_type max() {return UINT64_MAX;};
@@ -296,6 +298,14 @@ public:
 
   virtual void seed(result_type seed, result_type stream) override {
     throw std::runtime_error("Seed handling not supported for this class!");
+  };
+
+  virtual void set_stream(result_type stream) override {
+    throw std::runtime_error("Stream handling not supported for this class!");
+  };
+
+  virtual void set_substream(result_type substream) override {
+    throw std::runtime_error("Stream handling not supported for this class!");
   };
 
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {

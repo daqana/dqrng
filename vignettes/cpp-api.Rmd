@@ -179,3 +179,16 @@ generate<Dist>(start, end, param1, ... paramN)
 
 `start, end`
 :   Forward iterators pointing to start and end of a range to be filled with variates from the distribution function.
+
+## Advancing the RNG state to a different (sub)stream
+
+```cpp
+void dqrng::dqrng_set_stream(Rcpp::IntegerVector stream)
+void dqrng::dqrng_set_substream(Rcpp::IntegerVector substream)
+```
+
+`stream`
+:    RNG stream to use; length 1 or 2
+
+`substream`
+:    RNG stream to use; length 1 or 2; not supported for PCG64 and Xoroshiro128+/++/**

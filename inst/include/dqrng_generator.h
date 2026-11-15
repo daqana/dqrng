@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023-2024 Ralf Stubner
+// Copyright 2023-2026 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -55,6 +55,7 @@ protected:
   virtual void output(std::ostream& ost) const override {ost << gen;}
   virtual void input(std::istream& ist) override {ist >> gen;}
   void set_stream(result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
+  void set_substream(result_type substream) {throw std::runtime_error("Substream handling not supported for this RNG!");}
 
 public:
   random_64bit_wrapper() : gen() {};
@@ -103,7 +104,27 @@ inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result
 
 template<>
 inline void random_64bit_wrapper<::dqrng::mwc192x>::set_stream(result_type stream) {
-  gen.jump(stream);
+  gen.long_jump(stream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::set_substream(result_type substream) {
+  gen.jump(substream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_substream(result_type substream) {
+  gen.jump(substream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_substream(result_type substream) {
+  gen.jump(substream);
+}
+
+template<>
+inline void random_64bit_wrapper<::dqrng::mwc192x>::set_substream(result_type substream) {
+  gen.jump(substream);
 }
 
 #if !(defined(__APPLE__) && defined(__POWERPC__))
