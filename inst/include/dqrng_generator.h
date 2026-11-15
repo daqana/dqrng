@@ -54,8 +54,8 @@ private:
 protected:
   virtual void output(std::ostream& ost) const override {ost << gen;}
   virtual void input(std::istream& ist) override {ist >> gen;}
-  void set_stream(result_type stream) {throw std::runtime_error("Stream handling not supported for this RNG!");}
-  void set_substream(result_type substream) {throw std::runtime_error("Substream handling not supported for this RNG!");}
+  void set_stream(result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
+  void set_substream(result_type substream) override {throw std::runtime_error("Substream handling not supported for this RNG!");}
 
 public:
   random_64bit_wrapper() : gen() {};
