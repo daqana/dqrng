@@ -10,7 +10,7 @@ dqrng_set_stream(stream)
 
 dqrng_set_substream(substream)
 
-dqclusterSetRNGStream(cl = NULL)
+dqclusterSetRNGStream(cl = NULL, use_substream = FALSE)
 }
 \arguments{
 \item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
@@ -18,6 +18,8 @@ dqclusterSetRNGStream(cl = NULL)
 \item{substream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 
 \item{cl}{\code{parallel}-type cluster}
+
+\item{use_substream}{Use different substreams instead of different streams}
 }
 \description{
 The \code{dqrng} package provides several fast random number

@@ -12,6 +12,7 @@
 #' @param stream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param substream  integer used for selecting the RNG stream; either a scalar or a vector of length 2
 #' @param cl  \code{parallel}-type cluster 
+#' @param use_substream  Use different substreams instead of different streams  
 #' 
 #' @seealso \code{\link[parallel]{clusterSetRNGStream}} and \code{\link[parallel]{makeCluster}}
 #' 
@@ -34,15 +35,17 @@
 #' 
 #' @rdname parallel
 #' @export
-dqclusterSetRNGStream <- function(cl = NULL) {
+dqclusterSetRNGStream <- function(cl = NULL, use_substream = FALSE) {
     if (is.null(cl))
         cl <- parallel::getDefaultCluster()
     state <- dqrng::dqrng_get_state()
+  jump_func <- dqrng::dqrng_set_stream
+  if (use_substream) jump_func <- dqrng::dqrng_set_substream
     parallel::clusterApply(cl,
                            seq_along(cl) - 1,
                            function(stream, state) {
                                dqrng::dqrng_set_state(state)
-                               dqrng::dqrng_set_stream(stream)},
+                           jump_func(stream)},
                            state)
-     dqrng::dqrng_set_stream(length(cl))
+  jump_func(length(cl))
 }
