@@ -102,6 +102,44 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
+    inline void dqrng_set_stream(Rcpp::IntegerVector stream) {
+        typedef SEXP(*Ptr_dqrng_set_stream)(SEXP);
+        static Ptr_dqrng_set_stream p_dqrng_set_stream = NULL;
+        if (p_dqrng_set_stream == NULL) {
+            validateSignature("void(*dqrng_set_stream)(Rcpp::IntegerVector)");
+            p_dqrng_set_stream = (Ptr_dqrng_set_stream)R_GetCCallable("dqrng", "_dqrng_dqrng_set_stream");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrng_set_stream(Shield<SEXP>(Rcpp::wrap(stream)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
+    inline void dqrng_set_substream(Rcpp::IntegerVector substream) {
+        typedef SEXP(*Ptr_dqrng_set_substream)(SEXP);
+        static Ptr_dqrng_set_substream p_dqrng_set_substream = NULL;
+        if (p_dqrng_set_substream == NULL) {
+            validateSignature("void(*dqrng_set_substream)(Rcpp::IntegerVector)");
+            p_dqrng_set_substream = (Ptr_dqrng_set_substream)R_GetCCallable("dqrng", "_dqrng_dqrng_set_substream");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrng_set_substream(Shield<SEXP>(Rcpp::wrap(substream)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
         typedef SEXP(*Ptr_dqrunif)(SEXP,SEXP,SEXP);
         static Ptr_dqrunif p_dqrunif = NULL;

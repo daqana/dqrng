@@ -23,6 +23,18 @@ dqrng_set_state <- function(state) {
     invisible(.Call(`_dqrng_dqrng_set_state`, state))
 }
 
+#' @rdname parallel
+#' @export
+dqrng_set_stream <- function(stream) {
+    invisible(.Call(`_dqrng_dqrng_set_stream`, stream))
+}
+
+#' @rdname parallel
+#' @export
+dqrng_set_substream <- function(substream) {
+    invisible(.Call(`_dqrng_dqrng_set_substream`, substream))
+}
+
 #' @rdname dqrng-functions
 #' @export
 dqrunif <- function(n, min = 0.0, max = 1.0) {

@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2023-2024 Ralf Stubner
+// Copyright 2023-2026 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -36,6 +36,18 @@ inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_stream(result_type 
     state.push_back(number);
   // state[4:7] is the current counter, the highest part is incremented by stream
   gen.set_counter(state[4], state[5], state[6], state[7] + stream);
+}
+
+template<>
+inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_substream(result_type substream) {
+  uint64_t number;
+  std::vector<uint64_t> state;
+  std::stringstream iss;
+  iss << gen;
+  while (iss >> number)
+    state.push_back(number);
+  // state[4:7] is the current counter, the second highest part is incremented by substream
+  gen.set_counter(state[4], state[5], state[6] + substream, state[7]);
 }
 } // namespace dqrng
 
