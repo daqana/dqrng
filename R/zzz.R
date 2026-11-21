@@ -6,7 +6,7 @@
       set.seed(NULL)
     original_seed <- get(".Random.seed", mode="numeric", envir=globalenv())
     on.exit(assign(".Random.seed", original_seed, envir=globalenv()))
-    dqset_seed(seed = NULL, stream = NULL)
+    dqset.seed(seed = NULL, stream = NULL)
   }
 }
 

@@ -1,6 +1,7 @@
 # dqrng (development version)
 
 * New RNG: MWC192X, a scrambled multiply-with-carry generator by Sebastiano Vigna, in `mwc192x.h`. Its `jump(n)` and `long_jump(n)` methods take time logarithmic in `n` (Sebastiano Vigna in [#109](https://github.com/daqana/dqrng/issues/109) fixing [#108](https://github.com/daqana/dqrng/issues/108))
+* Save the state of the RNG after initialization from R's RNG via `dqset.seed(NULL)`. Restoring this seed allows for reproducability without the need to seed explicitly ([#114](https://github.com/daqana/dqrng/pull/114) fixing [#104](https://github.com/daqana/dqrng/issues/104))
 
 # dqrng 0.4.1
 

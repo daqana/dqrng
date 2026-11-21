@@ -9,6 +9,7 @@
 \alias{dqrexp}
 \alias{dqrrademacher}
 \alias{dqset.seed}
+\alias{dqrng_get_saved_state}
 \title{R interface}
 \usage{
 dqRNGkind(kind, normal_kind = "ignored")
@@ -26,6 +27,8 @@ dqrexp(n, rate = 1)
 dqrrademacher(n)
 
 dqset.seed(seed, stream = NULL)
+
+dqrng_get_saved_state()
 }
 \arguments{
 \item{kind}{string specifying the RNG (see details)}
@@ -101,7 +104,9 @@ seeds that provide 64 bits of entropy. These allow full exploration of
 the state space of the 64-bit RNGs provided in this package.
 
 If the provided \code{seed} is \code{NULL}, a seed is generated from R's RNG
-without state alteration.
+without state alteration. This happens automatically when the package is loaded,
+so that the RNG is always properly seeded. Using the function \code{dqrng_get_saved_state()}
+one can retrieve the state of the RNG right after this initialization.
 }
 \examples{
 library(dqrng)
