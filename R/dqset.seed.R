@@ -60,7 +60,9 @@
 #' the state space of the 64-bit RNGs provided in this package.
 #'
 #' If the provided \code{seed} is \code{NULL}, a seed is generated from R's RNG
-#' without state alteration.
+#' without state alteration. This happens automatically when the package is loaded,
+#' so that the RNG is always properly seeded. Using the function \code{dqrng_get_saved_state()}
+#' one can retrieve the state of the RNG right after this initialization.
 #'
 #' @seealso \code{\link{set.seed}}, \code{\link{RNGkind}}, \code{\link{runif}},
 #'          \code{\link{rnorm}}, and \code{\link{rexp}}
@@ -98,4 +100,15 @@
 #' @export
 dqset.seed <- function(seed, stream = NULL) {
   dqset_seed(seed, stream)
+  if (is.null(seed)) save_state()
+}
+
+save_state <- function() {
+  state$random_state <- dqrng_get_state()
+}
+
+#' @rdname dqrng-functions
+#' @export
+dqrng_get_saved_state <- function() {
+  state$random_state
 }
