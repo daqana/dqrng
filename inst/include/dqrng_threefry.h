@@ -35,7 +35,8 @@ inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_stream(result_type 
   while (iss >> number)
     state.push_back(number);
   // state[4:7] is the current counter, the highest part is incremented by stream
-  gen.set_counter(state[4], state[5], state[6], state[7] + stream);
+  state[7] += stream;
+  gen.set_counter(state[4], state[5], state[6], state[7]);
 }
 
 template<>
@@ -47,7 +48,10 @@ inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_substream(result_ty
   while (iss >> number)
     state.push_back(number);
   // state[4:7] is the current counter, the second highest part is incremented by substream
-  gen.set_counter(state[4], state[5], state[6] + substream, state[7]);
+  state[6] += substream;
+  // check for integer overflow
+  if (state[6] < substream) state[7]++;
+  gen.set_counter(state[4], state[5], state[6], state[7]);
 }
 } // namespace dqrng
 
