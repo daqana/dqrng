@@ -167,7 +167,7 @@ test_that("dqrng_set_stream works for Xoroshiro128++", {
   expect_identical(r1, r2)
 })
 
-test_that("dqrng_set_stream works for PCG64", {
+test_that("dqrng_set_stream works (but differently) for PCG64", {
   dqRNGkind("PCG64")
   dqset.seed(123456) 
   dqrng_set_stream(1)
@@ -177,6 +177,14 @@ test_that("dqrng_set_stream works for PCG64", {
   dqset.seed(123456) 
   dqrng_set_stream(3)
   r2 <- dqrunif(10)
+  # PCG64 streams are not "additive"
+  expect_false(identical(r1, r2))
+  dqset.seed(123456) 
+  dqrng_set_stream(1)
+  dqrng_set_stream(1)
+  dqrng_set_stream(1)
+  r2 <- dqrunif(10)
+  # but they are still reproducible
   expect_identical(r1, r2)
 })
 

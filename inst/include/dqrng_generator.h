@@ -131,6 +131,7 @@ inline void random_64bit_wrapper<::dqrng::mwc192x>::set_substream(result_type su
 template<>
 inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   // set the stream relative to the current stream, i.e. stream = 0 does not change the RNG
+  if (stream == 0) return;
   pcg_extras::pcg128_t number;
   std::vector<pcg_extras::pcg128_t> state;
   std::stringstream iss;
@@ -139,8 +140,13 @@ inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
   while (iss >> number)
     state.push_back(number);
   // state[1] is the current stream
-  // PCG will do 2*stream + 1 to make sure stream is odd; need to revert that here
-  gen.set_stream(state[1]/pcg_extras::pcg128_t(2) + pcg_extras::pcg128_t(stream));
+  // PCG will do 2*stream + 1 to make sure stream is odd; need to revert that here by using state[1]/2
+  // The first value after changing the stream is often very similar when streams are close-by,
+  // see https://github.com/imneme/pcg-cpp/issues/108. So we discard the first draw and also shift `stream`
+  // into the upper half, increasing the difference of the used streams w/o changing the logic, where
+  // stream=0 means no change. Note that this means that `clone(1).clone(1) != clone(2)`! 
+  gen.set_stream(state[1]/2 + (pcg_extras::pcg128_t(stream) << 64) + stream);
+  gen();
 }
 
 // keep using the two argument ctor for PCG for backwards compatibility

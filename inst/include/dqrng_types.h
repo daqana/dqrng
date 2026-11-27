@@ -301,11 +301,11 @@ public:
   };
 
   virtual void set_stream(result_type stream) override {
-    throw std::runtime_error("Stream handling not supported for this class!");
+    gen->set_stream(stream);
   };
 
   virtual void set_substream(result_type substream) override {
-    throw std::runtime_error("Stream handling not supported for this class!");
+    gen->set_substream(substream);
   };
 
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
