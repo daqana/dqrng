@@ -65,9 +65,12 @@ public:
   virtual result_type operator() () override {return gen();}
   virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
   virtual void seed(result_type seed, result_type stream) override {cache = false; gen.seed(seed); this->set_stream(stream);}
-  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream) override {
+  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream = false) override {
     auto rng = make_unique<random_64bit_wrapper<RNG>>(gen);
-    rng->set_stream(stream);
+    if (use_substream)
+      rng->set_substream(stream);
+    else
+      rng->set_stream(stream);
     return rng;
   }
 };

@@ -13,9 +13,9 @@ Rcpp::NumericVector dqrexp_extrng(const std::size_t n, const double rate = 1.0) 
 }
 
 // [[Rcpp::export]]
-bool cloned_calls(int stream) {
+bool cloned_calls(int stream, bool use_substream = false) {
   dqrng::random_64bit_accessor engine{};
-  auto cloned_engine = engine.clone(stream);
+  auto cloned_engine = engine.clone(stream, use_substream);
 
   Rcpp::NumericVector u1(10);
   Rcpp::NumericVector u2(10);

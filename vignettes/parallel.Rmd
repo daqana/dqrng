@@ -244,21 +244,21 @@ A simple way to use this template would be the following functions which generat
 using dqrng::extra::parallel_generate;
 
 // [[Rcpp::export]]
-Rcpp::NumericVector runif_para(std::size_t n, double min = 0, double max = 1,
+Rcpp::NumericVector runif_para(std::size_t n, double min = 0, double max = 1, bool use_substream = false,
                                std::size_t threads = 2, std::size_t streams = 24) {
-  return parallel_generate<dqrng::uniform_distribution>(n, threads, streams, min, max);
+  return parallel_generate<dqrng::uniform_distribution>(n, threads, streams, use_substream, min, max);
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector rnorm_para(std::size_t n, double mean = 0, double sd = 1,
+Rcpp::NumericVector rnorm_para(std::size_t n, double mean = 0, double sd = 1, bool use_substream = false,
                                std::size_t threads = 2, std::size_t streams = 24) {
-  return parallel_generate<dqrng::normal_distribution>(n, threads, streams, mean, sd);
+  return parallel_generate<dqrng::normal_distribution>(n, threads, streams, use_substream, mean, sd);
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector rexp_para(std::size_t n, double rate = 1,
+Rcpp::NumericVector rexp_para(std::size_t n, double rate = 1, bool use_substream = false,
                               std::size_t threads = 2, std::size_t streams = 24) {
-  return parallel_generate<dqrng::exponential_distribution>(n, threads, streams, rate);
+  return parallel_generate<dqrng::exponential_distribution>(n, threads, streams, use_substream, rate);
 }
 ```
 
@@ -350,3 +350,19 @@ dqset.seed(546, 5); (v2 <- rnorm_para(8, streams = 4))
 #> [1]  1.2018189 -0.1060487 -0.8532641  0.6531933 -0.8304053 -0.4745548
 #> [7] -0.4211618 -0.5871540
 ```
+
+As an alternative, when can also use a generator with support for substreams like MWC192X:
+
+```{r}
+dqRNGkind("xoshiro256++")
+# Seed used in the first thread
+dqset.seed(546, 1); (v1 <- rnorm_para(8, use_substream = TRUE, streams = 4))
+#> [1]  0.54887245 -0.06535241  0.44624016  0.78889885  0.64714296  0.31920987
+#> [7] -0.60751560 -1.00937889
+# Seed used in the second thread
+dqset.seed(546, 2); (v2 <- rnorm_para(8, use_substream = TRUE, streams = 4))
+#> [1]  1.9844008 -0.9904368  0.6722684 -1.1348272  0.1765528 -0.7658879
+#> [7]  2.1884689  1.2417341
+```
+
+Here the results stay independent, even though the two RNG states are only one stream appart.

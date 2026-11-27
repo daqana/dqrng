@@ -26,6 +26,7 @@ template<typename Dist, typename... Params>
 Rcpp::NumericVector parallel_generate(std::size_t n,
                                       std::size_t threads,
                                       std::size_t streams,
+                                      bool use_substream = false,
                                       Params&&... params) {
   if (n < streams)
     streams = n;
@@ -62,13 +63,16 @@ Rcpp::NumericVector parallel_generate(std::size_t n,
       end = start + stream_size;
     }
     // private RNG in each stream; RNG with i == 0 is identical to global RNG
-    auto prng = rng.clone(i);
+    auto prng = rng.clone(i, use_substream);
     prng->generate<Dist>(std::begin(work) + start, std::begin(work) + end,
                          std::forward<Params>(params)...);
   }
 }
   // Make sure that the global RNG advances as well.
-  rng.set_stream(streams);
+  if (use_substream)
+    rng.set_substream(streams);
+  else
+    rng.set_stream(streams);
   return res;
 }
 } // namespace extra
