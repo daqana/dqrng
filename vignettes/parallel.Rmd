@@ -12,6 +12,7 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  eval = FALSE,
   comment = "#>"
 )
 library(dqrng)
@@ -36,8 +37,8 @@ This is equivalent to $2^{64}$ streams with a period of $2^{194}$ each.
 In the following example a matrix with random numbers is generated in parallel using the parallel package.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
-```{r, eval=evaluate}
-library(parallel)
+```{r}
+dqRNGkind("Threefry")
 cl <- parallel::makeCluster(2)
 res <- clusterApply(cl, 1:8, function(stream, seed, N) {
   library(dqrng)
@@ -81,7 +82,7 @@ As an example using C++ we draw and sum a large number of uniformly distributed 
 This is done several times sequentially as well as using OpenMP for parallelisation.
 Care has been taken to keep the global RNG `rng` usable outside of the parallel block.
 
-```{r, eval=evaluate, engine='Rcpp'}
+```{Rcpp}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
@@ -161,7 +162,7 @@ Instead of using the more traditional approach of generating the random numbers 
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
 
-```{r, eval=evaluate, engine='Rcpp'}
+```{Rcpp}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_generator.h>
@@ -235,7 +236,7 @@ As an alternative, we can also make use of dqrng's global RNG.
 This is exemplified in the template function `parallel_generate<>()` defined in the header file `dqrng_extra/parallel_generate.h`.
 A simple way to use this template would be the following functions which generate random variates according to the uniform, normal, or exponential distribution:
 
-```{r, eval=evaluate, engine='Rcpp'}
+```{Rcpp}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH, RcppParallel)]]
 // [[Rcpp::plugins(openmp)]]
@@ -267,7 +268,8 @@ For an efficient distribution of the workload it is important that `streams` is 
 The default `streams = 24` can be used together with 1, 2, 3, 4, 6, 8, 12, and 24 threads.
 The result for a *given number of streams* is *independent of the number of threads*:
 
-```{r, eval=evaluate}
+```{r}
+dqRNGkind("default")
 dqset.seed(42); norm1 <- rnorm_para(22, threads = 1)
 dqset.seed(42); norm2 <- rnorm_para(22, threads = 4)
 identical(norm1, norm2)
@@ -277,7 +279,7 @@ identical(norm1, norm2)
 At the same time, the serial version is almost as fast as using the normal `dqrng::dqr<dist>` function and therefore much faster than the `stats::r<dist>` function.
 Using multiple threads gives a clear speed up.
 
-```{r, eval=evaluate}
+```{r}
 n <- 1e6
 bench::mark(stats::runif(n),
             dqrng::dqrunif(n),
@@ -298,7 +300,7 @@ bench::mark(stats::rexp(n),
 
 Here the actual implementation of the template function:
 
-```{r, eval=FALSE, engine='Rcpp', file="../inst/include/dqrng_extra/parallel_generate.h"}
+```{Rcpp, eval=FALSE, file="../inst/include/dqrng_extra/parallel_generate.h"}
 ```
 
 Besides the distribution of the work into (about) equal streams, the pattern for RNG access is similar to the OpenMP example above with the important difference that the local RNGs are not *thread-* but *stream-specific*.
@@ -309,7 +311,7 @@ Calling the function repeatedly would lead to identical results.
 To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state.^[Note that **here** in contrast to the default PCG implementation, streams are counted from the current stream, i.e. setting `stream` to `0` will give the same RNG. This brings PCG in line with the other RNGs.]
 This way, the global RNG's state advances as if it had processed one of the streams and successive calls to `parallel_generate()` produce different random numbers as expected.
 
-```{r, eval=evaluate}
+```{r}
 dqset.seed(153)
 runif_para(30)
 #>   [1] 0.87693642 0.14323366 0.33129746 0.07856319 0.80991119 0.37524485
@@ -327,7 +329,7 @@ runif_para(30) # Different values, as expected
 
 Pitfall: should you use `parallel_generate()` in concurrent threads or streams, make sure to seed each of them with enough separate streams to avoid overlap. For instance, with `parallel_generate(..., stream = 4)`, you could seed first thread with something like `dqset.seed(546, 1)`, but you must seed second thread at least on stream 5 (previous stream plus the number of streams you reserve for `parallel_generate()`). If you use `dqset.seed(546, 2)` on the second thread, there will be an overlap like this:
 
-```{r, eval=evaluate}
+```{r}
 # Seed used in the first thread
 dqset.seed(546, 1); (v1 <- rnorm_para(8, streams = 4))
 #> [1]  0.01904358  0.57750157  0.39156879 -1.72594164  1.24949453 -0.87535133
@@ -340,7 +342,7 @@ dqset.seed(546, 2); (v2 <- rnorm_para(8, streams = 4))
 
 Note how values 1-6 of v2 are identical to values 3-8 of v1 because of an overlap of the streams consumed in each call to `parallel_generate()`. You will get the same result if the two lines of code were run in separate threads or even, separate R processes. Here, if second `dqset.seed()` is shifted by 4 streams or more from first one, then there is no overlap any more:
 
-```{r, eval=evaluate}
+```{r}
 # Seed used in the first thread
 dqset.seed(546, 1); (v1 <- rnorm_para(8, streams = 4))
 #> [1]  0.01904358  0.57750157  0.39156879 -1.72594164  1.24949453 -0.87535133
