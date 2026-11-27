@@ -308,8 +308,8 @@ public:
     gen->set_substream(substream);
   };
 
-  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream) override {
-    return gen->clone(stream, use_substream = false);
+  virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream = false) override {
+    return gen->clone(stream, use_substream);
   };
 };
 
