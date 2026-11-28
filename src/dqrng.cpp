@@ -106,17 +106,9 @@ void dqrng_set_state(std::vector<std::string> state) {
 //' @rdname parallel
 //' @export
 // [[Rcpp::export(rng = false)]]
-void dqrng_advance_stream(Rcpp::IntegerVector stream) {
+void dqrng_advance_stream(Rcpp::IntegerVector stream, bool use_substream = false) {
   uint64_t _stream = dqrng::convert_seed<uint64_t>(stream);
-  rng->advance_stream(_stream);
-}
-
-//' @rdname parallel
-//' @export
-// [[Rcpp::export(rng = false)]]
-void dqrng_advance_substream(Rcpp::IntegerVector substream) {
-  uint64_t _substream = dqrng::convert_seed<uint64_t>(substream);
-  rng->advance_substream(_substream);
+  rng->advance_stream(_stream, use_substream);
 }
 
 //' @rdname dqrng-functions

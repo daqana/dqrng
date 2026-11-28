@@ -183,12 +183,11 @@ generate<Dist>(start, end, param1, ... paramN)
 ## Advancing the RNG state to a different (sub)stream
 
 ```cpp
-void dqrng::dqrng_advance_stream(Rcpp::IntegerVector stream)
-void dqrng::dqrng_advance_substream(Rcpp::IntegerVector substream)
+void dqrng::dqrng_advance_stream(Rcpp::IntegerVector stream, bool use_substream)
 ```
 
 `stream`
 :    RNG stream to use; length 1 or 2
 
-`substream`
-:    RNG stream to use; length 1 or 2; not supported for PCG64 and Xoroshiro128+/++/**
+`use_substream`
+:    use substream instead of stream; not supported for PCG64 and Xoroshiro128+/++/**

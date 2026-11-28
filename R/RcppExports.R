@@ -25,14 +25,8 @@ dqrng_set_state <- function(state) {
 
 #' @rdname parallel
 #' @export
-dqrng_advance_stream <- function(stream) {
-    invisible(.Call(`_dqrng_dqrng_advance_stream`, stream))
-}
-
-#' @rdname parallel
-#' @export
-dqrng_advance_substream <- function(substream) {
-    invisible(.Call(`_dqrng_dqrng_advance_substream`, substream))
+dqrng_advance_stream <- function(stream, use_substream = FALSE) {
+    invisible(.Call(`_dqrng_dqrng_advance_stream`, stream, use_substream))
 }
 
 #' @rdname dqrng-functions

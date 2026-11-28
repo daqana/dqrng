@@ -2,32 +2,27 @@
 % Please edit documentation in R/RcppExports.R, R/parallel.R
 \name{dqrng_advance_stream}
 \alias{dqrng_advance_stream}
-\alias{dqrng_advance_substream}
 \alias{dqclusterSetRNGStream}
 \title{Support for parallel computing}
 \usage{
-dqrng_advance_stream(stream)
-
-dqrng_advance_substream(substream)
+dqrng_advance_stream(stream, use_substream = FALSE)
 
 dqclusterSetRNGStream(cl = NULL, use_substream = FALSE, register = TRUE)
 }
 \arguments{
 \item{stream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
 
-\item{substream}{integer used for selecting the RNG stream; either a scalar or a vector of length 2}
+\item{use_substream}{Use different substreams instead of different streams}
 
 \item{cl}{\code{parallel}-type cluster}
-
-\item{use_substream}{Use different substreams instead of different streams}
 
 \item{register}{Should the RNG be registered as \code{user-defined}, default \code{TRUE}}
 }
 \description{
 The \code{dqrng} package provides several fast random number
-  generators that are suited for parallel usage. The functions \code{dqrng_advance_stream}
-  and \code{dqrng_advance_substream} allow to switch the RNG to a different (sub)stream.
-  Note that substream handling is only available for the Xoshiro256+/++/**, MWC192X, and
+  generators that are suited for parallel usage. The function \code{dqrng_advance_stream}
+  allows to switch the RNG to a different (sub)stream. Note that substream handling via
+  the option \code{use_substream} is only available for the Xoshiro256+/++/**, MWC192X, and
   Threefry generators.
 
   The \code{dqclusterRNGStream} function prepares a \code{parallel}-type cluster for

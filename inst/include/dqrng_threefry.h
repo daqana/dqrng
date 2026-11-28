@@ -27,31 +27,24 @@
 namespace dqrng {
 
 template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::advance_stream(result_type stream) {
+inline void random_64bit_wrapper<sitmo::threefry_20_64>::advance_stream(result_type stream, bool use_substream) {
   uint64_t number;
   std::vector<uint64_t> state;
   std::stringstream iss;
   iss << gen;
   while (iss >> number)
     state.push_back(number);
-  // state[4:7] is the current counter, the highest part is incremented by stream
-  state[7] += stream;
-  gen.set_counter(state[4], state[5], state[6], state[7]);
-}
-
-template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::advance_substream(result_type substream) {
-  uint64_t number;
-  std::vector<uint64_t> state;
-  std::stringstream iss;
-  iss << gen;
-  while (iss >> number)
-    state.push_back(number);
-  // state[4:7] is the current counter, the second highest part is incremented by substream
-  state[6] += substream;
-  // check for integer overflow
-  if (state[6] < substream) state[7]++;
-  gen.set_counter(state[4], state[5], state[6], state[7]);
+  // state[4:7] is the current counter
+  if (use_substream) {
+    // the second highest part is incremented for substream
+    state[6] += stream;
+    // check for integer overflow
+    if (state[6] < stream) state[7]++;
+  } else {
+    // the highest part is incremented for stream
+    state[7] += stream;
+  }
+    gen.set_counter(state[4], state[5], state[6], state[7]);
 }
 } // namespace dqrng
 

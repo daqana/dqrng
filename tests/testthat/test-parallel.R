@@ -241,69 +241,69 @@ test_that("dqrng_advance_stream works for Threefry", {
 })
 
 
-test_that("dqrng_advance_substream produces error for Xoroshiro128+",{
+test_that("dqrng_advance_stream with substreams produces error for Xoroshiro128+",{
   dqRNGkind("Xoroshiro128+")
-  expect_error(dqrng_advance_substream(1))
+  expect_error(dqrng_advance_stream(1, use_substream = TRUE), "Substream handling not supported for this RNG!")
 })
 
-test_that("dqrng_advance_substream produces error for Xoroshiro128++",{
+test_that("dqrng_advance_stream with substreams produces error for Xoroshiro128++",{
   dqRNGkind("Xoroshiro128++")
-  expect_error(dqrng_advance_substream(1))
+  expect_error(dqrng_advance_stream(1, use_substream = TRUE), "Substream handling not supported for this RNG!")
 })
 
-test_that("dqrng_advance_substream produces error for PCG64",{
+test_that("dqrng_advance_stream with substreams produces error for PCG64",{
   dqRNGkind("PCG64")
-  expect_error(dqrng_advance_substream(1))
+  expect_error(dqrng_advance_stream(1, use_substream = TRUE), "Substream handling not supported for this RNG!")
 })
 
-test_that("dqrng_advance_substream works for Xoshiro256+", {
+test_that("dqrng_advance_stream with substreams works for Xoshiro256+", {
   dqRNGkind("Xoshiro256+")
   dqset.seed(123456) 
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
   r1 <- dqrunif(10)
   dqset.seed(123456) 
-  dqrng_advance_substream(3)
+  dqrng_advance_stream(3, use_substream = TRUE)
   r2 <- dqrunif(10)
   expect_identical(r1, r2)
 })
 
-test_that("dqrng_advance_substream works for Xoshiro256++", {
+test_that("dqrng_advance_stream with substreams works for Xoshiro256++", {
   dqRNGkind("Xoshiro256++")
   dqset.seed(123456) 
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
   r1 <- dqrunif(10)
   dqset.seed(123456) 
-  dqrng_advance_substream(3)
+  dqrng_advance_stream(3, use_substream = TRUE)
   r2 <- dqrunif(10)
   expect_identical(r1, r2)
 })
 
-test_that("dqrng_advance_substream works for MWC192X", {
+test_that("dqrng_advance_stream with substreams works for MWC192X", {
   dqRNGkind("MWC192X")
   dqset.seed(123456) 
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
   r1 <- dqrunif(10)
   dqset.seed(123456) 
-  dqrng_advance_substream(3)
+  dqrng_advance_stream(3, use_substream = TRUE)
   r2 <- dqrunif(10)
   expect_identical(r1, r2)
 })
 
-test_that("dqrng_advance_substream works for Threefry", {
+test_that("dqrng_advance_stream with substreams works for Threefry", {
   dqRNGkind("Threefry")
   dqset.seed(123456) 
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
-  dqrng_advance_substream(1)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
+  dqrng_advance_stream(1, use_substream = TRUE)
   r1 <- dqrunif(10)
   dqset.seed(123456) 
-  dqrng_advance_substream(3)
+  dqrng_advance_stream(3, use_substream = TRUE)
   r2 <- dqrunif(10)
   expect_identical(r1, r2)
 })
