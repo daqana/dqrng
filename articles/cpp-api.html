@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.4</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2026-11-21</h4>
+            <h4 data-toc-skip class="date">2026-11-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/main/vignettes/cpp-api.Rmd" class="external-link"><code>vignettes/cpp-api.Rmd</code></a></small>
       <div class="hidden name"><code>cpp-api.Rmd</code></div>
@@ -271,7 +271,7 @@ addition, you SHOULD NOT store a reference to the RNG permanently,
 because it can be invalidated by calls to <code>dqRNGkind</code>.
 Therefore, instances of <code>dqrng::random_64bit_accessor</code> SHOULD
 be stored as (non-static) variables in functions.</p>
-<p>Note that <code>dqrng::random_64bit_accessor</code> supports <a href="https://en.cppreference.com/w/cpp/named_req/UniformRandomBitGenerator" class="external-link">UniformRandomBitGenerator</a>
+<p>Note that <code>dqrng::random_64bit_accessor</code> supports <a href="https://en.cppreference.com/cpp/named_req/UniformRandomBitGenerator" class="external-link">UniformRandomBitGenerator</a>
 and can therefore be used together with any C++11 distribution function.
 In addition, the following functions are supported, since they are
 inherited from the abstract parent class
@@ -328,6 +328,22 @@ function. Needs to support <code>std::begin</code> and
 <dd>
 Forward iterators pointing to start and end of a range to be filled with
 variates from the distribution function.
+</dd>
+</dl>
+</div>
+<div class="section level2">
+<h2 id="advancing-the-rng-state-to-a-different-substream">Advancing the RNG state to a different (sub)stream<a class="anchor" aria-label="anchor" href="#advancing-the-rng-state-to-a-different-substream"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="dt">void</span> dqrng<span class="op">::</span>dqrng_advance_stream<span class="op">(</span>Rcpp<span class="op">::</span>IntegerVector stream<span class="op">,</span> <span class="dt">bool</span> use_substream<span class="op">)</span></span></code></pre></div>
+<dl>
+<dt><code>stream</code></dt>
+<dd>
+RNG stream to use; length 1 or 2
+</dd>
+<dt><code>use_substream</code></dt>
+<dd>
+use substream instead of stream; not supported for PCG64 and
+Xoroshiro128+/++/**
 </dd>
 </dl>
 </div>

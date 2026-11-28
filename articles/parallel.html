@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.4</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
                         <h4 data-toc-skip class="author">Ralf
 Stubner</h4>
             
-            <h4 data-toc-skip class="date">2026-11-21</h4>
+            <h4 data-toc-skip class="date">2026-11-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/daqana/dqrng/blob/main/vignettes/parallel.Rmd" class="external-link"><code>vignettes/parallel.Rmd</code></a></small>
       <div class="hidden name"><code>parallel.Rmd</code></div>
@@ -98,6 +98,9 @@ Stubner</h4>
 
     
     
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>When you want to use random number generators (RNG) for parallel
 computations, you need to make sure that the sequences of random numbers
 used by the different processes do not overlap. There are two main
@@ -110,73 +113,18 @@ sub-sequence.</li>
 the same seed.</li>
 </ul>
 <p>The RNGs included in <code>dqrng</code> offer at least one of these
-methods for parallel RNG usage. When using the R or C++ interface
-independent streams can be accessed using the two argument
-<code>dqset.seed(seed, stream)</code> or
-<code>dqset_seed(seed, stream)</code> functions.</p>
-<div class="section level2">
-<h2 id="threefry-usage-from-r">Threefry: usage from R<a class="anchor" aria-label="anchor" href="#threefry-usage-from-r"></a>
-</h2>
-<p>The Threefry engine uses internally a counter with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>256</mn></msup><annotation encoding="application/x-tex">2^{256}</annotation></semantics></math>
-possible states, which can be split into different substreams. When used
-from R or C++ with the two argument <code>dqset.seed</code> or
-<code>dqset_seed</code> this counter space is split into
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
-streams with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
-possible states each. This is equivalent to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
-streams with a period of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>194</mn></msup><annotation encoding="application/x-tex">2^{194}</annotation></semantics></math>
-each.</p>
-<p>In the following example a matrix with random numbers is generated in
-parallel using the parallel package. The resulting correlation matrix
-should be close to the identity matrix if the different streams are
-independent:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
-<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterApply</a></span><span class="op">(</span><span class="va">cl</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="kw">function</span><span class="op">(</span><span class="va">stream</span>, <span class="va">seed</span>, <span class="va">N</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://daqana.github.io/dqrng/" class="external-link">dqrng</a></span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Threefry"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="va">seed</span>, <span class="va">stream</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span></span>
-<span><span class="op">}</span>, <span class="fl">42</span>, <span class="fl">1e6</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/symnum.html" class="external-link">symnum</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, cutpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span><span class="op">)</span>,</span>
-<span>       symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span><span class="op">)</span>,</span>
-<span>       abbr.colnames <span class="op">=</span> <span class="cn">FALSE</span>, corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Correlation matrix:</p>
-<pre><code>[1,] 1              
-[2,]   1            
-[3,]   ? 1          
-[4,]   ? ? 1        
-[5,] ?     ? 1      
-[6,]     ?     1    
-[7,]     ?       1  
-[8,]         ?     1
-attr(,"legend")
-[1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1</code></pre>
-<p>As expected the correlation matrix for the different columns is
-almost equal to the identity matrix.</p>
-</div>
-<div class="section level2">
-<h2 id="xoroshiro-jump-ahead-with-openmp">Xo(ro)shiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoroshiro-jump-ahead-with-openmp"></a>
-</h2>
-<p>The Xoshiro256+/++/** generators has a period of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>256</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{256} -1</annotation></semantics></math>
-and offers
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
-sub-sequences that are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
-random draws apart as well as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
-streams that are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
-random draws apart. The Xoroshiro128+/++/** generators has a period of
+methods for parallel RNG usage. The precise details depend on the kind
+of usage of the provided RNGs as numerated in <a href="dqrng.html"><code>vignette("dqrng", package = "dqrng")</code></a>.
+Here we will go through them in reverse order, starting with the RNGs as
+implemented in C++, followed by the provided C++ header only library and
+the compiled C++ API and ending with the interface at the R level.</p>
+<div class="section level3">
+<h3 id="c-classes">C++ classes<a class="anchor" aria-label="anchor" href="#c-classes"></a>
+</h3>
+<div class="section level4">
+<h4 id="xoroshiro128-xoshiro256-and-mwc192x">Xoroshiro128+/++/**, Xoshiro256+/++/**, and MWC192X<a class="anchor" aria-label="anchor" href="#xoroshiro128-xoshiro256-and-mwc192x"></a>
+</h4>
+<p>The Xoroshiro128+/++/** generators have a period of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>128</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{128} -1</annotation></semantics></math>
 and offers
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
@@ -186,6 +134,16 @@ random draws apart as well as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>32</mn></msup><annotation encoding="application/x-tex">2^{32}</annotation></semantics></math>
 streams that are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>98</mn></msup><annotation encoding="application/x-tex">2^{98}</annotation></semantics></math>
+random draws apart. The Xoshiro256+/++/** generators have a period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>256</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{256} -1</annotation></semantics></math>
+and offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+random draws apart as well as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+streams that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
 random draws apart. The MWC192X generator has a period of about
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>191</mn></msup><annotation encoding="application/x-tex">2^{191}</annotation></semantics></math>
 and offers
@@ -200,17 +158,214 @@ random draws apart. You can go from one sub-sequence to the next using
 the <code>jump()</code> or <code>long_jump()</code> method and the
 convenience wrapper <code>jump(int n)</code> or
 <code>long_jump(int n)</code>, which advances to the <code>n</code>th
-sub-sequence; for MWC192X, they take time logarithmic in <code>n</code>.
-When used from R or C++ with the two argument <code>dqset.seed</code>
-and <code>dqset_seed</code> you get
+sub-sequence; for MWC192X, they take time logarithmic in
+<code>n</code>.</p>
+</div>
+<div class="section level4">
+<h4 id="pcg64">PCG64<a class="anchor" aria-label="anchor" href="#pcg64"></a>
+</h4>
+<p>From the PCG family we will look at pcg64, a 64-bit generator with a
+period of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>.
+It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>,
+which is equivalent to <code>n</code> random draws but scales as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mi>l</mi><mi>n</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(ln(n))</annotation></semantics></math>
+instead of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math>.
+In addition, it offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
+separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a>
+or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two
+argument constructor</a> with <code>seed</code> and
+<code>stream</code>.</p>
+</div>
+<div class="section level4">
+<h4 id="threefry">Threefry<a class="anchor" aria-label="anchor" href="#threefry"></a>
+</h4>
+<p>The generators from the Threefry family are special in two ways.
+First, they are not included in <code>dqrng</code> but are instead
+linked from <code>sitmo</code>. Second, it does not provide an explicit
+interface for accessing different streams. Instead, the Threefry engine
+uses internally a counter with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>256</mn></msup><annotation encoding="application/x-tex">2^{256}</annotation></semantics></math>
+possible states, which can be split into different streams via the
+<code>set_counter()</code> method.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="c-header-only-library">C++ header only library<a class="anchor" aria-label="anchor" href="#c-header-only-library"></a>
+</h3>
+<p>When including the <code>dqrng_generator.h</code> header, one gets
+<code>dqrng::random_64bit_wrapper</code> class, which implements the
+abstract <code>dqrng::random_64bit_generator</code>. Within this class
+there are multiple places where one can set the stream of the
+generator:</p>
+<ul>
+<li>When creating an instance of the generator via a constructor or a
+factory method one can use the two argument version with
+<code>seed</code> and <code>stream</code>.</li>
+<li>When re-seeding an existing instance via the
+<code>seed(seed, stream)</code> method.</li>
+<li>When creating a copy of the generator that has been changed to a
+different stream via clone(stream).</li>
+<li>When changing an existing generator to a different stream via
+<code>advance_stream(int n, false)</code>.</li>
+</ul>
+<p>The meaning of <code>stream</code> in this context depends on the
+used generator:</p>
+<ul>
+<li>For Xoroshiro128+/++/** it corresponds to <code>jump(n)</code>,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+random draws apart.</li>
+<li>For Xoshiro256+/++/** it corresponds to <code>long_jump(n)</code>,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
+random draws apart.</li>
+<li>For MCW192X it corresponds to <code>long_jump(n)</code>,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>47</mn></msup><annotation encoding="application/x-tex">2^{47}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>144</mn></msup><annotation encoding="application/x-tex">2^{144}</annotation></semantics></math>
+random draws apart.</li>
+<li>For PGCG64 it corresponds to one of th
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
+different random streams. Note that the logic has been changed compared
+with the original <code>set_stream()</code> from the PCG library, where
+the function argument is interpreted absolutely,
+i.e. <code>stream = 1</code> is always the same stream. In contrast,
+here the stream is interpreted relative to the current stream, so that
+<code>clone(stream = 0)</code> returns an exact clone and
+<code>advance_stream(stream = 1)</code> always returns the “next”
+stream. Since the first draw from “nearby” streams are related, the
+first draw from the generator is ignored. As a consequence,
+<code>advance_stream</code> is not “additive” for PCG64.</li>
+<li>For Threefry setting/advancing the stream simply sets/advances the
+highest of the 4 integers defining the state. This is equivalent to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
 streams that are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
-and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>192</mn></msup><annotation encoding="application/x-tex">2^{192}</annotation></semantics></math>
+random draws apart.</li>
+</ul>
+<p>Some of the generators also support the concept of a substream via
+<code>advance_stream(int n, true)</code>:</p>
+<ul>
+<li>For Xoshiro256+/++/** it corresponds to <code>jump(n)</code>,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+sub-sequences that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+random draws apart.</li>
+<li>For MCW192X it corresponds to <code>jump(n)</code>,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>95</mn></msup><annotation encoding="application/x-tex">2^{95}</annotation></semantics></math>
+sub-sequences that are
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>96</mn></msup><annotation encoding="application/x-tex">2^{96}</annotation></semantics></math>
-random draws apart for Xoshiro256+/++/<strong>,
-Xoroshiro128+/++/</strong> and MWC192X, respectively.</p>
+random draws apart.</li>
+<li>For Threefry setting/advancing the stream simply sets/advances the
+second highest of the 4 integers defining the state. This is equivalent
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+streams that are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>
+draws apart.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>Since <code>stream</code> is represented by an unsigned 64 bit
+integer, not all of these streams and substreams can be accessed right
+away. Consecutive calls to <code>advance_stream(n, use_substream)</code>
+are necessary.</li>
+<li>The number of available substreams is reduced when they are used to
+further division streams. In particular, Xoshiro256+/++/** and Threefry
+offer
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
+substreams with one stream; MCW192X offers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>48</mn></msup><annotation encoding="application/x-tex">2^{48}</annotation></semantics></math>.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="compiled-c-library">Compiled C++ library<a class="anchor" aria-label="anchor" href="#compiled-c-library"></a>
+</h3>
+<p>The full API available from the <code>dqrng.h</code> header is
+documented in <a href="cpp-api.html"><code>vignette("cpp-api", package = "dqrng")</code></a>.
+The functions relevant for parallel usage are
+<code>dqrng::dqset_seed(seed, stream)</code>,
+<code>dqrng::dqrng_advance_stream(stream, use_substream)</code>. All of
+them act on the global RNG, that is created when the <code>dqrng</code>
+package is loaded. Most of the time it makes more sense to manipulate
+this generator from R, which will be discussed in the next section.</p>
+</div>
+<div class="section level3">
+<h3 id="r-interface">R interface<a class="anchor" aria-label="anchor" href="#r-interface"></a>
+</h3>
+<p>The main functions relevant for parallel usage are
+<code>dqset.seed(seed, stream)</code> and
+<code>dqrng_advance_stream(stream, use_substream)</code>. All of them
+act on the global RNG, that is created when the <code>dqrng</code>
+package is loaded.</p>
+<p>Besides these low level functions there is also
+<code><a href="../reference/parallel.html">dqclusterSetRNGStream()</a></code>, which is modeled after
+<code><a href="https://rdrr.io/r/parallel/RngStream.html" class="external-link">parallel::clusterSetRNGStream()</a></code>, to set-up the RNGs in a
+<code>parallel</code>-type cluster, but deviates in some important
+points.</p>
+<ul>
+<li>The only RNG provided by R that supports parallel streams is
+“L’Ecuyer-CMRG”, which is therefore enforced by the method from the
+<code>parallel</code> package. Since all RNGs from <code>dqrng</code>
+support this, we simply use the currently used RNG also on the cluster
+node.</li>
+<li>The method from <code>parallel</code> either expects a numeric seed
+or derives one from the current RNG. This is then used to create a
+series of seeds, which are then forwarded to the nodes. Our method
+copies the state from the main node to all compute nodes and advances
+them by 0 to N-1 streams. The main node is advanced N streams.</li>
+<li>Instead of using streams one can also use substreams with
+<code>use_substreams = TRUE</code>, assuming the currently used RNG
+supports them (see above).</li>
+<li>By default <code><a href="../reference/parallel.html">dqclusterSetRNGStream()</a></code> registers the RNG as
+<code>user-supplied</code> RNG on the worker nodes. This makes sure that
+any other RNG usage is also reproducible.</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="threefry-usage-from-r">Threefry: usage from R<a class="anchor" aria-label="anchor" href="#threefry-usage-from-r"></a>
+</h2>
+<p>In the following example a random matrix with 8 columns is generated
+in parallel using a 2 node <code>parallel</code>-type cluster. The
+crucial work of setting up the RNG streams in the cluster is done by
+<code><a href="../reference/parallel.html">dqclusterSetRNGStream()</a></code>. The RNG in the main process is
+also advanced beyond the range reserved for the individual nodes, making
+it save to use afterwards. The resulting correlation matrix should be
+close to the identity matrix if the different streams are
+independent:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"Threefry"</span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/parallel.html">dqclusterSetRNGStream</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">clusterApply</a></span><span class="op">(</span><span class="va">cl</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1e6</span>, <span class="fl">8</span><span class="op">)</span>, <span class="fu">dqrng</span><span class="fu">::</span><span class="va"><a href="../reference/dqrng-functions.html">dqrnorm</a></span><span class="op">)</span></span>
+<span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/symnum.html" class="external-link">symnum</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>, cutpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span>, <span class="fl">0.999</span><span class="op">)</span>,</span>
+<span>       symbols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" "</span>, <span class="st">"?"</span>, <span class="st">"!"</span>, <span class="st">"1"</span><span class="op">)</span>,</span>
+<span>       abbr.colnames <span class="op">=</span> <span class="cn">FALSE</span>, corr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Typical output for the correlation matrix:</p>
+<pre><code>[1,] 1              
+[2,]   1            
+[3,] ?   1          
+[4,]       1        
+[5,]   ?   ? 1      
+[6,]       ? ? 1    
+[7,]   ?   ? ?   1  
+[8,]     ? ?     ? 1
+attr(,"legend")
+[1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1</code></pre>
+<p>As expected the correlation matrix for the different columns is
+almost equal to the identity matrix.</p>
+</div>
+<div class="section level2">
+<h2 id="xoshiro-jump-ahead-with-openmp">Xoshiro: jump ahead with OpenMP<a class="anchor" aria-label="anchor" href="#xoshiro-jump-ahead-with-openmp"></a>
+</h2>
 <p>As an example using C++ we draw and sum a large number of uniformly
 distributed numbers. This is done several times sequentially as well as
 using OpenMP for parallelisation. Care has been taken to keep the global
@@ -245,8 +400,8 @@ RNG <code>rng</code> usable outside of the parallel block.</p>
 <span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>  </span>
 <span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>  <span class="pp">#pragma omp parallel num_threads(ncores)</span></span>
 <span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>  <span class="op">{</span></span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>    <span class="co">// make thread local copy of rng and advance it by 1 ... ncores jumps</span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>    <span class="kw">auto</span> lrng <span class="op">=</span> rng<span class="op">-&gt;</span>clone<span class="op">(</span>omp_get_thread_num<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>    <span class="co">// make thread local copy of rng and advance it by 0 ... ncores-1 jumps</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>    <span class="kw">auto</span> lrng <span class="op">=</span> rng<span class="op">-&gt;</span>clone<span class="op">(</span>omp_get_thread_num<span class="op">());</span></span>
 <span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a></span>
 <span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
 <span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
@@ -257,18 +412,20 @@ RNG <code>rng</code> usable outside of the parallel block.</p>
 <span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>      res<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> lres <span class="op">/</span> n<span class="op">;</span></span>
 <span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">/*** R</span></span>
-<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">bm &lt;- bench::mark(</span></span>
-<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">  parallel_random_sum(1e7, 8, 4),</span></span>
-<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">  random_sum(1e7, 8),</span></span>
-<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">  check = FALSE</span></span>
-<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">)</span></span>
-<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">bm[,1:4]</span></span>
-<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>  <span class="co">// advance rng beyond the range reserved for parallel processing</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>  rng<span class="op">-&gt;</span>advance_stream<span class="op">(</span>ncores<span class="op">);</span> </span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>  <span class="co">// ok to use rng here</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">/*** R</span></span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">bm &lt;- bench::mark(</span></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">  parallel_random_sum(1e7, 8, 4),</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">  random_sum(1e7, 8),</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">  check = FALSE</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">)</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">bm[,1:4]</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">*/</span></span></code></pre></div>
 <p>Result:</p>
 <pre><code>  expression                            min   median `itr/sec`
   &lt;bch:expr&gt;                       &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt;
@@ -281,25 +438,6 @@ code.</p>
 <div class="section level2">
 <h2 id="pcg-multiple-streams-with-rcppparallel">PCG: multiple streams with RcppParallel<a class="anchor" aria-label="anchor" href="#pcg-multiple-streams-with-rcppparallel"></a>
 </h2>
-<p>From the PCG family we will look at pcg64, a 64-bit generator with a
-period of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>128</mn></msup><annotation encoding="application/x-tex">2^{128}</annotation></semantics></math>.
-It offers the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta" class="external-link"><code>advance(int n)</code></a>,
-which is equivalent to <code>n</code> random draws but scales as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mi>l</mi><mi>n</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(ln(n))</annotation></semantics></math>
-instead of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math>.
-In addition, it offers
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
-separate streams that can be enabled via the function <a href="https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream" class="external-link"><code>set_stream(int n)</code></a>
-or the <a href="https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor" class="external-link">two
-argument constructor</a> with <code>seed</code> and <code>stream</code>.
-When used from R or C++ with the two argument <code>dqset.seed</code>
-and <code>dqset_seed</code> you get
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>64</mn></msup><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math>
-streams out of the possible
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mn>127</mn></msup><annotation encoding="application/x-tex">2^{127}</annotation></semantics></math>
-separate streams.</p>
 <p>In the following example a matrix with random numbers is generated in
 parallel using RcppParallel. Instead of using the more traditional
 approach of generating the random numbers from a certain distribution,
@@ -384,21 +522,21 @@ according to the uniform, normal, or exponential distribution:</p>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="kw">using</span> dqrng<span class="op">::</span>extra<span class="op">::</span>parallel_generate<span class="op">;</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector runif_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> min <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector runif_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> min <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">double</span> max <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bool</span> use_substream <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                               <span class="bu">std::</span>size_t threads <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> <span class="bu">std::</span>size_t streams <span class="op">=</span> <span class="dv">24</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>uniform_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> min<span class="op">,</span> max<span class="op">);</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>uniform_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> use_substream<span class="op">,</span> min<span class="op">,</span> max<span class="op">);</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector rnorm_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector rnorm_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> mean <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">double</span> sd <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bool</span> use_substream <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                               <span class="bu">std::</span>size_t threads <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> <span class="bu">std::</span>size_t streams <span class="op">=</span> <span class="dv">24</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>normal_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> mean<span class="op">,</span> sd<span class="op">);</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>normal_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> use_substream<span class="op">,</span> mean<span class="op">,</span> sd<span class="op">);</span></span>
 <span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a></span>
 <span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector rexp_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> rate <span class="op">=</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector rexp_para<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span> <span class="dt">double</span> rate <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">bool</span> use_substream <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>                              <span class="bu">std::</span>size_t threads <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> <span class="bu">std::</span>size_t streams <span class="op">=</span> <span class="dv">24</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>exponential_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> rate<span class="op">);</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="cf">return</span> parallel_generate<span class="op">&lt;</span>dqrng<span class="op">::</span>exponential_distribution<span class="op">&gt;(</span>n<span class="op">,</span> threads<span class="op">,</span> streams<span class="op">,</span> use_substream<span class="op">,</span> rate<span class="op">);</span></span>
 <span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Generating <code>n</code> numbers is split into (about) equal
 <code>streams</code> streams that are processed by <code>threads</code>
@@ -409,7 +547,8 @@ default <code>streams = 24</code> can be used together with 1, 2, 3, 4,
 6, 8, 12, and 24 threads. The result for a <em>given number of
 streams</em> is <em>independent of the number of threads</em>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>; <span class="va">norm1</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">22</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"default"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>; <span class="va">norm1</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">22</span>, threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>; <span class="va">norm2</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">22</span>, threads <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">norm1</span>, <span class="va">norm2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
@@ -453,17 +592,17 @@ multiple threads gives a clear speed up.</p>
 <span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">// You should have received a copy of the GNU Affero General Public License</span></span>
 <span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">// along with dqrng.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></span>
 <span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;sstream&gt;</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;RcppParallel/RVector.h&gt;</span></span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="kw">namespace</span> dqrng <span class="op">{</span></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="kw">namespace</span> extra <span class="op">{</span></span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Dist<span class="op">,</span> <span class="kw">typename</span><span class="op">...</span> Params<span class="op">&gt;</span></span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector parallel_generate<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span></span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>                                      <span class="bu">std::</span>size_t threads<span class="op">,</span></span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>                                      <span class="bu">std::</span>size_t streams<span class="op">,</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;dqrng.h&gt;</span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;RcppParallel/RVector.h&gt;</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="kw">namespace</span> dqrng <span class="op">{</span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="kw">namespace</span> extra <span class="op">{</span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Dist<span class="op">,</span> <span class="kw">typename</span><span class="op">...</span> Params<span class="op">&gt;</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a>Rcpp<span class="op">::</span>NumericVector parallel_generate<span class="op">(</span><span class="bu">std::</span>size_t n<span class="op">,</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>                                      <span class="bu">std::</span>size_t threads<span class="op">,</span></span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>                                      <span class="bu">std::</span>size_t streams<span class="op">,</span></span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>                                      <span class="dt">bool</span> use_substream <span class="op">=</span> <span class="kw">false</span><span class="op">,</span></span>
 <span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a>                                      Params<span class="op">&amp;&amp;...</span> params<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>n <span class="op">&lt;</span> streams<span class="op">)</span></span>
 <span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a>    streams <span class="op">=</span> n<span class="op">;</span></span>
@@ -476,60 +615,46 @@ multiple threads gives a clear speed up.</p>
 <span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a></span>
 <span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a>  <span class="co">// use global RNG from dqrng</span></span>
 <span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a>  dqrng<span class="op">::</span>random_64bit_accessor rng<span class="op">{};</span></span>
-<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a>  <span class="bu">std::</span>stringstream buffer<span class="op">;</span></span>
-<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a></span>
-<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a><span class="pp">#ifdef _OPENMP</span></span>
-<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a>  <span class="bu">std::</span>size_t maxthreads <span class="op">=</span> omp_get_num_procs<span class="op">();</span></span>
-<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>threads <span class="op">&gt;</span> maxthreads<span class="op">)</span></span>
-<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a>    threads <span class="op">=</span> maxthreads<span class="op">;</span></span>
-<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a>  <span class="co">// No need for more threads than there are streams</span></span>
-<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>threads <span class="op">&gt;</span> streams<span class="op">)</span></span>
-<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a>    threads <span class="op">=</span> streams<span class="op">;</span></span>
-<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a><span class="pp">#endif</span></span>
-<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a></span>
-<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a><span class="pp">#pragma omp parallel num_threads(threads)</span></span>
-<span id="cb11-54"><a href="#cb11-54" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb11-55"><a href="#cb11-55" tabindex="-1"></a>  <span class="bu">std::</span>size_t start<span class="op">,</span>end<span class="op">;</span></span>
-<span id="cb11-56"><a href="#cb11-56" tabindex="-1"></a></span>
-<span id="cb11-57"><a href="#cb11-57" tabindex="-1"></a><span class="pp">#pragma omp for schedule(static,1)</span></span>
-<span id="cb11-58"><a href="#cb11-58" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>size_t i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> streams<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb11-59"><a href="#cb11-59" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">&lt;</span> remainder<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb11-60"><a href="#cb11-60" tabindex="-1"></a>      start <span class="op">=</span> i <span class="op">*</span> stream_size <span class="op">+</span> i<span class="op">;</span></span>
-<span id="cb11-61"><a href="#cb11-61" tabindex="-1"></a>      end <span class="op">=</span> start <span class="op">+</span> stream_size <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb11-62"><a href="#cb11-62" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb11-63"><a href="#cb11-63" tabindex="-1"></a>      start <span class="op">=</span> i <span class="op">*</span> stream_size <span class="op">+</span> remainder<span class="op">;</span></span>
-<span id="cb11-64"><a href="#cb11-64" tabindex="-1"></a>      end <span class="op">=</span> start <span class="op">+</span> stream_size<span class="op">;</span></span>
-<span id="cb11-65"><a href="#cb11-65" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb11-66"><a href="#cb11-66" tabindex="-1"></a>    <span class="co">// private RNG in each stream; RNG with i == 0 is identical to global RNG</span></span>
-<span id="cb11-67"><a href="#cb11-67" tabindex="-1"></a>    <span class="kw">auto</span> prng <span class="op">=</span> rng<span class="op">.</span>clone<span class="op">(</span>i<span class="op">);</span></span>
-<span id="cb11-68"><a href="#cb11-68" tabindex="-1"></a>    prng<span class="op">-&gt;</span>generate<span class="op">&lt;</span>Dist<span class="op">&gt;(</span><span class="bu">std::</span>begin<span class="op">(</span>work<span class="op">)</span> <span class="op">+</span> start<span class="op">,</span> <span class="bu">std::</span>begin<span class="op">(</span>work<span class="op">)</span> <span class="op">+</span> end<span class="op">,</span></span>
-<span id="cb11-69"><a href="#cb11-69" tabindex="-1"></a>                         <span class="bu">std::</span>forward<span class="op">&lt;</span>Params<span class="op">&gt;(</span>params<span class="op">)...);</span></span>
-<span id="cb11-70"><a href="#cb11-70" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span><span class="co">// Save the state of the global RNG's clone</span></span>
-<span id="cb11-71"><a href="#cb11-71" tabindex="-1"></a>      buffer <span class="op">&lt;&lt;</span> <span class="op">*</span>prng<span class="op">;</span></span>
-<span id="cb11-72"><a href="#cb11-72" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb11-73"><a href="#cb11-73" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="pp">#ifdef _OPENMP</span></span>
+<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a>  <span class="bu">std::</span>size_t maxthreads <span class="op">=</span> omp_get_num_procs<span class="op">();</span></span>
+<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>threads <span class="op">&gt;</span> maxthreads<span class="op">)</span></span>
+<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a>    threads <span class="op">=</span> maxthreads<span class="op">;</span></span>
+<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a>  <span class="co">// No need for more threads than there are streams</span></span>
+<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>threads <span class="op">&gt;</span> streams<span class="op">)</span></span>
+<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a>    threads <span class="op">=</span> streams<span class="op">;</span></span>
+<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a><span class="pp">#endif</span></span>
+<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a></span>
+<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a><span class="pp">#pragma omp parallel num_threads(threads)</span></span>
+<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-54"><a href="#cb11-54" tabindex="-1"></a>  <span class="bu">std::</span>size_t start<span class="op">,</span>end<span class="op">;</span></span>
+<span id="cb11-55"><a href="#cb11-55" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" tabindex="-1"></a><span class="pp">#pragma omp for schedule(static,1)</span></span>
+<span id="cb11-57"><a href="#cb11-57" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="bu">std::</span>size_t i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> streams<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-58"><a href="#cb11-58" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">&lt;</span> remainder<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-59"><a href="#cb11-59" tabindex="-1"></a>      start <span class="op">=</span> i <span class="op">*</span> stream_size <span class="op">+</span> i<span class="op">;</span></span>
+<span id="cb11-60"><a href="#cb11-60" tabindex="-1"></a>      end <span class="op">=</span> start <span class="op">+</span> stream_size <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb11-62"><a href="#cb11-62" tabindex="-1"></a>      start <span class="op">=</span> i <span class="op">*</span> stream_size <span class="op">+</span> remainder<span class="op">;</span></span>
+<span id="cb11-63"><a href="#cb11-63" tabindex="-1"></a>      end <span class="op">=</span> start <span class="op">+</span> stream_size<span class="op">;</span></span>
+<span id="cb11-64"><a href="#cb11-64" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb11-65"><a href="#cb11-65" tabindex="-1"></a>    <span class="co">// private RNG in each stream; RNG with i == 0 is identical to global RNG</span></span>
+<span id="cb11-66"><a href="#cb11-66" tabindex="-1"></a>    <span class="kw">auto</span> prng <span class="op">=</span> rng<span class="op">.</span>clone<span class="op">(</span>i<span class="op">,</span> use_substream<span class="op">);</span></span>
+<span id="cb11-67"><a href="#cb11-67" tabindex="-1"></a>    prng<span class="op">-&gt;</span>generate<span class="op">&lt;</span>Dist<span class="op">&gt;(</span><span class="bu">std::</span>begin<span class="op">(</span>work<span class="op">)</span> <span class="op">+</span> start<span class="op">,</span> <span class="bu">std::</span>begin<span class="op">(</span>work<span class="op">)</span> <span class="op">+</span> end<span class="op">,</span></span>
+<span id="cb11-68"><a href="#cb11-68" tabindex="-1"></a>                         <span class="bu">std::</span>forward<span class="op">&lt;</span>Params<span class="op">&gt;(</span>params<span class="op">)...);</span></span>
+<span id="cb11-69"><a href="#cb11-69" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb11-70"><a href="#cb11-70" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-71"><a href="#cb11-71" tabindex="-1"></a>  <span class="co">// Make sure that the global RNG advances as well.</span></span>
+<span id="cb11-72"><a href="#cb11-72" tabindex="-1"></a>  rng<span class="op">.</span>advance_stream<span class="op">(</span>streams<span class="op">,</span> use_substream<span class="op">);</span></span>
+<span id="cb11-73"><a href="#cb11-73" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
 <span id="cb11-74"><a href="#cb11-74" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb11-75"><a href="#cb11-75" tabindex="-1"></a>  <span class="co">// Make sure that the global RNG advances as well by applying the state</span></span>
-<span id="cb11-76"><a href="#cb11-76" tabindex="-1"></a>  <span class="co">// of the global RNG's clone to the global RNG</span></span>
-<span id="cb11-77"><a href="#cb11-77" tabindex="-1"></a>  buffer <span class="op">&gt;&gt;</span> rng<span class="op">;</span></span>
-<span id="cb11-78"><a href="#cb11-78" tabindex="-1"></a>  <span class="cf">return</span> res<span class="op">;</span></span>
-<span id="cb11-79"><a href="#cb11-79" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb11-80"><a href="#cb11-80" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace extra</span></span>
-<span id="cb11-81"><a href="#cb11-81" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace dqrng</span></span></code></pre></div>
+<span id="cb11-75"><a href="#cb11-75" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace extra</span></span>
+<span id="cb11-76"><a href="#cb11-76" tabindex="-1"></a><span class="op">}</span> <span class="co">// namespace dqrng</span></span></code></pre></div>
 <p>Besides the distribution of the work into (about) equal streams, the
 pattern for RNG access is similar to the OpenMP example above with the
 important difference that the local RNGs are not <em>thread-</em> but
 <em>stream-specific</em>. This way, the result becomes independent of
-the used amount of parallelism. However, one has to consider one
-important aspect: After the parallel for loop, the global RNG has not
-advanced at all. Calling the function repeatedly would lead to identical
-results. To circumvent this, one of the stream specific RNGs is an exact
-clone of the global RNG (<code>clone(stream=0)</code>) and the state of
-this RNG after processing its stream is saved and used to overwrite the
-global RNG’s state.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This way, the global RNG’s state advances
-as if it had processed one of the streams and successive calls to
-<code>parallel_generate()</code> produce different random numbers as
-expected.</p>
+the used amount of parallelism.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">153</span><span class="op">)</span></span>
 <span><span class="fu">runif_para</span><span class="op">(</span><span class="fl">30</span><span class="op">)</span></span>
@@ -539,11 +664,11 @@ expected.</p>
 <span><span class="co">#&gt; [19] 0.59308120 0.07853078 0.63040483 0.21707435 0.25876379 0.81296194</span></span>
 <span><span class="co">#&gt; [25] 0.53645030 0.29976254 0.37159454 0.38683266 0.03737063 0.03359113</span></span>
 <span><span class="fu">runif_para</span><span class="op">(</span><span class="fl">30</span><span class="op">)</span> <span class="co"># Different values, as expected</span></span>
-<span><span class="co">#&gt;  [1] 0.90407135 0.73543499 0.09026296 0.90321975 0.66162669 0.51716146</span></span>
-<span><span class="co">#&gt;  [7] 0.74186366 0.41125413 0.17581202 0.68547734 0.11766549 0.82316789</span></span>
-<span><span class="co">#&gt; [13] 0.40565668 0.44854610 0.95477820 0.64388593 0.31991691 0.02239872</span></span>
-<span><span class="co">#&gt; [19] 0.13687388 0.32476719 0.67093851 0.05564081 0.76817620 0.49502455</span></span>
-<span><span class="co">#&gt; [25] 0.07459706 0.25493312 0.14019729 0.89704659 0.40548199 0.53800443</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.646831542 0.378089116 0.493795112 0.214934597 0.501976654 0.128367803</span></span>
+<span><span class="co">#&gt;  [7] 0.012745952 0.669304282 0.421289455 0.580001266 0.985460064 0.093296834</span></span>
+<span><span class="co">#&gt; [13] 0.595594108 0.067344204 0.738176741 0.059677902 0.191877203 0.425571240</span></span>
+<span><span class="co">#&gt; [19] 0.535212161 0.777199535 0.462971481 0.222718199 0.418285869 0.620787219</span></span>
+<span><span class="co">#&gt; [25] 0.566432541 0.094250313 0.861051406 0.009309542 0.350106622 0.759479294</span></span></code></pre></div>
 <p>Pitfall: should you use <code>parallel_generate()</code> in
 concurrent threads or streams, make sure to seed each of them with
 enough separate streams to avoid overlap. For instance, with
@@ -577,15 +702,25 @@ streams or more from first one, then there is no overlap any more:</p>
 <span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">546</span>, <span class="fl">5</span><span class="op">)</span>; <span class="op">(</span><span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">8</span>, streams <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  1.2018189 -0.1060487 -0.8532641  0.6531933 -0.8304053 -0.4745548</span></span>
 <span><span class="co">#&gt; [7] -0.4211618 -0.5871540</span></span></code></pre></div>
+<p>As an alternative, when can also use a generator with support for
+substreams like MWC192X:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dqrng-functions.html">dqRNGkind</a></span><span class="op">(</span><span class="st">"xoshiro256++"</span><span class="op">)</span></span>
+<span><span class="co"># Seed used in the first thread</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">546</span>, <span class="fl">1</span><span class="op">)</span>; <span class="op">(</span><span class="va">v1</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">8</span>, use_substream <span class="op">=</span> <span class="cn">TRUE</span>, streams <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  0.54887245 -0.06535241  0.44624016  0.78889885  0.64714296  0.31920987</span></span>
+<span><span class="co">#&gt; [7] -0.60751560 -1.00937889</span></span>
+<span><span class="co"># Seed used in the second thread</span></span>
+<span><span class="fu"><a href="../reference/dqrng-functions.html">dqset.seed</a></span><span class="op">(</span><span class="fl">546</span>, <span class="fl">2</span><span class="op">)</span>; <span class="op">(</span><span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu">rnorm_para</span><span class="op">(</span><span class="fl">8</span>, use_substream <span class="op">=</span> <span class="cn">TRUE</span>, streams <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  1.9844008 -0.9904368  0.6722684 -1.1348272  0.1765528 -0.7658879</span></span>
+<span><span class="co">#&gt; [7]  2.1884689  1.2417341</span></span></code></pre></div>
+<p>Here the results stay independent, even though the two RNG states are
+only one stream appart.</p>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
 <li id="fn1"><p>See for example <a href="https://www.pcg-random.org/posts/critiquing-pcg-streams.html" class="external-link uri">https://www.pcg-random.org/posts/critiquing-pcg-streams.html</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Note that <strong>here</strong> in contrast to the
-default PCG implementation, streams are counted from the current stream,
-i.e. setting <code>stream</code> to <code>0</code> will give the same
-RNG. This brings PCG in line with the other RNGs.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dqrng</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.4</span>
       </span>
     </div>
 
@@ -68,9 +68,18 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="dqrng-development-version">dqrng (development version)<a class="anchor" aria-label="anchor" href="#dqrng-development-version"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>Changed logic when using PCG64 for parallel computing. When close-by streams are used, the first values are often very similar, c.f. <a href="https://github.com/imneme/pcg-cpp/issues/108" class="external-link uri">https://github.com/imneme/pcg-cpp/issues/108</a>. The first value after a stream change therefore is discarded(<a href="https://github.com/daqana/dqrng/pull/113" class="external-link">#114</a> fixing <a href="https://github.com/daqana/dqrng/issues/115" class="external-link">#104</a>).</li>
+<li>Changed logic in <code>dqrng::extra::parallel_generate</code>: Now the global RNG is set to a stream beyond the already used ones (<a href="https://github.com/daqana/dqrng/pull/113" class="external-link">#114</a> fixing <a href="https://github.com/daqana/dqrng/issues/115" class="external-link">#104</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
 <ul><li>New RNG: MWC192X, a scrambled multiply-with-carry generator by Sebastiano Vigna, in <code>mwc192x.h</code>. Its <code>jump(n)</code> and <code>long_jump(n)</code> methods take time logarithmic in <code>n</code> (Sebastiano Vigna in <a href="https://github.com/daqana/dqrng/issues/109" class="external-link">#109</a> fixing <a href="https://github.com/daqana/dqrng/issues/108" class="external-link">#108</a>)</li>
 <li>Save the state of the RNG after initialization from R’s RNG via <code>dqset.seed(NULL)</code>. Restoring this seed allows for reproducability without the need to seed explicitly (<a href="https://github.com/daqana/dqrng/pull/114" class="external-link">#114</a> fixing <a href="https://github.com/daqana/dqrng/issues/104" class="external-link">#104</a>)</li>
+<li>New methods <code>dqclusterSetRNGStream</code> and <code>dqrng_advance_stream</code> to simplify parallel usage from R, especially with <code>parallel</code> type clusters. Im prove documentation in parallel vignette. (<a href="https://github.com/daqana/dqrng/pull/113" class="external-link">#114</a> partially fixing <a href="https://github.com/daqana/dqrng/issues/38" class="external-link">#38</a>)</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.4.1" id="dqrng-041">dqrng 0.4.1<small>2024-05-28</small><a class="anchor" aria-label="anchor" href="#dqrng-041"></a></h2>
 <ul><li>Fix an UBSAN error found by CRAN (<a href="https://github.com/daqana/dqrng/pull/90" class="external-link">#90</a> fixing <a href="https://github.com/daqana/dqrng/issues/89" class="external-link">#89</a>)</li>
