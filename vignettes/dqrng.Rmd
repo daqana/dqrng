@@ -150,7 +150,7 @@ These functions are also available at the C++ level if you include `dqrng.h`.
 The full list of functions is available with `vignette("cpp-api", package = "dqrng")`.
 Revisiting the example of approximating $\pi$ we can use:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 // [[Rcpp::depends(dqrng)]]
 #include <Rcpp.h>
 #include <dqrng.h>
@@ -177,7 +177,7 @@ system.time(cat("pi ~= ", piCpp(1e7), "\n"))
 Note that in C++ you have to use `dqrng::dqset_seed()`, whereas the analogue function in the R interface is called `dqrng::dqset.seed()`.
 For sampling with and without replacement `dqrng::dqsample_int()` and `dqrng::dqsample_num()` are the analogue of `dqrng::dqsample.int()` in the R interface:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 // [[Rcpp::depends(dqrng)]]
 #include <Rcpp.h>
 #include <dqrng.h>
@@ -202,7 +202,7 @@ You have to link to the `BH` package as well to use dqrng's distribution functio
 For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG.
 Here a minimal [SplitMix](https://prng.di.unimi.it/splitmix.c) generator is used together with `dqrng::normal_distribution`:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <dqrng_distribution.h>
@@ -250,7 +250,7 @@ Since SplitMix is a very fast RNG, the speed of this function is comparable to `
 Generally speaking you can use any C++11 compliant RNG with 64 bit output size.
 For example, here the 64 bit Threefry engine with 13 rounds from package sitmo is used:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH, sitmo)]]
 #include <dqrng_distribution.h>
@@ -275,7 +275,7 @@ Note that for the (recommended) Threefry engine with 20 rounds some additional i
 Alternatively, you could combine the included RNGs together with dqrng's tooling and some other distribution function.
 For example, this function generates random numbers according to the normal distribution using the standard library from C++11:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <random>
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng)]]
@@ -302,7 +302,7 @@ Note however, that the algorithms used for the distributions from C++11 are *imp
 Finally you could directly use the base generators, which are provided as header-only libraries, without dqrng's tooling.
 For example, the following function uses the 32 bit PCG variant together with Boost's normal distribution function:
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <pcg_random.hpp>
@@ -328,7 +328,7 @@ For some applications it is necessary to draw random numbers from multiple distr
 The following function uses a binomial distribution (from `boost.random`) as well as the normal distribution from `dqrng`.
 The parameters of the distributions are adjusted for every draw using `<distribution>::param_type`: 
 
-```{r, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <boost/random/binomial_distribution.hpp>
@@ -360,7 +360,7 @@ You may use the class `dqrng::random_64bit_accessor` to use the **seeded**
 RNG engine of `dqrng`. Please note that the included RNG will be invalidated if
 `dqRNGkind` is called. You therefore should use this calls only within functions:
 
-```{Rcpp, eval=FALSE, engine='Rcpp'}
+```{Rcpp, eval=FALSE}
 #include <Rcpp.h>
 // [[Rcpp::depends(dqrng, BH)]]
 #include <boost/random/binomial_distribution.hpp>
@@ -369,7 +369,7 @@ RNG engine of `dqrng`. Please note that the included RNG will be invalidated if
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix multiple_distributions(int n) {
-  auto rng = dqrng::random_64bit_accessor{};
+  dqrng::random_64bit_accessor rng{};
   Rcpp::NumericMatrix out(n, 3);
   double p = 0.0;
   for (int i = 0; i < n; ++i) {
