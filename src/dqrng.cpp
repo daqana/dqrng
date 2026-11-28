@@ -1,5 +1,5 @@
 // Copyright 2018-2019 Ralf Stubner (daqana GmbH)
-// Copyright 2022-2024 Ralf Stubner
+// Copyright 2022-2026 Ralf Stubner
 //
 // This file is part of dqrng.
 //
@@ -56,7 +56,6 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   for (auto & c: kind)
     c = std::tolower(c);
   uint64_t seed = rng->operator()();
-  rng_kind = kind;
   if (kind == "default") {
     rng =  dqrng::generator(seed);
   } else if (kind == "xoroshiro128+") {
@@ -78,6 +77,7 @@ void dqRNGkind(std::string kind, const std::string& normal_kind = "ignored") {
   } else {
     Rcpp::stop("Unknown random generator kind: %s", kind);
   }
+  rng_kind = kind;
 }
 
 //' @rdname dqrng-functions
@@ -101,6 +101,14 @@ void dqrng_set_state(std::vector<std::string> state) {
             std::ostream_iterator<std::string>(buffer, " "));
   dqRNGkind(state[0]);
   buffer >> *rng;
+}
+
+//' @rdname parallel
+//' @export
+// [[Rcpp::export(rng = false)]]
+void dqrng_advance_stream(Rcpp::IntegerVector stream, bool use_substream = false) {
+  uint64_t _stream = dqrng::convert_seed<uint64_t>(stream);
+  rng->advance_stream(_stream, use_substream);
 }
 
 //' @rdname dqrng-functions

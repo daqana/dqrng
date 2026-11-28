@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with dqrng.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <sstream>
 #include <dqrng.h>
 #include <RcppParallel/RVector.h>
 #include <omp.h>
@@ -27,6 +26,7 @@ template<typename Dist, typename... Params>
 Rcpp::NumericVector parallel_generate(std::size_t n,
                                       std::size_t threads,
                                       std::size_t streams,
+                                      bool use_substream = false,
                                       Params&&... params) {
   if (n < streams)
     streams = n;
@@ -39,7 +39,6 @@ Rcpp::NumericVector parallel_generate(std::size_t n,
 
   // use global RNG from dqrng
   dqrng::random_64bit_accessor rng{};
-  std::stringstream buffer;
 
 #ifdef _OPENMP
   std::size_t maxthreads = omp_get_num_procs();
@@ -64,17 +63,13 @@ Rcpp::NumericVector parallel_generate(std::size_t n,
       end = start + stream_size;
     }
     // private RNG in each stream; RNG with i == 0 is identical to global RNG
-    auto prng = rng.clone(i);
+    auto prng = rng.clone(i, use_substream);
     prng->generate<Dist>(std::begin(work) + start, std::begin(work) + end,
                          std::forward<Params>(params)...);
-    if (i == 0) {// Save the state of the global RNG's clone
-      buffer << *prng;
-    }
   }
 }
-  // Make sure that the global RNG advances as well by applying the state
-  // of the global RNG's clone to the global RNG
-  buffer >> rng;
+  // Make sure that the global RNG advances as well.
+  rng.advance_stream(streams, use_substream);
   return res;
 }
 } // namespace extra

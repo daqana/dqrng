@@ -144,6 +144,39 @@ RcppExport SEXP _dqrng_dqrng_set_state(SEXP stateSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// dqrng_advance_stream
+void dqrng_advance_stream(Rcpp::IntegerVector stream, bool use_substream);
+static SEXP _dqrng_dqrng_advance_stream_try(SEXP streamSEXP, SEXP use_substreamSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type stream(streamSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_substream(use_substreamSEXP);
+    dqrng_advance_stream(stream, use_substream);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _dqrng_dqrng_advance_stream(SEXP streamSEXP, SEXP use_substreamSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        rcpp_result_gen = PROTECT(_dqrng_dqrng_advance_stream_try(streamSEXP, use_substreamSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // dqrunif
 Rcpp::NumericVector dqrunif(size_t n, double min, double max);
 static SEXP _dqrng_dqrunif_try(SEXP nSEXP, SEXP minSEXP, SEXP maxSEXP) {
@@ -509,6 +542,7 @@ static int _dqrng_RcppExport_validate(const char* sig) {
         signatures.insert("void(*dqRNGkind)(std::string,const std::string&)");
         signatures.insert("std::vector<std::string>(*dqrng_get_state)()");
         signatures.insert("void(*dqrng_set_state)(std::vector<std::string>)");
+        signatures.insert("void(*dqrng_advance_stream)(Rcpp::IntegerVector,bool)");
         signatures.insert("Rcpp::NumericVector(*dqrunif)(size_t,double,double)");
         signatures.insert("double(*runif)(double,double)");
         signatures.insert("Rcpp::NumericVector(*dqrnorm)(size_t,double,double)");
@@ -529,6 +563,7 @@ RcppExport SEXP _dqrng_RcppExport_registerCCallable() {
     R_RegisterCCallable("dqrng", "_dqrng_dqRNGkind", (DL_FUNC)_dqrng_dqRNGkind_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrng_get_state", (DL_FUNC)_dqrng_dqrng_get_state_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrng_set_state", (DL_FUNC)_dqrng_dqrng_set_state_try);
+    R_RegisterCCallable("dqrng", "_dqrng_dqrng_advance_stream", (DL_FUNC)_dqrng_dqrng_advance_stream_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrunif", (DL_FUNC)_dqrng_dqrunif_try);
     R_RegisterCCallable("dqrng", "_dqrng_runif", (DL_FUNC)_dqrng_runif_try);
     R_RegisterCCallable("dqrng", "_dqrng_dqrnorm", (DL_FUNC)_dqrng_dqrnorm_try);
@@ -548,6 +583,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dqrng_dqRNGkind", (DL_FUNC) &_dqrng_dqRNGkind, 2},
     {"_dqrng_dqrng_get_state", (DL_FUNC) &_dqrng_dqrng_get_state, 0},
     {"_dqrng_dqrng_set_state", (DL_FUNC) &_dqrng_dqrng_set_state, 1},
+    {"_dqrng_dqrng_advance_stream", (DL_FUNC) &_dqrng_dqrng_advance_stream, 2},
     {"_dqrng_dqrunif", (DL_FUNC) &_dqrng_dqrunif, 3},
     {"_dqrng_runif", (DL_FUNC) &_dqrng_runif, 2},
     {"_dqrng_dqrnorm", (DL_FUNC) &_dqrng_dqrnorm, 3},

@@ -69,6 +69,14 @@ test_that("cloned external Xoshiro256++ gives different result only when a diffe
   dqrng::dqRNGkind("default")
 })
 
+test_that("cloned external Xoshiro256++ gives different result only when a different substream is selected", {
+  dqrng::dqRNGkind("Xoshiro256++")
+  dqset.seed(use_seed)
+  expect_true(cloned_calls(stream = 0, use_substream = TRUE))
+  expect_false(cloned_calls(stream = 1, use_substream = TRUE))
+  dqrng::dqRNGkind("default")
+})
+
 test_that("cloned external PCG64 gives different result", {
   skip_if(powerpc_apple)
   dqrng::dqRNGkind("PCG64")

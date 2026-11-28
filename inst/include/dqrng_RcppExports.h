@@ -102,6 +102,25 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
+    inline void dqrng_advance_stream(Rcpp::IntegerVector stream, bool use_substream = false) {
+        typedef SEXP(*Ptr_dqrng_advance_stream)(SEXP,SEXP);
+        static Ptr_dqrng_advance_stream p_dqrng_advance_stream = NULL;
+        if (p_dqrng_advance_stream == NULL) {
+            validateSignature("void(*dqrng_advance_stream)(Rcpp::IntegerVector,bool)");
+            p_dqrng_advance_stream = (Ptr_dqrng_advance_stream)R_GetCCallable("dqrng", "_dqrng_dqrng_advance_stream");
+        }
+        RObject rcpp_result_gen;
+        {
+            rcpp_result_gen = p_dqrng_advance_stream(Shield<SEXP>(Rcpp::wrap(stream)), Shield<SEXP>(Rcpp::wrap(use_substream)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline Rcpp::NumericVector dqrunif(size_t n, double min = 0.0, double max = 1.0) {
         typedef SEXP(*Ptr_dqrunif)(SEXP,SEXP,SEXP);
         static Ptr_dqrunif p_dqrunif = NULL;
