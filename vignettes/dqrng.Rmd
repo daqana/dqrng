@@ -200,7 +200,7 @@ The RNG wrapper and distributions functions can be used from C++ by including `d
 In order to use these header files, you have to use at least C++11.
 You have to link to the `BH` package as well to use dqrng's distribution functions.
 For example, you can use the distribution functions from dqrng together with some foreign 64bit RNG.
-Here a minimal [SplitMix](https://prng.di.unimi.it/splitmix64.c) generator is used together with `dqrng::normal_distribution`:
+Here a minimal [SplitMix](https://prng.di.unimi.it/splitmix.c) generator is used together with `dqrng::normal_distribution`:
 
 ```{r, eval=FALSE, engine='Rcpp'}
 #include <Rcpp.h>
