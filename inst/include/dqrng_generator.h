@@ -54,8 +54,8 @@ private:
 protected:
   virtual void output(std::ostream& ost) const override {ost << gen;}
   virtual void input(std::istream& ist) override {ist >> gen;}
-  void set_stream(result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
-  void set_substream(result_type substream) override {throw std::runtime_error("Substream handling not supported for this RNG!");}
+  void advance_stream(result_type stream) override {throw std::runtime_error("Stream handling not supported for this RNG!");}
+  void advance_substream(result_type substream) override {throw std::runtime_error("Substream handling not supported for this RNG!");}
 
 public:
   random_64bit_wrapper() : gen() {};
@@ -64,75 +64,75 @@ public:
   random_64bit_wrapper(result_type seed, result_type stream) : gen() {this->seed(seed, stream);};
   virtual result_type operator() () override {return gen();}
   virtual void seed(result_type seed) override {cache = false; gen.seed(seed);}
-  virtual void seed(result_type seed, result_type stream) override {cache = false; gen.seed(seed); this->set_stream(stream);}
+  virtual void seed(result_type seed, result_type stream) override {cache = false; gen.seed(seed); this->advance_stream(stream);}
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream = false) override {
     auto rng = make_unique<random_64bit_wrapper<RNG>>(gen);
     if (use_substream)
-      rng->set_substream(stream);
+      rng->advance_substream(stream);
     else
-      rng->set_stream(stream);
+      rng->advance_stream(stream);
     return rng;
   }
 };
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128plus>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoroshiro128plus>::advance_stream(result_type stream) {
   gen.jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128plusplus>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoroshiro128plusplus>::advance_stream(result_type stream) {
   gen.jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoroshiro128starstar>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoroshiro128starstar>::advance_stream(result_type stream) {
   gen.jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::advance_stream(result_type stream) {
   gen.long_jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::advance_stream(result_type stream) {
   gen.long_jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::advance_stream(result_type stream) {
   gen.long_jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::mwc192x>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<::dqrng::mwc192x>::advance_stream(result_type stream) {
   gen.long_jump(stream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::set_substream(result_type substream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256plus>::advance_substream(result_type substream) {
   gen.jump(substream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::set_substream(result_type substream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256plusplus>::advance_substream(result_type substream) {
   gen.jump(substream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::set_substream(result_type substream) {
+inline void random_64bit_wrapper<::dqrng::xoshiro256starstar>::advance_substream(result_type substream) {
   gen.jump(substream);
 }
 
 template<>
-inline void random_64bit_wrapper<::dqrng::mwc192x>::set_substream(result_type substream) {
+inline void random_64bit_wrapper<::dqrng::mwc192x>::advance_substream(result_type substream) {
   gen.jump(substream);
 }
 
 #if !(defined(__APPLE__) && defined(__POWERPC__))
 template<>
-inline void random_64bit_wrapper<pcg64>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<pcg64>::advance_stream(result_type stream) {
   // set the stream relative to the current stream, i.e. stream = 0 does not change the RNG
   if (stream == 0) return;
   pcg_extras::pcg128_t number;

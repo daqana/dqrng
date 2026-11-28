@@ -73,8 +73,8 @@ public:
   virtual result_type operator() () = 0;
   virtual void seed(result_type seed) = 0;
   virtual void seed(result_type seed, result_type stream) = 0;
-  virtual void set_stream(result_type stream) = 0;
-  virtual void set_substream(result_type substream) = 0;
+  virtual void advance_stream(result_type stream) = 0;
+  virtual void advance_substream(result_type substream) = 0;
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream = false) = 0;
   static constexpr result_type min() {return 0;};
   static constexpr result_type max() {return UINT64_MAX;};
@@ -300,12 +300,12 @@ public:
     throw std::runtime_error("Seed handling not supported for this class!");
   };
 
-  virtual void set_stream(result_type stream) override {
-    gen->set_stream(stream);
+  virtual void advance_stream(result_type stream) override {
+    gen->advance_stream(stream);
   };
 
-  virtual void set_substream(result_type substream) override {
-    gen->set_substream(substream);
+  virtual void advance_substream(result_type substream) override {
+    gen->advance_substream(substream);
   };
 
   virtual std::unique_ptr<random_64bit_generator> clone(result_type stream, bool use_substream = false) override {

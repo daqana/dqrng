@@ -102,16 +102,16 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline void dqrng_set_stream(Rcpp::IntegerVector stream) {
-        typedef SEXP(*Ptr_dqrng_set_stream)(SEXP);
-        static Ptr_dqrng_set_stream p_dqrng_set_stream = NULL;
-        if (p_dqrng_set_stream == NULL) {
-            validateSignature("void(*dqrng_set_stream)(Rcpp::IntegerVector)");
-            p_dqrng_set_stream = (Ptr_dqrng_set_stream)R_GetCCallable("dqrng", "_dqrng_dqrng_set_stream");
+    inline void dqrng_advance_stream(Rcpp::IntegerVector stream) {
+        typedef SEXP(*Ptr_dqrng_advance_stream)(SEXP);
+        static Ptr_dqrng_advance_stream p_dqrng_advance_stream = NULL;
+        if (p_dqrng_advance_stream == NULL) {
+            validateSignature("void(*dqrng_advance_stream)(Rcpp::IntegerVector)");
+            p_dqrng_advance_stream = (Ptr_dqrng_advance_stream)R_GetCCallable("dqrng", "_dqrng_dqrng_advance_stream");
         }
         RObject rcpp_result_gen;
         {
-            rcpp_result_gen = p_dqrng_set_stream(Shield<SEXP>(Rcpp::wrap(stream)));
+            rcpp_result_gen = p_dqrng_advance_stream(Shield<SEXP>(Rcpp::wrap(stream)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -121,16 +121,16 @@ namespace dqrng {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline void dqrng_set_substream(Rcpp::IntegerVector substream) {
-        typedef SEXP(*Ptr_dqrng_set_substream)(SEXP);
-        static Ptr_dqrng_set_substream p_dqrng_set_substream = NULL;
-        if (p_dqrng_set_substream == NULL) {
-            validateSignature("void(*dqrng_set_substream)(Rcpp::IntegerVector)");
-            p_dqrng_set_substream = (Ptr_dqrng_set_substream)R_GetCCallable("dqrng", "_dqrng_dqrng_set_substream");
+    inline void dqrng_advance_substream(Rcpp::IntegerVector substream) {
+        typedef SEXP(*Ptr_dqrng_advance_substream)(SEXP);
+        static Ptr_dqrng_advance_substream p_dqrng_advance_substream = NULL;
+        if (p_dqrng_advance_substream == NULL) {
+            validateSignature("void(*dqrng_advance_substream)(Rcpp::IntegerVector)");
+            p_dqrng_advance_substream = (Ptr_dqrng_advance_substream)R_GetCCallable("dqrng", "_dqrng_dqrng_advance_substream");
         }
         RObject rcpp_result_gen;
         {
-            rcpp_result_gen = p_dqrng_set_substream(Shield<SEXP>(Rcpp::wrap(substream)));
+            rcpp_result_gen = p_dqrng_advance_substream(Shield<SEXP>(Rcpp::wrap(substream)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

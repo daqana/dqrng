@@ -183,8 +183,8 @@ generate<Dist>(start, end, param1, ... paramN)
 ## Advancing the RNG state to a different (sub)stream
 
 ```cpp
-void dqrng::dqrng_set_stream(Rcpp::IntegerVector stream)
-void dqrng::dqrng_set_substream(Rcpp::IntegerVector substream)
+void dqrng::dqrng_advance_stream(Rcpp::IntegerVector stream)
+void dqrng::dqrng_advance_substream(Rcpp::IntegerVector substream)
 ```
 
 `stream`

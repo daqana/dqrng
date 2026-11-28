@@ -1,8 +1,8 @@
 #' @title Support for parallel computing
 #'
 #' @description The \code{dqrng} package provides several fast random number
-#'   generators that are suited for parallel usage. The functions \code{dqrng_set_stream}
-#'   and \code{dqrng_set_substream} allow to switch the RNG to a different (sub)stream.
+#'   generators that are suited for parallel usage. The functions \code{dqrng_advance_stream}
+#'   and \code{dqrng_advance_substream} allow to switch the RNG to a different (sub)stream.
 #'   Note that substream handling is only available for the Xoshiro256+/++/**, MWC192X, and
 #'   Threefry generators.
 #' 
@@ -40,8 +40,8 @@ dqclusterSetRNGStream <- function(cl = NULL, use_substream = FALSE, register = T
    if (is.null(cl))
     cl <- parallel::getDefaultCluster()
   state <- dqrng::dqrng_get_state()
-  jump_func <- dqrng::dqrng_set_stream
-  if (use_substream) jump_func <- dqrng::dqrng_set_substream
+  jump_func <- dqrng::dqrng_advance_stream
+  if (use_substream) jump_func <- dqrng::dqrng_advance_substream
   parallel::clusterApply(cl,
                          seq_along(cl) - 1,
                          function(stream, state) {

@@ -27,7 +27,7 @@
 namespace dqrng {
 
 template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_stream(result_type stream) {
+inline void random_64bit_wrapper<sitmo::threefry_20_64>::advance_stream(result_type stream) {
   uint64_t number;
   std::vector<uint64_t> state;
   std::stringstream iss;
@@ -40,7 +40,7 @@ inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_stream(result_type 
 }
 
 template<>
-inline void random_64bit_wrapper<sitmo::threefry_20_64>::set_substream(result_type substream) {
+inline void random_64bit_wrapper<sitmo::threefry_20_64>::advance_substream(result_type substream) {
   uint64_t number;
   std::vector<uint64_t> state;
   std::stringstream iss;

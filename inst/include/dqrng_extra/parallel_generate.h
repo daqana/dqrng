@@ -70,9 +70,9 @@ Rcpp::NumericVector parallel_generate(std::size_t n,
 }
   // Make sure that the global RNG advances as well.
   if (use_substream)
-    rng.set_substream(streams);
+    rng.advance_substream(streams);
   else
-    rng.set_stream(streams);
+    rng.advance_stream(streams);
   return res;
 }
 } // namespace extra
