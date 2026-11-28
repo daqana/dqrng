@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 library(dqrng)
-evaluate <- FALSE
 ```
+
+# Overview
 
 When you want to use random number generators (RNG) for parallel computations, you need to make sure that the sequences of random numbers used by the different processes do not overlap.
 There are two main approaches to this problem:^[See for example https://www.pcg-random.org/posts/critiquing-pcg-streams.html.]
@@ -26,57 +27,117 @@ There are two main approaches to this problem:^[See for example https://www.pcg-
 * Re-parametrize the generator to produce independent sequences for the same seed.
 
 The RNGs included in `dqrng` offer at least one of these methods for parallel RNG usage.
-When using the R or C++ interface independent streams can be accessed using the two argument `dqset.seed(seed, stream)` or `dqset_seed(seed, stream)` functions.
+The precise details depend on the kind of usage of the provided RNGs as numerated in [`vignette("dqrng", package = "dqrng")`](dqrng.html).
+Here we will go through them in reverse order, starting with the RNGs as implemented in C++, followed by the provided C++ header only library and the compiled C++ API and ending with the interface at the R level.
+
+## C++ classes
+
+### Xoroshiro128+/++/\*\*, Xoshiro256+/++/\*\*, and MWC192X
+
+The Xoroshiro128+/++/** generators have a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws apart. 
+The Xoshiro256+/++/** generators have a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws apart.
+The MWC192X generator has a period of about $2^{191}$ and offers $2^{95}$ sub-sequences that are $2^{96}$ random draws apart as well as $2^{47}$ streams that are $2^{144}$ random draws apart.
+You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence; for MWC192X, they take time logarithmic in `n`.
+
+### PCG64
+
+From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
+It offers the function [`advance(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
+In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
+
+### Threefry
+
+The generators from the Threefry family are special in two ways.
+First, they are not included in `dqrng` but are instead linked from `sitmo`.
+Second, it does not provide an explicit interface for accessing different streams.
+Instead, the Threefry engine uses internally a counter with $2^{256}$ possible states, which can be split into different streams via the `set_counter()` method.
+
+## C++ header only library
+
+When including the `dqrng_generator.h` header, one gets `dqrng::random_64bit_wrapper` class, which implements the abstract `dqrng::random_64bit_generator`.
+Within this class there are multiple places where one can set the stream of the generator:
+
+* When creating an instance of the generator via a constructor or a factory method one can use the two argument version with `seed` and `stream`.
+* When re-seeding an existing instance via the `seed(seed, stream)` method.
+* When creating a copy of the generator that has been changed to a different stream via clone(stream).
+* When changing an existing generator to a different stream via `advance_stream(int n, false)`.
+
+The meaning of `stream` in this context depends on the used generator:
+
+* For Xoroshiro128+/++/** it corresponds to `jump(n)`, i.e. $2^{64}$ sub-sequences that are $2^{64}$ random draws apart.
+* For Xoshiro256+/++/** it corresponds to `long_jump(n)`, i.e. $2^{64}$ sub-sequences that are $2^{192}$ random draws apart.
+* For MCW192X it corresponds to `long_jump(n)`, i.e. $2^{47}$ sub-sequences that are $2^{144}$ random draws apart.
+* For PGCG64 it corresponds to one of th $2^{127}$ different random streams. Note that the logic has been changed compared with the original `set_stream()` from the PCG library, where the function argument is interpreted absolutely, i.e. `stream = 1` is always the same stream. In contrast, here the stream is interpreted relative to the current stream, so that `clone(stream = 0)` returns an exact clone and `advance_stream(stream = 1)` always returns the "next" stream. Since the first draw from "nearby" streams are related, the first draw from the generator is ignored. As a consequence, `advance_stream` is not "additive" for PCG64.
+* For Threefry setting/advancing the stream simply sets/advances the highest of the 4 integers defining the state. This is equivalent to $2^{64}$ streams that are $2^{192}$ random draws apart.
+
+Some of the generators also support the concept of a substream via `advance_stream(int n, true)`:
+
+* For Xoshiro256+/++/** it corresponds to `jump(n)`, i.e. $2^{128}$ sub-sequences that are $2^{128}$ random draws apart.
+* For MCW192X it corresponds to `jump(n)`, i.e. $2^{95}$ sub-sequences that are $2^{96}$ random draws apart.
+* For Threefry setting/advancing the stream simply sets/advances the second highest of the 4 integers defining the state. This is equivalent to $2^{128}$ streams that are $2^{128}$ draws apart.
+
+Notes:
+
+* Since `stream` is represented by an unsigned 64 bit integer, not all of these streams and substreams can be accessed right away. Consecutive calls to `advance_stream(n, use_substream)` are necessary.
+* The number of available substreams is reduced when they are used to further division streams. In particular,  Xoshiro256+/++/** and Threefry offer $2^{64}$ substreams with one stream; MCW192X offers $2^{48}$.
+
+## Compiled C++ library
+
+The full API available from the `dqrng.h` header is documented in [`vignette("cpp-api", package = "dqrng")`](cpp-api.html).
+The functions relevant for parallel usage are `dqrng::dqset_seed(seed, stream)`, `dqrng::dqrng_advance_stream(stream, use_substream)`.
+All of them act on the global RNG, that is created when the `dqrng` package is loaded. 
+Most of the time it makes more sense to manipulate this generator from R, which will be discussed in the next section.
+
+## R interface
+
+The main functions relevant for parallel usage are `dqset.seed(seed, stream)` and `dqrng_advance_stream(stream, use_substream)`. 
+All of them act on the global RNG, that is created when the `dqrng` package is loaded.
+
+Besides these low level functions there is also `dqclusterSetRNGStream()`, which is modeled after `parallel::clusterSetRNGStream()`, to set-up the RNGs in a `parallel`-type cluster, but deviates in some important points.
+
+* The only RNG provided by R that supports parallel streams is "L'Ecuyer-CMRG", which is therefore enforced by the method from the `parallel` package. Since all RNGs from `dqrng` support this, we simply use the currently used RNG also on the cluster node.
+* The method from `parallel` either expects a numeric seed or derives one from the current RNG. This is then used to create a series of seeds, which are then forwarded to the nodes. Our method copies the state from the main node to all compute nodes and advances them by 0 to N-1 streams. The main node is advanced N streams.
+* Instead of using streams one can also use substreams with `use_substreams = TRUE`, assuming the currently used RNG supports them (see above).
+* By default `dqclusterSetRNGStream()` registers the RNG as `user-supplied` RNG on the worker nodes. This makes sure that any other RNG usage is also reproducible. 
 
 # Threefry: usage from R
 
-The Threefry engine uses internally a counter with $2^{256}$ possible states, which can be split into different substreams.
-When used from R or C++ with the two argument `dqset.seed` or `dqset_seed` this counter space is split into $2^{64}$ streams with $2^{192}$ possible states each.
-This is equivalent to $2^{64}$ streams with a period of $2^{194}$ each.
-
-In the following example a matrix with random numbers is generated in parallel using the parallel package.
+In the following example a random matrix with 8 columns is generated in parallel using a 2 node `parallel`-type cluster.
+The crucial work of setting up the RNG streams in the cluster is done by `dqclusterSetRNGStream()`.
+The RNG in the main process is also advanced beyond the range reserved for the individual nodes, making it save to use afterwards.
 The resulting correlation matrix should be close to the identity matrix if the different streams are independent:
 
 ```{r}
 dqRNGkind("Threefry")
 cl <- parallel::makeCluster(2)
-res <- clusterApply(cl, 1:8, function(stream, seed, N) {
-  library(dqrng)
-  dqRNGkind("Threefry")
-  dqset.seed(seed, stream)
-  dqrnorm(N)
-}, 42, 1e6)
-stopCluster(cl)
-
+dqclusterSetRNGStream(cl)
+res <- parallel::clusterApply(cl, rep(1e6, 8), dqrng::dqrnorm)
+parallel::stopCluster(cl)
 res <- matrix(unlist(res), ncol = 8)
 symnum(x = cor(res), cutpoints = c(0.001, 0.003, 0.999),
        symbols = c(" ", "?", "!", "1"),
        abbr.colnames = FALSE, corr = TRUE)
 ```
 
-Correlation matrix:
+Typical output for the correlation matrix:
 
-    [1,] 1              
-    [2,]   1            
-    [3,]   ? 1          
-    [4,]   ? ? 1        
-    [5,] ?     ? 1      
-    [6,]     ?     1    
-    [7,]     ?       1  
-    [8,]         ?     1
-    attr(,"legend")
-    [1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
+```
+[1,] 1              
+[2,]   1            
+[3,] ?   1          
+[4,]       1        
+[5,]   ?   ? 1      
+[6,]       ? ? 1    
+[7,]   ?   ? ?   1  
+[8,]     ? ?     ? 1
+attr(,"legend")
+[1] 0 ‘ ’ 0.001 ‘?’ 0.003 ‘!’ 0.999 ‘1’ 1
+```
 
 As expected the correlation matrix for the different columns is almost equal to the identity matrix.
 
 
-# Xo(ro)shiro: jump ahead with OpenMP
-
-The Xoshiro256+/++/** generators has a period of $2^{256} -1$ and offers $2^{128}$ sub-sequences that are $2^{128}$ random draws apart as well as $2^{64}$ streams that are $2^{192}$ random draws apart.
-The Xoroshiro128+/++/** generators has a period of $2^{128} -1$ and offers $2^{64}$ sub-sequences that are $2^{64}$ random draws apart as well as $2^{32}$ streams that are $2^{98}$ random draws apart. 
-The MWC192X generator has a period of about $2^{191}$ and offers $2^{95}$ sub-sequences that are $2^{96}$ random draws apart as well as $2^{47}$ streams that are $2^{144}$ random draws apart.
-You can go from one sub-sequence to the next using the `jump()` or `long_jump()` method and the convenience wrapper `jump(int n)` or `long_jump(int n)`, which  advances to the `n`th sub-sequence; for MWC192X, they take time logarithmic in `n`.
-When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams that are $2^{192}$, $2^{64}$ and $2^{96}$ random draws apart for Xoshiro256+/++/**, Xoroshiro128+/++/** and MWC192X, respectively.
+# Xoshiro: jump ahead with OpenMP
 
 As an example using C++ we draw and sum a large number of uniformly distributed numbers.
 This is done several times sequentially as well as using OpenMP for parallelisation.
@@ -113,8 +174,8 @@ std::vector<double> parallel_random_sum(int n, int m, int ncores) {
   
   #pragma omp parallel num_threads(ncores)
   {
-    // make thread local copy of rng and advance it by 1 ... ncores jumps
-    auto lrng = rng->clone(omp_get_thread_num() + 1);
+    // make thread local copy of rng and advance it by 0 ... ncores-1 jumps
+    auto lrng = rng->clone(omp_get_thread_num());
 
     #pragma omp for
     for (int i = 0; i < m; ++i) {
@@ -125,6 +186,8 @@ std::vector<double> parallel_random_sum(int n, int m, int ncores) {
       res[i] = lres / n;
     }
   }
+  // advance rng beyond the range reserved for parallel processing
+  rng->advance_stream(ncores); 
   // ok to use rng here
   return res;
 }
@@ -151,11 +214,6 @@ Result:
 Note that the thread local RNG uses `std::unique_ptr` instead of `Rcpp::Xptr` since it is used in parallel code. 
 
 # PCG: multiple streams with RcppParallel
-
-From the PCG family we will look at pcg64, a 64-bit generator with a period of $2^{128}$.
-It offers the function [`advance(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-advance-state-type-delta), which is equivalent to `n` random draws but scales as $O(ln(n))$ instead of $O(n)$. 
-In addition, it offers $2^{127}$ separate streams that can be enabled via the function [`set_stream(int n)`](https://www.pcg-random.org/using-pcg-cpp.html#void-pcg32-set-stream-state-type-stream) or the [two argument constructor](https://www.pcg-random.org/using-pcg-cpp.html#pcg32-pcg32-constructor) with `seed` and `stream`.
-When used from R or C++ with the two argument `dqset.seed` and `dqset_seed` you get $2^{64}$ streams out of the possible $2^{127}$ separate streams.
 
 In the following example a matrix with random numbers is generated in parallel using RcppParallel.
 Instead of using the more traditional approach of generating the random numbers from a certain distribution, we are using the fast sampling methods from `dqrng_sample.h`.
@@ -305,11 +363,6 @@ Here the actual implementation of the template function:
 
 Besides the distribution of the work into (about) equal streams, the pattern for RNG access is similar to the OpenMP example above with the important difference that the local RNGs are not *thread-* but *stream-specific*.
 This way, the result becomes independent of the used amount of parallelism. 
-However, one has to consider one important aspect:
-After the parallel for loop, the global RNG has not advanced at all.
-Calling the function repeatedly would lead to identical results.
-To circumvent this, one of the stream specific RNGs is an exact clone of the global RNG (`clone(stream=0)`) and the state of this RNG after processing its stream is saved and used to overwrite the global RNG's state.^[Note that **here** in contrast to the default PCG implementation, streams are counted from the current stream, i.e. setting `stream` to `0` will give the same RNG. This brings PCG in line with the other RNGs.]
-This way, the global RNG's state advances as if it had processed one of the streams and successive calls to `parallel_generate()` produce different random numbers as expected.
 
 ```{r}
 dqset.seed(153)
@@ -320,11 +373,11 @@ runif_para(30)
 #> [19] 0.59308120 0.07853078 0.63040483 0.21707435 0.25876379 0.81296194
 #> [25] 0.53645030 0.29976254 0.37159454 0.38683266 0.03737063 0.03359113
 runif_para(30) # Different values, as expected
-#>  [1] 0.90407135 0.73543499 0.09026296 0.90321975 0.66162669 0.51716146
-#>  [7] 0.74186366 0.41125413 0.17581202 0.68547734 0.11766549 0.82316789
-#> [13] 0.40565668 0.44854610 0.95477820 0.64388593 0.31991691 0.02239872
-#> [19] 0.13687388 0.32476719 0.67093851 0.05564081 0.76817620 0.49502455
-#> [25] 0.07459706 0.25493312 0.14019729 0.89704659 0.40548199 0.53800443
+#>  [1] 0.646831542 0.378089116 0.493795112 0.214934597 0.501976654 0.128367803
+#>  [7] 0.012745952 0.669304282 0.421289455 0.580001266 0.985460064 0.093296834
+#> [13] 0.595594108 0.067344204 0.738176741 0.059677902 0.191877203 0.425571240
+#> [19] 0.535212161 0.777199535 0.462971481 0.222718199 0.418285869 0.620787219
+#> [25] 0.566432541 0.094250313 0.861051406 0.009309542 0.350106622 0.759479294
 ```
 
 Pitfall: should you use `parallel_generate()` in concurrent threads or streams, make sure to seed each of them with enough separate streams to avoid overlap. For instance, with `parallel_generate(..., stream = 4)`, you could seed first thread with something like `dqset.seed(546, 1)`, but you must seed second thread at least on stream 5 (previous stream plus the number of streams you reserve for `parallel_generate()`). If you use `dqset.seed(546, 2)` on the second thread, there will be an overlap like this:

@@ -2,13 +2,14 @@
 
 ## Breaking changes
 
-* Changed logic when using PCG64 for parallel computing. When close-by streams are used, the first values are often very similar, c.f. https://github.com/imneme/pcg-cpp/issues/108. The first value after a stream change therefore is discarded.
-* Changed logic in `dqrng::extra::parallel_generate`: Now the global RNG is set to a stream beyond the already used ones.
+* Changed logic when using PCG64 for parallel computing. When close-by streams are used, the first values are often very similar, c.f. https://github.com/imneme/pcg-cpp/issues/108. The first value after a stream change therefore is discarded([#114](https://github.com/daqana/dqrng/pull/113) fixing [#104](https://github.com/daqana/dqrng/issues/115)).
+* Changed logic in `dqrng::extra::parallel_generate`: Now the global RNG is set to a stream beyond the already used ones ([#114](https://github.com/daqana/dqrng/pull/113) fixing [#104](https://github.com/daqana/dqrng/issues/115)).
 
 ## Other changes
 
 * New RNG: MWC192X, a scrambled multiply-with-carry generator by Sebastiano Vigna, in `mwc192x.h`. Its `jump(n)` and `long_jump(n)` methods take time logarithmic in `n` (Sebastiano Vigna in [#109](https://github.com/daqana/dqrng/issues/109) fixing [#108](https://github.com/daqana/dqrng/issues/108))
 * Save the state of the RNG after initialization from R's RNG via `dqset.seed(NULL)`. Restoring this seed allows for reproducability without the need to seed explicitly ([#114](https://github.com/daqana/dqrng/pull/114) fixing [#104](https://github.com/daqana/dqrng/issues/104))
+* New methods `dqclusterSetRNGStream` and `dqrng_advance_stream` to simplify parallel usage from R, especially with `parallel` type clusters. Im prove documentation in parallel vignette. ([#114](https://github.com/daqana/dqrng/pull/113) partially fixing [#38](https://github.com/daqana/dqrng/issues/38))
 
 # dqrng 0.4.1
 
